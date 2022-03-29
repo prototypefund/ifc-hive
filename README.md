@@ -1,3 +1,14 @@
+
+```bash
+AN DEN PROTOTYP FUND
+
+Wir haben das Projekt gerade erst aufgesetzt und wollten lieber
+diesen als gar keinen Link in der Bewerbung mitschicken.
+Im Verlauf von April und Mai kommt hier Bewegung rein.
+```
+
+---
+
 # ifc-hive
 
 A BIM plattform to collaborate and share your IFC data.
@@ -12,6 +23,17 @@ Wir wollen einen Beitrag zu Open BIM leisten. Gegenstand dieses Projekts ist die
 
 ## Zielgruppe
 
+# Komponenten
+
+## ifc-hive-server
+Eigenes Repo siehe...
+
+## ifc-hive-client
+Eigenes Repo siehe...
+
+## ifc-hive-project
+Das übergeorndete Projekt das alle aktuellen und etwaige zukünftige Komponenten referenziert und als Cluster von zusammengehörigen Services präsentiert. Für Nutzer, die das Projekt nur installieren und als Plattform verwenden wollen brauchen nur die hier genannten Informationen.
+
 # Konzept
 
 ## Kurzbeschreibung
@@ -20,7 +42,25 @@ Wir wollen einen Beitrag zu Open BIM leisten. Gegenstand dieses Projekts ist die
 
 ## Prämissen und technische Ansätze
 
+## Verwendete Technologien
+
 # Roadmap
+
+Siehe [Meilensteine](https://repo.karo.design/daniel/ifc-hive/-/milestones) für detaillierte Beschreibungen.
+
+1. Detailkonzept und technische Planung
+2. Front-End Basis
+3. API und Back-End Basis
+4. IFC Graph Operationen Schlüsselkonzepte
+5. Front-End interaktiver IFC Viewer
+6. Early Alpha Basis-Anwendungsfällen
+7. IFC Projekt Management und Versionkontrolle
+8. Front-End feature complete
+9. API feature complete
+10. Prototype Release Candidate (QA)
+11. Prototyp Release
+
+
 
 # Sonstiges
 
