@@ -108,6 +108,7 @@ Produktionsumgebung mit ausgeliefert oder automatisch installiert.
   - [vuetify 3](https://next.vuetifyjs.com/en/) UI Component Library for Vue 3
   - [three.js](https://threejs.org/) Javascript 3D WebGL library
   - [ifc.js](https://github.com/IFCjs) Open source IFC library  
+  - [vitejs](https://vitejs.dev/) Lean fron-end tooling for Vue Apps
   - [vitest](https://vitest.dev/) front-end testing framework including Vue component testing
   - [cypress](cypress) additional browser based end-to-end testing
 - **ifc-hive-server**
@@ -127,7 +128,6 @@ Produktionsumgebung mit ausgeliefert oder automatisch installiert.
   - [eslint](https://eslint.org/) Code Linting
   - [snyk.io](https://snyk.io/) Security Auditing
   - [prettier.io](https://prettier.io/) Auto formatting code
-  - [vitejs](https://vitejs.dev/) Lean fron-end tooling for Vue Apps
   - [nyc](https://github.com/istanbuljs/nyc) Code coverage
 - **Deployment und Infrastruktur** 
   - [Gitlab and gitlab-runner](https://docs.gitlab.com/runner/) for code management and deployment to test and integration environment.
