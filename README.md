@@ -56,38 +56,42 @@ auf.
 
 @TODO Arbeisweise in Contribution Guide genauer festlegen. 
 
-- Anforderungs Management im Gitlab Ticketsystem
-- Diskussion von Anforderungen und möglichen Umsetzungen im Kommentar des Tickets 
-- Design Dokumente für Architektur und einzelne Anforderungen im Projekt Wiki
-- Gemeinsame Bewertung, Sprint Planung und Sprint Review im 2-Wochen Rhythmus
-- Definition-of-Done 
-- 100% Code Coverage (Unit und integration Tests)
-- Kein API Endpoint ohne vollständige Dokumentation und automatisierte integration Tests (API Test des gebauten Containrs mit definierten Test-Daten)
-- Contract-Driven API Design, d.h. Anforderungen des Clients oder Abstimmung zwischen Front-End und API Implementierung werden über API Tests abgebildet.  
-- Einheitliche Linting-Regeln für eine Programmiersprache, d.h. Javascript / Typesceript folgen sowohl im Front-End als auch im Back-End dem selben Stil. Mit kleinen Anpassungen folgendem wir dem [Google Javascript Styleguide](https://google.github.io/styleguide/jsguide.html)
-- Wir folgen einem festgelegtem Commit-Template. Das Format ist bei jedem Commit und in jedem Fall zu beachten. Insbesondere kein Check-In ohne Bezug zu einer Issue ID. Jeder Commit hat einen Body mit der Motivation für die Änderungen.
-  - Subject `<type> (<component> #<ticket): <imperative description imperative and present tense>`
-  - Body Motivation, ggf. Breaking Changes, Depreciation Notice samt Update Path, related issues und issues to be closed.
-- Anforderungen werden als User Stories dargestellt möglichst ausführlich und mit Beispielen Dargestellt. Wo notwendig oder hilfreich werden nach gemeinsamer Diskussion Akzeptanzkriterien hinzugefügt.
-- Wir handhaben eine noch genauer festzulegende Definition-of-Done für Integration von Anforderungen, Dokumentation, Nutzerhandbuch und sonstige redaktionelle Texte, um einen Mindeststandard zu gewährleisten. 
+  - Anforderungs Management im Gitlab Ticketsystem
+  - Diskussion von Anforderungen und möglichen Umsetzungen im Kommentar des Tickets 
+  - Design Dokumente für Architektur und einzelne Anforderungen im Projekt Wiki
+  - Gemeinsame Bewertung, Sprint Planung und Sprint Review im 2-Wochen Rhythmus
+  - Definition-of-Done 
+  - 100% Code Coverage (Unit und integration Tests)
+  - Kein API Endpoint ohne vollständige Dokumentation und automatisierte integration Tests (API Test des gebauten Containrs mit definierten Test-Daten)
+  - Contract-Driven API Design, d.h. Anforderungen des Clients oder Abstimmung zwischen Front-End und API Implementierung werden über API Tests abgebildet.  
+  - Einheitliche Linting-Regeln für eine Programmiersprache, d.h. Javascript / Typesceript folgen sowohl im Front-End als auch im Back-End dem selben Stil. Mit kleinen Anpassungen folgendem wir dem [Google Javascript Styleguide](https://google.github.io/styleguide/jsguide.html)
+  - Wir folgen einem festgelegtem Commit-Template. Das Format ist bei jedem Commit und in jedem Fall zu beachten. Insbesondere kein Check-In ohne Bezug zu einer Issue ID. Jeder Commit hat einen Body mit der Motivation für die Änderungen.
+    - Subject `<type> (<component> #<ticket): <imperative description imperative and present tense>`
+    - Body Motivation, ggf. Breaking Changes, Depreciation Notice samt Update Path, related issues und issues to be closed.
+  - Anforderungen werden als User Stories dargestellt möglichst ausführlich und mit Beispielen Dargestellt. Wo notwendig oder hilfreich werden nach gemeinsamer Diskussion Akzeptanzkriterien hinzugefügt.
+  - Wir handhaben eine noch genauer festzulegende Definition-of-Done für Integration von Anforderungen, Dokumentation, Nutzerhandbuch und sonstige redaktionelle Texte, um einen Mindeststandard zu gewährleisten. 
 
 # Komponenten
 
-## ifc-hive-server
-Eigenes Repo siehe...
+Die Plattform besteht im wesentlich aus zwei Komponenten:
 
-## ifc-hive-client
-Eigenes Repo siehe...
+1. ifc-hive-server (REST API, socket-server)
+2. ifc-hive-client (Browser Web App)
 
-## ifc-hive-project
-Das übergeorndete Projekt das alle aktuellen und etwaige zukünftige Komponenten
-referenziert und als Cluster von zusammengehörigen Services präsentiert. Für
-bloße Installation, Betrieb und Nutzung der Plattform sind die hier genannten
-Informationen hinreichend.
+Im Betrieb kommen mit einem Reverse Proxy (z.B. nginx) und einem persistenten
+Logging Service (z.B. Logstash / Kibana) noch weitere Komponenten hinzu.
+Grundsäzlich lassen sich diese sekundäre Komponenten aber auch ganz anders
+integrieren, je nach Deployment Infrastruktur.
+
+# Source Code Verwaltung
+
+__Mono-repo vs multi-repo__  
+Für die Prototyp-Entwicklung handhaben wir vorerst ein Mono-Repo, also alle
+Komponenten in einem Git-Repository. Bei wachsender Struktur und Komplexität
+sind autonome Repostiories perspektivisch sinnvoller. Aktuell wollen wir die
+Arbeitsstruktur und Deployments so schlank und einfach wie möglich halten.
 
 # Konzept
-
-## Kurzbeschreibung
 
 ## IFC und Graphdatenbank
 
@@ -97,12 +101,6 @@ Informationen hinreichend.
 
 Die verwendeten Technologien werden all als Bestandteil der Enwicklungs oder Produktionsumgebung mit ausgeliefert oder automatisch installiert. 
 
-- **Tools**
-  - [eslint](https://eslint.org/) Code Linting
-  - [snyk.io](https://snyk.io/) Security Auditing
-  - [prettier.io](https://prettier.io/) Auto formatting code
-  - [vitejs](https://vitejs.dev/) Lean fron-end tooling for Vue Apps
-  - [nyc](https://github.com/istanbuljs/nyc) Code coverage
 - **ifc-hive-client**
   - [vue 3.0](https://vuejs.org/) Reactive framework web app 
   - [vuetify 3](https://next.vuetifyjs.com/en/) UI Component Library for Vue 3
@@ -119,15 +117,22 @@ Die verwendeten Technologien werden all als Bestandteil der Enwicklungs oder Pro
   - [swagger / openAPI 3.0](https://swagger.io/docs/) openAPI 3.0 compliant API documentation
   - [ifc.js](https://github.com/IFCjs) Open source IFC library
   - [ifcOpenShell](http://ifcopenshell.org/) open source ifc toolkit and geometry engine
+- **Database and Storage**
+  - [neo4j](https://neo4j.com/) graph database as primary database technology.
+  - [redis](https://redis.io/) in memory data store for the management of socket connections and efficient access control  
+  - [elasticsearch](https://www.elastic.co/de/elastic-stack/) for full-text search and meta-data aggregations and indexing of key IFC concepts as denormalized, composed entities.
+- **Tools**
+  - [eslint](https://eslint.org/) Code Linting
+  - [snyk.io](https://snyk.io/) Security Auditing
+  - [prettier.io](https://prettier.io/) Auto formatting code
+  - [vitejs](https://vitejs.dev/) Lean fron-end tooling for Vue Apps
+  - [nyc](https://github.com/istanbuljs/nyc) Code coverage
 - **Deployment und Infrastruktur** 
   - [Gitlab and gitlab-runner](https://docs.gitlab.com/runner/) for code management and deployment to test and integration environment.
   - [Docker and docker-compose](https://www.docker.com/) for development environment and as deployment format.
   - [nginx](https://www.nginx.com/) as reverse proxy and public facade
   - [letsencrypt](https://letsencrypt.org/de/) and [certbot](https://certbot.eff.org/) as default option to handle TSL/SSL certificates.
-  - [neo4j](https://neo4j.com/) graph database as primary database technology.
-  - [redis](https://redis.io/) in memory data store for the management of socket connections and efficient access control  
-  - [elasticsearch](https://www.elastic.co/de/elastic-stack/) for full-text search and meta-data aggregations and indexing of key IFC concepts as denormalized, composed entities.
-  - [logstash](https://www.elastic.co/de/logstash/) and [kibana](https://www.elastic.co/de/kibana/) as loggin service
+  - [logstash](https://www.elastic.co/de/logstash/) and [kibana](https://www.elastic.co/de/kibana/) docker container logs are pushed via logstash to central logging service.
 
 
 # Roadmap
@@ -178,4 +183,68 @@ Siehe auch [Meilensteine](https://repo.karo.design/daniel/ifc-hive/-/milestones)
 
 # Diskussion und weiterführende Literatur
 
+- Afsari, Eastman, Castro-Lacouture, Javascript Object Notation (JSON) data
+  serialization for IFC schema and web-based-BIM data exhange, Automation in
+  Construction 77 (2017) 24-51
+- Bolognesi, Villa, From Building Information Modelling to Mixed Reality,
+    Springer (2021)
+- Michael Jäger, VCS 4 CDE - Version Control Systems as Common Data
+    Environments, 2018, Report Advanced Topics in Building Information Modeling
+- Borrmann, König, Koch, Beetz, Building Information Modelling, Technology
+    Foundations and Industry Practice, Spriner (2018) 
+- Ismael, Application of graph databases and graph theory concepts for advanced
+    analysing of BIM models based on IFC standard, Converence Paper (2017)
+- Ismael, Building Knowledge Extraction from BIM/IFC Data for Analysis in Graph
+    Databases, 2018, DOI: 10.1007/978-3-319-91262-2_57
+- Kameli et al., Improving maintanance performance by developing an IFC BIM/
+    RFID-based computer system, (2020), Journaal of Ambient Intelligence and
+    Humanized Computing (2020), https://doi.org/10.1007/s12652-020-02464-3
+- Ofluoglu, Ozener, Isikdag, Advances in Building Information Modeling, Revised
+    Selected Papers, Springer (2019) Communications in Computer and Information
+    Science 1188
+- Sacks et al., BIM Handbook, A guide to Building Information Modeling for
+    Owners, Designers, Engineers, Contractors, and Facility Managers, Third
+    Edition, Wiley (2017)
+- Scherer, Schapke, Informationssystem im Bauwesen 1, Modelle, Methoden und
+    Prozesse, Springer Vieweg 2014
+- Scherer, Schapke, Informationssystem im Bauwesen 2, Anwendungen, Springer Vieweg 2014
+- Yitmen, BIM-enabled Cognitive Computing for Smart Building Environment,
+    Potential, Requirements, and Implementation, CRC Press, Tayloer & Franis
+    Group (2021)
+
+
 # Andere interessante BIM und IFC Projekte
+
+
+__[Speckle](https://speckle.systems/)__  
+
+Eine innovative Open Source Lösung zur Echtzeit-Kommunikation von 3D Designs.
+Mittels nodejs streams, sockets und an Git angelehnten Konzeption können Nutzer
+an Speckle Streams partizipieren. Es können ganze Modelle oder auch nur Teile in
+einen Stream per »commit« samt Nachricht gepusht werden. Die Speckle
+Entwickler-Community stellt für viele wichtige CAD Autorensoftware Konnektoren
+bereit (AutoCAD, Rhino, Unreal, Blender, Unity). 
+
+__[BlenderBIM](https://blenderbim.org/)__
+
+BlenderBIM ist gestartet als heroischer Alleingang von Dion Moult, der auszog
+den IFC Standard als native Datenstruktur in Blender zu implementieren. Auf
+Basis von Blender ist dabei ein sehr ernstzunehmendes Open Source BIM Werkzeug
+entstanden, das IFC besser unterstützt als jegliche kommerzielle Plattform. 
+
+Das Projekt wurde inzwischen von der Organisation, die IFC wesentlich
+vorantreibt mit dem Building Smart Award 2020 ausgezeichnet, wird vom Epic
+MegaGrants und Google Summer of Code unterstützt.
+
+__[ifc.js](https://ifcjs.github.io/info/)__
+
+BIM und IFC Toolkit für Javascript. Kaum eine Plattform zu BIM/IFC, sei es
+kommerziell oder Open Source kommt ganz ohne diese Bibliothek aus. 
+
+__[ifcOpenShell](http://ifcopenshell.org/)__
+
+IfcOpenShell ist eine extrem nützliche und low level Bibliothek für C++ und
+Python. Das oben erwähnte BlenderBIM nutzt diese Bibliothek bzw. befruchten sich
+die Projekte mittlerweile gegenseitig.
+
+
