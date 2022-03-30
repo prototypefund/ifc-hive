@@ -10,22 +10,34 @@ hier Bewegung rein.
 
 # ifc-hive
 
-A BIM plattform to collaborate and share your IFC data.
+An Open BIM plattform to collaborate with stakeholders, contractors, partners
+and share your IFC data.
 
 [[_TOC_]]
 
-## Projektbeschreibung
+Wir wollen einen Beitrag zu Open BIM leisten indem wir Bau- und
+Planungsprojekten aller Größenordnungen sowie Betreibern von Immobilien ihre
+Bauwerksdaten ermöglichen ihre Daten vollständig IFC-konform zu verwalten. Im
+Sinne der IFC Spezifikation beschränken wir uns dabei nicht auf Design -und
+Austausch der Gebäudegeometrie, sondern schließen die Abstraken und meist
+vernachlässtigen oder proprietär implementierten abstraken Konzepte mit ein.
+Dazu gehören Randbedingungen und Anforderungen in der Vorplanung,
+Emmissionswerte zu Baustoffen, Gewerken und Baugruppen, Dokumente,
+Verantwortlichkeiten, Gewährleistungen, Baustoffe Metadaten, Ausstattungs- und
+Einrichtungselemente. 
 
-Wir wollen einen Beitrag zu Open BIM leisten. Gegenstand dieses Projekts ist die
-Entwicklung einer Plattform, mit der Bauherren einen digitalen Zwilling eines
-Gebäudes Planern und Handwerkern bereitstellen können. Der digitale Zwilling
-kann gemeinsam bearbeitet und fortlaufend mit Daten für eine nachhaltige
-Gebäudeverwaltung angereichert werden. Grundlage ist das offene Datenschema IFC
-in Kombination mit einer Repräsentation der Bauwerksdaten als Graph. Vernetztes
-Arbeiten im Sinne von Open BIM und eine datengetriebene Bewirtschaftung von
-Gebäuden braucht ein Common Data Environment (CDE), das nativ vom IFC Standard
-her gedacht und entwickelt ist. Diese Vision wollen wir als Prototyp
-realisieren.
+Dieses Projekt ist zunächst ein Prototyp. Wir wollen einerseits ausgewählte
+Anwendungsfälle so vollständig abbilden, dass die Plattform umgehend produktiv
+genutzt werden kann. Gleichzeiig wollen wir mit diesem Prototyp aber auch
+darstellen, wie ein offenes, anschlussfähiges, zukunftsfähiges BIM Common Data
+Environment (CDE) funktionieren kann. Ein derart offenes CDE ist eine notwendige
+Voraussetzung, wenn die Vorstellung von Open BIM praktisch möglich werden soll.
+Wir sehen uns als Teil einer wachsenden, innovativen Community, die genau daran
+arbeitet. Im Abschnitt [Andere interessante IFC und BIM
+Projekte](https://repo.karo.design/daniel/ifc-hive#andere-interessante-bim-und-ifc-projekte)
+listen wir einige aus unserer Sicht bemerkenswerten und inspirierende Projekte
+auf.
+
 
 ## Motivation
 
@@ -42,8 +54,8 @@ Eigenes Repo siehe...
 ## ifc-hive-project
 Das übergeorndete Projekt das alle aktuellen und etwaige zukünftige Komponenten
 referenziert und als Cluster von zusammengehörigen Services präsentiert. Für
-Nutzer, die das Projekt nur installieren und als Plattform verwenden wollen
-brauchen nur die hier genannten Informationen.
+bloße Installation, Betrieb und Nutzung der Plattform sind die hier genannten
+Informationen hinreichend.
 
 # Konzept
 
