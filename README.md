@@ -102,15 +102,20 @@ Die verwendeten Technologien werden all als Bestandteil der Enwicklungs oder Pro
   - [snyk.io](https://snyk.io/) Security Auditing
   - [prettier.io](https://prettier.io/) Auto formatting code
   - [vitejs](https://vitejs.dev/) Lean fron-end tooling for Vue Apps
+  - [nyc](https://github.com/istanbuljs/nyc) Code coverage
 - **ifc-hive-client**
   - [vue 3.0](https://vuejs.org/) Reactive framework web app 
   - [vuetify 3](https://next.vuetifyjs.com/en/) UI Component Library for Vue 3
   - [three.js](https://threejs.org/) Javascript 3D WebGL library
   - [ifc.js](https://github.com/IFCjs) Open source IFC library  
+  - [vitest](https://vitest.dev/) front-end testing framework including Vue component testing
+  - [cypress](cypress) additional browser based end-to-end testing
 - **ifc-hive-server**
   - [nodejs](https://nodejs.org/en/)
   - [fastify](https://www.fastify.io/) Lean nodejs web framework with excellent performance as the basis for our API and application Layer.
     - see also the [fastify ecosystem](https://www.fastify.io/ecosystem/)
+  - [tap](https://node-tap.org/) lean testing framework for unit tests
+  - [superTest](https://github.com/visionmedia/supertest) API testing
   - [swagger / openAPI 3.0](https://swagger.io/docs/) openAPI 3.0 compliant API documentation
   - [ifc.js](https://github.com/IFCjs) Open source IFC library
   - [ifcOpenShell](http://ifcopenshell.org/) open source ifc toolkit and geometry engine
