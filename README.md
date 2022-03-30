@@ -5,7 +5,10 @@ Wir haben das Projekt gerade erst aufgesetzt und wollten lieber diesen als gar
 keinen Link in der Bewerbung mitschicken. Im Verlauf von April und Mai kommt
 hier Bewegung rein.
 
-Der Regel für den Antrag selber folgend halten wir alle Texte zur Darstellung des Projeks vorläufig auf Deutsch. Um der wachsenden Community an BIM und IFC interessierten Entwicklern keine unnötigen Hürden in den Weg zu stellen schlagen wir für den weiteren Projektverlauf Englisch als Geschäftssprache vor.  
+Der Regel für den Antrag selber folgend halten wir alle Texte zur Darstellung
+des Projeks vorläufig auf Deutsch. Um der wachsenden Community an BIM und IFC
+interessierten Entwicklern keine unnötigen Hürden in den Weg zu stellen schlagen
+wir für den weiteren Projektverlauf Englisch als Geschäftssprache vor.  
 ```
 
 ---
