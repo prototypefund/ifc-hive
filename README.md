@@ -109,6 +109,8 @@ Die verwendeten Technologien werden all als Bestandteil der Enwicklungs oder Pro
   - [fastify](https://www.fastify.io/) Lean nodejs web framework with excellent performance as the basis for our API and application Layer.
     - see also the [fastify ecosystem](https://www.fastify.io/ecosystem/)
   - [swagger / openAPI 3.0](https://swagger.io/docs/) openAPI 3.0 compliant API documentation
+  - [ifc.js](https://github.com/IFCjs) Open source IFC library
+  - [ifcOpenShell](http://ifcopenshell.org/) open source ifc toolkit and geometry engine
 - **Deployment und Infrastruktur** 
   - [Gitlab and gitlab-runner](https://docs.gitlab.com/runner/) for code management and deployment to test and integration environment.
   - [Docker and docker-compose](https://www.docker.com/) for development environment and as deployment format.
