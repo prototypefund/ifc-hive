@@ -92,6 +92,34 @@ Informationen hinreichend.
 
 ## Verwendete Technologien
 
+Die verwendeten Technologien werden all als Bestandteil der Enwicklungs oder Produktionsumgebung mit ausgeliefert oder automatisch installiert. 
+
+- **Tools**
+  - [eslint](https://eslint.org/) Code Linting
+  - [snyk.io](https://snyk.io/) Security Auditing
+  - [prettier.io](https://prettier.io/) Auto formatting code
+  - [vitejs](https://vitejs.dev/) Lean fron-end tooling for Vue Apps
+- **ifc-hive-client**
+  - [vue 3.0](https://vuejs.org/) Reactive framework web app 
+  - [vuetify 3](https://next.vuetifyjs.com/en/) UI Component Library for Vue 3
+  - [three.js](https://threejs.org/) Javascript 3D WebGL library
+  - [ifc.js](https://github.com/IFCjs) Open source IFC library  
+- **ifc-hive-server**
+  - [nodejs](https://nodejs.org/en/)
+  - [fastify](https://www.fastify.io/) Lean nodejs web framework with excellent performance as the basis for our API and application Layer.
+    - see also the [fastify ecosystem](https://www.fastify.io/ecosystem/)
+  - [swagger / openAPI 3.0](https://swagger.io/docs/) openAPI 3.0 compliant API documentation
+- **Deployment und Infrastruktur** 
+  - [Gitlab and gitlab-runner](https://docs.gitlab.com/runner/) for code management and deployment to test and integration environment.
+  - [Docker and docker-compose](https://www.docker.com/) for development environment and as deployment format.
+  - [nginx](https://www.nginx.com/) as reverse proxy and public facade
+  - [letsencrypt](https://letsencrypt.org/de/) and [certbot](https://certbot.eff.org/) as default option to handle TSL/SSL certificates.
+  - [neo4j](https://neo4j.com/) graph database as primary database technology.
+  - [redis](https://redis.io/) in memory data store for the management of socket connections and efficient access control  
+  - [elasticsearch](https://www.elastic.co/de/elastic-stack/) for full-text search and meta-data aggregations and indexing of key IFC concepts as denormalized, composed entities.
+  - [logstash](https://www.elastic.co/de/logstash/) and [kibana](https://www.elastic.co/de/kibana/) as loggin service
+
+
 # Roadmap
 
 Siehe auch [Meilensteine](https://repo.karo.design/daniel/ifc-hive/-/milestones) für detaillierte Beschreibungen.
