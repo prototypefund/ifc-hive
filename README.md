@@ -56,20 +56,21 @@ auf.
 
 @TODO Arbeisweise in Contribution Guide genauer festlegen. 
 
-  - Anforderungs Management im Gitlab Ticketsystem
-  - Diskussion von Anforderungen und möglichen Umsetzungen im Kommentar des Tickets 
-  - Design Dokumente für Architektur und einzelne Anforderungen im Projekt Wiki
+  - Anforderungs Management machen wir im Gitlab Ticketsystem
+  - Diskussion von Anforderungen und möglichen Umsetzungen im Kommentarbereich der jeweiligen Tickets 
+  - Design Dokumente für Architektur und Implementierung einzelner Anforderungen im Gitlab-Projekt-Wiki
   - Gemeinsame Bewertung, Sprint Planung und Sprint Review im 2-Wochen Rhythmus
-  - Definition-of-Done 
   - 100% Code Coverage (Unit und integration Tests)
-  - Kein API Endpoint ohne vollständige Dokumentation und automatisierte integration Tests (API Test des gebauten Containrs mit definierten Test-Daten)
+  - Kein API Endpoint ohne vollständige Dokumentation und automatisierte Integration-Tests (API Testing des gebauten Containrs mit Test-Daten)
   - Contract-Driven API Design, d.h. Anforderungen des Clients oder Abstimmung zwischen Front-End und API Implementierung werden über API Tests abgebildet.  
-  - Einheitliche Linting-Regeln für eine Programmiersprache, d.h. Javascript / Typesceript folgen sowohl im Front-End als auch im Back-End dem selben Stil. Mit kleinen Anpassungen folgendem wir dem [Google Javascript Styleguide](https://google.github.io/styleguide/jsguide.html)
-  - Wir folgen einem festgelegtem Commit-Template. Das Format ist bei jedem Commit und in jedem Fall zu beachten. Insbesondere kein Check-In ohne Bezug zu einer Issue ID. Jeder Commit hat einen Body mit der Motivation für die Änderungen.
-    - Subject `<type> (<component> #<ticket): <imperative description imperative and present tense>`
-    - Body Motivation, ggf. Breaking Changes, Depreciation Notice samt Update Path, related issues und issues to be closed.
-  - Anforderungen werden als User Stories dargestellt möglichst ausführlich und mit Beispielen Dargestellt. Wo notwendig oder hilfreich werden nach gemeinsamer Diskussion Akzeptanzkriterien hinzugefügt.
-  - Wir handhaben eine noch genauer festzulegende Definition-of-Done für Integration von Anforderungen, Dokumentation, Nutzerhandbuch und sonstige redaktionelle Texte, um einen Mindeststandard zu gewährleisten. 
+  - Einheitliche Linting-Regeln für eine Programmiersprache, d.h. Javascript / Typesceript folgen sowohl im Front-End als auch im Back-End dem selben Stil.
+  - Wir handhaben ein Commit-Template. Das Format ist bei jedem Commit und in jedem Fall zu beachten. Insbesondere kein Check-In ohne Bezug zu einer Issue ID. Jeder Commit hat einen Body mit der Motivation für die Änderungen.
+    - _Subject:_ `<type> (<component> #<ticket): <imperative description imperative and present tense>`
+    - _Body:_ Motivation, ggf. Breaking Changes, Depreciation Notice samt Update Path, related issues und issues to be closed.
+  - Anforderungen werden als User Stories dargestellt, möglichst ausführlich, mit konkreten Beispielen. Wo notwendig oder hilfreich werden nach gemeinsamer Diskussion Akzeptanzkriterien und zu beachtetende Edge-Cases hinzugefügt.
+  - Wir handhaben eine noch genauer festzulegende Definition-of-Done für Integration von Anforderungen, Dokumentation, Nutzerhandbuch etc. um einen Mindeststandard zu gewährleisten. 
+  - Alle Dokumentation ist Teil des Quelltextes (API Dokumentation, Dokumentation im Quelltext, Nutzerhandbuch)
+  - Tests (unit, integration, end-to-end) sind so zu schreiben, dass sie leicht als Teil der Dokumentation zu verstehen sind.
 
 # Komponenten
 
@@ -99,7 +100,8 @@ Arbeitsstruktur und Deployments so schlank und einfach wie möglich halten.
 
 ## Verwendete Technologien
 
-Die verwendeten Technologien werden all als Bestandteil der Enwicklungs oder Produktionsumgebung mit ausgeliefert oder automatisch installiert. 
+Die verwendeten Technologien werden alle als Bestandteil der Enwicklungs oder
+Produktionsumgebung mit ausgeliefert oder automatisch installiert. 
 
 - **ifc-hive-client**
   - [vue 3.0](https://vuejs.org/) Reactive framework web app 
@@ -212,9 +214,7 @@ Siehe auch [Meilensteine](https://repo.karo.design/daniel/ifc-hive/-/milestones)
     Potential, Requirements, and Implementation, CRC Press, Tayloer & Franis
     Group (2021)
 
-
 # Andere interessante BIM und IFC Projekte
-
 
 __[Speckle](https://speckle.systems/)__  
 
