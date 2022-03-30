@@ -4,6 +4,8 @@ AN DEN PROTOTYP FUND (2022-03-30)
 Wir haben das Projekt gerade erst aufgesetzt und wollten lieber diesen als gar
 keinen Link in der Bewerbung mitschicken. Im Verlauf von April und Mai kommt
 hier Bewegung rein.
+
+Der Regel für den Antrag selber folgend halten wir alle Texte zur Darstellung des Projeks vorläufig auf Deutsch. Um der wachsenden Community an BIM und IFC interessierten Entwicklern keine unnötigen Hürden in den Weg zu stellen schlagen wir für den weiteren Projektverlauf Englisch als Geschäftssprache vor.  
 ```
 
 ---
@@ -43,10 +45,28 @@ listen wir einige aus unserer Sicht bemerkenswerte und inspirierende Projekte
 auf.
 
 
-
 ## Motivation
 
 ## Zielgruppe
+
+# Arbeitsweise
+
+@TODO Arbeisweise in Contribution Guide genauer festlegen. 
+
+- Anforderungs Management im Gitlab Ticketsystem
+- Diskussion von Anforderungen und möglichen Umsetzungen im Kommentar des Tickets 
+- Design Dokumente für Architektur und einzelne Anforderungen im Projekt Wiki
+- Gemeinsame Bewertung, Sprint Planung und Sprint Review im 2-Wochen Rhythmus
+- Definition-of-Done 
+- 100% Code Coverage (Unit und integration Tests)
+- Kein API Endpoint ohne vollständige Dokumentation und automatisierte integration Tests (API Test des gebauten Containrs mit definierten Test-Daten)
+- Contract-Driven API Design, d.h. Anforderungen des Clients oder Abstimmung zwischen Front-End und API Implementierung werden über API Tests abgebildet.  
+- Einheitliche Linting-Regeln für eine Programmiersprache, d.h. Javascript / Typesceript folgen sowohl im Front-End als auch im Back-End dem selben Stil. Mit kleinen Anpassungen folgendem wir dem [Google Javascript Styleguide](https://google.github.io/styleguide/jsguide.html)
+- Wir folgen einem festgelegtem Commit-Template. Das Format ist bei jedem Commit und in jedem Fall zu beachten. Insbesondere kein Check-In ohne Bezug zu einer Issue ID. Jeder Commit hat einen Body mit der Motivation für die Änderungen.
+  - Subject `<type> (<component> #<ticket): <imperative description imperative and present tense>`
+  - Body Motivation, ggf. Breaking Changes, Depreciation Notice samt Update Path, related issues und issues to be closed.
+- Anforderungen werden als User Stories dargestellt möglichst ausführlich und mit Beispielen Dargestellt. Wo notwendig oder hilfreich werden nach gemeinsamer Diskussion Akzeptanzkriterien hinzugefügt.
+- Wir handhaben eine noch genauer festzulegende Definition-of-Done für Integration von Anforderungen, Dokumentation, Nutzerhandbuch und sonstige redaktionelle Texte, um einen Mindeststandard zu gewährleisten. 
 
 # Komponenten
 
@@ -118,8 +138,6 @@ Siehe auch [Meilensteine](https://repo.karo.design/daniel/ifc-hive/-/milestones)
       Immobilien.
 
 
-# Sonstiges
+# Diskussion und weiterführende Literatur
 
-## Diskussion und weiterführende Literatur
-
-## Andere interessante BIM und IFC Projekte
+# Andere interessante BIM und IFC Projekte
