@@ -16,15 +16,19 @@ and share your IFC data.
 [[_TOC_]]
 
 Wir wollen einen Beitrag zu Open BIM leisten indem wir Bau- und
-Planungsprojekten aller Größenordnungen sowie Betreibern von Immobilien ihre
-Bauwerksdaten ermöglichen ihre Daten vollständig IFC-konform zu verwalten. Im
-Sinne der IFC Spezifikation beschränken wir uns dabei nicht auf Design -und
-Austausch der Gebäudegeometrie, sondern schließen die Abstraken und meist
-vernachlässtigen oder proprietär implementierten abstraken Konzepte mit ein.
-Dazu gehören Randbedingungen und Anforderungen in der Vorplanung,
-Emmissionswerte zu Baustoffen, Gewerken und Baugruppen, Dokumente,
-Verantwortlichkeiten, Gewährleistungen, Baustoffe Metadaten, Ausstattungs- und
-Einrichtungselemente. 
+Planungsprojekten aller Größenordnungen sowie Betreibern von Immobilien
+ermöglichen, ihre Bauwerksdaten vollständig IFC-konform zu verwalten. Im Sinne
+der IFC Spezifikation beschränken wir uns dabei nicht auf Design und Austausch
+der Gebäudegeometrie, sondern schließen die Abstraken und meist vernachlässtigen
+oder proprietär implementierten abstraken Konzepte mit ein. Dazu gehören
+Randbedingungen und Anforderungen in der Vorplanung, Emmissionswerte zu
+Baustoffen, Gewerken und Baugruppen, Dokumente, Verantwortlichkeiten,
+Gewährleistungen, Baustoffe Metadaten, Ausstattungs- und Einrichtungselemente. 
+
+Die für BIM Formate COBie und BCF wollen wir ebenfalls unterstützen, soweit sie
+Teildes IFC 4.0 Standards order einer etablierten Erweiterung sind. Vor allem im
+Betrieb und in der Sanierung von Bestandsgebäuden spielen beide Formate eine
+wichtige Rolle für einen niederschwelligen Datenaustausch ohne Medienbrüche.
 
 Dieses Projekt ist zunächst ein Prototyp. Wir wollen einerseits ausgewählte
 Anwendungsfälle so vollständig abbilden, dass die Plattform umgehend produktiv
@@ -35,8 +39,9 @@ Voraussetzung, wenn die Vorstellung von Open BIM praktisch möglich werden soll.
 Wir sehen uns als Teil einer wachsenden, innovativen Community, die genau daran
 arbeitet. Im Abschnitt [Andere interessante IFC und BIM
 Projekte](https://repo.karo.design/daniel/ifc-hive#andere-interessante-bim-und-ifc-projekte)
-listen wir einige aus unserer Sicht bemerkenswerten und inspirierende Projekte
+listen wir einige aus unserer Sicht bemerkenswerte und inspirierende Projekte
 auf.
+
 
 
 ## Motivation
