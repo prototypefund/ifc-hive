@@ -5,10 +5,12 @@
   "main": "src/index.js",
   "repository": "https://repo.karo.design/daniel/ifc-hive",
   "author": "Daniel Kaminski <daniel@karo.berlin>",
+  "type": "module",
   "license": "MIT",
   "scripts": {
     "start": "node ./src/index",
-    "dev": "nodemon ./src/index | npx pino-pretty"
+    "dev": "nodemon ./src/index | npx pino-pretty",
+    "test": "npx tap"
   },
   "dependencies": {
     "fastify": "^3.27.4",
@@ -16,7 +18,13 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
     "nodemon": "^2.0.15",
-    "pino-pretty": "^7.6.0"
+    "pino-pretty": "^7.6.0",
+    "tap": "^16.0.1"
   }
 }

@@ -1,4 +1,4 @@
-const swaggerConfig = {
+export default {
   // show API documentation
   exposeRoute: true,
   routePrefix: '/docs',
@@ -13,7 +13,7 @@ const swaggerConfig = {
       description: 'FInd more documentation here'
     },
     tags: [
-      { name: 'item', 'description': 'Test item related end-points' }
+      { name: 'item', description: 'Test item related end-points' }
     ]
   },
   uiConcfig: {
@@ -21,5 +21,3 @@ const swaggerConfig = {
     deepLinking: true,
   }
 }
-
-module.exports = swaggerConfig

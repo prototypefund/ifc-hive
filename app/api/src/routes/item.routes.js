@@ -1,8 +1,6 @@
-const items = require('../itemsDB')
-const { getItems, getItem, addItem, deleteItem, updateItem } = require('../controllers/item.controller')
+import { getItems, getItem, addItem, deleteItem, updateItem } from '../controllers/item.controller.js'
 
-function itemRoute (fastify, options, done) {
-
+export default function itemRoutes (fastify, options, done) {
   /* item schema */
   const itemSchema = {
     type: 'object',
@@ -20,7 +18,7 @@ function itemRoute (fastify, options, done) {
       response: {
         200: {
           type: 'array',
-          items: itemSchema 
+          items: itemSchema
         }
       }
     },
@@ -81,8 +79,8 @@ function itemRoute (fastify, options, done) {
   /* update item options */
   const updateItemOpts = {
     schema: {
-    tags: ['item'],
-    description: 'Update single item',
+      tags: ['item'],
+      description: 'Update single item',
       body: {
         type: 'object',
         required: ['name'],
@@ -112,5 +110,3 @@ function itemRoute (fastify, options, done) {
   /* don't forget to call done */
   done()
 }
-
-module.exports = itemRoute
