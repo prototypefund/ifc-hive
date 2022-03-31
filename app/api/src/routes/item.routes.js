@@ -15,6 +15,8 @@ function itemRoute (fastify, options, done) {
   /* get all items options */
   const getItemsOpts = {
     schema: {
+      tags: ['item'],
+      description: 'Get all test items',
       response: {
         200: {
           type: 'array',
@@ -28,6 +30,11 @@ function itemRoute (fastify, options, done) {
   /* get item options */
   const getItemOpts = {
     schema: {
+      tags: ['item'],
+      description: 'Get single test item by id',
+      params: {
+        id: { type: 'string' }
+      },
       response: {
         200: itemSchema
       }
@@ -38,6 +45,8 @@ function itemRoute (fastify, options, done) {
   /* add items options */
   const addItemOpts = {
     schema: {
+      tags: ['item'],
+      description: 'Add new item',
       body: {
         type: 'object',
         required: ['name'],
@@ -55,6 +64,8 @@ function itemRoute (fastify, options, done) {
   /* delete item options */
   const deleteItemOpts = {
     schema: {
+      tags: ['item'],
+      description: 'Delete single item by id',
       response: {
         200: {
           type: 'object',
@@ -70,6 +81,8 @@ function itemRoute (fastify, options, done) {
   /* update item options */
   const updateItemOpts = {
     schema: {
+    tags: ['item'],
+    description: 'Update single item',
       body: {
         type: 'object',
         required: ['name'],

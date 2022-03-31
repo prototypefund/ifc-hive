@@ -1,16 +1,8 @@
 const fastify = require('fastify')({ logger: true })
+const swaggerConfig = require('./lib/swaggerConfig')
 
 /* register swagger documentation tool */
-fastify.register(require('fastify-swagger'), {
-  // show API documentation
-  exposeRoute: true,
-  routePrefix: '/docs',
-  swagger: {
-    info: {
-      title: 'ifc-hive-api'
-    }
-  }
-})
+fastify.register(require('fastify-swagger'), swaggerConfig)
 
 /* register routes */
 fastify.register(require('./routes/item.routes'))
