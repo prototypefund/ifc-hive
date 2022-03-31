@@ -12,8 +12,10 @@ export default function itemRoutes (fastify, options, done) {
 
   /* get all items options */
   const getItemsOpts = {
+    // constraints: { version: '1.2.1' },
     schema: {
       tags: ['item'],
+      summary: 'Get all items',
       description: 'Get all test items',
       response: {
         200: {
@@ -27,11 +29,18 @@ export default function itemRoutes (fastify, options, done) {
 
   /* get item options */
   const getItemOpts = {
+    constraints: { version: '1.2.1' },
     schema: {
       tags: ['item'],
-      description: 'Get single test item by id',
+      description: 'Some description for this rest end-point',
       params: {
-        id: { type: 'string' }
+        id: { type: 'string', default: '1' },
+      },
+      query: {
+        format: { type: 'string', enum: ['tree', 'list'], default: 'list' }
+      },
+      headers: {
+        'Accept-Version': { type: 'string', default: '1.x', example: '*', }
       },
       response: {
         200: itemSchema
