@@ -1,0 +1,21 @@
+# Please add dedicated .gitignore files to each app so that it is clearer why a
+# particular ignore rule is present
+
+# keep this files
+!.gitkeep
+
+# editor directories and files
+/tags
+.tern-port
+vim-session
+.DS_Store
+
+# just in case when moving arround keys
+/ssh
+/.ssh
+id_rsa
+id_rsa.pub
+
+# ignore reference folder
+**/*-ref
+
