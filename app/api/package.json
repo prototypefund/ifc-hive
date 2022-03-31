@@ -1,0 +1,22 @@
+{
+  "name": "ifc-hive-api",
+  "version": "0.0.1",
+  "description": "API for ifc-hive plattform",
+  "main": "src/index.js",
+  "repository": "https://repo.karo.design/daniel/ifc-hive",
+  "author": "Daniel Kaminski <daniel@karo.berlin>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./src/index",
+    "dev": "nodemon ./src/index | npx pino-pretty"
+  },
+  "dependencies": {
+    "fastify": "^3.27.4",
+    "fastify-swagger": "^5.1.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "pino-pretty": "^7.6.0"
+  }
+}
