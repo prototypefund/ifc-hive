@@ -14,7 +14,14 @@ export default {
     },
     tags: [
       { name: 'item', description: 'Test item related end-points' }
-    ]
+    ],
+    securityDefinitions: {
+      apiKey: {
+        type: 'apiKey',
+        name: 'apiKey',
+        in: 'header'
+      }
+    }
   },
   uiConcfig: {
     docExpansion: 'full',

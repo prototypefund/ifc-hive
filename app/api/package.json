@@ -2,18 +2,19 @@
   "name": "ifc-hive-api",
   "version": "0.0.1",
   "description": "API for ifc-hive plattform",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "repository": "https://repo.karo.design/daniel/ifc-hive",
   "author": "Daniel Kaminski <daniel@karo.berlin>",
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "start": "node ./src/index",
-    "dev": "nodemon ./src/index | npx pino-pretty",
+    "start": "node ./src/server",
+    "dev": "npx nodemon ./src/server | npx pino-pretty",
     "test": "npx tap"
   },
   "dependencies": {
     "fastify": "^3.27.4",
+    "fastify-healthcheck": "^3.1.0",
     "fastify-swagger": "^5.1.0",
     "uuid": "^8.3.2"
   },
@@ -26,5 +27,8 @@
     "nodemon": "^2.0.15",
     "pino-pretty": "^7.6.0",
     "tap": "^16.0.1"
+  },
+  "imports": {
+    "#src/*": "./src/*.js"
   }
 }

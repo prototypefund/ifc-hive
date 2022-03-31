@@ -1,6 +1,6 @@
 /* eslint-disable no-import-assign */
 import { v4 as uuidv4 } from 'uuid'
-import { items, modifyItems } from '../itemsDB.js'
+import { items, modifyItems } from '#src/bundle.items/itemsDB'
 
 /* get all items */
 export const getItems = (req, reply) => {
