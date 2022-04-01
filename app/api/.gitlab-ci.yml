@@ -1,0 +1,27 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build-core-app:
+  stage: build
+  script:
+    - echo "building containers"
+
+test-api:
+  stage: test
+  script:
+    - echo "Run api tests"
+
+deploy-all:
+  stage: deploy
+  script:
+    - echo "deploy to integration environment"
+
+# deploy API integration
+deploy-staging:
+  stage: deploy
+  only:
+    - master
+  script:
+    - echo "Deploy new build to staging server"
