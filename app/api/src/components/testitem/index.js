@@ -1,4 +1,4 @@
-import { getItems, getItem, addItem, deleteItem, updateItem } from '../controllers/item.controller.js'
+import { getItems, getItem, addItem, deleteItem, updateItem } from './item.controller.js'
 
 export default function itemRoutes (fastify, options, done) {
   /* item schema */
@@ -31,16 +31,15 @@ export default function itemRoutes (fastify, options, done) {
   const getItemOpts = {
     constraints: { version: '1.2.1' },
     schema: {
+      security: [{ ApiToken: ['admin'] }],
       tags: ['item'],
-      description: 'Some description for this rest end-point',
+      description: 'This endpoint fetches a test-item from the DB given the `id` parameters.\nNote that this route requires an API token',
+      summary: 'v1.2.1 return single item by ID',
       params: {
         id: { type: 'string', default: '1' },
       },
-      query: {
-        format: { type: 'string', enum: ['tree', 'list'], default: 'list' }
-      },
       headers: {
-        'Accept-Version': { type: 'string', default: '1.x', example: '*', }
+        'Accept-Version': { type: 'string', default: '*' }
       },
       response: {
         200: itemSchema
