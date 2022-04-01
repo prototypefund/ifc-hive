@@ -54,7 +54,7 @@ export default function build (opts = {}) {
    */
   app.addHook('onRequest', (request, reply, done) => {
     // we want the accept-versio header everywhere except when requesting the documentation routes
-    if (!request.headers['accept-version'] && !/docs/.test(request.req.url)) {
+    if (!request.headers['accept-version'] && !/(docs|health)/.test(request.req.url)) {
       // send error if we are missing the Accept-Version header
       reply
         .status(412)
