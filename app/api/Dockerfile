@@ -18,7 +18,7 @@ RUN if [ "$NODE_ENV" = "development" ]; \
 COPY . ./
 
 # set default values
-ENV PORT 5000
+ENV PORT 3000
 
 # set port
 EXPOSE $PORT

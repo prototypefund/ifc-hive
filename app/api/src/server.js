@@ -1,7 +1,7 @@
 import app from '#src/app'
 
 /* Set port */
-const PORT = 5000
+const PORT = 3000
 
 const server = app({ logger: true })
 
