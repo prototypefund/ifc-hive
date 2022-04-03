@@ -25,3 +25,14 @@ services:
     environment:
       - NODE_ENV=production
     command: yarn run start
+  # Web-client
+  ifc-hive-client:
+    build:
+      context: ./app/client
+      args:
+        NODE_ENV: production
+    ports:
+      - "8081:80"
+    environment:
+      - NODE_ENV=production
+      - PORT=80

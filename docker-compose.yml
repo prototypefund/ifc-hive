@@ -18,3 +18,8 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
+  # Web-client http://localhost:8081
+  ifc-hive-client:
+    build: ./app/client
+    environment:
+      - PORT=8081
