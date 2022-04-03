@@ -1,8 +1,19 @@
-# Docs App
+# Vuepress Starter Page
 
-This directory only contains the required configuration and definitions for the
-VuePress static site generator. The actual documentation files are to be found
-in the root directory of this project `/docs` in order to follow the most common
-conventions.
+See [VuePress Website](https://vuepress.vuejs.org/) for documentation. This
+project is a very basic VuePress boilerplate. Please note the the markdown
+documents to be published are located in the `./docs` directory. 
 
-Make sure to configure VuePress accordingly.
+All configuration ist to be found in `./docs/.vuepress` and this boilerplate is
+configured in such a way that the build directory is `./dist` instead of the
+default `./docs/.vuepress/dist`.
+
+## Quickstart
+
+```bash
+yarn install
+# for development run
+yarn dev
+# if you wan to build the static files for production run
+yarn build
+```

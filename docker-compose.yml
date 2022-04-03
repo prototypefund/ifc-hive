@@ -1,0 +1,12 @@
+# https://docs.docker.com/compose/yml/
+# This docker-compose file contains only generic entries which are to be use in
+# all environments, i. e.
+# 
+# - development
+# - testing
+# - production
+version: "3"
+services:
+  ifc-hive-docs:
+    build:
+      context: ./app/docs

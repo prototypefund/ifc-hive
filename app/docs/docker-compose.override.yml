@@ -1,0 +1,17 @@
+version: "3"
+services:
+  vuepress-docs:
+    build:
+      context: .
+      target: build
+      args:
+        NODE_ENV: development
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=8089
+    command: yarn run dev
