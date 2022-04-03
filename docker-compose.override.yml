@@ -7,6 +7,7 @@
 # docker-compose up
 version: "3"
 services:
+  # Docs Service
   ifc-hive-docs:
     build:
       context: ./app/docs
@@ -21,4 +22,16 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=8089
+    command: yarn run dev
+  # API Service
+  ifc-hive-api:
+    build:
+      context: ./app/api
+      args: 
+        NODE_ENV: development
+    volumes:
+      - ./app/api:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
     command: yarn run dev

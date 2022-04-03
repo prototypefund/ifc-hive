@@ -5,6 +5,7 @@
 # docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 version: "3"
 services:
+  # Docs Service
   ifc-hive-docs:
     build:
       context: ./app/docs
@@ -15,3 +16,12 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=80
+  # API Service
+  ifc-hive-api:
+    build:
+      context: ./app/api
+      args: 
+        NODE_ENV: production
+    environment:
+      - NODE_ENV=production
+    command: yarn run start

@@ -5,7 +5,8 @@ const PORT = 5000
 
 const server = app({ logger: true })
 
-server.listen(PORT, (err, address) => {
+/* since we are running inside a docker container we need to bin to '0.0.0.0' instead of the default 'localhost' */
+server.listen(PORT, '0.0.0.0', (err, address) => {
   server.log.info('APP RUNNING')
   if (err) {
     server.log.error(err)

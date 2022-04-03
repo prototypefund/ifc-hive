@@ -14,6 +14,7 @@ export default function itemRoutes (fastify, options, done) {
   const getItemsOpts = {
     // constraints: { version: '1.2.1' },
     schema: {
+      constraints: { version: '1.0.0' },
       tags: ['item'],
       summary: 'Get all items',
       description: 'Get all test items',
@@ -29,7 +30,6 @@ export default function itemRoutes (fastify, options, done) {
 
   /* get item options */
   const getItemOpts = {
-    constraints: { version: '1.2.1' },
     schema: {
       security: [{ ApiToken: ['admin'] }],
       tags: ['item'],

@@ -7,6 +7,14 @@
 # - production
 version: "3"
 services:
+  # Docs Service http://localhost:8089
   ifc-hive-docs:
     build:
       context: ./app/docs
+  # API Service http://localhost:5000
+  ifc-hive-api:
+    build: ./app/api
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
