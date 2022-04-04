@@ -1,17 +1,17 @@
+<div align="center" style="margin-top: 50px">
+  <img src="./docs/assets/logo-text-und-bild-small_200px.png">
+</div>
 
-```bash
-AN DEN PROTOTYP FUND (2022-03-30)
-Wir haben das Projekt gerade erst aufgesetzt und wollten lieber diesen als gar
+**AN DEN PROTOTYP FUND (2022-03-30)**  
+_Wir haben das Projekt gerade erst aufgesetzt und wollten lieber diesen als gar
 keinen Link in der Bewerbung mitschicken. Im Verlauf von April und Mai kommt
-hier Bewegung rein.
+hier Bewegung rein._
 
-Der Regel für den Antrag selber folgend halten wir alle Texte zur Darstellung
+_Der Regel für den Antrag selber folgend halten wir alle Texte zur Darstellung
 des Projeks vorläufig auf Deutsch. Um der wachsenden Community an BIM und IFC
 interessierten Entwicklern keine unnötigen Hürden in den Weg zu stellen schlagen
-wir für den weiteren Projektverlauf Englisch als Geschäftssprache vor.  
-```
+wir für den weiteren Projektverlauf Englisch als Geschäftssprache vor._  
 
----
 
 # ifc-hive
 
