@@ -51,15 +51,16 @@ auf.
 
 **Wer kann etwas mit dem Ergebnis dieser Prototyp-Entwicklung anfangen?**
 
-Im Rahmen einer zeiltlich begrenzten Prototypentwicklung richten wir uns
-zunächste vor allem an Nutzer, die in verschiedenen Anwendungsfällen mit
-Bestandsgebäuden umgehen.
+Im Rahmen einer zeiltlich begrenzten Prototyp-Entwicklung richten wir uns
+zunächst vor allem an Nutzer, die in verschiedenen Anwendungsfällen mit
+Bestandsgebäuden umgehen und eine einheitliche, strukturierte Datenlage als Ziel
+haben.
 
 1. Migration von Bauwerksdaten zu BIM / IFC
 2. Grundlagenerfassung von Bestandsgebäuden
 3. Ausplanung von Räumen, Etagen oder ganzen Gebäuden, z.B. Neueinrichtung von
-   Unternehmen und Behördenx
-4. IFC konforme Verwaltung von Immobilienportfolio
+   Unternehmen und Behörden
+4. IFC konforme Verwaltung Immobilienportfolio
 5. Datenlage für energetische Gebäudesanierung schaffen und pflegen
 6. Planung und Umsetzung Neueinrichtung von Verkaufsräumen
 6. Planung von Umbauten und Sanierungen
