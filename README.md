@@ -91,6 +91,9 @@ Nach erfolgreichem Start sind die folgenden Services erreichbar:
 3. http://localhost:3000/docs (Auto generated API documentation)
 4. http://localhost:8089 (Documentation Website)
 
+Siehe auch [technische Dokumentation](https://ifc-hive.karo.design/docs) und [Quickstart
+Anleitung](https://ifc-hive.karo.design/quickstart) in der Dokumentation.
+
 # Arbeitsweise
 
 Wichtige Aspekte für die Zusammenarbeit im Projekt sind im [Contribution
