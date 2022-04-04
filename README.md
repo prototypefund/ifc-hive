@@ -47,30 +47,10 @@ Projekte](https://repo.karo.design/daniel/ifc-hive#andere-interessante-bim-und-i
 listen wir einige aus unserer Sicht bemerkenswerte und inspirierende Projekte
 auf.
 
-
-## Motivation
-
-## Zielgruppe
-
 # Arbeitsweise
 
-@TODO Arbeisweise in Contribution Guide genauer festlegen. 
-
-  - Anforderungs Management machen wir im Gitlab Ticketsystem
-  - Diskussion von Anforderungen und möglichen Umsetzungen im Kommentarbereich der jeweiligen Tickets 
-  - Design Dokumente für Architektur und Implementierung einzelner Anforderungen im Gitlab-Projekt-Wiki
-  - Gemeinsame Bewertung, Sprint Planung und Sprint Review im 2-Wochen Rhythmus
-  - 100% Code Coverage (Unit und integration Tests)
-  - Kein API Endpoint ohne vollständige Dokumentation und automatisierte Integration-Tests (API Testing des gebauten Containrs mit Test-Daten)
-  - Contract-Driven API Design, d.h. Anforderungen des Clients oder Abstimmung zwischen Front-End und API Implementierung werden über API Tests abgebildet.  
-  - Einheitliche Linting-Regeln für eine Programmiersprache, d.h. Javascript / Typesceript folgen sowohl im Front-End als auch im Back-End dem selben Stil.
-  - Wir handhaben ein Commit-Template. Das Format ist bei jedem Commit und in jedem Fall zu beachten. Insbesondere kein Check-In ohne Bezug zu einer Issue ID. Jeder Commit hat einen Body mit der Motivation für die Änderungen.
-    - _Subject:_ `<type> (<component> #<ticket): <imperative description imperative and present tense>`
-    - _Body:_ Motivation, ggf. Breaking Changes, Depreciation Notice samt Update Path, related issues und issues to be closed.
-  - Anforderungen werden als User Stories dargestellt, möglichst ausführlich, mit konkreten Beispielen. Wo notwendig oder hilfreich werden nach gemeinsamer Diskussion Akzeptanzkriterien und zu beachtetende Edge-Cases hinzugefügt.
-  - Wir handhaben eine noch genauer festzulegende Definition-of-Done für Integration von Anforderungen, Dokumentation, Nutzerhandbuch etc. um einen Mindeststandard zu gewährleisten. 
-  - Alle Dokumentation ist Teil des Quelltextes (API Dokumentation, Dokumentation im Quelltext, Nutzerhandbuch)
-  - Tests (unit, integration, end-to-end) sind so zu schreiben, dass sie leicht als Teil der Dokumentation zu verstehen sind.
+Wichtige Aspekte für die Zusammenarbeit im Projekt sind im [Contribution
+Guide](CONTRIBUTING.md) dargestellt.
 
 # Komponenten
 
@@ -83,14 +63,6 @@ Im Betrieb kommen mit einem Reverse Proxy (z.B. nginx) und einem persistenten
 Logging Service (z.B. Logstash / Kibana) noch weitere Komponenten hinzu.
 Grundsäzlich lassen sich diese sekundäre Komponenten aber auch ganz anders
 integrieren, je nach Deployment Infrastruktur.
-
-# Source Code Verwaltung
-
-__Mono-repo vs multi-repo__  
-Für die Prototyp-Entwicklung handhaben wir vorerst ein Mono-Repo, also alle
-Komponenten in einem Git-Repository. Bei wachsender Struktur und Komplexität
-sind autonome Repostiories perspektivisch sinnvoller. Aktuell wollen wir die
-Arbeitsstruktur und Deployments so schlank und einfach wie möglich halten.
 
 # Konzept
 
