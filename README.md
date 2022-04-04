@@ -68,15 +68,18 @@ Guide](CONTRIBUTING.md) dargestellt.
 
 # Komponenten
 
-Die Plattform besteht im wesentlich aus zwei Komponenten:
+Die Plattform besteht im wesentlich aus drei Komponenten:
 
-1. ifc-hive-server (REST API, socket-server)
-2. ifc-hive-client (Browser Web App)
+1. ifc-hive-server — REST API, GraphQL, socket-server
+2. ifc-hive-client — Browser Web App
+3. ifc-hive-docs — Technische Dokumentation und Projektdarstellung
 
 Im Betrieb kommen mit einem Reverse Proxy (z.B. nginx) und einem persistenten
 Logging Service (z.B. Logstash / Kibana) noch weitere Komponenten hinzu.
-Grundsäzlich lassen sich diese sekundäre Komponenten aber auch ganz anders
-integrieren, je nach Deployment Infrastruktur.
+Außerdem gibt es noch sekundäre Services, z.B. Container für API
+Integrationstests und End-to-End Testing der Web App. Grundsäzlich lassen sich
+diese sekundäre Komponenten aber auch ganz anders integrieren, je nach
+Deployment Infrastruktur.
 
 # Konzept
 
