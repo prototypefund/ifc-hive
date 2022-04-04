@@ -27,22 +27,39 @@ Randbedingungen und Anforderungen in der Vorplanung, Emmissionswerte zu
 Baustoffen, Gewerken und Baugruppen, Dokumente, Verantwortlichkeiten,
 Gewährleistungen, Baustoffe Metadaten, Ausstattungs- und Einrichtungselemente. 
 
-Die für BIM Formate COBie und BCF wollen wir ebenfalls unterstützen, soweit sie
-Teildes IFC 4.0 Standards order einer etablierten Erweiterung sind. Vor allem im
-Betrieb und in der Sanierung von Bestandsgebäuden spielen beide Formate eine
-wichtige Rolle für einen niederschwelligen Datenaustausch ohne Medienbrüche.
+Die für BIM relevanten Formate COBie und BCF wollen wir ebenfalls unterstützen,
+soweit sie Teil des IFC 4.0 Standards oder einer etablierten Erweiterung sind.
+Vor allem im Betrieb und in der Sanierung von Bestandsgebäuden spielen beide
+Formate eine wichtige Rolle für einen niederschwelligen Datenaustausch ohne
+Medienbrüche.
 
 Dieses Projekt ist zunächst ein Prototyp. Wir wollen einerseits ausgewählte
 Anwendungsfälle so vollständig abbilden, dass die Plattform umgehend produktiv
-genutzt werden kann. Gleichzeiig wollen wir mit diesem Prototyp aber auch
+genutzt werden kann. Gleichzeitig wollen wir mit diesem Prototyp aber auch
 darstellen, wie ein offenes, anschlussfähiges, zukunftsfähiges BIM Common Data
-Environment (CDE) funktionieren kann. Ein derart offenes CDE ist eine notwendige
-Voraussetzung, wenn die Vorstellung von Open BIM praktisch möglich werden soll.
+Environment (CDE) funktionieren kann. Ein derart offenes und nachhaltiges CDE
+ist nach unserer Auffassung eine notwendige Voraussetzung für eine
+funktionierende, praktische Umsetzung von Open BIM. 
+
 Wir sehen uns als Teil einer wachsenden, innovativen Community, die genau daran
 arbeitet. Im Abschnitt [Andere interessante IFC und BIM
 Projekte](https://repo.karo.design/daniel/ifc-hive#andere-interessante-bim-und-ifc-projekte)
 listen wir einige aus unserer Sicht bemerkenswerte und inspirierende Projekte
 auf.
+
+# Zielgruppen
+
+Wer kann was mit dem Ergebnis dieser Prototypentwicklung anfangen?
+
+Im Rahmen einer zeiltlich begrenzten und ergebnisorientierten
+Prototypentwicklung wollen richten wir uns vor allem Nutzer mit in verschiedenen
+Anwendungsfällen mit Bestandsgebäuden umgehen.
+
+1. Migration von Bauwerksdaten zu BIM / IFC
+2. Grundlagenerfassung von Bestandgebäuden
+3. Ausplanung von Räumen, Etagen oder ganzen Gebäuden
+4. IFC konforme Verwaltung von Immobilienportfolio
+5. Datenlage für energetische Gebäudesanierung schaffen und pflegen.
 
 # Quickstart
 
