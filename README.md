@@ -15,7 +15,7 @@ wir für den weiteren Projektverlauf Englisch als Geschäftssprache vor._
 
 # ifc-hive
 
-**An Open BIM platform for sustainable data management based the open IFC standard.**
+**An Open BIM platform for sustainable data management based on the open IFC standard.**
 
 Wir wollen einen Beitrag zu Open BIM leisten indem wir Bau- und
 Planungsprojekten aller Größenordnungen sowie Betreibern von Immobilien
