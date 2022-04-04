@@ -9,7 +9,7 @@ Add the following template to your local git configuration for the project like
 this:
 ```bash
 cd <project-root>
-git config commit.template .git-commit-template.txt
+git config commit.template .gitlab/git-commit-template.txt
 ```
 Now on each commit this template should automatically be presented.
 

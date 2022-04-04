@@ -3,10 +3,16 @@ stages:
   - test
   - deploy
 
-build-core-app:
+build:
   stage: build
   script:
-    - echo "building containers"
+    - echo "building containers for integration environment"
+    # remove all running containers on this server
+    - if [[ -n $(docker ps -aq) ]]; then docker rm --force $(docker ps -aq); fi;
+    # remove all existing volumes
+    - docker volume prune --force
+    # build services from scratch
+    - docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 
 test-api:
   stage: test

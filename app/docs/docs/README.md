@@ -1,8 +1,8 @@
 ---
 home: true
 heroImage: hero.png
-heroText: IFC-HIVE
-tagline: Open BIM Platform
+heroText: IFC HIVE
+tagline: An Open BIM platform for sustainable data based on the open IFC standard.
 actionText: Learn More →
 actionLink: /concept/
 features:
