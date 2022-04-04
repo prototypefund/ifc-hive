@@ -53,10 +53,10 @@ Wer kann was mit dem Ergebnis dieser Prototypentwicklung anfangen?
 
 Im Rahmen einer zeiltlich begrenzten Prototypentwicklung richten wir uns
 zunächste vor allem an Nutzer, die in verschiedenen Anwendungsfällen mit
-Bestandgebäuden umgehen.
+Bestandsgebäuden umgehen.
 
 1. Migration von Bauwerksdaten zu BIM / IFC
-2. Grundlagenerfassung von Bestandgebäuden
+2. Grundlagenerfassung von Bestandsgebäuden
 3. Ausplanung von Räumen, Etagen oder ganzen Gebäuden, z.B. Neueinrichtung von
    Unternehmen und Behördenx
 4. IFC konforme Verwaltung von Immobilienportfolio
