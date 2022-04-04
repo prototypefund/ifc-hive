@@ -8,7 +8,7 @@ build:
   script:
     - echo "building containers for integration environment"
     # remove all running containers containing the default ifc-hive_ifc-hive in their name
-    - if [[ -n $(docker ps -f name=ifc-hive_ifc-hive) ]]; then docker rm --force -v $(docker ps -f name=ifc-hive_ifc-hive); fi;
+    - if [[ -n $(docker ps -q -f namer=ifc-hive_ifc-hive) ]]; then docker -v rm $(docker stop $(docker ps -q -f namer=ifc-hive_ifc-hive)); fi;
     # build services from scratch
     - docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
     # remove dangling images
