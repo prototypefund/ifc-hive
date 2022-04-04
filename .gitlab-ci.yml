@@ -1,7 +1,9 @@
 stages:
   - build
   - test
-  - deploy
+  - integration
+  - staging
+  - production
 
 build:
   stage: build
@@ -19,14 +21,14 @@ test-api:
   script:
     - echo "Run api tests"
 
-deploy-all:
-  stage: deploy
+deploy-integration:
+  stage: integration
   script:
-    - echo "deploy to integration environment"
+    - echo "Deploy to inegration environment"
 
 # deploy API integration
 deploy-staging:
-  stage: deploy
+  stage: staging
   when: manual
   environment:
     name: "staging"
@@ -34,5 +36,15 @@ deploy-staging:
   only:
     - master
   script:
-    - echo "Deploy new build to staging server"
+    - echo "Deploy to staging environment"
     # build services from scratch
+
+deploy-production:
+  stage: production
+  when: manual
+  only:
+    - master
+  script:
+    - echo "Deploy to production environment"
+
+  
