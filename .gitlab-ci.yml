@@ -7,12 +7,12 @@ build:
   stage: build
   script:
     - echo "building containers for integration environment"
-    # remove all running containers on this server
-    - if [[ -n $(docker ps -aq) ]]; then docker rm --force $(docker ps -aq); fi;
-    # remove all existing volumes
-    - docker volume prune --force
+    # remove all running containers containing the default ifc-hive_ifc-hive in their name
+    - if [[ -n $(docker ps -f name=ifc-hive_ifc-hive) ]]; then docker rm --force -v $(docker ps -f name=ifc-hive_ifc-hive); fi;
     # build services from scratch
     - docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+    # remove dangling images
+    - docker rmi $(sudo docker images -f "dangling=true" -q)
 
 test-api:
   stage: test
@@ -27,7 +27,12 @@ deploy-all:
 # deploy API integration
 deploy-staging:
   stage: deploy
+  when: manual
+  environment:
+    name: "staging"
+    url: "https://ifc-hive.karo.design"
   only:
     - master
   script:
     - echo "Deploy new build to staging server"
+    # build services from scratch

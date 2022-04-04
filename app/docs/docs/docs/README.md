@@ -1,6 +1,6 @@
 # Technical Documentation
 
-If you directly want to toy around you can jump to the [Quickstart](quickstart).
+If you directly want to toy around you can jump to the [Quickstart](./quickstart.md).
 
 You can review or clone the source code from our [gitlab project](https://repo.karo.design/daniel/ifc-hive)
 
