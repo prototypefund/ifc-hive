@@ -7,11 +7,25 @@ module.exports = {
     logo: '/hero.png',
     nav: [
       { text: 'Start', link: '/' },
-      { text: 'About', link: '/concept/' },
-      { text: 'Quickstart', link: '/quickstart/' },
-      { text: 'Docs', link: '/docs/' },
-      { text: 'Contact', link: '/contact/' },
+      { text: 'Konzept', link: '/concept/' },
+      { text: 'Docs (EN)', link: '/docs/' },
+      { text: 'Kontakt', link: '/contact/' },
       { text: 'Gitlab', link: 'https://repo.karo.design/daniel/ifc-hive' },
-    ]
+    ],
+    sidebar: {
+      '/concept/': [
+        '/concept/',
+        '/concept/motivation',
+        '/concept/openbim',
+        '/concept/ifc',
+        '/concept/CommonDataEnvironment',
+        '/concept/graphdatabase',
+      ],
+      '/docs/': [
+        '/docs/',
+        '/docs/quickstart',
+        '/docs/technologies',
+      ]
+    } 
   }
 }

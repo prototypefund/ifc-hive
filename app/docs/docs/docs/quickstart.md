@@ -1,7 +1,5 @@
 # Quickstart Guide
 
-[[toc]]
-
 ## Set up for development
 
 In the development environment all services allow local editing of the source

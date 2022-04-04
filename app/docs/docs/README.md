@@ -15,3 +15,12 @@ features:
 footer: MIT Licensed | Copyright © 2022-present Daniel Kaminski
 ---
 
+<div style="margin-top: 40px">&nbsp;</div>
+
+## Hinweis 
+
+Das Projekt steht gerade am Anfang. Diese Webseite ist daher noch sehr
+unvollständig. Wir sind überzeugt vom Open Source Ansatz und lassen deshalb alle
+die wollen auch schon an den ersten Schritten teilhaben.
+
+<div style="margin-bottom: 100px">&nbsp;</div>
