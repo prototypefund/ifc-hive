@@ -15,10 +15,9 @@ wir für den weiteren Projektverlauf Englisch als Geschäftssprache vor._
 
 # ifc-hive
 
-An Open BIM plattform to collaborate with stakeholders, contractors, partners
-and share your IFC data.
+An Open BIM plattform to collaborate with stakeholder and for sustainable data
+management based the open IFC standard.
 
-[[_TOC_]]
 
 Wir wollen einen Beitrag zu Open BIM leisten indem wir Bau- und
 Planungsprojekten aller Größenordnungen sowie Betreibern von Immobilien
@@ -46,6 +45,21 @@ arbeitet. Im Abschnitt [Andere interessante IFC und BIM
 Projekte](https://repo.karo.design/daniel/ifc-hive#andere-interessante-bim-und-ifc-projekte)
 listen wir einige aus unserer Sicht bemerkenswerte und inspirierende Projekte
 auf.
+
+# Quickstart
+
+Die Entwicklungsumgebung ist Docker-basiert und lässt sich mit den folgenden
+Kommandos hochfahren bzw. restlos wieder entfernen.
+
+```bash
+# spin up docker based development environment
+git clone git@repo.karo.design:daniel/ifc-hive.git
+cd ifc-hive
+docker-compose up --build -d
+
+# tear down including all volumes
+docker-compose down -v
+```
 
 # Arbeitsweise
 
