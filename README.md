@@ -49,7 +49,7 @@ auf.
 
 # Zielgruppen
 
-Wer kann was mit dem Ergebnis dieser Prototypentwicklung anfangen?
+**Wer kann etwas mit dem Ergebnis dieser Prototyp-Entwicklung anfangen?**
 
 Im Rahmen einer zeiltlich begrenzten Prototypentwicklung richten wir uns
 zunächste vor allem an Nutzer, die in verschiedenen Anwendungsfällen mit
