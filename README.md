@@ -13,7 +13,7 @@ interessierten Entwicklern keine unnötigen Hürden in den Weg zu stellen schlag
 wir für den weiteren Projektverlauf Englisch als Geschäftssprache vor._  
 
 
-# ifc-hive
+# IFC HIVE
 
 **An Open BIM platform for sustainable data management based on the open IFC standard.**
 
