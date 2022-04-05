@@ -58,6 +58,6 @@ deploy-production:
     # doe we have production containers running? If so stop and delete them
     - if [[ -n $(docker ps -q -f name=production) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=production)); fi;
     # build services from scratch
-    - docker-compose -f /var/www/ifc-hive.production/docker-compose.yml -f /var/www/ifc-hive.production/docker-compose.staging.yml up -d --build
+    - docker-compose -f /var/www/ifc-hive.production/docker-compose.yml -f /var/www/ifc-hive.production/docker-compose.production.yml up -d --build
 
   
