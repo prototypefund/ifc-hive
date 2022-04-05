@@ -7,17 +7,19 @@ version: "3"
 services:
   # Docs Service
   ifc-hive-docs:
+    container_name: integration-docs
     build:
       context: ./app/docs
       args:
         NODE_ENV: production
     ports:
-      - "8099:80"
+      - "8049:80"
     environment:
       - NODE_ENV=production
       - PORT=80
   # API Service
   ifc-hive-api:
+    container_name: integration-api
     build:
       context: ./app/api
       args: 
@@ -26,15 +28,16 @@ services:
       - NODE_ENV=production
     command: yarn run start
     ports:
-      - "8092:3000"
+      - "8042:3000"
   # Web-client
   ifc-hive-client:
+    container_name: integration-client
     build:
       context: ./app/client
       args:
         NODE_ENV: production
     ports:
-      - "8091:80"
+      - "8041:80"
     environment:
       - NODE_ENV=production
       - PORT=80

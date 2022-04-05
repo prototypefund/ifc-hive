@@ -7,6 +7,7 @@ version: "3"
 services:
   # Docs Service
   ifc-hive-docs:
+    container_name: production-docs
     build:
       context: ./app/docs
       args:
@@ -18,6 +19,7 @@ services:
       - PORT=80
   # API Service
   ifc-hive-api:
+    container_name: production-api
     build:
       context: ./app/api
       args: 
@@ -29,6 +31,7 @@ services:
       - "8002:3000"
   # Web-client
   ifc-hive-client:
+    container_name: production-client
     build:
       context: ./app/client
       args:

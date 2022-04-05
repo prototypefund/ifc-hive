@@ -8,8 +8,8 @@ build:
   stage: integration
   script:
     - echo "building containers for integration environment"
-    # remove all running containers containing the default ifc-hive_ifc-hive in their name
-    - if [[ -n $(docker ps -q -f namer=ifc-hive_ifc-hive) ]]; then docker -v rm $(docker stop $(docker ps -q -f namer=ifc-hive_ifc-hive)); fi;
+    # doe we have previous integration containers running? If so stop and delete them
+    - if [[ -n $(docker ps -q -f name=integration) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=integration)); fi;
     # build services from scratch
     - docker-compose -f docker-compose.yml -f docker-compose.integration.yml up -d --build
     # remove dangling images
@@ -32,20 +32,31 @@ deploy-staging:
   when: manual
   environment:
     name: "staging"
-    url: "https://staging.ifc-hive.karo.design"
+    url: "https://staging.docs.ifc-hive.karo.design"
   only:
     - master
   script:
     - echo "Deploy to staging environment"
+    - git -C /var/www/ifc-hive.staging pull
+    # doe we have staging containers running? If so stop and delete them
+    - if [[ -n $(docker ps -q -f name=staging) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=staging)); fi;
     # build services from scratch
+    - docker-compose -f /var/www/ifc-hive.staging/docker-compose.yml -f /var/www/ifc-hive.staging/docker-compose.staging.yml up -d --build
 
 # deploy to production
 deploy-production:
   stage: production
   when: manual
+  environment:
+    name: "production"
+    url: "https://ifc-hive.karo.design"
   only:
     - master
   script:
     - echo "Deploy to production environment"
+    # doe we have production containers running? If so stop and delete them
+    - if [[ -n $(docker ps -q -f name=production) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=production)); fi;
+    # build services from scratch
+    - docker-compose -f docker-compose.yml -f docker-compose.production.yml up -d --build
 
   
