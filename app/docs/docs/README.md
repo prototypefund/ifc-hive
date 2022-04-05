@@ -1,7 +1,7 @@
 ---
 home: true
 heroImage: hero.png
-heroText: IFC HIVE
+heroText: IFC HIVE BETA
 tagline: An Open BIM platform for sustainable data based on the open IFC standard.
 actionText: Learn More →
 actionLink: /concept/

@@ -22,7 +22,7 @@ sudo docker-compose up -d --build
 ## Build containers for publication
 
 In order to run all containers in production mode, e.g. for local integration
-testing, you need to specify utilize the `docker-compose.prod.yml` in
+testing, you need to specify utilize the `docker-compose.integration.yml` in
 conjungtion with the default `docker-compose.yml` file.
 
 ```bash
@@ -30,11 +30,15 @@ git clone git@repo.karo.design:daniel/ifc-hive.git
 # cd into the directory
 cd ifc-hive
 # if you only want to build the container
-sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build
+sudo docker-compose -f docker-compose.yml -f docker-compose.integration.yml build
 # if you want to build from source and run the containers, e.g. in order to run
 # an integration environment, then execute
 sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml -d --build
 ```
+
+Note that the files `docker-compose.staging.yml` and `docker-compose.production.yml`
+can be used in the same way as `docker-compose.integration.yml`, however they
+are tailored for deployment to our staging and production environment.
 
 <div style="margin-top: 20px">&nbsp;</div>
 

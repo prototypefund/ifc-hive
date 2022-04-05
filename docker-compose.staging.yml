@@ -1,0 +1,40 @@
+# https://docs.docker.com/compose/yml/
+# Use only production, note that you also need the docker-compose.yml file
+#
+# Example usage for production:
+# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+version: "3"
+services:
+  # Docs Service
+  ifc-hive-docs:
+    build:
+      context: ./app/docs
+      args:
+        NODE_ENV: production
+    ports:
+      - "8099:80"
+    environment:
+      - NODE_ENV=production
+      - PORT=80
+  # API Service
+  ifc-hive-api:
+    build:
+      context: ./app/api
+      args: 
+        NODE_ENV: production
+    environment:
+      - NODE_ENV=production
+    command: yarn run start
+    ports:
+      - "8092:3000"
+  # Web-client
+  ifc-hive-client:
+    build:
+      context: ./app/client
+      args:
+        NODE_ENV: production
+    ports:
+      - "8091:80"
+    environment:
+      - NODE_ENV=production
+      - PORT=80

@@ -1,21 +1,21 @@
 stages:
-  - build
   - test
   - integration
   - staging
   - production
 
 build:
-  stage: build
+  stage: integration
   script:
     - echo "building containers for integration environment"
     # remove all running containers containing the default ifc-hive_ifc-hive in their name
     - if [[ -n $(docker ps -q -f namer=ifc-hive_ifc-hive) ]]; then docker -v rm $(docker stop $(docker ps -q -f namer=ifc-hive_ifc-hive)); fi;
     # build services from scratch
-    - docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+    - docker-compose -f docker-compose.yml -f docker-compose.integration.yml up -d --build
     # remove dangling images
     - docker rmi $(sudo docker images -f "dangling=true" -q)
 
+# complete integration deployment
 test-api:
   stage: test
   script:
@@ -26,7 +26,7 @@ deploy-integration:
   script:
     - echo "Deploy to inegration environment"
 
-# deploy API integration
+# deploy to staging
 deploy-staging:
   stage: staging
   when: manual
@@ -39,6 +39,7 @@ deploy-staging:
     - echo "Deploy to staging environment"
     # build services from scratch
 
+# deploy to production
 deploy-production:
   stage: production
   when: manual
