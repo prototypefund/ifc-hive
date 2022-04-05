@@ -4,11 +4,14 @@ stages:
   - staging
   - production
 
+variables:
+  CI_COMMIT_SHA: $CI_COMMIT_SHORT_SHA
+
 build:
   stage: integration
   script:
     - echo "building containers for integration environment"
-    # doe we have previous integration containers running? If so stop and delete them
+    # do we have previous integration containers running? If so stop and delete them
     - if [[ -n $(docker ps -q -f name=integration) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=integration)); fi;
     # build services from scratch
     - docker-compose -f docker-compose.yml -f docker-compose.integration.yml up -d --build
@@ -37,11 +40,11 @@ deploy-staging:
     - master
   script:
     - echo "Deploy to staging environment"
-    - git -C /var/www/ifc-hive.staging pull
-    # doe we have staging containers running? If so stop and delete them
+    - git -C $STAGING_DIR_PATH pull
+    # do we have staging containers running? If so stop and delete them
     - if [[ -n $(docker ps -q -f name=staging) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=staging)); fi;
     # build services from scratch
-    - docker-compose -f /var/www/ifc-hive.staging/docker-compose.yml -f /var/www/ifc-hive.staging/docker-compose.staging.yml up -d --build
+    - docker-compose -f $STAGING_DIR_PATH/docker-compose.yml -f $STAGING_DIR_PATH/docker-compose.staging.yml up -d --build
 
 # deploy to production
 deploy-production:
@@ -54,10 +57,10 @@ deploy-production:
     - master
   script:
     - echo "Deploy to production environment"
-    - git -C /var/www/ifc-hive.production pull
-    # doe we have production containers running? If so stop and delete them
+    - git -C $PRODUCTION_DIR_PATH pull
+    # do we have production containers running? If so stop and delete them
     - if [[ -n $(docker ps -q -f name=production) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=production)); fi;
     # build services from scratch
-    - docker-compose -f /var/www/ifc-hive.production/docker-compose.yml -f /var/www/ifc-hive.production/docker-compose.production.yml up -d --build
+    - docker-compose -f $PRODUCTION_DIR_PATH/docker-compose.yml -f $PRODUCTION_DIR_PATH/docker-compose.production.yml up -d --build
 
   

@@ -12,7 +12,7 @@ features:
   details: Share your data with stakeholders and merge technical plannings back into your building data. Have everybody still working with their prefered software.
 - title: Use Open Standards
   details: Make sure you can sustainably work with your data over a long period of time and still read and edit every bit of it. Query, process and link your data in any way which is relevant for your use case.
-footer: MIT Licensed | Copyright © 2022-present Daniel Kaminski
+footer: MIT Licensed | Copyright © 2022-present Daniel Kaminski - CI_COMMIT_SHA
 ---
 
 <div style="margin-top: 40px">&nbsp;</div>

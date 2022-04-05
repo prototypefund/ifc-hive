@@ -16,6 +16,9 @@ vim-session
 id_rsa
 id_rsa.pub
 
+# ignore env files
+.env*
+
 # ignore reference folder
 **/*-ref
 

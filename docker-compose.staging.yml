@@ -11,12 +11,14 @@ services:
     build:
       context: ./app/docs
       args:
-        NODE_ENV: production
+        - NODE_ENV=production
+        - CI_COMMIT_SHA=${CI_COMMIT_SHA:-NO_COMMIT_SHA}
     ports:
       - "8029:80"
     environment:
       - NODE_ENV=production
       - PORT=80
+      - CI_COMMIT_SHA=${CI_COMMIT_SHA:-NO_COMMIT_SHA}
   # API Service
   ifc-hive-api:
     container_name: staging-api
