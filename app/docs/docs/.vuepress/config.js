@@ -1,6 +1,6 @@
 module.exports = {
-  title: 'IFC-HIVE',
-  description: 'Just playing around',
+  title: 'IFC HIVE',
+  description: '',
   port: 8089,
   dest: 'dist',
   themeConfig: {
