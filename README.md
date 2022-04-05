@@ -235,6 +235,8 @@ Siehe auch [Meilensteine](https://repo.karo.design/daniel/ifc-hive/-/milestones)
 - Yitmen, BIM-enabled Cognitive Computing for Smart Building Environment,
     Potential, Requirements, and Implementation, CRC Press, Tayloer & Franis
     Group (2021)
+- [Rasmussen, Hviid, Karlshøj, Web-based, topology queries on a BIM model, 2017,
+    Presentation](https://linkedbuildingdata.net/ldac2017/files/Presentations/171114_Web_sparql.pdf)
 
 # Andere interessante BIM und IFC Projekte
 
