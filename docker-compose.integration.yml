@@ -12,7 +12,7 @@ services:
       args:
         NODE_ENV: production
     ports:
-      - "8089:80"
+      - "8099:80"
     environment:
       - NODE_ENV=production
       - PORT=80
@@ -25,6 +25,8 @@ services:
     environment:
       - NODE_ENV=production
     command: yarn run start
+    ports:
+      - "8092:3000"
   # Web-client
   ifc-hive-client:
     build:
@@ -32,7 +34,7 @@ services:
       args:
         NODE_ENV: production
     ports:
-      - "8081:80"
+      - "8091:80"
     environment:
       - NODE_ENV=production
       - PORT=80

@@ -237,6 +237,14 @@ Siehe auch [Meilensteine](https://repo.karo.design/daniel/ifc-hive/-/milestones)
     Group (2021)
 - [Rasmussen, Hviid, Karlshøj, Web-based, topology queries on a BIM model, 2017,
     Presentation](https://linkedbuildingdata.net/ldac2017/files/Presentations/171114_Web_sparql.pdf)
+- Ma, Zhiliang & Liu, Zhe. (2018). Ontology- and freeware-based platform for rapid development of BIM applications with reasoning support. Automation in Construction. 90. 1-8. 10.1016/j.autcon.2018.02.004. 
+- Boje, Calin & Kubicki, Sylvain & Guerriero, Annie. (2020). A 4D BIM System Architecture for the Semantic Web. 10.1007/978-3-030-51295-8_40. 
+- Boje, Calin & Guerriero, Annie & Kubicki, Sylvain & Rezgui, Yacine. (2020). Towards a semantic Construction Digital Twin: Directions for future research. Automation in Construction. 114. 103179. 10.1016/j.autcon.2020.103179. 
+- Jiang, Shaohua & Jiang, Liping & Han, Yunwei & Wu, Zheng & Wang, Na. (2019). OpenBIM: An Enabling Solution for Information Interoperability. Applied Sciences. 9. 5358. 10.3390/app9245358. 
+- Yousif, Jabar & Abdul Majeed, Saif & Al-Azzawi, Fouad. (2020). Web-Based Architecture for Automating Quantity Surveying Construction Cost Calculation. 5. 45. 10.3390/infrastructures5060045. 
+- Lee, Pin-Chan & Xie, Wei & Lo, Tzu-Ping & Long, Danbing & Tang, Xiaofei. (2019). A Cloud Model-based Knowledge Mapping Method for Historic Building Maintenance based on Building Information Modelling and Ontology. KSCE Journal of Civil Engineering. 23. 10.1007/s12205-019-2457-0. 
+- Zhang, Jisong & Zhao, Lihua & Ren, Guoqian & Li, Haijiang & Li, Xiaofei. (2020). Special Issue “Digital Twin Technology in the AEC Industry”. Advances in Civil Engineering. 2020. 1-18. 10.1155/2020/8842113. 
+- Cao, Jianpeng & Hall, Daniel. (2020). Ontology-based Product Configuration for Modular Buildings. 10.22260/ISARC2020/0026. 
 
 # Andere interessante BIM und IFC Projekte
 

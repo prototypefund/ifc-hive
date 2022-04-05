@@ -14,12 +14,6 @@ services:
   # API Service http://localhost:5000
   ifc-hive-api:
     build: ./app/api
-    ports:
-      - "3000:3000"
-    environment:
-      - PORT=3000
   # Web-client http://localhost:8081
   ifc-hive-client:
     build: ./app/client
-    environment:
-      - PORT=8081

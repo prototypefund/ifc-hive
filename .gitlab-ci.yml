@@ -32,7 +32,7 @@ deploy-staging:
   when: manual
   environment:
     name: "staging"
-    url: "https://ifc-hive.karo.design"
+    url: "https://staging.ifc-hive.karo.design"
   only:
     - master
   script:
