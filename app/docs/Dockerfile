@@ -45,7 +45,7 @@ COPY --from=build /app/dist /usr/share/nginx/html
 COPY provision/entrypoint.sh /docker-entrypoint.d/entrypoint.sh
 
 # add bash since alpine doesn't come with a shell
-RUN apk update && apk add bash
+RUN apk update && apk add bash # @TODO remove bash, the default shall should be sufficient
 # run entrypoint.sh on every startup of the container to apply the env variables
 # expose port 80
 ENV PORT 80

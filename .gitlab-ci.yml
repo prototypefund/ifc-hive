@@ -13,6 +13,8 @@ build:
     - echo "building containers for integration environment"
     # do we have previous integration containers running? If so stop and delete them
     - if [[ -n $(docker ps -q -f name=integration) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=integration)); fi;
+    # Set env variable API_BASE_URL
+    - API_BASE_URL="https://integration.api.ifc-hive.karo.design"
     # build services from scratch
     - docker-compose -f docker-compose.yml -f docker-compose.integration.yml up -d --build
     # remove dangling images
@@ -43,6 +45,8 @@ deploy-staging:
     - git -C $STAGING_DIR_PATH pull
     # do we have staging containers running? If so stop and delete them
     - if [[ -n $(docker ps -q -f name=staging) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=staging)); fi;
+    # Set env variable API_BASE_URL
+    - API_BASE_URL="https://staging.api.ifc-hive.karo.design"
     # build services from scratch
     - docker-compose -f $STAGING_DIR_PATH/docker-compose.yml -f $STAGING_DIR_PATH/docker-compose.staging.yml up -d --build
 

@@ -13,8 +13,8 @@ export default function itemRoutes (fastify, options, done) {
   /* get all items options */
   const getItemsOpts = {
     // constraints: { version: '1.2.1' },
+    constraints: { version: '1.2.0' },
     schema: {
-      constraints: { version: '1.0.0' },
       tags: ['item'],
       summary: 'Get all items',
       description: 'Get all test items',
@@ -30,17 +30,18 @@ export default function itemRoutes (fastify, options, done) {
 
   /* get item options */
   const getItemOpts = {
+    constraints: { version: '1.0.0' },
     schema: {
-      security: [{ ApiToken: ['admin'] }],
+      // security: [{ ApiToken: ['admin'] }],
       tags: ['item'],
       description: 'This endpoint fetches a test-item from the DB given the `id` parameters.\nNote that this route requires an API token',
       summary: 'v1.2.1 return single item by ID',
       params: {
         id: { type: 'string', default: '1' },
       },
-      headers: {
-        'Accept-Version': { type: 'string', default: '*' }
-      },
+      // headers: {
+      //   'Accept-Version': { type: 'string', default: '*' }
+      // },
       response: {
         200: itemSchema
       }
@@ -50,6 +51,7 @@ export default function itemRoutes (fastify, options, done) {
 
   /* add items options */
   const addItemOpts = {
+    constraints: { version: '1.0.0' },
     schema: {
       tags: ['item'],
       description: 'Add new item',
@@ -69,6 +71,7 @@ export default function itemRoutes (fastify, options, done) {
 
   /* delete item options */
   const deleteItemOpts = {
+    constraints: { version: '1.0.0' },
     schema: {
       tags: ['item'],
       description: 'Delete single item by id',
@@ -86,6 +89,7 @@ export default function itemRoutes (fastify, options, done) {
 
   /* update item options */
   const updateItemOpts = {
+    constraints: { version: '1.0.0' },
     schema: {
       tags: ['item'],
       description: 'Update single item',

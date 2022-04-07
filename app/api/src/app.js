@@ -3,6 +3,7 @@
  */
 import fastifyFabric from 'fastify'
 import fastifySwagger from 'fastify-swagger' // api documentation
+import fastifyCors from 'fastify-cors'
 // import autoload from 'fastify-autoload' // autoload routes from directory
 import { fileURLToPath } from 'url' // required to emulate __filename
 import { dirname } from 'path' // required to emulate __dirname
@@ -26,6 +27,23 @@ export default function build (opts = {}) {
    * @TODO make logging configurable with an env variable
    */
   const app = fastifyFabric({ logger: true })
+
+  /* register CORS plugins */
+  app.register(fastifyCors, {
+    origin: '*',
+    methods: 'GET,PUT,HEAD,POST,PATCH,DELETE,CONNECT,OPTIONS,TRACE',
+    strictPreflight: false,
+    allowHeader: [
+      'Accept',
+      'Accept-Version',
+      'Access-Control-Allow-Headers',
+      'Access-Control-Request-Method',
+      'Authorization',
+      'Content-Range',
+      'Content-Type',
+      'Origin',
+    ]
+  })
 
   /*
    * manage accept-version header in onSend hook

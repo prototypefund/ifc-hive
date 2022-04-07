@@ -42,6 +42,10 @@ COPY provision/nginx.conf /etc/nginx/conf.d/default.conf
 # copy the built app from the build stage
 COPY --from=build /app/dist /usr/share/nginx/html
 # run entrypoint.sh on every startup of the container to apply the env variables
+COPY provision/entrypoint.sh /docker-entrypoint.d/entrypoint.sh
+
+# add bash since alpine doesn't come with a shell
+RUN apk update && apk add bash # @TODO remove bash, the default shell should be sufficient
 # expose port 80
 ENV PORT 80
 EXPOSE $PORT
