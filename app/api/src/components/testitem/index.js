@@ -39,9 +39,9 @@ export default function itemRoutes (fastify, options, done) {
       params: {
         id: { type: 'string', default: '1' },
       },
-      // headers: {
-      //   'Accept-Version': { type: 'string', default: '*' }
-      // },
+      headers: {
+        'Accept-Version': { type: 'string', default: '*' }
+      },
       response: {
         200: itemSchema
       }
