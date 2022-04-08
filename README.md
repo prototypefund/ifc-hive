@@ -84,11 +84,11 @@ docker-compose up --build -d
 # tear down including all volumes
 docker-compose down -v
 ```
-Nach erfolgreichem Start sind die folgenden Services erreichbar:
+Nach erfolgreichem Start sind die folgenden Services erreichbar.
 
 1. http://localhost:8081 (web client)
-2. http://localhost:3000 (API)
-3. http://localhost:3000/docs (Auto generated API documentation)
+2. http://localhost:8082 (API)
+3. http://localhost:8082/docs (Auto generated API documentation)
 4. http://localhost:8089 (Documentation Website)
 
 Siehe auch [technische Dokumentation](https://ifc-hive.karo.design/docs) und [Quickstart

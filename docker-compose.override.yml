@@ -9,6 +9,7 @@ version: "3"
 services:
   # Docs Service
   ifc-hive-docs:
+    container_name: ifc-dev-docs
     build:
       context: ./app/docs
       target: build
@@ -26,6 +27,7 @@ services:
 
   # API Service
   ifc-hive-api:
+    container_name: ifc-dev-api
     build:
       context: ./app/api
       args: 
@@ -41,6 +43,7 @@ services:
 
   # Web-client
   ifc-hive-client:
+    container_name: ifc-dev-client
     build:
       context: ./app/client
       target: build
