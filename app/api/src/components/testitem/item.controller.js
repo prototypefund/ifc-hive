@@ -3,19 +3,20 @@ import { v4 as uuidv4 } from 'uuid'
 import { items, modifyItems } from './itemsDB.js'
 
 /* get all items */
-export const getItems = (req, reply) => {
+export function getItems (req, reply) {
   reply.send(items)
 }
 
 /* get item */
-export const getItem = (req, reply) => {
+export function getItem (req, reply) {
   const { id } = req.params
   const item = items.find(i => i.id === id)
+  this.assert(item, 404)
   reply.send(item)
 }
 
 /* add item */
-export const addItem = (req, reply) => {
+export function addItem (req, reply) {
   const { name } = req.body
   const item = {
     id: uuidv4(),
@@ -27,7 +28,7 @@ export const addItem = (req, reply) => {
 }
 
 /* delete item */
-export const deleteItem = (req, reply) => {
+export function deleteItem (req, reply) {
   const { id } = req.params
   modifyItems(items.filter(i => i.id !== id))
 
@@ -35,7 +36,7 @@ export const deleteItem = (req, reply) => {
 }
 
 /* update item */
-export const updateItem = (req, reply) => {
+export function updateItem (req, reply) {
   const { id } = req.params
   const { name } = req.body
   modifyItems(items.map(item => (item.id === id) ? { id, name } : item))

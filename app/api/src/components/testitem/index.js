@@ -1,6 +1,6 @@
 import { getItems, getItem, addItem, deleteItem, updateItem } from './item.controller.js'
 
-export default function itemRoutes (fastify, options, done) {
+export default function itemRoutes (app, options, done) {
   /* item schema */
   const itemSchema = {
     type: 'object',
@@ -109,15 +109,15 @@ export default function itemRoutes (fastify, options, done) {
   }
 
   /* get all items */
-  fastify.get('/items', getItemsOpts)
+  app.get('/items', getItemsOpts)
   /* get single item */
-  fastify.get('/items/:id', getItemOpts)
+  app.get('/items/:id', getItemOpts)
   /* add single item */
-  fastify.post('/items', addItemOpts)
+  app.post('/items', addItemOpts)
   /* delete single item */
-  fastify.delete('/items/:id', deleteItemOpts)
+  app.delete('/items/:id', deleteItemOpts)
   /* update single item */
-  fastify.put('/items/:id', updateItemOpts)
+  app.put('/items/:id', updateItemOpts)
 
   /* don't forget to call done */
   done()

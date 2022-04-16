@@ -14,6 +14,17 @@ services:
   # API Service http://localhost:5000
   ifc-hive-api:
     build: ./app/api
+    depends_on:
+      - mongo
   # Web-client http://localhost:8081
   ifc-hive-client:
     build: ./app/client
+  mongo:
+    image:  mongo:5.0.6
+    restart: unless-stopped
+    ports: 
+      - "27017:27017"
+    volumes:
+      - ifc-dev-mongodb:/data/db
+volumes:
+  ifc-dev-mongodb:

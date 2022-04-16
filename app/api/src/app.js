@@ -4,6 +4,8 @@
 import fastifyFabric from 'fastify'
 import fastifySwagger from 'fastify-swagger' // api documentation
 import fastifyCors from 'fastify-cors'
+import fastifySensible from 'fastify-sensible'
+import mongoose from 'mongoose'
 // import autoload from 'fastify-autoload' // autoload routes from directory
 import { fileURLToPath } from 'url' // required to emulate __filename
 import { dirname } from 'path' // required to emulate __dirname
@@ -26,16 +28,26 @@ export default function build (opts = {}) {
    *
    * @TODO make logging configurable with an env variable
    */
-  const app = fastifyFabric({ logger: true })
+  const app = fastifyFabric({
+    // enable logging, note that you can make container logs prettier by using pino-pretty e.g.
+    // docker logs -f ifc-dev-pai | npx pino-pretty
+    logger: true,
+    // we are behind a trusted proxy
+    trustProxy: true,
+  })
 
   /* register CORS plugins */
   app.register(fastifyCors, {
+    /* allow acces from everywhere. Overwrite this in production (nginx) to only allow clien domain */
     origin: '*',
+    /* allow all HTTP verbs */
     methods: 'GET,PUT,HEAD,POST,PATCH,DELETE,CONNECT,OPTIONS,TRACE',
+    /* be relaxed with preflight requests. Overwrite this in production (nginx proxy) */
     strictPreflight: false,
+    /* define th allowed headers */
     allowHeader: [
       'Accept',
-      'Accept-Version',
+      'Accept-Version', // required in most of our route, exepct /docs and /health
       'Access-Control-Allow-Headers',
       'Access-Control-Request-Method',
       'Authorization',
@@ -43,6 +55,15 @@ export default function build (opts = {}) {
       'Content-Type',
       'Origin',
     ]
+  })
+
+  /* connect to mongodb @TODO make host and database dynamic with env variables */
+  mongoose.connect('mongodb://mongo:27017', { useNewUrlParser: true, useUnifiedTopology: true })
+  const db = mongoose.connection
+  db.on('error', console.error.bind(console, 'mongo connection error:'))
+  db.once('open', () => {
+    app.log.debug('some debugging output')
+    app.log.info('Mongodb connected')
   })
 
   /*
@@ -84,6 +105,9 @@ export default function build (opts = {}) {
     }
     done()
   })
+
+  /* register fastifySensible for easier error handling in responses */
+  app.register(fastifySensible)
 
   /* autoload our project components from the ./component directory */
   // app.register(autoload, { dir: join(global.__dirname, 'components') })

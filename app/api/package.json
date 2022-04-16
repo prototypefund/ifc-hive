@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node ./src/server",
-    "dev": "npx nodemon ./src/server | npx pino-pretty",
+    "dev": "npx nodemon ./src/server",
     "test": "npx tap"
   },
   "dependencies": {
@@ -17,7 +17,9 @@
     "fastify-autoload": "^3.11.0",
     "fastify-cors": "^6.0.3",
     "fastify-healthcheck": "^3.1.0",
+    "fastify-sensible": "^3.1.2",
     "fastify-swagger": "^5.1.0",
+    "mongoose": "^6.2.10",
     "uuid": "^8.3.2",
     "vary": "^1.1.2"
   },
