@@ -59,3 +59,7 @@ services:
     ports:
       - "8081:8081"
     command: yarn run dev
+
+  # MongoDB
+  mongo:
+    container_name: ifc-dev-mongo
