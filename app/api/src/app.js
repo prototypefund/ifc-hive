@@ -62,6 +62,39 @@ export default function app (opts = {}) {
   })
 
   /*
+   * REGISTER AND CONFIGURE GLOBAL PLUGINS
+   * ----------------------------------------------------------------------------------------------
+   */
+  /* register CORS plugins */
+  app.register(fastifyCors, {
+    /* allow acces from everywhere. Overwrite this in prod env (nginx), e.g. client domain only */
+    origin: '*',
+    /* allow all HTTP verbs */
+    methods: 'GET,PUT,HEAD,POST,PATCH,DELETE,CONNECT,OPTIONS,TRACE',
+    /* be relaxed with preflight requests. Overwrite this in production (nginx proxy) */
+    strictPreflight: false,
+    /* define th allowed headers */
+    allowHeader: [
+      'Accept',
+      'Accept-Version', // required in most of our route, exepct /docs and /health
+      'Access-Control-Allow-Headers',
+      'Access-Control-Request-Method',
+      'Authorization',
+      'Content-Range',
+      'Content-Type',
+      'Origin',
+    ]
+  })
+  /* register fastifySensible for easier error handling in responses */
+  app.register(fastifySensible)
+  /* autoload our project components from the ./component directory */
+  // app.register(autoload, { dir: join(global.__dirname, 'components') })
+  /* register swagger documentation tool */
+  app.register(fastifySwagger, swaggerConfig)
+  /* simple health check on /health */
+  app.register(healthcheck)
+
+  /*
    * ACCEPT-VERSION HANDLING
    * ----------------------------------------------------------------------------------------------
    *
@@ -102,39 +135,6 @@ export default function app (opts = {}) {
     }
     done()
   })
-
-  /*
-   * REGISTER AND CONFIGURE GLOBAL PLUGINS
-   * ----------------------------------------------------------------------------------------------
-   */
-  /* register CORS plugins */
-  app.register(fastifyCors, {
-    /* allow acces from everywhere. Overwrite this in prod env (nginx), e.g. client domain only */
-    origin: '*',
-    /* allow all HTTP verbs */
-    methods: 'GET,PUT,HEAD,POST,PATCH,DELETE,CONNECT,OPTIONS,TRACE',
-    /* be relaxed with preflight requests. Overwrite this in production (nginx proxy) */
-    strictPreflight: false,
-    /* define th allowed headers */
-    allowHeader: [
-      'Accept',
-      'Accept-Version', // required in most of our route, exepct /docs and /health
-      'Access-Control-Allow-Headers',
-      'Access-Control-Request-Method',
-      'Authorization',
-      'Content-Range',
-      'Content-Type',
-      'Origin',
-    ]
-  })
-  /* register fastifySensible for easier error handling in responses */
-  app.register(fastifySensible)
-  /* autoload our project components from the ./component directory */
-  // app.register(autoload, { dir: join(global.__dirname, 'components') })
-  /* register swagger documentation tool */
-  app.register(fastifySwagger, swaggerConfig)
-  /* simple health check on /health */
-  app.register(healthcheck)
 
   /*
    * REGISTER PROJECT COMPONENTS
