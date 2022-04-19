@@ -1,0 +1,7 @@
+#!/usr/bin/sh
+
+# copy git commit message hook to .git/hooks directory
+ln -rs .gitlab/commit-msg .git/hooks/commit-msg
+
+# add local git commit template
+git config commit.template .gitlab/git-commit-template.txt

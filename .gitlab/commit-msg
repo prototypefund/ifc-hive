@@ -1,0 +1,35 @@
+#!/usr/bin/sh
+# 
+# This commit-msg hook will check the commit message for a valid format.
+# The format should follow the pattern:
+# <type> (scope) #<issue>: <subject line>
+#
+# IMPORTANT:
+# Make sure this file is executable and copied or linked to the project's ./git/hooks directory.
+
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+# path to temporary file with commit message
+MSG=$1
+# capture the first line which is not a comment
+SUBJECT=$(sed "/^\#/d" $MSG  | head -n 1)
+
+# test format of commit subject line
+if ! echo "$SUBJECT" | grep -qE "^(feat|fix|refactor|style|doc|chore|devops|test|version|hack|WIP)(\s\([a-z ]+\))?(\s\#[0-9]{1,6}):.+"; then
+    # cat "$MSG"
+    printf "${RED}ERROR:\n"
+    printf "${RED}COMMIT MESSAGE FORMAT ERROR: Please use the following format:${NC}\n"
+    printf "${GREEN}<type> (<scope>)? #<issue>: <subject line>${NC}\n"
+    printf "EXAMPLE: ${YELLOW}feat (login) #13: Add login component${NC}\n"
+    printf -- "\t- type, issue, and subject line are mandatory\n"
+    printf -- "\t- scope is optional\n"
+    printf "\nYour message:\n"
+    printf "\t${RED}${SUBJECT}${NC}\n"
+    printf "\nFurther information:\n"
+    printf "Check the git-commit template in ./gitlab/git-commit-template.txt\n\n"
+    exit 1
+fi

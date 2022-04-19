@@ -1,3 +1,5 @@
+# ifc-hive commit template
+#
 # <tag> (<scope>) #<issue>: (If applied, this commit will...) <subject> (Max 72 char)
 # feat (login) #13: Implement automated commit messages...............|
 

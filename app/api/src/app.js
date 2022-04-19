@@ -13,6 +13,7 @@ import vary from 'vary' // required to handle the accept-version header
 import swaggerConfig from './lib/swaggerConfig.js' // swagger api documentation configuration
 import healthcheck from 'fastify-healthcheck' // simple health check utility
 
+/* import custom components from ./components here. */
 import testitem from './components/testitem/index.js'
 
 /* manually add __filename and __dirname since they are not available in ES modules */
@@ -20,14 +21,13 @@ global.__filename = fileURLToPath(import.meta.url)
 global.__dirname = dirname(__filename)
 
 /*
- * import project modules
+ * Build function
+ * Creates the app
  */
+export default function app (opts = {}) {
+  // @TODO read opts
 
-export default function build (opts = {}) {
-  /* create fastify instance
-   *
-   * @TODO make logging configurable with an env variable
-   */
+  /* @TODO make logging configurable with an env variable */
   const app = fastifyFabric({
     // enable logging, note that you can make container logs prettier by using pino-pretty e.g.
     // docker logs -f ifc-dev-pai | npx pino-pretty
@@ -36,9 +36,80 @@ export default function build (opts = {}) {
     trustProxy: true,
   })
 
+  /*
+   * APP CONFIGURATION FROM ENV VARIABLES
+   * ----------------------------------------------------------------------------------------------
+   */
+
+  /*
+   * CONNECT TO MONGO
+   * ----------------------------------------------------------------------------------------------
+   */
+
+  /* connect to mongodb @TODO make host and database dynamic with env variables */
+  mongoose.connect('mongodb://mongo:27017/ifc-hive', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  // @TODO descorate fastify with mongoose connection
+  const db = mongoose.connection
+
+  // add mongoose event handlers
+  db.on('error', console.error.bind(console, 'mongo connection error:'))
+  db.once('open', () => {
+    app.log.debug('some debugging output')
+    app.log.info('Mongodb connected')
+  })
+
+  /*
+   * ACCEPT-VERSION HANDLING
+   * ----------------------------------------------------------------------------------------------
+   *
+   * We are using versioning for out end-points. Following the fastify
+   * recommendation regarding the version contraint we add the following hook
+   * in order to prevent cache poisoning attacks. see
+   * https://www.fastify.io/docs/latest/Reference/Routes/#constraints
+   */
+  const append = vary.append // prepare vary
+  app.addHook('onSend', async (req, reply) => {
+    // do we have an accep-version header?
+    if (req.headers['accept-version']) {
+      // let the vary package to its thing
+      const value = reply.getHeader('Vary') || ''
+      const header = Array.isArray(value) ? value.join(', ') : String(value)
+      if ((value === append(header, 'Accept-Version'))) {
+        reply.header('Vary', value)
+      }
+    }
+  })
+
+  /*
+   * check if we meet al pre-conditions do we have an Accept-Version header
+   * Disregard routes /docs and health
+   */
+  app.addHook('onRequest', (request, reply, done) => {
+    // we want the accept-versio header everywhere except when requesting the documentation routes
+    // @TODO take care of request.req depreciated
+    if (!request.headers['accept-version'] && !/(docs|health)/.test(request.req.url)) {
+      // send error if we are missing the Accept-Version header
+      reply
+        .status(412)
+        .send({
+          statusCode: 412,
+          error: 'Missing Header',
+          message: 'You must specify an Accept-Version header'
+        })
+    }
+    done()
+  })
+
+  /*
+   * REGISTER AND CONFIGURE GLOBAL PLUGINS
+   * ----------------------------------------------------------------------------------------------
+   */
   /* register CORS plugins */
   app.register(fastifyCors, {
-    /* allow acces from everywhere. Overwrite this in production (nginx) to only allow clien domain */
+    /* allow acces from everywhere. Overwrite this in prod env (nginx), e.g. client domain only */
     origin: '*',
     /* allow all HTTP verbs */
     methods: 'GET,PUT,HEAD,POST,PATCH,DELETE,CONNECT,OPTIONS,TRACE',
@@ -56,66 +127,29 @@ export default function build (opts = {}) {
       'Origin',
     ]
   })
-
-  /* connect to mongodb @TODO make host and database dynamic with env variables */
-  mongoose.connect('mongodb://mongo:27017', { useNewUrlParser: true, useUnifiedTopology: true })
-  const db = mongoose.connection
-  db.on('error', console.error.bind(console, 'mongo connection error:'))
-  db.once('open', () => {
-    app.log.debug('some debugging output')
-    app.log.info('Mongodb connected')
-  })
-
-  /*
-   * manage accept-version header in onSend hook
-   *
-   * We are using versioning for out end-points. Following the fastify recommendation regarding the version contraint
-   * we add the following hook in order to prevent cache poisoning attacks.
-   * see https://www.fastify.io/docs/latest/Reference/Routes/#constraints
-   */
-
-  const append = vary.append // prepare vary
-  app.addHook('onSend', async (req, reply) => {
-    // do we have an accep-version header?
-    if (req.headers['accept-version']) {
-      // let the vary package to its thing
-      const value = reply.getHeader('Vary') || ''
-      const header = Array.isArray(value) ? value.join(', ') : String(value)
-      if ((value === append(header, 'Accept-Version'))) {
-        reply.header('Vary', value)
-      }
-    }
-  })
-
-  /*
-   * check if we meet al pre-conditions
-   * - do we have an Accept-Version header (except for docs routes)?
-   */
-  app.addHook('onRequest', (request, reply, done) => {
-    // we want the accept-versio header everywhere except when requesting the documentation routes
-    if (!request.headers['accept-version'] && !/(docs|health)/.test(request.req.url)) {
-      // send error if we are missing the Accept-Version header
-      reply
-        .status(412)
-        .send({
-          statusCode: 412,
-          error: 'Missing Header',
-          message: 'You must specify an Accept-Version header'
-        })
-    }
-    done()
-  })
-
   /* register fastifySensible for easier error handling in responses */
   app.register(fastifySensible)
-
   /* autoload our project components from the ./component directory */
   // app.register(autoload, { dir: join(global.__dirname, 'components') })
   /* register swagger documentation tool */
   app.register(fastifySwagger, swaggerConfig)
   /* simple health check on /health */
   app.register(healthcheck)
+
+  /*
+   * REGISTER PROJECT COMPONENTS
+   * ----------------------------------------------------------------------------------------------
+   */
   app.register(testitem)
+
+  /*
+   * DECORATE GLOBALE EVENT EMITTER
+   * ----------------------------------------------------------------------------------------------
+   *
+   * Add a global event emitter and decorate the request object, so that all
+   * routes in all components can emit events. Commonly events should be
+   * handled in the respective components. Try to keep interdependency as minimal as possible.
+   */
 
   return app
 }
