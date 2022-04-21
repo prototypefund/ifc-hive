@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/sh
 #
 # Print API logging to stdout and make it pretty
 # Note that this script assumes the default container name for the dev-environment
