@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/bash
 #
 # Print API logging to stdout and make it pretty
 # Note that this script assumes the default container name for the dev-environment
@@ -8,7 +8,24 @@ GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 BOLD=$(tput bold)
 NORM=$(tput sgr0)
+# default container identifier
+CONTAINER=ifc-dev-api
 
-printf "${CYAN}Print API logs to stdout\n"
-printf -- "- NOTE: this only works for docker container with default »ifc-dev-api« name in DEV environment.${NC}\n"
-docker logs -f ifc-dev-api | npx pino-pretty
+# die we get an identifier for the container?
+[ "$1" ] && {
+  CONTAINER=$1
+}
+
+# is the container running?
+container=$( docker ps -q -f "name=$CONTAINER")
+# print error and exit if container is not online
+[ ! $container ] && {
+  printf "${RED}ERROR: no container with identifier '$CONTAINER' running.${NC}\n"
+  exit
+}
+# start logging
+printf -- "------------------------------------\n"
+printf -- "         $CONTAINER logs            \n"
+printf -- "------------------------------------\n"
+docker logs -f $CONTAINER | npx pino-pretty
+

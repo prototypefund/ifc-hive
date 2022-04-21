@@ -22,7 +22,7 @@ Help()
    printf -- "\t\t${CYAN}-h${NC}\t\tPrint this Help.\n"
    printf "\tsub-commands:\n"
    printf "\t\t${CYAN}install dev${NC}\tConfigure project specific git settings\n"
-   printf "\t\t${CYAN}api log${NC}\t\tPrint api container »ifc-hive-dev« logs to stdout\n"
+   printf "\t\t${CYAN}api log [name]${NC}\tPrint container logs to stdout, default [ifc-dev-api].\n"
    printf "\t\t${CYAN}up <env>${NC}\tStart [dev|stag|prod] developmen environment\n"
 }
 
@@ -45,7 +45,7 @@ done
 # Print API logs to stdout
 [ "$1" = "api" -a "$2" = "log" ] && {
   printf "${CYAN}Requese API loggin to stdout\n${NORM}"
-  ./app/api/bin/dev-log
+  ./app/api/bin/dev-log $3
   exit
 }
 
