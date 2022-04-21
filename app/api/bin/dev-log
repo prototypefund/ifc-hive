@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# Print API logging to stdout and make it pretty
+# Note that this script assumes the default container name for the dev-environment
+CYAN='\033[0;36m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+BOLD=$(tput bold)
+NORM=$(tput sgr0)
+
+printf "${CYAN}Print API logs to stdout\n"
+printf -- "- NOTE: this only works for docker container with default »ifc-dev-api« name in DEV environment.${NC}\n"
+docker logs -f ifc-dev-api | npx pino-pretty

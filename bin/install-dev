@@ -1,7 +1,18 @@
 #!/usr/bin/sh
+CYAN='\033[0;36m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+BOLD=$(tput bold)
+NORM=$(tput sgr0)
 
 # copy git commit message hook to .git/hooks directory
-ln -rs .gitlab/commit-msg .git/hooks/commit-msg
+ln -rsf .gitlab/commit-msg .git/hooks/commit-msg
+printf "${NC}- Copy git commit-msg hookt to .git directory.\n"
 
 # add local git commit template
 git config commit.template .gitlab/git-commit-template.txt
+printf "${NC}- add git-commit-template to local git configuration.\n${NC}"
+printf "done\n"
+
+exit 0

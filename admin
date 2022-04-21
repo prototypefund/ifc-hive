@@ -1,0 +1,53 @@
+#!/bin/sh
+#
+# This script is the facade to a number of commands which might be helpful to
+# manage the project, mainly in the development environment. 
+#
+# When adding new sub-commands plesase keep this file lean and place the script
+# in the scope where it belongs, i.e. into the app/api/bin or app/client/bin etc.
+CYAN='\033[0;36m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+BOLD=$(tput bold)
+NORM=$(tput sgr0)
+
+# Help function
+Help()
+{
+   # Display Help
+   printf "\nManage your application with the following commands\n\n"
+   printf "Syntax:\tadmin [-h] [sub-command]\n\n"
+   printf "\toptions:\n"
+   printf -- "\t\t${CYAN}-h${NC}\t\tPrint this Help.\n"
+   printf "\tsub-commands:\n"
+   printf "\t\t${CYAN}install dev${NC}\tConfigure project specific git settings\n"
+   printf "\t\t${CYAN}api log${NC}\t\tPrint api container »ifc-hive-dev« logs to stdout\n"
+   printf "\t\t${CYAN}up <env>${NC}\tStart [dev|stag|prod] developmen environment\n"
+}
+
+# get options and act accordingly
+while getopts ":h" option; do
+   case $option in
+      h) # display Help
+         Help
+         exit;;
+   esac
+done
+
+# Install local development environment
+[ "$1" = "install" -a "$2" = "dev" ] && {
+  printf "${CYAN}Configure development set-up (currently only git)...\n${NORM}"
+  ./bin/install-dev
+  exit
+}
+
+# Print API logs to stdout
+[ "$1" = "api" -a "$2" = "log" ] && {
+  printf "${CYAN}Requese API loggin to stdout\n${NORM}"
+  ./app/api/bin/dev-log
+  exit
+}
+
+
+
