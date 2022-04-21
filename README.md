@@ -79,6 +79,9 @@ Kommandos hochfahren bzw. restlos wieder entfernen.
 # spin up docker based development environment
 git clone git@repo.karo.design:daniel/ifc-hive.git
 cd ifc-hive
+# apply locally project specific git configuration
+./admin install dev
+# start up the containers in development mode
 docker-compose up --build -d
 
 # tear down including all volumes
