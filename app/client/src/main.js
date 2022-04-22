@@ -17,12 +17,6 @@ console.log('API_BASE_URL', API_BASE_URL)
  */
 const sendTestRequest = async () => {
   try {
-    const res = await axios.get('/items/2', {
-      headers: {
-        'Accept-Version': '1.0'
-      }
-    })
-    console.dir(res.data)
     // create root component
     const app = createApp(App)
     // add axios to all components
