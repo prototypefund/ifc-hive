@@ -16,7 +16,7 @@ export default {
       { name: 'item', description: 'Test item related end-points' }
     ],
     securityDefinitions: {
-      ApiToken: {
+      apiKey: {
         description: 'Authorization header token, sample: "Bearer #TOKEN#"',
         type: 'apiKey',
         name: 'Authorization',

@@ -1,4 +1,4 @@
-import app from '#src/app'
+import app from '#src/app.js'
 
 /* Set port */
 const PORT = 3000

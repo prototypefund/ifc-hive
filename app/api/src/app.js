@@ -13,8 +13,11 @@ import vary from 'vary' // required to handle the accept-version header
 import swaggerConfig from './lib/swaggerConfig.js' // swagger api documentation configuration
 import healthcheck from 'fastify-healthcheck' // simple health check utility
 
-/* import custom components from ./components here. */
-import testitem from './components/testitem/index.js'
+/*
+ * import custom components from ./components here.
+ * ------------------------------------------------------------------------------------------------
+ */
+import notes from './components/note/index.js'
 
 /* manually add __filename and __dirname since they are not available in ES modules */
 global.__filename = fileURLToPath(import.meta.url)
@@ -140,7 +143,7 @@ export default function app (opts = {}) {
    * REGISTER PROJECT COMPONENTS
    * ----------------------------------------------------------------------------------------------
    */
-  app.register(testitem)
+  app.register(notes, { prefix: '/test' })
 
   /*
    * DECORATE GLOBALE EVENT EMITTER

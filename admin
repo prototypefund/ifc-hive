@@ -3,8 +3,9 @@
 # This script is the facade to a number of commands which might be helpful to
 # manage the project, mainly in the development environment. 
 #
-# When adding new sub-commands plesase keep this file lean and place the script
-# in the scope where it belongs, i.e. into the app/api/bin or app/client/bin etc.
+# When adding new sub-commands try to keep this file lean, place the actual
+# script in the scope where it belongs and call it from here, i.e. into the
+# app/api/bin or app/client/bin etc.
 CYAN='\033[0;36m'
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -17,7 +18,7 @@ Help()
 {
    # Display Help
    printf "\nManage your application with the following commands\n\n"
-   printf "Syntax:\tadmin [-h] [sub-command]\n\n"
+   printf "Syntax:\tadmin [-h] [sub-command] [argument...]\n\n"
    printf "\toptions:\n"
    printf -- "\t\t${CYAN}-h${NC}\t\tPrint this Help.\n"
    printf "\tsub-commands:\n"
@@ -49,5 +50,5 @@ done
   exit
 }
 
-
-
+# if nothing was called, display help
+Help
