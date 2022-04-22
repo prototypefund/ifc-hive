@@ -13,7 +13,7 @@ export default {
       description: 'FInd more documentation here'
     },
     tags: [
-      { name: 'item', description: 'Test item related end-points' }
+      { name: 'note', description: 'Test object note' }
     ],
     securityDefinitions: {
       apiKey: {
