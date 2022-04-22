@@ -5,14 +5,14 @@
 Please use the [.git-commit-template.txt](.git-commit-template.txt) and follow the instructions mentioned
 in that file.
 
-Add the following template to your local git configuration for the project like
-this:
+Configure the git settings for this project
 ```bash
-cd <project-root>
-git config commit.template .gitlab/git-commit-template.txt
+./admin install dev
 ```
-Now on each commit this template should automatically be presented.
+This command takes care of two things:
 
+1. apply a commit message template
+2. apply a commit-msg hook to check the format of the first line.
 
 ```
 # <tag> (<scope>) #<issue>: (If applied, this commit will...) <subject> (Max 72 char)
@@ -57,6 +57,12 @@ Now on each commit this template should automatically be presented.
 #   * Mention BREAKING CHANGES if applicable
 #   * signify BREAKING CHANGES with exclamation mark, e.g. feat! (api) #132: Change endpoint
 ```
+
+## Branching Policy
+
+We are following the best practise for continuous deployments by adopting a
+trunk based branching style. In a number of respects this is in contrast to the
+git flow style with long lived feature branches.
 
 ## Issues and requirements management
 
