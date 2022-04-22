@@ -21,7 +21,7 @@ const count = ref(0)
 
 <template>
   <h1>{{ msg }}</h1>
-  <h1>Hallo Christian</h1>
+  <h1>Hallo Christian diggi</h1>
 
   <p>
     <a href="https://vitejs.dev/guide/features.html" target="_blank">
