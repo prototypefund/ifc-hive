@@ -11,9 +11,18 @@ NORM=$(tput sgr0)
 # default container identifier
 CONTAINER=ifc-dev-api
 
+
 # die we get an identifier for the container?
 [ "$1" ] && {
   CONTAINER=$1
+}
+
+[ "$1" = "client" ] && {
+  CONTAINER=ifc-dev-client
+}
+
+[ "$1" = "api" ] && {
+  CONTAINER=ifc-dev-api
 }
 
 # is the container running?
@@ -28,4 +37,3 @@ printf -- "------------------------------------\n"
 printf -- "         $CONTAINER logs            \n"
 printf -- "------------------------------------\n"
 docker logs -f $CONTAINER | npx pino-pretty
-
