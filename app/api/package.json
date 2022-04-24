@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node ./src/server",
     "dev": "npx nodemon ./src/server",
-    "test": "npx c8 --100 tap"
+    "test": "npx c8 tap --reporter=spec --100" 
   },
   "dependencies": {
     "c8": "^7.11.2",

@@ -14,9 +14,9 @@ export function isObject (value) {
  */
 export function removeIdProperty (doc = {}) {
   // copy the provided object
+  if (!isObject(doc)) { return false }
   const obj = { ...doc }
-  // do we have an object at all?
-  if (!isObject(obj)) { return false }
+  // // do we have an object at all?
 
   // get properties of object
   const entries = Object.entries(obj)
@@ -31,12 +31,6 @@ export function removeIdProperty (doc = {}) {
       delete obj._id
       return obj
     }
-    // if the property is an object, recursively call this function
-    // if (isObject(objectValue)) {
-    //   const child = removeIdProperty(objectValue)
-    //   if (child !== null) {
-    //     return child
-    //   }
-    // }
   }
+  return false
 }
