@@ -9,8 +9,8 @@ const { Schema } = mongoose
 const noteSchema = new Schema({
   title: { type: String, required: true },
   content: { type: String },
-})
+}, { timestamps: true })
 
-const Note = mongoose.model('note', noteSchema)
+const Note = mongoose.model('ifc_test_note', noteSchema)
 
 export default Note

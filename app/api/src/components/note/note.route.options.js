@@ -10,7 +10,9 @@ export const noteSchema = {
   properties: {
     _id: { type: 'string' },
     title: { type: 'string' },
-    content: { type: 'string' }
+    content: { type: 'string' },
+    createdAt: { type: 'string' },
+    updatedAt: { type: 'string' },
   }
 }
 
