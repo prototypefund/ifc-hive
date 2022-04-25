@@ -18,6 +18,7 @@ import healthcheck from 'fastify-healthcheck' // simple health check utility
  * ------------------------------------------------------------------------------------------------
  */
 import notes from './components/note/index.js'
+import access from './components/access/index.js'
 
 /* manually add __filename and __dirname since they are not available in ES modules */
 global.__filename = fileURLToPath(import.meta.url)
@@ -144,6 +145,7 @@ export default function app (opts = {}) {
    * ----------------------------------------------------------------------------------------------
    */
   app.register(notes, { prefix: '/test' })
+  app.register(access, { prefix: '/access' })
 
   /*
    * DECORATE GLOBALE EVENT EMITTER

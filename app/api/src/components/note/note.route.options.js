@@ -11,13 +11,21 @@ export const noteSchema = {
     _id: { type: 'string' },
     title: { type: 'string' },
     content: { type: 'string' },
+  },
+  optionalProperties: {
     createdAt: { type: 'string' },
     updatedAt: { type: 'string' },
   }
 }
 
+/* when creating a new object we don't expect an _id field in the body */
 const noteSchemaWithoutId = { ...noteSchema }
 noteSchemaWithoutId.properties = removeIdProperty(noteSchema.properties)
+
+/* the reponse also includes the optional fields */
+const noteSchemaComplete = { ...noteSchema }
+const { noteProperties, noteOptionalProperties } = noteSchemaComplete
+noteSchemaComplete.properties = { ...noteProperties, ...noteOptionalProperties }
 
 /*
  * options add note
@@ -31,7 +39,7 @@ export const addNoteOptions = {
     body: noteSchemaWithoutId,
     headers: { 'Accept-Version': { type: 'string', default: '*' } },
     response: {
-      201: noteSchema,
+      201: noteSchemaComplete,
     },
     security: [{ apiKey: [] }],
   },

@@ -10,9 +10,10 @@
   "scripts": {
     "start": "node ./src/server",
     "dev": "npx nodemon ./src/server",
-    "test": "npx c8 tap --reporter=spec --100" 
+    "test": "npx c8 tap --reporter=spec --100"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "c8": "^7.11.2",
     "fastify": "^3.27.4",
     "fastify-autoload": "^3.11.0",
