@@ -12,6 +12,7 @@ import { dirname } from 'path' // required to emulate __dirname
 import vary from 'vary' // required to handle the accept-version header
 import swaggerConfig from './lib/swaggerConfig.js' // swagger api documentation configuration
 import healthcheck from 'fastify-healthcheck' // simple health check utility
+import { nanoid } from 'nanoid'
 
 /*
  * import custom components from ./components here.
@@ -38,6 +39,8 @@ export default function app (opts = {}) {
     logger: true,
     // we are behind a trusted proxy
     trustProxy: true,
+    // custom request id generator
+    genReqId: () => nanoid()
   })
 
   /*
@@ -127,7 +130,7 @@ export default function app (opts = {}) {
   app.addHook('onRequest', (request, reply, done) => {
     // we want the accept-versio header everywhere except when requesting the documentation routes
     // @TODO take care of request.req depreciated
-    if (!request.headers['accept-version'] && !/(docs|health)/.test(request.req.url)) {
+    if (!request.headers['accept-version'] && !/(docs|health)/.test(request.raw.url)) {
       // send error if we are missing the Accept-Version header
       reply
         .status(412)
