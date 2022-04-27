@@ -14,6 +14,17 @@ import swaggerConfig from './lib/swaggerConfig.js' // swagger api documentation 
 import healthcheck from 'fastify-healthcheck' // simple health check utility
 import { nanoid } from 'nanoid'
 
+import fastifyJwt from 'fastify-jwt'
+import jwt from './plugins/authentication/index.js'
+
+/*
+ * Env variables for configuration
+ *
+ * NODE_ENV             development, production, test
+ * API_TOKEN_SECRET     secret for signing the JWT token
+ * API_TOKEN_MAX_AGE    max age for valig JWT, e.g. '3600' (seconds), '1d' (days), '1h' (hours)
+ */
+
 /*
  * import custom components from ./components here.
  * ------------------------------------------------------------------------------------------------
@@ -43,10 +54,20 @@ export default function app (opts = {}) {
     genReqId: () => nanoid()
   })
 
+  // register jwt authentication plugin
+  app.register(jwt, {
+    secret: process.env.API_TOKEN_SECRET,
+    maxAge: process.env.API_TOKEN_MAX_AGE,
+  })
+
   /*
    * APP CONFIGURATION FROM ENV VARIABLES
    * ----------------------------------------------------------------------------------------------
    */
+  if (!process.env.API_TOKEN_SECRET || process.env.API_TOKEN_SECRET === 'undefined') {
+    app.log.fatal('Missing config API_SECRET')
+    process.exit(1)
+  }
 
   /*
    * CONNECT TO MONGO

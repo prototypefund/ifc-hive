@@ -48,22 +48,25 @@ export const addUserOtions = {
 }
 
 /* get user collection options */
-export const getUsersOptions = {
-  constraints: { version: '1.0.0' },
-  handler: controller.getUsers,
-  schema: {
-    tags: ['user'],
-    summary: 'v1.0.0 returns user collection',
-    description: 'Returns user collection',
-    headers: { 'Accept-Version': { type: 'string', default: '*' } },
-    response: {
-      200: {
-        type: 'array',
-        items: userSchemaComplete
-      }
+export const getUsersOptions = (app) => {
+  return {
+    constraints: { version: '1.0.0' },
+    handler: controller.getUsers,
+    onRequest: [app.authenticate],
+    schema: {
+      tags: ['user'],
+      summary: 'v1.0.0 returns user collection',
+      description: 'Returns user collection',
+      headers: { 'Accept-Version': { type: 'string', default: '*' } },
+      response: {
+        200: {
+          type: 'array',
+          items: userSchemaComplete
+        }
+      },
+      security: [{ apiKey: [] }],
     },
-    security: [{ apiKey: [] }],
-  },
+  }
 }
 
 /* get single user options */

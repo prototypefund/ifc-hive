@@ -4,7 +4,7 @@ export default function accessRoutes (app, options, done) {
   /* create new user */
   app.post('/users', opts.addUserOtions)
   /* get user collection */
-  app.get('/users', opts.getUsersOptions)
+  app.get('/users', opts.getUsersOptions(app))
   /* get single user by _id */
   app.get('/user/:id', opts.getUserOptions)
   /* update single user by _id */

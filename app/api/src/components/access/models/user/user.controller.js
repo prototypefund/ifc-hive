@@ -30,6 +30,7 @@ export async function createUser (req, res) {
 export async function getUsers (req, res) {
   try {
     const users = await User.find({})
+    req.log.info(req.user)
     res.code(200).send(users)
   } catch (err) {
     res.status(500).send(err)
@@ -202,8 +203,10 @@ export async function login (req, res) {
     return false
   }
 
+  const token = await res.jwtSign({ user: { username: 'daniel', email: 'daniel@karo.berlin' } })
+
   // @TODO generate token
   res.send({
-    token: 'token for the user',
+    token,
   })
 }
