@@ -13,16 +13,15 @@ import vary from 'vary' // required to handle the accept-version header
 import swaggerConfig from './lib/swaggerConfig.js' // swagger api documentation configuration
 import healthcheck from 'fastify-healthcheck' // simple health check utility
 import { nanoid } from 'nanoid'
-
-import fastifyJwt from 'fastify-jwt'
 import jwt from './plugins/authentication/index.js'
 
 /*
- * Env variables for configuration
+ * ENV variables for configuration
  *
  * NODE_ENV             development, production, test
  * API_TOKEN_SECRET     secret for signing the JWT token
  * API_TOKEN_MAX_AGE    max age for valig JWT, e.g. '3600' (seconds), '1d' (days), '1h' (hours)
+ * API_PORT             port for the api, defaults to 3000
  */
 
 /*
@@ -168,8 +167,8 @@ export default function app (opts = {}) {
    * REGISTER PROJECT COMPONENTS
    * ----------------------------------------------------------------------------------------------
    */
-  app.register(notes, { prefix: '/test' })
   app.register(access, { prefix: '/access' })
+  app.register(notes, { prefix: '/test' })
 
   /*
    * DECORATE GLOBALE EVENT EMITTER

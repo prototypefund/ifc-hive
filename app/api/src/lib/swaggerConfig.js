@@ -9,15 +9,18 @@ export default {
       version: '0.0.1'
     },
     externalDocs: {
-      url: 'https://docs.ifc-hive.com',
+      url: 'https://ifc-hive.karo.design',
       description: 'FInd more documentation here'
     },
     tags: [
-      { name: 'note', description: 'Test object note' }
+      { name: 'account', description: 'The root entity, all users and other objects belong to an account.' },
+      { name: 'user', description: 'Represents a natural person using the app.' },
+      { name: 'permission', description: 'Handle account specific roles and for users.' },
+      { name: 'note', description: 'A simpel test object for development.' }
     ],
     securityDefinitions: {
       apiKey: {
-        description: 'Authorization header token, sample: "Bearer #TOKEN#"',
+        description: 'Example: "Bearer {token}"',
         type: 'apiKey',
         name: 'Authorization',
         in: 'header'

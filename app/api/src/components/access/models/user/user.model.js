@@ -1,7 +1,9 @@
 /**
- * Karo User Model
+ * User Model
  *
  * This class represents a system user entity to the app
+ * Users belong to an account and have one ore more permissions / roles per
+ * account.
  */
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'

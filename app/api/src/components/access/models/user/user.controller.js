@@ -181,6 +181,9 @@ export async function verifyEmail (req, res) {
  */
 export async function login (req, res) {
   const user = await User.findOne({ username: req.body.username.trim() })
+  // @TODO populate with account
+  // @TODO check if account is active
+
   if (!user) {
     res.unauthorized('Username or password invalid')
     return false
@@ -194,19 +197,26 @@ export async function login (req, res) {
     return false
   }
   if (user.blocked) {
-    res.unauthorized('Account is blocked')
+    res.unauthorized('User is blocked')
     return false
   }
+
+  // check password
   const valid = await user.checkPassword(req.body.password)
   if (!valid) {
     res.unauthorized('Username or password invalid')
     return false
   }
 
-  const token = await res.jwtSign({ user: { username: 'daniel', email: 'daniel@karo.berlin' } })
+  const { _id, username, nickname, email } = user
 
-  // @TODO generate token
+  // generate token
+  const token = await res.jwtSign({
+    user: { _id, username, nickname, email }
+  })
+
+  // send token
   res.send({
-    token,
+    data: { token, user }
   })
 }
