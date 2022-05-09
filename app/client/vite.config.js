@@ -3,8 +3,12 @@ import vue from '@vitejs/plugin-vue'
 
 // see https://vitejs.dev/config/
 export default defineConfig({
-    server: {
+  server: {
     port: 8081 // @TODO read port from env variable
+  },
+  test: {
+    // make all test functions available without import
+    globals: true,
   },
   // build: {
   //   rollupOptions: {
