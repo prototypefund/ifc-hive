@@ -6,7 +6,10 @@
     "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "npx vitest"
+    "test:unit": "vitest",
+    "test:spec": "cypress open",
+    "test:spec:ct": "cypress open-ct",
+    "test:spec:run": "cypress run-ct "
   },
   "dependencies": {
     "@cypress/vite-dev-server": "^2.2.2",

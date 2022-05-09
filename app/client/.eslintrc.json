@@ -14,6 +14,9 @@
     },
     "globals": {
       "test": "readonly",
-      "expect": "readonly"
+      "expect": "readonly",
+      "it": "readonly",
+      "cy": "readonly"
+
     }
 }

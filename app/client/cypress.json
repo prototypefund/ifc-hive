@@ -1,4 +1,5 @@
 {
-  "baseUrl": "http://localhost:8081",
+  "testFiles": "**/*.spec.js",
+  "componentFolder": "src",
   "chromeWebSecurity": false
 }

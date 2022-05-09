@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { configDefaults } from 'vitest/config'
 
 // see https://vitejs.dev/config/
 export default defineConfig({
@@ -9,6 +10,7 @@ export default defineConfig({
   test: {
     // make all test functions available without import
     globals: true,
+    exclude: [...configDefaults.exclude, '**/*.spec.js'],
   },
   // build: {
   //   rollupOptions: {
