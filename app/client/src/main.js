@@ -6,7 +6,7 @@ import getEnvVariable from './lib/getEnvVariable'
 const API_BASE_URL = getEnvVariable('VITE_API_BASE_URL')
 
 // set default to accept all API endpoint version
-axios.defaults.headers.common['Accept-Version'] = '1.0'
+axios.defaults.headers.common['Accept-Version'] = '*'
 // @TODO change to API_BASE_URL
 axios.defaults.baseURL = API_BASE_URL
 

@@ -3,14 +3,7 @@ import { ref, onMounted, inject } from 'vue'
 
 const $api = inject('$api')
 
-onMounted(async () => {
-    const res = await $api.get('/items', {
-      headers: {
-        'Accept-Version': '1.x'
-      }
-    })
-    console.dir(res.data)
-})
+onMounted(async () => { })
 
 defineProps({
   msg: String
