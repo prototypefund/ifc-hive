@@ -18,7 +18,7 @@ build:
     # build services from scratch
     - docker-compose -f docker-compose.yml -f docker-compose.integration.yml up -d --build
     # remove dangling images
-    - docker rmi $(sudo docker images -f "dangling=true" -q)
+    - docker rmi $(sudo docker images -f "dangling=true" -q) -f
 
 # complete integration deployment
 test-api:
