@@ -14,25 +14,8 @@ const count = ref(0)
 
 <template>
   <h1>{{ msg }}</h1>
-  <h1>Hallo Christian blub</h1>
 
-  <p>
-    <a href="https://vitejs.dev/guide/features.html" target="_blank">
-      IFC-Hive
-    </a>
-    |
-    <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Documentation</a>
-  </p>
-
-  <button type="button" @click="count++">count is: {{ count }}</button>
-  <p>
-    Edit
-    <code>components/HelloWorld.vue</code> to test hot module replacement.
-  </p>
+  <v-btn type="button" @click="count++" flat color="grey-lighten-2">
+    count is: {{ count }}
+  </v-btn>
 </template>
-
-<style scoped>
-a {
-  color: #42b983;
-}
-</style>

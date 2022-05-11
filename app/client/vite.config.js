@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { configDefaults } from 'vitest/config'
-
+//
 // see https://vitejs.dev/config/
 export default defineConfig({
   server: {
@@ -17,5 +17,7 @@ export default defineConfig({
   //     input: './src/index.html'
   //   }
   // },
-  plugins: [vue()]
+  plugins: [
+    vue(),
+  ]
 })

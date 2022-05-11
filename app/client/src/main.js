@@ -1,7 +1,14 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import axios from 'axios'
+import 'vuetify/styles' // Global CSS has to be imported
+import { createVuetify } from 'vuetify'
+import '@mdi/font/css/materialdesignicons.css'
+import  'roboto-fontface/css/roboto/roboto-fontface.css'
 import getEnvVariable from './lib/getEnvVariable'
+
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
 
 const API_BASE_URL = getEnvVariable('VITE_API_BASE_URL')
 
@@ -19,6 +26,12 @@ const sendTestRequest = async () => {
   try {
     // create root component
     const app = createApp(App)
+    const vuetify = createVuetify({
+        components,
+        directives,
+      })
+    app.use(vuetify)
+
     // add axios to all components
     app.config.globalProperties.$api = axios
     app.provide('$api', axios)
