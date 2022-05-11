@@ -17,7 +17,8 @@
     "@mdi/font": "^6.6.96",
     "roboto-fontface": "^0.10.0",
     "webfontloader": "^1.0.0",
-    "axios": "^0.26.1"
+    "axios": "^0.26.1",
+    "pinia": "^2.0.14"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
