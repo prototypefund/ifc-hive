@@ -1,10 +1,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import axios from 'axios'
+import axios from 'axios-observable'
 import 'vuetify/styles' // Global CSS has to be imported
 import { createVuetify } from 'vuetify'
 import '@mdi/font/css/materialdesignicons.css'
-import  'roboto-fontface/css/roboto/roboto-fontface.css'
+import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import getEnvVariable from './lib/getEnvVariable'
 
 import * as components from 'vuetify/components'
@@ -27,9 +27,9 @@ const sendTestRequest = async () => {
     // create root component
     const app = createApp(App)
     const vuetify = createVuetify({
-        components,
-        directives,
-      })
+      components,
+      directives,
+    })
     app.use(vuetify)
 
     // add axios to all components
