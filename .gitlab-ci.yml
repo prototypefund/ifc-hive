@@ -7,7 +7,6 @@ stages:
 variables:
   CI_COMMIT_SHA: $CI_COMMIT_SHORT_SHA
   CI_COMMIT_TITLE: $CI_COMMIT_TITLE
-  CI_COMMIT_MESSAGE: $CI_COMMIT_MESSAGE
 
 build:
   stage: integration
@@ -15,20 +14,19 @@ build:
   #  CI_COMMIT_TITLE: $CI_COMMIT_TITLE
   #  CI_COMMIT_MESSAGE: $CI_COMMIT_MESSAGE
   rules:
-    - if: '$CI_COMMIT_MESSAGE =~ /^wip /'
+    - if: $CI_COMMIT_MESSAGE =~ /^wip.*/
       when: never
     - when: on_success
   script:
     - echo "building containers for integration environment if commit message DOES NOT start with WIP"
     # do we have previous integration containers running? If so stop and delete them
-    # - if [[ -n $(docker ps -q -f name=integration) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=integration)); fi;
+    - if [[ -n $(docker ps -q -f name=integration) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=integration)); fi;
     # Set env variable API_BASE_URL
-    # - export API_BASE_URL="https://integration.api.ifc-hive.karo.design"
+    - export API_BASE_URL="https://integration.api.ifc-hive.karo.design"
     # build services from scratch
-    # - docker-compose -f docker-compose.yml -f docker-compose.integration.yml up -d --build
+    - docker-compose -f docker-compose.yml -f docker-compose.integration.yml up -d --build
     # remove dangling images
-    # - docker rmi $(sudo docker images -f "dangling=true" -q) -f
-    - echo $CI_COMMIT_TITLE
+    - docker rmi $(sudo docker images -f "dangling=true" -q) -f
 
 # complete integration deployment
 test-api:
@@ -40,6 +38,7 @@ deploy-integration:
   stage: integration
   script:
     - echo "Deploy to inegration environment"
+    - echo "$CI_COMMIT_MESSAGE"
 
 # deploy to staging
 deploy-staging:

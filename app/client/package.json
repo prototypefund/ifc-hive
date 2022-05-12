@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build",
+    "build": "npx vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
     "test:spec": "cypress open",
@@ -26,9 +26,7 @@
     "pinia": "^2.0.14",
     "ramda": "0.28.0",
     "semver": "7.3.5",
-    "@vueuse/core": "^8.4.2"
-  },
-  "devDependencies": {
+    "@vueuse/core": "^8.4.2",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-cypress": "^2.12.1",
