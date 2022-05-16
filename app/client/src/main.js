@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import axios from 'axios-observable'
+import axios from 'axios'
 import 'vuetify/styles' // Global CSS has to be imported
 import { createVuetify } from 'vuetify'
 import '@mdi/font/css/materialdesignicons.css'
