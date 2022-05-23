@@ -1,9 +1,9 @@
 import { mount } from '@cypress/vue'
-import HelloWorld from './HelloWorld.vue'
+import dashboard from './dashboard.vue'
 
-describe('HelloWorl', () => {
+describe('dashboard', () => {
   it('renders a message from prop data', () => {
-    mount(HelloWorld, {
+    mount(dashboard, {
       propsData: {
         msg: 'Hello Cypress!',
       },

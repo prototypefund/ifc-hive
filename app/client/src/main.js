@@ -1,12 +1,14 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import routes from './routes'
 import axios from 'axios'
 import 'vuetify/styles' // Global CSS has to be imported
 import { createVuetify } from 'vuetify'
 import '@mdi/font/css/materialdesignicons.css'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import getEnvVariable from './lib/getEnvVariable'
-
+import store from './store'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
@@ -30,11 +32,18 @@ const sendTestRequest = async () => {
       components,
       directives,
     })
+    const router = createRouter({
+      // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
+      history: createWebHashHistory(),
+      routes, // short for `routes: routes`
+    })
     app.use(vuetify)
+    app.use(router)
 
     // add axios to all components
     app.config.globalProperties.$api = axios
     app.provide('$api', axios)
+    app.provide('$store', store)
     // mount the app
     app.mount('#app')
   } catch (err) {
