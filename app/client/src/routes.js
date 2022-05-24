@@ -1,6 +1,6 @@
 // import routes from modules
 import Dashboard from './components/dashboard.vue'
-import { createFeatureStore } from 'mini-rx-store';
+import featureStoreHandler from './lib/featureStoreHandler'
 export default [
     /* Root */
     {
@@ -8,10 +8,7 @@ export default [
         name: 'dashboard',
         component: Dashboard,
         props: route => ({
-            store: createFeatureStore('dashboard', {
-                name: 'lutz',
-                msg: route.params.msg,
-            })
+            store: featureStoreHandler('dashboard', { name: 'Lutz', title: 'the lutzness of life' }, route.params)
         }),
     },
 ]
