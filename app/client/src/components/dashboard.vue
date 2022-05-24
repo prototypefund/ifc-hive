@@ -1,19 +1,21 @@
 <template>
     <v-container>
-        <h1>{{ msg || 'hmm' }}</h1>
-
+        <h1>{{ currState.name }} - {{ currState.title }}</h1>
+        <p>url params {{ msg }}</p>
+        {{ currState }}
     </v-container>
 </template>
 <script setup>
 import { inject } from 'vue'
 const $store = inject('$store')
-const msgState = $store.select(state => state['dashboard'].msg);
+const state = $store.select(state => state['dashboard']);
 defineProps({
     msg: {
         type: String,
         default: 'moin'
     }
 })
-console.dir(msgState)
+let currState
+state.subscribe(val => currState = val)
 
 </script>
