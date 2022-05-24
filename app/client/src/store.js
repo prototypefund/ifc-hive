@@ -1,20 +1,21 @@
 import {
     configureStore,
-    ImmutableStateExtension,
     LoggerExtension,
     ReduxDevtoolsExtension,
     UndoExtension,
+    ImmutableStateExtension
 } from 'mini-rx-store';
 import getEnvVariable from './lib/getEnvVariable'
-import { mergeDeepRight } from 'ramda'
 
 const extensions = getEnvVariable('NODE_ENV') === 'production'
     ? [
         new LoggerExtension(),
+        new ImmutableStateExtension()
     ]
     : [
         new LoggerExtension(),
         new ReduxDevtoolsExtension({ name: 'pacifico applicationState' }),
+        new ImmutableStateExtension(),
         new UndoExtension(),
     ];
 const applicationState = {
@@ -30,7 +31,7 @@ const applicationReducers = {
     router: (state, action) => {
         switch (action.type) {
             case 'updateRouter':
-                return action.payload
+                return JSON.parse(JSON.stringify(action.payload))
             default:
                 return state;
         }

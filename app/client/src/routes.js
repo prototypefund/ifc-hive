@@ -7,8 +7,9 @@ export default [
         path: '/:msg?',
         name: 'dashboard',
         component: Dashboard,
-        props: route => ({
-            store: featureStoreHandler('dashboard', { name: 'Lutz', title: 'the lutzness of life' }, route.params)
-        }),
+        props: true,
+        beforeEnter: (to, from) => {
+            featureStoreHandler.page({ name: 'Lutz', title: 'the lutzness of life' }, to)
+        },
     },
 ]
