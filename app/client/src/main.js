@@ -37,6 +37,7 @@ const sendTestRequest = async () => {
       history: createWebHashHistory(),
       routes, // short for `routes: routes`
     })
+
     app.use(vuetify)
     app.use(router)
 
@@ -44,6 +45,13 @@ const sendTestRequest = async () => {
     app.config.globalProperties.$api = axios
     app.provide('$api', axios)
     app.provide('$store', store)
+    router.beforeEach((to, from) => {
+      // set the new route to the store
+      store.dispatch({
+        type: 'addRoute',
+        payload: to
+      });
+    })
     // mount the app
     app.mount('#app')
   } catch (err) {

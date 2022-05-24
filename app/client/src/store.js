@@ -16,28 +16,35 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
         new UndoExtension(),
     ];
 const applicationState = {
-    router: {},
-    user: {}
+    router: { test: 'bla' },
+    user: {
+        test: 'blub'
+    },
+    uiState: {
+        test: 'ble'
+    }
+}
+const applicationReducers = {
+    router: (state, action) => {
+        console.log('router reducer')
+        console.dir(state, action)
+        debugger
+    },
+    user: (state, action) => {
+        console.log('user reducer')
+        console.dir(state, action)
+        debugger
+    },
+    uiState: (state, action) => {
+        console.log('uiState reducer')
+        console.dir(state, action)
+        debugger
+    }
 }
 
-function routerReducer(state, action) {
-    console.dir(applicationState)
-    console.dir(state)
-    console.log(action)
-
-}
-
-function userReducer(state, action) {
-    console.dir(applicationState)
-    console.dir(state)
-    console.log(action)
-
-}
 
 export default configureStore({
     extensions,
-    reducers: {
-        user: userReducer,
-        router: routerReducer
-    }
+    reducers: applicationReducers,
+    initialState: applicationState
 });

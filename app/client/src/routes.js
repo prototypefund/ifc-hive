@@ -5,6 +5,9 @@ export default [
     {
         path: '/:msg?',
         component: Dashboard,
-        props: true
+        props: true,
+        beforeEnter: (to, from) => {
+            //debugger
+        },
     },
 ]

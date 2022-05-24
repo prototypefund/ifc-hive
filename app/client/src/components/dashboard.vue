@@ -1,23 +1,28 @@
 <template>
     <v-container>
-        <h1>{{ msg }}</h1>
-        <h2>{{ msg1 }}</h2>
+        <h1>{{ msg || 'hmm' }}</h1>
     </v-container>
 </template>
 <script setup>
 import { inject } from 'vue'
+import {
+    createFeatureSelector,
+    createSelector
+} from 'mini-rx-store';
 
 const $store = inject('$store')
-console.dir($store)
-defineProps({
-    msg: {
-        type: String,
-        default: 'moin'
-    },
-    msg1: {
-        type: String,
-        default: () => { return 'moin' }
-    },
 
-})
+
+/*
+const dashboardStore = {
+    initialState: {
+        msg: props.msg || "fallback"
+    },
+    reducers: {
+        msg: (state, action) => {
+            debugger;
+        }
+    }
+}
+*/
 </script>
