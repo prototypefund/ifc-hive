@@ -5,24 +5,6 @@
 </template>
 <script setup>
 import { inject } from 'vue'
-import {
-    createFeatureSelector,
-    createSelector
-} from 'mini-rx-store';
-
 const $store = inject('$store')
-
-
-/*
-const dashboardStore = {
-    initialState: {
-        msg: props.msg || "fallback"
-    },
-    reducers: {
-        msg: (state, action) => {
-            debugger;
-        }
-    }
-}
-*/
+console.dir($store)
 </script>

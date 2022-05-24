@@ -48,7 +48,7 @@ const sendTestRequest = async () => {
     router.beforeEach((to, from) => {
       // set the new route to the store
       store.dispatch({
-        type: 'addRoute',
+        type: 'updateRouter',
         payload: to
       });
     })

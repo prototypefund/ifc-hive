@@ -6,17 +6,19 @@ import {
     UndoExtension,
 } from 'mini-rx-store';
 import getEnvVariable from './lib/getEnvVariable'
+import { mergeDeepRight } from 'ramda'
 
 const extensions = getEnvVariable('NODE_ENV') === 'production'
-    ? [new ReduxDevtoolsExtension({}), new UndoExtension()] // Keep DevTools for Demo purposes
+    ? [
+        new LoggerExtension(),
+    ]
     : [
         new LoggerExtension(),
-        new ImmutableStateExtension(),
-        new ReduxDevtoolsExtension({}),
+        new ReduxDevtoolsExtension({ name: 'pacifico applicationState' }),
         new UndoExtension(),
     ];
 const applicationState = {
-    router: { test: 'bla' },
+    router: {},
     user: {
         test: 'blub'
     },
@@ -26,19 +28,28 @@ const applicationState = {
 }
 const applicationReducers = {
     router: (state, action) => {
-        console.log('router reducer')
-        console.dir(state, action)
-        debugger
+        switch (action.type) {
+            case 'updateRouter':
+                return action.payload
+            default:
+                return state;
+        }
     },
     user: (state, action) => {
-        console.log('user reducer')
-        console.dir(state, action)
-        debugger
+        switch (action.type) {
+            case 'updateUser':
+                return action.payload
+            default:
+                return state;
+        }
     },
     uiState: (state, action) => {
-        console.log('uiState reducer')
-        console.dir(state, action)
-        debugger
+        switch (action.type) {
+            case 'updateUi':
+                return action.payload
+            default:
+                return state;
+        }
     }
 }
 
