@@ -19,18 +19,19 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
         new UndoExtension(),
     ];
 const applicationState = {
-    router: {},
+    route: {},
     user: {
         test: 'blub'
     },
-    uiState: {
+    ui: {
         test: 'ble'
-    }
+    },
+    currentPage: {}
 }
 const applicationReducers = {
-    router: (state, action) => {
+    route: (state, action) => {
         switch (action.type) {
-            case 'updateRouter':
+            case 'updateRoute':
                 return JSON.parse(JSON.stringify(action.payload))
             default:
                 return state;
@@ -44,14 +45,22 @@ const applicationReducers = {
                 return state;
         }
     },
-    uiState: (state, action) => {
+    ui: (state, action) => {
         switch (action.type) {
             case 'updateUi':
                 return action.payload
             default:
                 return state;
         }
-    }
+    },
+    currentPage: (state, action) => {
+        switch (action.type) {
+            case 'updateCurrentPage':
+                return action.payload
+            default:
+                return state;
+        }
+    },
 }
 
 

@@ -8,7 +8,8 @@
 <script setup>
 import { inject } from 'vue'
 const $store = inject('$store')
-const state = $store.select(state => state['dashboard']);
+console.dir(this)
+const state = $store.select(state => state['app-dashboard']);
 defineProps({
     msg: {
         type: String,
