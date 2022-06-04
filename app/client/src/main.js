@@ -2,6 +2,9 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import routes from './routes'
 import axios from 'axios'
+import messages from './i18n/messages'
+import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
+import { createI18n, useI18n } from 'vue-i18n'
 import 'vuetify/styles' // Global CSS has to be imported
 import { createVuetify } from 'vuetify'
 import '@mdi/font/css/materialdesignicons.css'
@@ -18,7 +21,6 @@ const API_BASE_URL = getEnvVariable('VITE_API_BASE_URL')
 axios.defaults.headers.common['Accept-Version'] = '*'
 // @TODO change to API_BASE_URL
 axios.defaults.baseURL = API_BASE_URL
-
 console.log('API_BASE_URL', API_BASE_URL)
 /*
  * Send test request just to make sure we can talk to the back-end.
@@ -28,29 +30,47 @@ const sendTestRequest = async () => {
   try {
     // create root component
     const app = createApp(App)
-    const vuetify = createVuetify({
-      components,
-      directives,
-    })
     const router = createRouter({
       // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
       history: createWebHashHistory(),
       routes, // short for `routes: routes`
     })
+    const i18n = new createI18n({
+      legacy: false, // you must set `false`, to use Composition API
+      globalInjection: true,
+      locale: 'de-DE', // set locale
+      fallbackLocale: 'en-GB', // set fallback locale
+      messages, // set locale messages
+      // If you need to specify other options, you can set other options
+      // ...
+    })
 
+
+    const vuetify = createVuetify({
+      locale: createVueI18nAdapter({
+        i18n,
+        useI18n,
+      }),
+      components,
+      directives,
+    })
+    app.use(i18n)
     app.use(vuetify)
     app.use(router)
-
+    //app.use(i18n)
     // add axios to all components
     app.config.globalProperties.$api = axios
     app.provide('$api', axios)
     app.provide('$store', store)
+    app.provide('$t', i18n)
     router.beforeEach((to, from) => {
+      if (!to.params.locale) to.params.locale = 'de'
       // set the new route to the store
       store.dispatch({
-        type: 'updateRouter',
+        type: 'updateRoute',
         payload: to
       });
+
     })
     // mount the app
     app.mount('#app')

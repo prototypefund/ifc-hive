@@ -1,6 +1,7 @@
 <template>
   <v-app>
-    <v-app-bar color="grey-lighten-2">toolbar</v-app-bar>
+    {{ $t('messages.title') }}
+    <v-app-bar color="grey-lighten-2">toolbar > {{ state.name }}</v-app-bar>
     <v-navigation-drawer color="grey-darken-2" permanent>navigation</v-navigation-drawer>
     <v-main>
       <v-card>
@@ -13,8 +14,11 @@
 
 export default {
   inject: ['$api', '$store'],
+  data: () => ({
+    state: {}
+  }),
   created() {
-    console.dir(this)
+    this.$store.select(state => state['route']).subscribe(val => this.state = val)
   }
 }
 </script>
