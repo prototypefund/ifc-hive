@@ -56,6 +56,7 @@ const applicationReducers = {
     currentPage: (state, action) => {
         switch (action.type) {
             case 'updateCurrentPage':
+                debugger
                 return action.payload
             default:
                 return state;

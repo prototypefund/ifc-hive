@@ -1,8 +1,10 @@
 export default {
     'de': {
-        title: "test"
+        title: "test",
+        "app.dashboard": "Dashboard"
     },
     'en': {
-        title: "test en"
+        title: "test en",
+        fallBackTest: "en blabla"
     }
 }

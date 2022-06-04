@@ -35,7 +35,7 @@ const sendTestRequest = async () => {
       history: createWebHashHistory(),
       routes, // short for `routes: routes`
     })
-    const i18n = new createI18n({
+    const i18n = createI18n({
       legacy: false, // you must set `false`, to use Composition API
       globalInjection: true,
       locale: 'de', // set locale
