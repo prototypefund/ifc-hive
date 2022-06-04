@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    {{ $t('messages.title') }}
     <v-app-bar color="grey-lighten-2">toolbar > {{ state.name }}</v-app-bar>
     <v-navigation-drawer color="grey-darken-2" permanent>navigation</v-navigation-drawer>
     <v-main>
@@ -8,6 +7,8 @@
         <router-view />
       </v-card>
     </v-main>
+    {{ $t('messages.title') }}
+
   </v-app>
 </template>
 <script>

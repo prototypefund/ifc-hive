@@ -1,8 +1,8 @@
 export default {
-    'de-DE': {
+    'de': {
         title: "test"
     },
-    'en-GB': {
+    'en': {
         title: "test en"
     }
 }

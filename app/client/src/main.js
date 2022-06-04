@@ -38,8 +38,8 @@ const sendTestRequest = async () => {
     const i18n = new createI18n({
       legacy: false, // you must set `false`, to use Composition API
       globalInjection: true,
-      locale: 'de-DE', // set locale
-      fallbackLocale: 'en-GB', // set fallback locale
+      locale: 'de', // set locale
+      fallbackLocale: 'en', // set fallback locale
       messages, // set locale messages
       // If you need to specify other options, you can set other options
       // ...
