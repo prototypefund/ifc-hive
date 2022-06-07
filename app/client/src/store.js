@@ -25,8 +25,7 @@ const applicationState = {
     },
     ui: {
         test: 'ble'
-    },
-    currentPage: {}
+    }
 }
 const applicationReducers = {
     route: (state, action) => {
@@ -48,15 +47,6 @@ const applicationReducers = {
     ui: (state, action) => {
         switch (action.type) {
             case 'updateUi':
-                return action.payload
-            default:
-                return state;
-        }
-    },
-    currentPage: (state, action) => {
-        switch (action.type) {
-            case 'updateCurrentPage':
-                debugger
                 return action.payload
             default:
                 return state;

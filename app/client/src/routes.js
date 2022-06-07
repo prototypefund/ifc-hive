@@ -8,7 +8,7 @@ export default [
         redirect: { name: 'app.dashboard' },
     },
     {
-        path: '/app:msg?',
+        path: '/app&:msg?',
         name: 'app.dashboard',
         component: Dashboard,
         props: true,
