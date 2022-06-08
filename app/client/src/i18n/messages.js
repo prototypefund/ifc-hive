@@ -1,11 +1,13 @@
 export default {
     'de': {
         title: "test",
-        "app.dashboard": "Dashboard",
-        "app.settings": "Einstellungen"
+        "dashboard": "Dashboard",
+        "settings": "Einstellungen"
     },
     'en': {
         title: "test en",
-        fallBackTest: "en blabla"
+        fallBackTest: "en blabla",
+        "dashboard": "Dashboard",
+        "settings": "Settings"
     }
 }
