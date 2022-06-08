@@ -10,7 +10,7 @@ import { createVuetify } from 'vuetify'
 import '@mdi/font/css/materialdesignicons.css'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import getEnvVariable from './lib/getEnvVariable'
-import { applicationStore, featureStores } from './store'
+import { applicationStore, storeHelper } from './store'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -61,7 +61,7 @@ const sendTestRequest = async () => {
     app.config.globalProperties.$api = axios
     app.provide('$api', axios)
     app.provide('$applicationStore', applicationStore)
-    app.provide('$featureStore', featureStores)
+    app.provide('$storeHelper', storeHelper)
     app.provide('$t', i18n)
     router.beforeEach((to, from) => {
       // add default params to every route

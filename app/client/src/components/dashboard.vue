@@ -10,7 +10,7 @@
 </template>
 <script setup>
 import { inject, ref, onMounted } from 'vue'
-const $featureStore = inject('$featureStore').getFeatureStore('app-dashboard')
+const $featureStore = inject('$storeHelper').getFeatureStore('app-dashboard')
 const state$ = $featureStore.select(state => state);
 let state
 const count = ref(0)
@@ -25,6 +25,8 @@ onMounted(() => {
     console.log(`The initial count is ${count.value}.`)
 })
 const addWidget = () => {
-    console.dir($featureStore)
+    $featureStore.setState(state => ({
+        widgets: [...state.widgets, ...state.config.widgets]
+    }))
 }
 </script>

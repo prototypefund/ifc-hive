@@ -7,7 +7,7 @@
 </template>
 <script setup>
 import { inject } from 'vue'
-const $featureStore = inject('$featureStore').getFeatureStore('app-settings')
+const $featureStore = inject('$storeHelper').getFeatureStore('app-settings')
 const state$ = $featureStore.select(state => state);
 let state
 state$.subscribe(val => state = val)

@@ -75,7 +75,7 @@ export const applicationStore = configureStore({
     reducers: applicationReducers,
     initialState: applicationState
 });
-export const featureStores = {
+export const storeHelper = {
     createPageStore: (props, name) => {
         // create store name based on route name which must not include .
         const pageName = name.replace('.', '-')
