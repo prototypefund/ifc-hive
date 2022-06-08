@@ -1,5 +1,5 @@
 <template>
-  <v-app v-if="route">
+  <v-app v-if="route && route.name">
     <v-app-bar color="grey-lighten-2">toolbar > {{ $t(route.name) }}
     </v-app-bar>
     <v-navigation-drawer color="grey-darken-2" permanent>

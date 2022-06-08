@@ -6,6 +6,7 @@ export default [
     /* Root */
     {
         path: '/',
+        name: 'app',
         redirect: { name: 'app.dashboard' },
     },
     {

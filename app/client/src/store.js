@@ -18,13 +18,17 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
         new ImmutableStateExtension(),
         new UndoExtension(),
     ];
+
 const applicationState = {
     route: {},
     user: {
-        test: 'blub'
+        name: false,
+        email: false,
+        permissions: []
     },
     ui: {
-        test: 'ble'
+        navigationOpen: true,
+        inspectorOpen: false,
     }
 }
 const applicationReducers = {
@@ -51,7 +55,7 @@ const applicationReducers = {
             default:
                 return state;
         }
-    },
+    }
 }
 
 

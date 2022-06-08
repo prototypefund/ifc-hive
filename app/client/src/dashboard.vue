@@ -9,7 +9,7 @@
 import { inject } from 'vue'
 const $store = inject('$store')
 const state = $store.select(state => state['app-dashboard']);
-let currState
+let currState = false
 state.subscribe(val => currState = val)
 defineProps({
     msg: {
