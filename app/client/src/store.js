@@ -70,7 +70,7 @@ const applicationReducers = {
 }
 
 
-export const store = configureStore({
+export const applicationStore = configureStore({
     extensions,
     reducers: applicationReducers,
     initialState: applicationState

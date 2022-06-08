@@ -1,18 +1,18 @@
 <template>
-    <v-container v-if="currState">
-        <h1>{{ $t(currState.routeName) }} - {{ currState.title }}</h1>
+    <v-container v-if="state">
+        <h1>{{ $t(state.routeName) }} - {{ state.title }}</h1>
         <p>url params > {{ urlParams }} &lt;</p>
-        <pre> {{ currState }}</pre>
+        <pre> {{ state }}</pre>
     </v-container>
 </template>
 <script setup>
 import { inject } from 'vue'
-const $store = inject('$store')
-const state = $store.select(state => state['app-settings']);
-let currState
-state.subscribe(val => currState = val)
+const $featureStore = inject('$featureStore').getFeatureStore('app-settings')
+const state$ = $featureStore.select(state => state);
+let state
+state$.subscribe(val => state = val)
 defineProps({
-    config: {
+    urlParams: {
         type: String,
         default: 'moin'
     }

@@ -10,7 +10,7 @@ import { createVuetify } from 'vuetify'
 import '@mdi/font/css/materialdesignicons.css'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import getEnvVariable from './lib/getEnvVariable'
-import { store, featureStores } from './store'
+import { applicationStore, featureStores } from './store'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -60,7 +60,8 @@ const sendTestRequest = async () => {
     // add axios to all components
     app.config.globalProperties.$api = axios
     app.provide('$api', axios)
-    app.provide('$store', store)
+    app.provide('$applicationStore', applicationStore)
+    app.provide('$featureStore', featureStores)
     app.provide('$t', i18n)
     router.beforeEach((to, from) => {
       // add default params to every route
@@ -68,7 +69,7 @@ const sendTestRequest = async () => {
       if (!to.params.routeName) to.params.routeName = to.name
       if (!to.params.storeName) to.params.storeName = to.name.replace('.', '-')
       // set the new route to the store
-      store.dispatch({
+      applicationStore.dispatch({
         type: 'updateRoute',
         payload: to
       });
