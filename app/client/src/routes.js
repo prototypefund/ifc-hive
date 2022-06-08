@@ -2,7 +2,7 @@
 import dashboardComp from './components/dashboard.vue'
 import settingsComp from './components/settings.vue'
 import conf from './components/conf.js'
-import storeHandler from './lib/storeHandler'
+import { featureStores } from './store'
 export default [
     /* Root */
     {
@@ -16,7 +16,7 @@ export default [
         component: dashboardComp,
         props: true,
         beforeEnter: (to, from) => {
-            storeHandler.storePerPage({ ...to.params, ...conf.dashboard }, to.name)
+            featureStores.createPageStore({ ...to.params, ...conf.dashboard }, to.name)
         }
     },
     {
@@ -25,7 +25,7 @@ export default [
         component: settingsComp,
         props: true,
         beforeEnter: (to, from) => {
-            storeHandler.storePerPage({ ...to.params, ...conf.settings }, to.name)
+            featureStores.createPageStore({ ...to.params, ...conf.settings }, to.name)
         }
     },
 ]
