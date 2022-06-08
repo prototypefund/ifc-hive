@@ -16,7 +16,6 @@ export default [
         component: dashboardComp,
         props: true,
         beforeEnter: (to, from) => {
-            console.dir(to)
             storeHandler.storePerPage({ ...to.params, ...conf.dashboard }, to.name)
         }
     },

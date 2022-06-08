@@ -3,7 +3,7 @@ import {
     LoggerExtension,
     ReduxDevtoolsExtension,
     UndoExtension,
-    ImmutableStateExtension
+    ImmutableStateExtension,
 } from 'mini-rx-store';
 import getEnvVariable from './lib/getEnvVariable'
 
