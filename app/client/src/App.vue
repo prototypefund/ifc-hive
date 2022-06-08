@@ -1,19 +1,19 @@
 <template>
   <v-app v-if="route && route.name">
-    <v-app-bar color="grey-lighten-2">toolbar > {{ $t(route.name) }}
+    <v-app-bar color="grey-lighten-2">Toolbar > {{ $t(route.name) }}
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" :rail="rail" permanent @click="rail = false">
+    <v-navigation-drawer v-model="drawer" :rail="rail" permanent @click="handleNavigation(false)">
       <v-list-item title="Navigation" value="Navigation">
         <template v-slot:append>
-          <v-btn v-if="!rail" variant="text" icon="mdi-chevron-left" @click.stop="rail = !rail"></v-btn>
-          <v-btn v-if="rail" variant="text" icon="mdi-chevron-right" @click.stop="rail = !rail"></v-btn>
+          <v-btn v-if="!rail" variant="text" icon="mdi-chevron-left" @click.stop="handleNavigation(true)"></v-btn>
+          <v-btn v-if="rail" variant="text" icon="mdi-chevron-right" @click.stop="handleNavigation(false)"></v-btn>
         </template>
       </v-list-item>
 
       <v-divider></v-divider>
 
       <v-list density="compact" nav>
-        <v-list-item v-for="item in navItems" link :key="item.title" :prepend-icon="item.icon" :title="$t(item.title)"
+        <v-list-item v-for="item in navItems" link :key="item.title" :prepend-icon="item.icon" :title="$t(item.route)"
           :value="item.title" @click="navigate(item)">
         </v-list-item>
       </v-list>
@@ -37,18 +37,16 @@ export default {
     navItems: [
       {
         icon: 'mdi-view-dashboard',
-        title: "dashboard",
         route: 'app.dashboard',
         params: {
-          msg: 'fromNav'
+          urlParams: 'test'
         }
       },
       {
         icon: 'mdi-account',
-        title: "settings",
         route: 'app.settings',
         params: {
-          msg: 'fromNav'
+          urlParams: 'test'
         }
       }
 
@@ -58,8 +56,19 @@ export default {
     this.$store.select(state => state['route']).subscribe((val) => {
       this.route = val
     })
+    this.$store.select(state => state['ui']).subscribe((val) => {
+      this.rail = !val.navigationOpen
+    })
   },
   methods: {
+    handleNavigation(val) {
+      this.$store.dispatch({
+        type: 'updateUi',
+        payload: {
+          navigationOpen: !val
+        }
+      });
+    },
     navigate(item) {
       this.$router.push({
         name: item.route,

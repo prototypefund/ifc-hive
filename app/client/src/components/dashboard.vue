@@ -1,8 +1,9 @@
 <template>
     <v-container v-if="currState">
-        <h1>{{ currState.name }} - {{ currState.title }}</h1>
-        <p>url params {{ msg }}</p>
-        {{ currState }}
+        <h1>{{ $t(currState.routeName) }} - {{ currState.title }}</h1>
+        <p>url params > {{ urlParams }} &lt;</p>
+        <pre> {{ currState }}</pre>
+
     </v-container>
 </template>
 <script setup>
@@ -12,7 +13,7 @@ const state = $store.select(state => state['app-dashboard']);
 let currState
 state.subscribe(val => currState = val)
 defineProps({
-    msg: {
+    urlParams: {
         type: String,
         default: 'moin'
     }

@@ -1,6 +1,7 @@
 // import routes from modules
-import Dashboard from './components/dashboard.vue'
-import Settings from './components/settings.vue'
+import dashboardComp from './components/dashboard.vue'
+import settingsComp from './components/settings.vue'
+import conf from './components/conf.js'
 import storeHandler from './lib/storeHandler'
 export default [
     /* Root */
@@ -10,21 +11,22 @@ export default [
         redirect: { name: 'app.dashboard' },
     },
     {
-        path: '/app:msg?',
+        path: '/app/&:urlParams?',
         name: 'app.dashboard',
-        component: Dashboard,
+        component: dashboardComp,
         props: true,
         beforeEnter: (to, from) => {
-            storeHandler.storePerPage({ name: 'Lutz', title: 'the lutzness of life' }, to.name)
+            console.dir(to)
+            storeHandler.storePerPage({ ...to.params, ...conf.dashboard }, to.name)
         }
     },
     {
-        path: '/settings:msg?',
+        path: '/settings/&:urlParams?',
         name: 'app.settings',
-        component: Settings,
+        component: settingsComp,
         props: true,
         beforeEnter: (to, from) => {
-            storeHandler.storePerPage({ name: 'Lutz', title: 'the lutzness of life' }, to.name)
+            storeHandler.storePerPage({ ...to.params, ...conf.settings }, to.name)
         }
     },
 ]

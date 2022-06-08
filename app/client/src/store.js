@@ -27,7 +27,7 @@ const applicationState = {
         permissions: []
     },
     ui: {
-        navigationOpen: true,
+        navigationOpen: false,
         inspectorOpen: false,
     }
 }
@@ -51,7 +51,9 @@ const applicationReducers = {
     ui: (state, action) => {
         switch (action.type) {
             case 'updateUi':
-                return action.payload
+                return {
+                    ...state, ...action.payload
+                }
             default:
                 return state;
         }

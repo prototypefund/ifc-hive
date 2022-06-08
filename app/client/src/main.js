@@ -63,7 +63,10 @@ const sendTestRequest = async () => {
     app.provide('$store', store)
     app.provide('$t', i18n)
     router.beforeEach((to, from) => {
+      // add default params to every route
       if (!to.params.locale) to.params.locale = 'de'
+      if (!to.params.routeName) to.params.routeName = to.name
+      if (!to.params.storeName) to.params.storeName = to.name.replace('.', '-')
       // set the new route to the store
       store.dispatch({
         type: 'updateRoute',
