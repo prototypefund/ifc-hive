@@ -21,7 +21,6 @@ const API_BASE_URL = getEnvVariable('VITE_API_BASE_URL')
 axios.defaults.headers.common['Accept-Version'] = '*'
 // @TODO change to API_BASE_URL
 axios.defaults.baseURL = API_BASE_URL
-console.log('API_BASE_URL', API_BASE_URL)
 /*
  * Send test request just to make sure we can talk to the back-end.
  * Is the API online? Do we get CORS errors etc?

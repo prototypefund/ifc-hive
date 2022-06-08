@@ -3,8 +3,10 @@ import store from '../store'
 export default {
     storePerPage: (props, name) => {
         const pageName = name.replace('.', '-')
-        return createFeatureStore(pageName, {
+        //const state = store.select(state => state[pageName]);
+        const state = createFeatureStore(pageName, {
             ...props
         })
+        return state
     }
 }
