@@ -29,7 +29,7 @@
 <script>
 
 export default {
-  inject: ['$api', '$applicationStore'],
+  inject: ['$api', '$store'],
   data: () => ({
     route: false,
     drawer: true,
@@ -53,16 +53,16 @@ export default {
     ]
   }),
   created() {
-    this.$applicationStore.select(state => state['route']).subscribe((val) => {
+    this.$store.select(state => state['route']).subscribe((val) => {
       this.route = val
     })
-    this.$applicationStore.select(state => state['ui']).subscribe((val) => {
+    this.$store.select(state => state['ui']).subscribe((val) => {
       this.rail = !val.navigationOpen
     })
   },
   methods: {
     handleNavigation(val) {
-      this.$applicationStore.dispatch({
+      this.$store.dispatch({
         type: 'updateUi',
         payload: {
           navigationOpen: !val

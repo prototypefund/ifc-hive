@@ -3,6 +3,7 @@ import App from './App.vue'
 import routes from './routes'
 import axios from 'axios'
 import messages from './i18n/messages'
+import { mergeDeepRight } from 'ramda'
 import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
 import { createI18n, useI18n } from 'vue-i18n'
 import 'vuetify/styles' // Global CSS has to be imported
@@ -10,7 +11,7 @@ import { createVuetify } from 'vuetify'
 import '@mdi/font/css/materialdesignicons.css'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import getEnvVariable from './lib/getEnvVariable'
-import { applicationStore, storeHelper } from './store'
+import { store } from './store'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -60,20 +61,24 @@ const sendTestRequest = async () => {
     // add axios to all components
     app.config.globalProperties.$api = axios
     app.provide('$api', axios)
-    app.provide('$applicationStore', applicationStore)
-    app.provide('$storeHelper', storeHelper)
+    app.provide('$store', store)
     app.provide('$t', i18n)
     router.beforeEach((to, from) => {
       // add default params to every route
       if (!to.params.locale) to.params.locale = 'de'
-      if (!to.params.routeName) to.params.routeName = to.name
-      if (!to.params.storeName) to.params.storeName = to.name.replace('.', '-')
       // set the new route to the store
-      applicationStore.dispatch({
+      store.dispatch({
         type: 'updateRoute',
         payload: to
       });
-
+    })
+    router.beforeResolve((to, from) => {
+      // change the currentPage, might often be just a change in url params
+      store.dispatch({
+        type: 'setCurrentPage',
+        routeName: to.name,
+        payload: to.params
+      });
     })
     // mount the app
     app.mount('#app')
