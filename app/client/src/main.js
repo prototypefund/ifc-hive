@@ -79,7 +79,7 @@ const sendTestRequest = async () => {
         store.dispatch({
           type: 'setCurrentPage',
           routeName: to.name,
-          payload: to.params
+          payload: { ...to.params, query: to.query }
         });
       }
 
