@@ -1,7 +1,7 @@
 // import routes from modules
-import dashboardComp from './components/pages/dashboard.vue'
-import settingsComp from './components/pages/settings.vue'
-import conf from './components/pages/conf.js'
+import dashboardComp from '@p/dashboard.vue'
+import settingsComp from '@p/settings.vue'
+import conf from '@p/conf.js'
 
 import { store } from './store'
 export default [

@@ -62,12 +62,15 @@ export default {
   },
   methods: {
     handleNavigation(val) {
-      this.$store.dispatch({
-        type: 'updateUi',
-        payload: {
-          navigationOpen: !val
-        }
-      });
+      if (val !== this.rail) {
+        this.$store.dispatch({
+          type: 'updateUi',
+          payload: {
+            navigationOpen: !val
+          }
+        });
+      }
+
     },
     navigate(item) {
       this.$router.push({

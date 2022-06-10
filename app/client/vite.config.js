@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { configDefaults } from 'vitest/config'
+import path from 'path'
 //
 // see https://vitejs.dev/config/
 export default defineConfig({
@@ -19,5 +20,13 @@ export default defineConfig({
     // },
     plugins: [
         vue(),
-    ]
+    ],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './src/components'),
+            '@w': path.resolve(__dirname, './src/components/widgets'),
+            '@p': path.resolve(__dirname, './src/components/pages'),
+            '@t': path.resolve(__dirname, './src/components/templates'),
+        },
+    }
 })

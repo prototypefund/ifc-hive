@@ -11,12 +11,9 @@
 <script setup>
 import { inject, ref, onMounted, onUnmounted } from 'vue'
 const $store = inject('$store')
-
-
-const state$ = $store.select(state => state.currentPage)
 const count = ref(0)
 const state = ref({})
-state$.subscribe(val => {
+const stateSubscriber = $store.select(state => state.currentPage).subscribe(val => {
     console.log('dashboardSubscribe')
     count.value = val.count || 0
     state.value = val
@@ -30,15 +27,9 @@ defineProps({
 
 onMounted(() => {
     console.log(`The initial count is ${count.value}.`)
-    $store.dispatch({
-        type: 'updateCurrentPage',
-        payload: {
-            count: count.value + 1
-        }
-    });
 })
 onUnmounted(() => {
-    console.log('unmountz')
+    stateSubscriber.unsubscribe()
 })
 function counter() {
     $store.dispatch({

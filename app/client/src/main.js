@@ -3,7 +3,6 @@ import App from './App.vue'
 import routes from './routes'
 import axios from 'axios'
 import messages from './i18n/messages'
-import { mergeDeepRight } from 'ramda'
 import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
 import { createI18n, useI18n } from 'vue-i18n'
 import 'vuetify/styles' // Global CSS has to be imported
@@ -64,21 +63,26 @@ const sendTestRequest = async () => {
     app.provide('$store', store)
     app.provide('$t', i18n)
     router.beforeEach((to, from) => {
-      // add default params to every route
-      if (!to.params.locale) to.params.locale = 'de'
-      // set the new route to the store
-      store.dispatch({
-        type: 'updateRoute',
-        payload: to
-      });
+      if (to !== from) {
+        // add default params to every route
+        if (!to.params.locale) to.params.locale = 'de'
+        // set the new route to the store
+        store.dispatch({
+          type: 'updateRoute',
+          payload: to
+        });
+      }
     })
     router.beforeResolve((to, from) => {
       // change the currentPage, might often be just a change in url params
-      store.dispatch({
-        type: 'setCurrentPage',
-        routeName: to.name,
-        payload: to.params
-      });
+      if (to !== from) {
+        store.dispatch({
+          type: 'setCurrentPage',
+          routeName: to.name,
+          payload: to.params
+        });
+      }
+
     })
     // mount the app
     app.mount('#app')
