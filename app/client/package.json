@@ -25,6 +25,7 @@
     "mini-rx-store": "^3.1.0",
     "ramda": "0.28.0",
     "semver": "7.3.5",
+    "uuid": "^8.3.2",
     "@vueuse/core": "^8.4.2",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",

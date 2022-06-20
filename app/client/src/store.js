@@ -3,11 +3,11 @@ import {
     LoggerExtension,
     ReduxDevtoolsExtension,
     UndoExtension,
-    ImmutableStateExtension,
-    createFeatureStore
+    ImmutableStateExtension
 } from 'mini-rx-store';
 import getEnvVariable from './lib/getEnvVariable'
-import { mergeDeepRight } from 'ramda'
+import { mergeDeepRight, clone } from 'ramda'
+import { v4 as uuidv4 } from 'uuid';
 
 const extensions = getEnvVariable('NODE_ENV') === 'production'
     ? [
@@ -20,15 +20,16 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
         new ImmutableStateExtension(),
         new UndoExtension(),
     ];
+// TODO move this stup to seperate config and helper files
+// helper functions and lookup maps
 const storePatterns = {
     page: {
         loading: true,
-        widgets: [],
-        config: {}
+        slots: {}
     },
     widget: {
         uuid: false,
-        config: {}
+        name: false
     }
 }
 const applicationState = {
@@ -42,19 +43,15 @@ const applicationState = {
         navigationOpen: false,
         inspectorOpen: false,
     },
-    currentPage: {
+    notification: {
 
     },
-    widgets: {
-
-    },
+    currentPage: {},
+    widgets: {},
     pages: {}
 }
-
-
-let pages = false
-let widgets = false
-
+let pagesLookup = false
+let widgetsLookup = false
 
 const applicationReducers = {
     route: (state, action) => {
@@ -91,9 +88,9 @@ const applicationReducers = {
                 let currPage = {}
                 const pageName = action.routeName.replace('.', '-')
                 // check if that requested page has already been preconfigured (should always be the case)
-                if (pages[pageName].pageName) {
+                if (pagesLookup[pageName].pageName) {
                     // create a new currentPage object based on the url params merged ontop of the default page config
-                    currPage = mergeDeepRight(pages[pageName], action.payload)
+                    currPage = mergeDeepRight(pagesLookup[pageName], action.payload)
                 }
 
                 if (state.routeName) {
@@ -114,38 +111,66 @@ const applicationReducers = {
         }
     },
     pages: (state, action) => {
-        let updatedOldPage = {}
+        let newPage
+
         switch (action.type) {
             // initially add a new preconfigured page store. Will be handled in routes files in beforeEnter hook
             case 'addPage':
                 // create a new page object based on the default page config
-                const page = mergeDeepRight(storePatterns.page, action.payload)
+                const page = clone(mergeDeepRight(storePatterns.page, action.payload))
                 page.pageName = action.routeName.replace('.', '-')
                 page.routeName = action.routeName
 
-                updatedOldPage = {}
-                updatedOldPage[page.pageName] = page
-                return mergeDeepRight(state, updatedOldPage)
+                if (state[page.pageName]) {
+                    // if the page already exists do nothing
+                    return state
+                }
+
+                // if we have a widget config for this page we need to setup the widget states
+                if (page.config && page.config.widgets) {
+                    const widgets = []
+                    page.config.widgets.forEach(widget => {
+                        page.slots[widget.slot] = {
+                            ...widget, uuid: uuidv4()
+                        }
+                        widgets.push({
+                            uuid: page.slots[widget.slot].uuid,
+                            name: page.slots[widget.slot].name,
+                            ...page.slots[widget.slot].props
+                        })
+                    })
+                    store.dispatch({
+                        type: 'addWidgets',
+                        payload: widgets
+                    })
+
+                }
+                newPage = {}
+                newPage[page.pageName] = page
+                return mergeDeepRight(state, newPage)
             // update a configured page State usually called when current page changes
             case 'updatePage':
-                updatedOldPage = {}
+                newPage = {}
                 if (state[action.stateName]) {
                     // if we had the last current page already, just merge their states based on the latest version coming from currentPage
-                    updatedOldPage[action.stateName] = mergeDeepRight(state[action.stateName], action.payload)
+                    newPage[action.stateName] = mergeDeepRight(state[action.stateName], action.payload)
                 } else {
                     debugger
                 }
-                return mergeDeepRight(state, updatedOldPage)
+                return mergeDeepRight(state, newPage)
             default:
                 return state;
         }
     },
     widgets: (state, action) => {
         switch (action.type) {
-            case 'addWidget':
+            case 'addWidgets':
+                const newWidgets = {}
+                action.payload.forEach(widget => {
+                    newWidgets[widget.uuid] = mergeDeepRight(storePatterns.widget, widget)
+                })
 
-                debugger
-                return action.payload
+                return mergeDeepRight(state, newWidgets)
             default:
                 return state;
         }
@@ -159,32 +184,15 @@ export const store = configureStore({
     initialState: applicationState
 });
 // subscribe to page and widget changes so we can lookup those maps via pages/widgets variables
-if (!pages) {
+if (pagesLookup === false) {
     store.select(state => state.pages).subscribe(val => {
         console.log("pages subscribe called")
-        pages = val
+        pagesLookup = val
     })
 }
-if (!widgets) {
+if (widgetsLookup === false) {
     store.select(state => state.widgets).subscribe(val => {
         console.log("widgets subscribe called")
-        widgets = val
+        widgetsLookup = val
     })
-}
-export const storeHelper = {
-    createPageStore: (props, name) => {
-        // create store name based on route name which must not include .
-        const pageName = name.replace('.', '-')
-        if (!createdFeatureStores[pageName]) {
-            const store = createFeatureStore(pageName, {
-                ...mergeDeepRight(featureStorePatterns.pages, props)
-            })
-            // TODO find out if that really is the only solution
-            //remember that we created this store already
-            createdFeatureStores[pageName] = store
-        }
-    },
-    getFeatureStore: (pageName) => {
-        return createdFeatureStores[pageName]
-    }
 }
