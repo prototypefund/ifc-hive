@@ -123,19 +123,18 @@ const applicationReducers = {
                 }
 
                 // if we have a widget config for this page we need to setup the widget states
-                if (page.config && page.config.widgets) {
+                if (page.slots) {
                     const widgets = []
-                    page.config.widgets.forEach(widget => {
+                    page.slots.forEach(slot => {
+                        const widget = slot.widget
+                        if (!widget.uuid) {
+                            widget.uuid = uuidv4()
+                        }
                         //TODO move this into either a side effect function or into the widgets state reducer
-                        let widgetUuid = widget.uuid || uuidv4()
-                        // create slot entries for each widget
-                        page.slots[widget.slot] = mergeDeepRight(page.slots[widget.slot] ? page.slots[widget.slot] : {}, {
-                            widget: { ...widget, uuid: widgetUuid }
-                        })
                         // make a generic widget state map
                         widgets.push({
-                            uuid: page.slots[widget.slot].widget.uuid,
-                            name: page.slots[widget.slot].widget.name
+                            uuid: widget.uuid,
+                            name: widget.name
                         })
                     })
                     // add page specific widget configs to state
@@ -143,7 +142,6 @@ const applicationReducers = {
                         type: 'addPageWidgets',
                         payload: widgets
                     })
-                    delete page.config.widgets
                 }
                 newPage = {}
                 newPage[page.pageName] = page

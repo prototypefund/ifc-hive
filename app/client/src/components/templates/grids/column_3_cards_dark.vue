@@ -43,18 +43,19 @@ const loadWidget = (name) => defineAsyncComponent(() => {
 })
 onMounted(() => {
     if (props.contents) {
-        props.contents.forEach(content => {
-            if (!content.widget) return
-            switch (content.widget.slot) {
+        props.contents.forEach((element, index) => {
+            if (!element.widget) return
+
+            switch (index) {
                 //TODO find a generic way to add yet unknown components to vue component instance
                 case 0:
-                    component0.value = loadWidget(content.widget.name)
+                    component0.value = loadWidget(element.widget.name)
                     break;
                 case 1:
-                    component1.value = loadWidget(content.widget.name)
+                    component1.value = loadWidget(element.widget.name)
                     break;
                 case 2:
-                    component2.value = loadWidget(content.widget.name)
+                    component2.value = loadWidget(element.widget.name)
                     break;
             }
         })

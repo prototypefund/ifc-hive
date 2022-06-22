@@ -1,7 +1,7 @@
 <template>
     <v-container v-if="state">
         <h1>{{ $t(state.routeName) }} - {{ state.title }}</h1>
-        <p>url params > {{ urlParams }} &lt; click value {{ state.count }}</p>
+        <p>url params > {{ urlParams }} &lt;</p>
         <Grid :contents="state.slots"></Grid>
     </v-container>
 </template>
