@@ -1,6 +1,7 @@
 export default {
     dashboard: {
         title: 'the lutzness of life',
+        count: 0,
         config: {
             widgets: [{
                 name: 'timeline',
@@ -10,22 +11,13 @@ export default {
                     }
                 },
                 title: 'Widget 1',
-                slot: 0
-            }, {
-                name: 'widget1',
-                title: 'Widget 1',
-                slot: 1
+                slot: 'default'
             }]
         }
     },
     settings: {
         title: 'the rolfness of life',
         config: {
-            widgets: [{
-                name: 'widget1',
-                title: 'Widget 1',
-                slot: 0
-            }]
         }
 
 

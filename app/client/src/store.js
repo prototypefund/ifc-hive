@@ -130,17 +130,19 @@ const applicationReducers = {
                 if (page.config && page.config.widgets) {
                     const widgets = []
                     page.config.widgets.forEach(widget => {
+                        // create slot entries for each widget
                         page.slots[widget.slot] = {
                             ...widget, uuid: uuidv4()
                         }
+                        // make a generic widget state map
                         widgets.push({
                             uuid: page.slots[widget.slot].uuid,
-                            name: page.slots[widget.slot].name,
-                            ...page.slots[widget.slot].props
+                            name: page.slots[widget.slot].name
                         })
                     })
+                    // add page specific widget configs to state
                     store.dispatch({
-                        type: 'addWidgets',
+                        type: 'addPageWidgets',
                         payload: widgets
                     })
 
@@ -163,14 +165,35 @@ const applicationReducers = {
         }
     },
     widgets: (state, action) => {
+        let newWidgets, configuredWidget
         switch (action.type) {
-            case 'addWidgets':
-                const newWidgets = {}
-                action.payload.forEach(widget => {
-                    newWidgets[widget.uuid] = mergeDeepRight(storePatterns.widget, widget)
-                })
+            case 'configureWidget':
+                configuredWidget = {}
+                // merge widget config with widget state (usually the page specific config we did before)
+                configuredWidget[action.payload.uuid] = mergeDeepRight(action.payload.conf, state[action.payload.uuid])
+                return mergeDeepRight(state, configuredWidget)
+            case 'addPageWidgets':
+                newWidgets = {}
+                if (action.payload.length > 0) {
+                    action.payload.forEach(widget => {
+                        // get the config file for the current widget
+                        // TODO find out why we can't use vite alias here
+                        import('./components/widgets/' + widget.name + '/conf.js').then(async conf => {
+                            store.dispatch({
+                                type: 'configureWidget',
+                                payload: {
+                                    conf: conf.default,
+                                    uuid: widget.uuid
+                                }
+                            })
+                        })
+                        // add page specific config to widget instance state
+                        newWidgets[widget.uuid] = mergeDeepRight(storePatterns.widget, widget)
+                    })
 
-                return mergeDeepRight(state, newWidgets)
+                    return mergeDeepRight(state, newWidgets)
+                }
+
             default:
                 return state;
         }
@@ -186,13 +209,11 @@ export const store = configureStore({
 // subscribe to page and widget changes so we can lookup those maps via pages/widgets variables
 if (pagesLookup === false) {
     store.select(state => state.pages).subscribe(val => {
-        console.log("pages subscribe called")
         pagesLookup = val
     })
 }
 if (widgetsLookup === false) {
     store.select(state => state.widgets).subscribe(val => {
-        console.log("widgets subscribe called")
         widgetsLookup = val
     })
 }

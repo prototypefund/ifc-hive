@@ -3,17 +3,26 @@
         <h1>{{ $t(state.routeName) }} - {{ state.title }}</h1>
         <p>url params > {{ urlParams }} &lt; click value {{ state.count }}</p>
         <v-btn @click="counter">addCount</v-btn>
-        <v-btn @click="addWidget">addWidget</v-btn>
-        <pre> {{ state }}</pre>
 
+        <v-btn @click="addWidget">addWidget</v-btn>
+        <slot v-if="state.slots && state.slots.default">
+            <AsyncComp :props="state.slots.default"></AsyncComp>
+        </slot>
     </v-container>
 </template>
 <script setup>
-import { inject, ref, onMounted, onUnmounted } from 'vue'
+import { inject, ref, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 const $store = inject('$store')
 const state = ref({})
 const stateSubscriber = $store.select(state => state.currentPage).subscribe(val => {
     state.value = val
+})
+const slotSubscriber = $store.select(state => state.currentPage.slots).subscribe(val => {
+
+})
+const AsyncComp = defineAsyncComponent((props) => {
+    //TODO either find a proper way to get generic async components or hook in a widget loader component
+    return import('@w/timeline/default.vue')
 })
 defineProps({
     urlParams: {
@@ -27,6 +36,7 @@ onMounted(() => {
 })
 onUnmounted(() => {
     stateSubscriber.unsubscribe()
+    slotSubscriber.unsubscribe()
 })
 function counter() {
     $store.dispatch({
