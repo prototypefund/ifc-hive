@@ -1,5 +1,8 @@
 <template>
-    {{ props }}
+    <v-card>
+        <pre> {{ props }}</pre>
+    </v-card>
+
 </template>
 <script setup>
 import { inject, ref, onMounted, onUnmounted } from 'vue'

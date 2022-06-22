@@ -3,11 +3,24 @@
         <h1>{{ $t(state.routeName) }} - {{ state.title }}</h1>
         <p>url params > {{ urlParams }} &lt; click value {{ state.count }}</p>
         <v-btn @click="counter">addCount</v-btn>
-
         <v-btn @click="addWidget">addWidget</v-btn>
-        <slot v-if="state.slots && state.slots.default">
-            <AsyncComp :props="state.slots.default"></AsyncComp>
-        </slot>
+        <v-row>
+            <v-col cols="6">
+                <h2>page state</h2>
+                <v-card>
+                    <pre>{{ state }}</pre>
+                </v-card>
+            </v-col>
+            <v-col v-bind:cols="6">
+                <h2>widget state</h2>
+                <slot v-if="state.slots && state.slots.default">
+                    <AsyncComp :props="state.slots.default"></AsyncComp>
+                </slot>
+            </v-col>
+
+        </v-row>
+
+
     </v-container>
 </template>
 <script setup>
