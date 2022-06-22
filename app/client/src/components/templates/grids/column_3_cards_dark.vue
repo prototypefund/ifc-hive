@@ -1,5 +1,5 @@
 <template>
-    <v-container v-if="contents">
+    <v-container class="bg-surface-variant" v-if="contents">
         <v-row no-gutters>
             <v-col :class="getSlotClass(contents['0'])">
                 <v-card class="pa-2 ma-2" v-if="contents['0']">

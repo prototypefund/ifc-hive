@@ -4,10 +4,10 @@ export default {
         title: 'the lutzness of life',
         slots: [
             {
-                class: 'v-col-6'
+                column: 'v-col-6'
             },
             {
-                class: 'v-col-6'
+                column: 'v-col-6'
             },
         ],
         count: 0,
@@ -40,8 +40,13 @@ export default {
         }
     },
     settings: {
-        grid: 'column_3_cards',
+        grid: 'column_3_cards_dark',
         title: 'the rolfness of life',
+        slots: [
+            {
+                column: 'v-col-12'
+            }
+        ],
         config: {
             widgets: [{
                 uuid: 'currPageDebug',

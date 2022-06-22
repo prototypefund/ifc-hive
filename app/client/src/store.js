@@ -143,7 +143,7 @@ const applicationReducers = {
                         type: 'addPageWidgets',
                         payload: widgets
                     })
-
+                    delete page.config.widgets
                 }
                 newPage = {}
                 newPage[page.pageName] = page
