@@ -25,11 +25,7 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
 const storePatterns = {
     page: {
         loading: true,
-        slots: {}
-    },
-    widget: {
-        uuid: false,
-        name: false
+        slots: []
     }
 }
 const applicationState = {
@@ -130,14 +126,16 @@ const applicationReducers = {
                 if (page.config && page.config.widgets) {
                     const widgets = []
                     page.config.widgets.forEach(widget => {
+                        //TODO move this into either a side effect function or into the widgets state reducer
+                        let widgetUuid = widget.uuid || uuidv4()
                         // create slot entries for each widget
-                        page.slots[widget.slot] = {
-                            ...widget, uuid: uuidv4()
-                        }
+                        page.slots[widget.slot] = mergeDeepRight(page.slots[widget.slot] ? page.slots[widget.slot] : {}, {
+                            widget: { ...widget, uuid: widgetUuid }
+                        })
                         // make a generic widget state map
                         widgets.push({
-                            uuid: page.slots[widget.slot].uuid,
-                            name: page.slots[widget.slot].name
+                            uuid: page.slots[widget.slot].widget.uuid,
+                            name: page.slots[widget.slot].widget.name
                         })
                     })
                     // add page specific widget configs to state
