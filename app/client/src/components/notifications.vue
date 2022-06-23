@@ -2,8 +2,8 @@
     <v-menu v-model="toggled" :close-on-click="false" :close-on-content-click="false" location="end" v-if="state"
         transition="scale-transition" class="notificationDrawer">
         <template v-slot:activator="{ props }">
-            <v-btn v-bind="props" v-if="state.unreadCount > 0" icon="mdi-bell-badge"></v-btn>
-            <v-btn v-bind="props" v-if="state.unreadCount == 0" icon="mdi-bell"></v-btn>
+            <v-btn v-bind="props" v-if="state.unreadCount > 0" icon="mdi-bell-badge-outline"></v-btn>
+            <v-btn v-bind="props" v-if="state.unreadCount == 0" icon="mdi-bell-outline"></v-btn>
         </template>
         <v-card left width="800">
             <v-expansion-panels v-model="panel">

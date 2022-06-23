@@ -1,5 +1,6 @@
 <template>
     <v-card v-if="state">
+        <h3>{{ props.props.type }}</h3>
         <pre>{{ state }}</pre>
     </v-card>
 </template>

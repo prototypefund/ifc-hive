@@ -55,7 +55,27 @@ export default {
                     }
 
                 }
-            }
+            }, {
+                column: 'v-col-6',
+                widget:
+                {
+                    uuid: 'currPageDebug',
+                    name: 'debug',
+                    props: {
+                        type: 'currentPage'
+                    }
+                }
+            }, {
+                column: 'v-col-12',
+                widget:
+                {
+                    uuid: 'currPageDebug',
+                    name: 'debug',
+                    props: {
+                        type: 'widgets'
+                    }
+                }
+            },
         ]
     }
 }
