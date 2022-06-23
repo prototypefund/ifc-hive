@@ -10,9 +10,15 @@
                 <v-expansion-panel>
                     <v-expansion-panel-title>Neu</v-expansion-panel-title>
                     <v-expansion-panel-text>
-                        <v-list>
+                        <v-list density="compact">
                             <v-list-item v-for="(entry, index) in state.items.slice().reverse()" :key="index">
-                                {{ entry }}
+                                <v-list-item-title class="fullListItem" :class="entry.state">{{ entry }}
+                                </v-list-item-title>
+                                <template v-slot:append>
+                                    <v-list-item-avatar end>
+                                        <v-btn variant="text" color="grey lighten-1" icon="mdi-information"></v-btn>
+                                    </v-list-item-avatar>
+                                </template>
                             </v-list-item>
                         </v-list>
                     </v-expansion-panel-text>
@@ -21,9 +27,14 @@
                 <v-expansion-panel v-if="state.history.length > 0">
                     <v-expansion-panel-title>Alle</v-expansion-panel-title>
                     <v-expansion-panel-text>
-                        <v-list>
+                        <v-list density="compact">
                             <v-list-item v-for="(entry, index) in state.history.slice().reverse()" :key="index">
-                                {{ entry }}
+                                <v-list-item-title class="fullListItem">{{ entry }} </v-list-item-title>
+                                <template v-slot:append>
+                                    <v-list-item-avatar end>
+                                        <v-btn variant="text" color="grey lighten-1" icon="mdi-information"></v-btn>
+                                    </v-list-item-avatar>
+                                </template>
                             </v-list-item>
                         </v-list>
                     </v-expansion-panel-text>
@@ -83,5 +94,13 @@ onUnmounted(() => {
 .notificationDrawer>.v-overlay__content {
     right: 0px !important;
     left: auto !important
+}
+
+.fullListItem.unread {
+    color: red
+}
+
+.fullListItem {
+    width: 100%
 }
 </style>>

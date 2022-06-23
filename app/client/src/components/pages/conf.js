@@ -4,13 +4,14 @@ export default {
         title: 'the lutzness of life',
         slots: [
             {
-                column: 'v-col-12',
+                column: 'v-col-6',
                 widget: {
                     name: 'timeline',
                     props: {
                         query: {
                             q: 'moin'
                         },
+                        categories: ['fugg'],
                         title: 'Widget 1',
                     }
                 }
@@ -28,7 +29,7 @@ export default {
                     }
                 }
             }, {
-                column: 'v-col-6',
+                column: 'v-col-3',
                 widget:
                 {
                     uuid: 'currPageDebug',

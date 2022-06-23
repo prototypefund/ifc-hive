@@ -1,4 +1,5 @@
 <template>
+
     <v-container v-if="contents">
         <v-row no-gutters>
             <v-col :class="getSlotClass(contents['0'])">
@@ -28,6 +29,7 @@
 <script setup>
 import { onMounted, defineAsyncComponent, shallowRef } from 'vue'
 //TODO find a generic way to add yet unknown components to vue component instance
+//TODO maybe get rid of the props here or use url params as props are merged in widget state
 const component0 = shallowRef({})
 const component1 = shallowRef({})
 const component2 = shallowRef({})

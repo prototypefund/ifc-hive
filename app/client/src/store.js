@@ -71,7 +71,6 @@ const applicationReducers = {
     },
     notifications: (state, action) => {
         let items
-        let unreadCount
         switch (action.type) {
             case 'archiveNotification':
                 const history = JSON.parse(JSON.stringify(state.history))
@@ -186,6 +185,7 @@ const applicationReducers = {
         let newPage
 
         switch (action.type) {
+
             // initially add a new preconfigured page store. Will be handled in routes files in beforeEnter hook
             case 'addPage':
                 store.dispatch({
@@ -217,7 +217,8 @@ const applicationReducers = {
                         // make a generic widget state map
                         widgets.push({
                             uuid: widget.uuid,
-                            name: widget.name
+                            name: widget.name,
+                            ...widget.props
                         })
                     })
                     // add page specific widget configs to state
@@ -288,7 +289,10 @@ const applicationReducers = {
                             })
                         })
                         // add page specific config to widget instance state
-                        newWidgets[widget.uuid] = mergeDeepRight(storePatterns.widget, widget)
+                        if (!newWidgets[widget.uuid]) {
+                            newWidgets[widget.uuid] = mergeDeepRight(storePatterns.widget, widget)
+                        }
+
                     })
 
                     return mergeDeepRight(state, newWidgets)
