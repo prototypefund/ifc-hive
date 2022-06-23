@@ -39,8 +39,11 @@ const applicationState = {
         navigationOpen: false,
         inspectorOpen: false,
     },
-    notification: {
-
+    notifications: {
+        unreadCount: 0,
+        toggled: false,
+        history: [],
+        items: []
     },
     currentPage: {},
     widgets: {},
@@ -66,6 +69,72 @@ const applicationReducers = {
                 return state;
         }
     },
+    notifications: (state, action) => {
+        let items
+        let unreadCount
+        switch (action.type) {
+            case 'archiveNotification':
+                const history = JSON.parse(JSON.stringify(state.history))
+                history.push(action.payload[0])
+
+                return {
+                    ...state, history
+                }
+            case 'addNotification':
+                items = JSON.parse(JSON.stringify(state.items))
+                action.payload.time = Date.now()
+                action.payload.state = 'unread'
+                store.dispatch({
+                    type: 'updateNotifications',
+                    payload: {
+                        unreadCount: state.unreadCount + 1
+                    }
+                })
+                items.push(action.payload)
+                if (items.length > 30) {
+                    store.dispatch({
+                        type: 'archiveNotification',
+                        payload: items.splice(-1)
+                    })
+                }
+                return {
+                    ...state, items
+                }
+            case 'markNotificationAsRead':
+                items = JSON.parse(JSON.stringify(state.items))
+                items.forEach(item => {
+                    if (item.state === 'unread') {
+                        item.state = 'read'
+                        store.dispatch({
+                            type: 'updateNotifications',
+                            payload: {
+                                unreadCount: 0
+                            }
+                        })
+                    }
+                })
+
+                return {
+                    ...state, items
+                }
+            case 'toggleNotification':
+                if (action.payload.toggled === false && state.toggled === true) {
+                    store.dispatch({
+                        type: 'markNotificationAsRead',
+                        payload: {
+                            type: 'items'
+                        }
+                    })
+                }
+                return {
+                    ...state, ...action.payload
+                }
+            case 'updateNotifications':
+                return mergeDeepRight(state, action.payload)
+            default:
+                return state;
+        }
+    },
     ui: (state, action) => {
         switch (action.type) {
             case 'updateUi':
@@ -80,6 +149,13 @@ const applicationReducers = {
         switch (action.type) {
             // used in beforeResolve router hook, will trigger before each route change including param changes
             case 'setCurrentPage':
+                store.dispatch({
+                    type: 'addNotification',
+                    payload: {
+                        action: action.type,
+                        type: 'log'
+                    }
+                })
                 // create our json friendly pageName
                 let currPage = {}
                 const pageName = action.routeName.replace('.', '-')
@@ -112,6 +188,13 @@ const applicationReducers = {
         switch (action.type) {
             // initially add a new preconfigured page store. Will be handled in routes files in beforeEnter hook
             case 'addPage':
+                store.dispatch({
+                    type: 'addNotification',
+                    payload: {
+                        action: action.type,
+                        type: 'log'
+                    }
+                })
                 // create a new page object based on the default page config
                 const page = clone(mergeDeepRight(storePatterns.page, action.payload))
                 page.pageName = action.routeName.replace('.', '-')
@@ -149,6 +232,13 @@ const applicationReducers = {
             // update a configured page State usually called when current page changes
             case 'updatePage':
                 newPage = {}
+                store.dispatch({
+                    type: 'addNotification',
+                    payload: {
+                        action: action.type,
+                        type: 'log'
+                    }
+                })
                 if (state[action.stateName]) {
                     // if we had the last current page already, just merge their states based on the latest version coming from currentPage
                     newPage[action.stateName] = mergeDeepRight(state[action.stateName], action.payload)
@@ -164,11 +254,25 @@ const applicationReducers = {
         let newWidgets, configuredWidget
         switch (action.type) {
             case 'configureWidget':
+                store.dispatch({
+                    type: 'addNotification',
+                    payload: {
+                        action: action.type,
+                        type: 'log'
+                    }
+                })
                 configuredWidget = {}
                 // merge widget config with widget state (usually the page specific config we did before)
                 configuredWidget[action.payload.uuid] = mergeDeepRight(action.payload.conf, state[action.payload.uuid])
                 return mergeDeepRight(state, configuredWidget)
             case 'addPageWidgets':
+                store.dispatch({
+                    type: 'addNotification',
+                    payload: {
+                        action: action.type,
+                        type: 'log'
+                    }
+                })
                 newWidgets = {}
                 if (action.payload.length > 0) {
                     action.payload.forEach(widget => {

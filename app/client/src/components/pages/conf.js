@@ -4,7 +4,7 @@ export default {
         title: 'the lutzness of life',
         slots: [
             {
-                column: 'v-col-6',
+                column: 'v-col-12',
                 widget: {
                     name: 'timeline',
                     props: {
@@ -32,7 +32,10 @@ export default {
                 widget:
                 {
                     uuid: 'currPageDebug',
-                    name: 'debug'
+                    name: 'debug',
+                    props: {
+                        type: 'currentPage'
+                    }
                 }
             },
         ],
@@ -43,10 +46,14 @@ export default {
         title: 'the rolfness of life',
         slots: [
             {
-                column: 'v-col-3',
+                column: 'v-col-6',
                 widget: {
                     uuid: 'currPageDebug',
-                    name: 'debug'
+                    name: 'debug',
+                    props: {
+                        type: 'pages'
+                    }
+
                 }
             }
         ]

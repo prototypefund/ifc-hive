@@ -7,10 +7,7 @@
 import { inject, ref, onMounted, onUnmounted } from 'vue'
 const $store = inject('$store')
 const state = ref({})
-const stateSubscriber = $store.select(state => state.currentPage).subscribe(val => {
-    state.value = val
 
-})
 const props = defineProps({
     props: {
         type: Object,
@@ -21,7 +18,10 @@ const props = defineProps({
         required: true
     }
 })
+const stateSubscriber = $store.select(state => state[props.props.type || 'currentPage']).subscribe(val => {
+    state.value = val
 
+})
 onMounted(() => {
 
 })

@@ -45,7 +45,6 @@ onMounted(() => {
     if (props.contents) {
         props.contents.forEach((element, index) => {
             if (!element.widget) return
-
             switch (index) {
                 //TODO find a generic way to add yet unknown components to vue component instance
                 case 0:

@@ -1,12 +1,18 @@
 <template>
   <v-app v-if="route && route.name">
-    <v-app-bar color="grey-lighten-2">Toolbar > {{ $t(route.name) }}
+    <v-app-bar color="grey-lighten-2">
+      <v-app-bar-title>Toolbar > {{ $t(route.name) }}</v-app-bar-title>
+      <template v-slot:append>
+        <notifications />
+      </template>
+
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" :rail="rail" permanent @click="handleNavigation(false)">
+    <v-navigation-drawer v-model="drawer" :rail="rail" permanent>
       <v-list-item title="Navigation" value="Navigation">
         <template v-slot:append>
           <v-btn v-if="!rail" variant="text" icon="mdi-chevron-left" @click.stop="handleNavigation(true)"></v-btn>
-          <v-btn v-if="rail" variant="text" icon="mdi-chevron-right" @click.stop="handleNavigation(false)"></v-btn>
+          <v-btn v-if="rail" variant="text" icon="mdi-chevron-right" @click.stop="handleNavigation(false)">
+          </v-btn>
         </template>
       </v-list-item>
 
@@ -27,8 +33,11 @@
   </v-app>
 </template>
 <script>
-
+import notifications from '@/notifications.vue'
 export default {
+  components: {
+    notifications
+  },
   inject: ['$api', '$store'],
   data: () => ({
     route: false,
@@ -39,14 +48,14 @@ export default {
         icon: 'mdi-view-dashboard',
         route: 'app.dashboard',
         params: {
-          urlParams: 'test'
+          urlParams: 'navigation nach dashboard von nav'
         }
       },
       {
         icon: 'mdi-account',
         route: 'app.settings',
         params: {
-          urlParams: 'test'
+          urlParams: 'navigation nach settings von nav'
         }
       }
 
@@ -56,8 +65,8 @@ export default {
     this.$store.select(state => state['route']).subscribe((val) => {
       this.route = val
     })
-    this.$store.select(state => state['ui']).subscribe((val) => {
-      this.rail = !val.navigationOpen
+    this.$store.select(state => state['ui'].navigationOpen).subscribe((val) => {
+      this.rail = !val
     })
   },
   methods: {

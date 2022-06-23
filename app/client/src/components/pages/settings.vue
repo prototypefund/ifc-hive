@@ -1,7 +1,7 @@
 <template>
     <v-container v-if="state">
         <h1>{{ $t(state.routeName) }} - {{ state.title }}</h1>
-        <p>url params > {{ urlParams }} &lt;</p>
+        <p>url params > {{ props.urlParams }} &lt;</p>
         <Grid :contents="state.slots"></Grid>
     </v-container>
 </template>
@@ -22,10 +22,10 @@ const gridSubscriber = $store.select(state => state.currentPage.grid).subscribe(
         })
     }
 })
-defineProps({
+const props = defineProps({
     urlParams: {
         type: String,
-        default: 'eure Rolfness'
+        default: 'default param'
     }
 })
 
