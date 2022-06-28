@@ -11,35 +11,23 @@
                     <v-expansion-panel-title>Neu</v-expansion-panel-title>
                     <v-expansion-panel-text>
                         <v-list density="compact">
-                            <v-list-item v-for="(entry, index) in state.items.slice().reverse()" :key="index">
+                            <v-list-item v-for="(entry, index) in state.items" :key="index"
+                                :class="{ hovered: hover == index + 1 }" @mouseover="handleHover(index + 1)"
+                                @mouseleave="handleHover(false)">
                                 <v-list-item-title class="fullListItem" :class="entry.state">{{ entry }}
                                 </v-list-item-title>
                                 <template v-slot:append>
                                     <v-list-item-avatar end>
-                                        <v-btn variant="text" color="grey lighten-1" icon="mdi-information"></v-btn>
+                                        <v-btn v-if="entry.state === 'read'" variant="text" color="grey lighten-1"
+                                            @click="markUnRead(index)" icon="mdi-circle-small"></v-btn>
+                                        <v-btn v-if="entry.state === 'unread'" variant="text" color="grey lighten-1"
+                                            @click="markRead(index)" icon="mdi-circle-medium"></v-btn>
                                     </v-list-item-avatar>
                                 </template>
                             </v-list-item>
                         </v-list>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
-
-                <v-expansion-panel v-if="state.history.length > 0">
-                    <v-expansion-panel-title>Alle</v-expansion-panel-title>
-                    <v-expansion-panel-text>
-                        <v-list density="compact">
-                            <v-list-item v-for="(entry, index) in state.history.slice().reverse()" :key="index">
-                                <v-list-item-title class="fullListItem">{{ entry }} </v-list-item-title>
-                                <template v-slot:append>
-                                    <v-list-item-avatar end>
-                                        <v-btn variant="text" color="grey lighten-1" icon="mdi-information"></v-btn>
-                                    </v-list-item-avatar>
-                                </template>
-                            </v-list-item>
-                        </v-list>
-                    </v-expansion-panel-text>
-                </v-expansion-panel>
-
             </v-expansion-panels>
             <v-divider></v-divider>
 
@@ -62,6 +50,7 @@ import { inject, computed, ref, onMounted, onUnmounted } from 'vue'
 const $store = inject('$store')
 const state = ref({})
 const panel = ref(0)
+const hover = ref(false)
 const toggled = computed({
     // getter
     get() {
@@ -84,6 +73,29 @@ const toggleNotifier = (newValue) => {
         }
     });
 }
+const handleHover = (itemId) => {
+    if (!itemId) {
+        hover.value = false
+    } else {
+        hover.value = itemId
+    }
+}
+const markUnRead = (index) => {
+    $store.dispatch({
+        type: 'markNotificationAsUnRead',
+        payload: {
+            index
+        }
+    });
+}
+const markRead = (index) => {
+    $store.dispatch({
+        type: 'markNotificationAsRead',
+        payload: {
+            index
+        }
+    });
+}
 onMounted(() => {
 })
 onUnmounted(() => {
@@ -102,5 +114,13 @@ onUnmounted(() => {
 
 .fullListItem {
     width: 100%
+}
+
+.hovered {
+    background-color: red !important;
+}
+
+.hovered * {
+    color: black !important
 }
 </style>>

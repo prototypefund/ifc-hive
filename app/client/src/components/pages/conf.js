@@ -15,9 +15,19 @@ export default {
                         title: 'Widget 1',
                     }
                 }
+            }, {
+                column: 'v-col-6',
+                widget:
+                {
+                    uuid: 'currPageDebug',
+                    name: 'debug',
+                    props: {
+                        type: 'currentPage'
+                    }
+                }
             },
             {
-                column: 'v-col-6',
+                column: 'v-col-12',
                 widget: {
                     name: 'timeline',
                     props: {
@@ -26,16 +36,6 @@ export default {
                             q: 'ich bin voll die andere query',
                             filter: 'und ich bin ein anderer Filter!'
                         }
-                    }
-                }
-            }, {
-                column: 'v-col-3',
-                widget:
-                {
-                    uuid: 'currPageDebug',
-                    name: 'debug',
-                    props: {
-                        type: 'currentPage'
                     }
                 }
             },

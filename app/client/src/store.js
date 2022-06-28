@@ -72,13 +72,6 @@ const applicationReducers = {
     notifications: (state, action) => {
         let items
         switch (action.type) {
-            case 'archiveNotification':
-                const history = JSON.parse(JSON.stringify(state.history))
-                history.push(action.payload[0])
-
-                return {
-                    ...state, history
-                }
             case 'addNotification':
                 items = JSON.parse(JSON.stringify(state.items))
                 action.payload.time = Date.now()
@@ -89,17 +82,11 @@ const applicationReducers = {
                         unreadCount: state.unreadCount + 1
                     }
                 })
-                items.push(action.payload)
-                if (items.length > 30) {
-                    store.dispatch({
-                        type: 'archiveNotification',
-                        payload: items.splice(-1)
-                    })
-                }
+                items.unshift(action.payload)
                 return {
                     ...state, items
                 }
-            case 'markNotificationAsRead':
+            case 'markAllNotificationsAsRead':
                 items = JSON.parse(JSON.stringify(state.items))
                 items.forEach(item => {
                     if (item.state === 'unread') {
@@ -116,10 +103,34 @@ const applicationReducers = {
                 return {
                     ...state, items
                 }
+            case 'markNotificationAsRead':
+                items = JSON.parse(JSON.stringify(state.items))
+                items[action.payload.index].state = 'read'
+                store.dispatch({
+                    type: 'updateNotifications',
+                    payload: {
+                        unreadCount: state.unreadCount - 1
+                    }
+                })
+                return {
+                    ...state, items: items
+                }
+            case 'markNotificationAsUnRead':
+                items = JSON.parse(JSON.stringify(state.items))
+                items[action.payload.index].state = 'unread'
+                store.dispatch({
+                    type: 'updateNotifications',
+                    payload: {
+                        unreadCount: state.unreadCount + 1
+                    }
+                })
+                return {
+                    ...state, items: items
+                }
             case 'toggleNotification':
-                if (action.payload.toggled === false && state.toggled === true) {
+                if (action.payload.toggled === false && state.toggled === true && 1 == 2) {
                     store.dispatch({
-                        type: 'markNotificationAsRead',
+                        type: 'markAllNotificationsAsRead',
                         payload: {
                             type: 'items'
                         }
@@ -148,13 +159,7 @@ const applicationReducers = {
         switch (action.type) {
             // used in beforeResolve router hook, will trigger before each route change including param changes
             case 'setCurrentPage':
-                store.dispatch({
-                    type: 'addNotification',
-                    payload: {
-                        action: action.type,
-                        type: 'log'
-                    }
-                })
+
                 // create our json friendly pageName
                 let currPage = {}
                 const pageName = action.routeName.replace('.', '-')
@@ -175,6 +180,13 @@ const applicationReducers = {
                 return currPage
             // simply let us update the state of the current page
             case 'updateCurrentPage':
+                store.dispatch({
+                    type: 'addNotification',
+                    payload: {
+                        action: action.type,
+                        type: 'log'
+                    }
+                })
                 return mergeDeepRight(state, action.payload)
 
             default:
@@ -254,6 +266,20 @@ const applicationReducers = {
     widgets: (state, action) => {
         let newWidgets, configuredWidget
         switch (action.type) {
+            case 'preconfigureWidget':
+                //TODO rethink the widget config flow
+                store.dispatch({
+                    type: 'addNotification',
+                    payload: {
+                        action: action.type,
+                        type: 'log'
+                    }
+                })
+                configuredWidget = {}
+                // merge widget config with widget state when we initially configure widget 
+
+                configuredWidget[action.payload.uuid] = mergeDeepRight(action.payload.conf, state[action.payload.uuid])
+                return mergeDeepRight(state, configuredWidget)
             case 'configureWidget':
                 store.dispatch({
                     type: 'addNotification',
@@ -263,8 +289,8 @@ const applicationReducers = {
                     }
                 })
                 configuredWidget = {}
-                // merge widget config with widget state (usually the page specific config we did before)
-                configuredWidget[action.payload.uuid] = mergeDeepRight(action.payload.conf, state[action.payload.uuid])
+                // merge given config onto widget state
+                configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload.conf)
                 return mergeDeepRight(state, configuredWidget)
             case 'addPageWidgets':
                 store.dispatch({
@@ -281,7 +307,7 @@ const applicationReducers = {
                         // TODO find out why we can't use vite alias here
                         import('./components/widgets/' + widget.name + '/conf.js').then(async conf => {
                             store.dispatch({
-                                type: 'configureWidget',
+                                type: 'preconfigureWidget',
                                 payload: {
                                     conf: conf.default,
                                     uuid: widget.uuid
@@ -292,9 +318,7 @@ const applicationReducers = {
                         if (!newWidgets[widget.uuid]) {
                             newWidgets[widget.uuid] = mergeDeepRight(storePatterns.widget, widget)
                         }
-
                     })
-
                     return mergeDeepRight(state, newWidgets)
                 }
 
@@ -303,7 +327,18 @@ const applicationReducers = {
         }
     }
 }
-
+const effects = {
+    addNotification: () => {
+        debugger
+        store.dispatch({
+            type: 'addNotification',
+            payload: {
+                action: action.type,
+                type: 'log'
+            }
+        })
+    }
+}
 
 export const store = configureStore({
     extensions,

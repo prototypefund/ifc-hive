@@ -28,18 +28,15 @@
                     <pre>{{ state }}</pre>
                 </v-card-text>
             </v-card>
-
         </v-timeline-item>
     </v-timeline>
 </template>
 <script setup>
 import { inject, ref, onMounted, onUnmounted } from 'vue'
-import { mergeDeepRight } from 'ramda'
 const $store = inject('$store')
 const state = ref({})
 const stateSubscriber = $store.select(state => state.widgets[props.uuid]).subscribe(val => {
     state.value = val
-
 })
 const props = defineProps({
     props: {
