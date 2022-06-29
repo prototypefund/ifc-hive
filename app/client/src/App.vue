@@ -78,7 +78,7 @@ export default {
     handleNavigation(val) {
       if (val !== this.rail) {
         this.$store.dispatch({
-          type: 'updateUi',
+          type: 'uiUpdate',
           payload: {
             navigationOpen: !val
           }

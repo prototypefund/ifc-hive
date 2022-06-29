@@ -68,7 +68,7 @@ const sendTestRequest = async () => {
         if (!to.params.locale) to.params.locale = 'de'
         // set the new route to the store
         store.dispatch({
-          type: 'updateRoute',
+          type: 'routeUpdate',
           payload: to
         });
       }
@@ -77,7 +77,7 @@ const sendTestRequest = async () => {
       // change the currentPage, might often be just a change in url params
       if (to !== from) {
         store.dispatch({
-          type: 'setCurrentPage',
+          type: 'currentPageSet',
           routeName: to.name,
           payload: { ...to.params, query: to.query }
         });

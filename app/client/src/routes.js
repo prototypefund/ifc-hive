@@ -19,7 +19,7 @@ export default [
         props: true,
         beforeEnter: (to, from) => {
             store.dispatch({
-                type: 'addPage',
+                type: 'pageAdd',
                 routeName: to.name,
                 payload: conf.dashboard
             });
@@ -32,23 +32,23 @@ export default [
         props: true,
         beforeEnter: (to, from) => {
             store.dispatch({
-                type: 'addPage',
+                type: 'pageAdd',
                 routeName: to.name,
                 payload: conf.settings
             });
         }
     },
     {
-      path: '/daniel',
-      name: 'app.daniel',
-      component: daniel,
-      props: true,
-      beforeEnter: (to, from) => {
-        store.dispatch({
-          type: 'addPage',
-          routeName: to.name,
-          payload: conf.daniel
-        });
-      }
+        path: '/daniel',
+        name: 'app.daniel',
+        component: daniel,
+        props: true,
+        beforeEnter: (to, from) => {
+            store.dispatch({
+                type: 'pageAdd',
+                routeName: to.name,
+                payload: conf.daniel
+            });
+        }
     }
 ]

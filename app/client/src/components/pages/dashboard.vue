@@ -33,7 +33,7 @@ const props = defineProps({
 
 onMounted(() => {
     $store.dispatch({
-        type: 'updateCurrentPage',
+        type: 'currentPageUpdate',
         payload: {
             loading: false
         }
@@ -43,7 +43,7 @@ onUnmounted(() => {
     stateSubscriber.unsubscribe()
     gridSubscriber.unsubscribe()
     $store.dispatch({
-        type: 'updateCurrentPage',
+        type: 'currentPageUpdate',
         payload: {
             loading: true
         }
@@ -51,7 +51,7 @@ onUnmounted(() => {
 })
 function counter() {
     $store.dispatch({
-        type: 'updateCurrentPage',
+        type: 'currentPageUpdate',
         payload: {
             count: state.value.count + 1 || 0,
             loading: true

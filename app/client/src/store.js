@@ -51,11 +51,20 @@ const applicationState = {
 }
 let pagesLookup = false
 let widgetsLookup = false
-
+const metaReducer = [(reducer) => {
+    return function newReducer(state, action) {
+        debugger
+        const nextState = reducer(state, action);
+        console.log('state', state);
+        console.log('action', action);
+        console.log('next state', nextState);
+        return nextState;
+    }
+}]
 const applicationReducers = {
     route: (state, action) => {
         switch (action.type) {
-            case 'updateRoute':
+            case 'routeUpdate':
                 return JSON.parse(JSON.stringify(action.payload))
             default:
                 return state;
@@ -63,7 +72,7 @@ const applicationReducers = {
     },
     user: (state, action) => {
         switch (action.type) {
-            case 'updateUser':
+            case 'userUpdate':
                 return action.payload
             default:
                 return state;
@@ -72,7 +81,7 @@ const applicationReducers = {
     notifications: (state, action) => {
         let items
         switch (action.type) {
-            case 'addNotification':
+            case 'notificationAdd':
                 items = JSON.parse(JSON.stringify(state.items))
                 action.payload.time = Date.now()
                 action.payload.state = 'unread'
@@ -86,7 +95,7 @@ const applicationReducers = {
                 return {
                     ...state, items
                 }
-            case 'markAllNotificationsAsRead':
+            case 'notificationMarkAllRead':
                 items = JSON.parse(JSON.stringify(state.items))
                 items.forEach(item => {
                     if (item.state === 'unread') {
@@ -103,7 +112,7 @@ const applicationReducers = {
                 return {
                     ...state, items
                 }
-            case 'markNotificationAsRead':
+            case 'notificationMarkRead':
                 items = JSON.parse(JSON.stringify(state.items))
                 items[action.payload.index].state = 'read'
                 store.dispatch({
@@ -115,7 +124,7 @@ const applicationReducers = {
                 return {
                     ...state, items: items
                 }
-            case 'markNotificationAsUnRead':
+            case 'notificationMarkUnread':
                 items = JSON.parse(JSON.stringify(state.items))
                 items[action.payload.index].state = 'unread'
                 store.dispatch({
@@ -127,7 +136,7 @@ const applicationReducers = {
                 return {
                     ...state, items: items
                 }
-            case 'toggleNotification':
+            case 'notificationToggle':
                 if (action.payload.toggled === false && state.toggled === true) {
                     store.dispatch({
                         type: 'updateNotifications',
@@ -147,7 +156,7 @@ const applicationReducers = {
     },
     ui: (state, action) => {
         switch (action.type) {
-            case 'updateUi':
+            case 'uiUpdate':
                 return {
                     ...state, ...action.payload
                 }
@@ -158,7 +167,7 @@ const applicationReducers = {
     currentPage: (state, action) => {
         switch (action.type) {
             // used in beforeResolve router hook, will trigger before each route change including param changes
-            case 'setCurrentPage':
+            case 'currentPageSet':
                 // create our json friendly pageName
                 let currPage = {}
                 const pageName = action.routeName.replace('.', '-')
@@ -171,16 +180,16 @@ const applicationReducers = {
                 if (state.routeName) {
                     // update our memorized preconfigured page with the new version which includes url params and user data
                     store.dispatch({
-                        type: 'updatePage',
+                        type: 'pageUpdate',
                         stateName: state.pageName,
                         payload: state
                     })
                 }
                 return currPage
             // simply let us update the state of the current page
-            case 'updateCurrentPage':
+            case 'currentPageUpdate':
                 store.dispatch({
-                    type: 'addNotification',
+                    type: 'notificationAdd',
                     payload: {
                         action: action.type,
                         type: 'log'
@@ -197,9 +206,9 @@ const applicationReducers = {
 
         switch (action.type) {
             // initially add a new preconfigured page store. Will be handled in routes files in beforeEnter hook
-            case 'addPage':
+            case 'pageAdd':
                 store.dispatch({
-                    type: 'addNotification',
+                    type: 'notificationAdd',
                     payload: {
                         action: action.type,
                         type: 'log'
@@ -233,7 +242,7 @@ const applicationReducers = {
                     })
                     // add page specific widget configs to state
                     store.dispatch({
-                        type: 'addPageWidgets',
+                        type: 'widgedAddForPage',
                         payload: widgets
                     })
                 }
@@ -241,7 +250,7 @@ const applicationReducers = {
                 newPage[page.pageName] = page
                 return mergeDeepRight(state, newPage)
             // update a configured page State usually called when current page changes
-            case 'updatePage':
+            case 'pageUpdate':
                 if (state[action.stateName]) {
                     newPage = {}
                     // if we had the last current page already, just merge their states based on the latest version coming from currentPage
@@ -257,19 +266,19 @@ const applicationReducers = {
     widgets: (state, action) => {
         let newWidgets, configuredWidget
         switch (action.type) {
-            case 'preconfigureWidget':
+            case 'widgetPreconfigure':
                 configuredWidget = {}
                 // merge widget config with widget state when we initially configure widget 
                 configuredWidget[action.payload.uuid] = mergeDeepRight(action.payload.conf, state[action.payload.uuid])
                 return mergeDeepRight(state, configuredWidget)
 
-            case 'configureWidget':
+            case 'widgedConfigure':
                 configuredWidget = {}
                 // merge given config onto widget state
                 configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload.conf)
                 return mergeDeepRight(state, configuredWidget)
 
-            case 'addPageWidgets':
+            case 'widgedAddForPage':
                 newWidgets = {}
                 if (action.payload.length > 0) {
                     action.payload.forEach(widget => {
@@ -277,7 +286,7 @@ const applicationReducers = {
                         // TODO find out why we can't use vite alias here
                         import('./components/widgets/' + widget.name + '/conf.js').then(async conf => {
                             store.dispatch({
-                                type: 'preconfigureWidget',
+                                type: 'widgetPreconfigure',
                                 payload: {
                                     conf: conf.default,
                                     uuid: widget.uuid
@@ -298,10 +307,10 @@ const applicationReducers = {
     }
 }
 const effects = {
-    addNotification: () => {
+    notificationAdd: () => {
         debugger
         store.dispatch({
-            type: 'addNotification',
+            type: 'notificationAdd',
             payload: {
                 action: action.type,
                 type: 'log'
@@ -313,7 +322,8 @@ const effects = {
 export const store = configureStore({
     extensions,
     reducers: applicationReducers,
-    initialState: applicationState
+    initialState: applicationState,
+    // metaReducers: metaReducer
 });
 // subscribe to page and widget changes so we can lookup those maps via pages/widgets variables
 if (pagesLookup === false) {
