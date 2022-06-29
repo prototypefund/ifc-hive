@@ -57,6 +57,11 @@ export default {
         params: {
           urlParams: 'navigation nach settings von nav'
         }
+      },
+      {
+        icon: 'mdi-account',
+        route: 'app.daniel',
+        params: {}
       }
 
     ]

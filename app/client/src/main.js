@@ -11,7 +11,7 @@ import '@mdi/font/css/materialdesignicons.css'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import getEnvVariable from './lib/getEnvVariable'
 import { store } from './store'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
@@ -31,7 +31,7 @@ const sendTestRequest = async () => {
     const app = createApp(App)
     const router = createRouter({
       // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
-      history: createWebHashHistory(),
+      history: createWebHistory(),
       routes, // short for `routes: routes`
     })
     const i18n = createI18n({

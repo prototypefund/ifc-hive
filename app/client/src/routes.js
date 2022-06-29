@@ -1,6 +1,7 @@
 // import routes from modules
 import dashboardComp from '@p/dashboard.vue'
 import settingsComp from '@p/settings.vue'
+import daniel from '@p/daniel.vue'
 import conf from '@p/conf.js'
 
 import { store } from './store'
@@ -12,7 +13,7 @@ export default [
         redirect: { name: 'app.dashboard' },
     },
     {
-        path: '/app',
+        path: '/dashboard',
         name: 'app.dashboard',
         component: dashboardComp,
         props: true,
@@ -37,4 +38,17 @@ export default [
             });
         }
     },
+    {
+      path: '/daniel',
+      name: 'app.daniel',
+      component: daniel,
+      props: true,
+      beforeEnter: (to, from) => {
+        store.dispatch({
+          type: 'addPage',
+          routeName: to.name,
+          payload: conf.daniel
+        });
+      }
+    }
 ]
