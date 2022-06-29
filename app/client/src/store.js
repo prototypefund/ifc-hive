@@ -128,11 +128,11 @@ const applicationReducers = {
                     ...state, items: items
                 }
             case 'toggleNotification':
-                if (action.payload.toggled === false && state.toggled === true && 1 == 2) {
+                if (action.payload.toggled === false && state.toggled === true) {
                     store.dispatch({
-                        type: 'markAllNotificationsAsRead',
+                        type: 'updateNotifications',
                         payload: {
-                            type: 'items'
+                            unreadCount: 0
                         }
                     })
                 }
@@ -159,7 +159,6 @@ const applicationReducers = {
         switch (action.type) {
             // used in beforeResolve router hook, will trigger before each route change including param changes
             case 'setCurrentPage':
-
                 // create our json friendly pageName
                 let currPage = {}
                 const pageName = action.routeName.replace('.', '-')
@@ -197,7 +196,6 @@ const applicationReducers = {
         let newPage
 
         switch (action.type) {
-
             // initially add a new preconfigured page store. Will be handled in routes files in beforeEnter hook
             case 'addPage':
                 store.dispatch({
@@ -244,15 +242,8 @@ const applicationReducers = {
                 return mergeDeepRight(state, newPage)
             // update a configured page State usually called when current page changes
             case 'updatePage':
-                newPage = {}
-                store.dispatch({
-                    type: 'addNotification',
-                    payload: {
-                        action: action.type,
-                        type: 'log'
-                    }
-                })
                 if (state[action.stateName]) {
+                    newPage = {}
                     // if we had the last current page already, just merge their states based on the latest version coming from currentPage
                     newPage[action.stateName] = mergeDeepRight(state[action.stateName], action.payload)
                 } else {
@@ -267,39 +258,18 @@ const applicationReducers = {
         let newWidgets, configuredWidget
         switch (action.type) {
             case 'preconfigureWidget':
-                //TODO rethink the widget config flow
-                store.dispatch({
-                    type: 'addNotification',
-                    payload: {
-                        action: action.type,
-                        type: 'log'
-                    }
-                })
                 configuredWidget = {}
                 // merge widget config with widget state when we initially configure widget 
-
                 configuredWidget[action.payload.uuid] = mergeDeepRight(action.payload.conf, state[action.payload.uuid])
                 return mergeDeepRight(state, configuredWidget)
+
             case 'configureWidget':
-                store.dispatch({
-                    type: 'addNotification',
-                    payload: {
-                        action: action.type,
-                        type: 'log'
-                    }
-                })
                 configuredWidget = {}
                 // merge given config onto widget state
                 configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload.conf)
                 return mergeDeepRight(state, configuredWidget)
+
             case 'addPageWidgets':
-                store.dispatch({
-                    type: 'addNotification',
-                    payload: {
-                        action: action.type,
-                        type: 'log'
-                    }
-                })
                 newWidgets = {}
                 if (action.payload.length > 0) {
                     action.payload.forEach(widget => {

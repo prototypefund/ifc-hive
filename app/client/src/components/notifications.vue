@@ -2,9 +2,14 @@
     <v-menu v-model="toggled" :close-on-click="false" :close-on-content-click="false" location="end" v-if="state"
         transition="scale-transition" class="notificationDrawer">
         <template v-slot:activator="{ props }">
-            <v-btn v-bind="props" v-if="state.unreadCount > 0" icon="mdi-bell-badge-outline"></v-btn>
-            <v-btn v-bind="props" v-if="state.unreadCount == 0" icon="mdi-bell-outline"></v-btn>
+            <v-btn v-bind="props" v-if="state.unreadCount > 0" icon="mdi-bell-circle"></v-btn>
+            <v-btn v-bind="props" v-if="state.unreadCount == 0" icon="mdi-bell-circle-outline"></v-btn>
+            <v-chip class="ma-2 unreadCount" size="x-small" :class="{ visible: state.unreadCount > 0 }" color="red"
+                text-color="white">
+                {{ state.unreadCount }}
+            </v-chip>
         </template>
+
         <v-card left width="800">
             <v-expansion-panels v-model="panel">
                 <v-expansion-panel>
@@ -46,11 +51,11 @@
 
 </template>
 <script setup>
-import { inject, computed, ref, onMounted, onUnmounted } from 'vue'
+import { inject, computed, ref, shallowRef, onMounted, onUnmounted } from 'vue'
 const $store = inject('$store')
 const state = ref({})
-const panel = ref(0)
-const hover = ref(false)
+const panel = shallowRef(0)
+const hover = shallowRef(0)
 const toggled = computed({
     // getter
     get() {
@@ -122,5 +127,16 @@ onUnmounted(() => {
 
 .hovered * {
     color: black !important
+}
+
+.unreadCount {
+    visibility: hidden;
+    position: absolute !important;
+    right: -3px;
+    top: 6px;
+}
+
+.unreadCount.visible {
+    visibility: visible
 }
 </style>>
