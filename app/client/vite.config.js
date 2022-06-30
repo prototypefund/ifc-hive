@@ -9,8 +9,7 @@ export default defineConfig({
         port: 8081 // @TODO read port from env variable
     },
     test: {
-        // make all test functions available without import
-        globals: true,
+        enviroment: "happy-dom",
         exclude: [...configDefaults.exclude, '**/*.spec.js'],
     },
     // build: {
