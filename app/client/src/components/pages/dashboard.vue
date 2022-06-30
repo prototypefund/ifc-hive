@@ -1,10 +1,12 @@
 <template>
-    <v-container v-if="state">
+    <v-container v-if="state" data-test-id="dashboardContainer">
         <h1>{{ $t(state.routeName) }} - {{ state.title }}</h1>
         <p>url params > {{ props.urlParams }} &lt; click value {{ state.count }}</p>
         <v-btn @click="counter">addCount</v-btn>
         <v-btn @click="addWidget">addWidget</v-btn>
-        <Grid :contents="state.slots"></Grid>
+        <Grid v-if="state.slots" data-test-id="dashboardContainerGrid" :data-test-name="state.grid"
+            :contents="state.slots">
+        </Grid>
     </v-container>
 </template>
 
