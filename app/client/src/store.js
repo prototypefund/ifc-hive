@@ -229,16 +229,19 @@ const applicationReducers = {
                     const widgets = []
                     page.slots.forEach(slot => {
                         const widget = slot.widget
-                        if (!widget.uuid) {
-                            widget.uuid = uuidv4()
+                        if (widget) {
+                            if (!widget.uuid) {
+                                widget.uuid = uuidv4()
+                            }
+                            //TODO move this into either a side effect function or into the widgets state reducer
+                            // make a generic widget state map
+                            widgets.push({
+                                uuid: widget.uuid,
+                                name: widget.name,
+                                ...widget.props
+                            })
                         }
-                        //TODO move this into either a side effect function or into the widgets state reducer
-                        // make a generic widget state map
-                        widgets.push({
-                            uuid: widget.uuid,
-                            name: widget.name,
-                            ...widget.props
-                        })
+
                     })
                     // add page specific widget configs to state
                     store.dispatch({

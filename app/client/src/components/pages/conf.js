@@ -1,18 +1,18 @@
 export default {
     daniel: {
-      grid: 'column_3_cards',
-      slots: [{
-        column: 'v-col-6',
-        widget:
-        {
-          uuid: 'currPageDebug',
-          name: 'debug',
-          props: {
-            type: 'currentPage'
-          }
-        }
-      }],
-      title: 'Daniel One Title'
+        grid: 'column_3_cards',
+        slots: [{
+            column: 'v-col-6',
+            widget:
+            {
+                uuid: 'currPageDebug',
+                name: 'debug',
+                props: {
+                    type: 'currentPage'
+                }
+            }
+        }],
+        title: 'Daniel One Title'
     },
     dashboard: {
         grid: 'column_3_cards',
