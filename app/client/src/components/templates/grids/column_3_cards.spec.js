@@ -7,17 +7,20 @@ describe('column_3_cards', () => {
             propsData: {
                 contents: [
                     {
-                        "column": "v-col-6",
+                        column: 'v-col-6',
+                        widget: false
                     },
                     {
-                        "column": "v-col-6",
+                        column: 'v-col-6',
+                        widget: false
                     },
                     {
-                        "column": "v-col-12",
+                        column: 'v-col-6',
+                        widget: false
                     }
                 ],
             },
         })
-        cy.get('[data-test-id="column_3_cardsContainer"]').should('have.length', 1)
+        cy.get('[data-test-id="column_3_cardsSlot"]').should('have.length', 1)
     })
 })
