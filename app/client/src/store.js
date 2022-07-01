@@ -242,7 +242,7 @@ const applicationReducers = {
                     })
                     // add page specific widget configs to state
                     store.dispatch({
-                        type: 'widgedAddForPage',
+                        type: 'widgetAddForPage',
                         payload: widgets
                     })
                 }
@@ -272,13 +272,17 @@ const applicationReducers = {
                 configuredWidget[action.payload.uuid] = mergeDeepRight(action.payload.conf, state[action.payload.uuid])
                 return mergeDeepRight(state, configuredWidget)
 
-            case 'widgedConfigure':
+            case 'widgetConfigure':
                 configuredWidget = {}
                 // merge given config onto widget state
                 configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload.conf)
                 return mergeDeepRight(state, configuredWidget)
-
-            case 'widgedAddForPage':
+            case 'widgetUpdate':
+                configuredWidget = {}
+                // merge given payload onto widget state
+                configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload)
+                return mergeDeepRight(state, configuredWidget)
+            case 'widgetAddForPage':
                 newWidgets = {}
                 if (action.payload.length > 0) {
                     action.payload.forEach(widget => {
