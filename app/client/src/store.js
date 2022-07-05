@@ -81,8 +81,7 @@ const metaReducer = [(reducer) => {
                 })
             }
         }
-        const nextState = reducer(state, action);
-        return nextState;
+        return reducer(state, action)
     }
 }]
 const applicationReducers = {
@@ -91,7 +90,7 @@ const applicationReducers = {
             case 'route/update':
                 return JSON.parse(JSON.stringify(action.payload))
             default:
-                return state;
+                return state
         }
     },
     user: (state, action) => {
@@ -99,7 +98,7 @@ const applicationReducers = {
             case 'user/update':
                 return action.payload
             default:
-                return state;
+                return state
         }
     },
     notifications: (state, action) => {
@@ -174,7 +173,7 @@ const applicationReducers = {
             case 'notifications/update':
                 return mergeDeepRight(state, action.payload)
             default:
-                return state;
+                return state
         }
     },
     ui: (state, action) => {
@@ -184,7 +183,7 @@ const applicationReducers = {
                     ...state, ...action.payload
                 }
             default:
-                return state;
+                return state
         }
     },
     currentPage: (state, action) => {
@@ -199,7 +198,6 @@ const applicationReducers = {
                     // create a new currentPage object based on the url params merged ontop of the default page config
                     currPage = mergeDeepRight(pagesLookup[pageName], action.payload)
                 }
-
                 if (state.routeName) {
                     // update our memorized preconfigured page with the new version which includes url params and user data
                     store.dispatch({
@@ -220,7 +218,7 @@ const applicationReducers = {
                 })
                 return mergeDeepRight(state, action.payload)
             default:
-                return state;
+                return state
         }
     },
     pages: (state, action) => {
@@ -239,7 +237,6 @@ const applicationReducers = {
                 const page = clone(mergeDeepRight(storePatterns.page, action.payload))
                 page.pageName = action.routeName.replace('.', '-')
                 page.routeName = action.routeName
-
                 if (state[page.pageName]) {
                     // if the page already exists do nothing
                     return state
@@ -258,7 +255,7 @@ const applicationReducers = {
                 }
                 return mergeDeepRight(state, newPage)
             default:
-                return state;
+                return state
         }
     },
     widgets: (state, action) => {
@@ -302,7 +299,7 @@ const applicationReducers = {
                     return mergeDeepRight(state, newWidgets)
                 }
             default:
-                return state;
+                return state
         }
     }
 }
