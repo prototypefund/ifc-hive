@@ -19,12 +19,12 @@ import { inject, shallowRef, onMounted, onUnmounted, defineAsyncComponent } from
 const $store = inject("$store");
 const state = shallowRef({});
 const Grid = shallowRef();
-const stateSubscriber = $store
+const stateSubscriber$ = $store
   .select((state) => state.currentPage)
   .subscribe((val) => {
     state.value = val;
   });
-const gridSubscriber = $store
+const gridSubscriber$ = $store
   .select((state) => state.currentPage.grid)
   .subscribe((val) => {
     if (val) {
@@ -50,8 +50,8 @@ onMounted(() => {
   });
 });
 onUnmounted(() => {
-  stateSubscriber.unsubscribe();
-  gridSubscriber.unsubscribe();
+  stateSubscriber$.unsubscribe();
+  gridSubscriber$.unsubscribe();
   $store.dispatch({
     type: "currentPage/update",
     payload: {
