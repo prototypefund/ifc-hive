@@ -66,7 +66,6 @@ const metaReducer = [(reducer) => {
                         if (!widget.uuid) {
                             widget.uuid = uuidv4()
                         }
-                        //TODO move this into either a side effect function or into the widgets state reducer
                         // make a generic widget state map
                         widgets.push({
                             uuid: widget.uuid,

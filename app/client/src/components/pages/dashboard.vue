@@ -18,6 +18,7 @@ import { inject, shallowRef, onMounted, onUnmounted, defineAsyncComponent } from
 const $store = inject("$store");
 const state = shallowRef({});
 const Grid = shallowRef();
+debugger;
 const stateSubscriber$ = $store
   .select((state) => state.currentPage)
   .subscribe((val) => {
