@@ -53,7 +53,7 @@ let pagesLookup = false
 let widgetsLookup = false
 // TODO find out how actual effects work without ts support. This works the "same" way for now
 const metaReducer = [(reducer) => {
-    return function widgetAdd(state, action) {
+    return (state, action) => {
         if (action.type == "pages/add") {
             const page = action.payload
             // if we have a widget config for this page we need to setup the widget states
