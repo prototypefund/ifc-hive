@@ -3,7 +3,8 @@ import {
     LoggerExtension,
     ReduxDevtoolsExtension,
     UndoExtension,
-    ImmutableStateExtension
+    ImmutableStateExtension,
+    actions$
 } from 'mini-rx-store';
 import getEnvVariable from './lib/getEnvVariable'
 import { mergeDeepRight, clone } from 'ramda'
@@ -60,11 +61,17 @@ const metaReducer = [(reducer) => {
         console.log('next state', nextState);
         return nextState;
     }
-}]
+}]/*
+const applicationEffects = actions$.pipe((state, action) => {
+    debugger
+    return state
+}, (state, action) => {
+    debugger
+})*/
 const applicationReducers = {
     route: (state, action) => {
         switch (action.type) {
-            case 'routeUpdate':
+            case 'route/update':
                 return JSON.parse(JSON.stringify(action.payload))
             default:
                 return state;
@@ -72,7 +79,7 @@ const applicationReducers = {
     },
     user: (state, action) => {
         switch (action.type) {
-            case 'userUpdate':
+            case 'user/update':
                 return action.payload
             default:
                 return state;
@@ -81,12 +88,12 @@ const applicationReducers = {
     notifications: (state, action) => {
         let items
         switch (action.type) {
-            case 'notificationAdd':
+            case 'notifications/add':
                 items = JSON.parse(JSON.stringify(state.items))
                 action.payload.time = Date.now()
                 action.payload.state = 'unread'
                 store.dispatch({
-                    type: 'updateNotifications',
+                    type: 'notifications/update',
                     payload: {
                         unreadCount: state.unreadCount + 1
                     }
@@ -95,13 +102,13 @@ const applicationReducers = {
                 return {
                     ...state, items
                 }
-            case 'notificationMarkAllRead':
+            case 'notifications/markAllAsRead':
                 items = JSON.parse(JSON.stringify(state.items))
                 items.forEach(item => {
                     if (item.state === 'unread') {
                         item.state = 'read'
                         store.dispatch({
-                            type: 'updateNotifications',
+                            type: 'notifications/update',
                             payload: {
                                 unreadCount: 0
                             }
@@ -112,11 +119,11 @@ const applicationReducers = {
                 return {
                     ...state, items
                 }
-            case 'notificationMarkRead':
+            case 'notifications/markAsRead':
                 items = JSON.parse(JSON.stringify(state.items))
                 items[action.payload.index].state = 'read'
                 store.dispatch({
-                    type: 'updateNotifications',
+                    type: 'notifications/update',
                     payload: {
                         unreadCount: state.unreadCount - 1
                     }
@@ -124,11 +131,11 @@ const applicationReducers = {
                 return {
                     ...state, items: items
                 }
-            case 'notificationMarkUnread':
+            case 'notifications/markUnread':
                 items = JSON.parse(JSON.stringify(state.items))
                 items[action.payload.index].state = 'unread'
                 store.dispatch({
-                    type: 'updateNotifications',
+                    type: 'notifications/update',
                     payload: {
                         unreadCount: state.unreadCount + 1
                     }
@@ -136,10 +143,10 @@ const applicationReducers = {
                 return {
                     ...state, items: items
                 }
-            case 'notificationToggle':
+            case 'notifications/toggle':
                 if (action.payload.toggled === false && state.toggled === true) {
                     store.dispatch({
-                        type: 'updateNotifications',
+                        type: 'notifications/update',
                         payload: {
                             unreadCount: 0
                         }
@@ -148,7 +155,7 @@ const applicationReducers = {
                 return {
                     ...state, ...action.payload
                 }
-            case 'updateNotifications':
+            case 'notifications/update':
                 return mergeDeepRight(state, action.payload)
             default:
                 return state;
@@ -156,7 +163,7 @@ const applicationReducers = {
     },
     ui: (state, action) => {
         switch (action.type) {
-            case 'uiUpdate':
+            case 'ui/update':
                 return {
                     ...state, ...action.payload
                 }
@@ -167,7 +174,7 @@ const applicationReducers = {
     currentPage: (state, action) => {
         switch (action.type) {
             // used in beforeResolve router hook, will trigger before each route change including param changes
-            case 'currentPageSet':
+            case 'currentPage/set':
                 // create our json friendly pageName
                 let currPage = {}
                 const pageName = action.routeName.replace('.', '-')
@@ -180,16 +187,16 @@ const applicationReducers = {
                 if (state.routeName) {
                     // update our memorized preconfigured page with the new version which includes url params and user data
                     store.dispatch({
-                        type: 'pageUpdate',
+                        type: 'pages/update',
                         stateName: state.pageName,
                         payload: state
                     })
                 }
                 return currPage
             // simply let us update the state of the current page
-            case 'currentPageUpdate':
+            case 'currentPage/update':
                 store.dispatch({
-                    type: 'notificationAdd',
+                    type: 'notifications/add',
                     payload: {
                         action: action.type,
                         type: 'log'
@@ -206,9 +213,9 @@ const applicationReducers = {
 
         switch (action.type) {
             // initially add a new preconfigured page store. Will be handled in routes files in beforeEnter hook
-            case 'pageAdd':
+            case 'pages/add':
                 store.dispatch({
-                    type: 'notificationAdd',
+                    type: 'notifications/add',
                     payload: {
                         action: action.type,
                         type: 'log'
@@ -245,7 +252,7 @@ const applicationReducers = {
                     })
                     // add page specific widget configs to state
                     store.dispatch({
-                        type: 'widgetAddForPage',
+                        type: 'widgets/addForPage',
                         payload: widgets
                     })
                 }
@@ -253,7 +260,7 @@ const applicationReducers = {
                 newPage[page.pageName] = page
                 return mergeDeepRight(state, newPage)
             // update a configured page State usually called when current page changes
-            case 'pageUpdate':
+            case 'pages/update':
                 if (state[action.stateName]) {
                     newPage = {}
                     // if we had the last current page already, just merge their states based on the latest version coming from currentPage
@@ -269,23 +276,23 @@ const applicationReducers = {
     widgets: (state, action) => {
         let newWidgets, configuredWidget
         switch (action.type) {
-            case 'widgetPreconfigure':
+            case 'widgets/preconfigure':
                 configuredWidget = {}
                 // merge widget config with widget state when we initially configure widget 
                 configuredWidget[action.payload.uuid] = mergeDeepRight(action.payload.conf, state[action.payload.uuid])
                 return mergeDeepRight(state, configuredWidget)
 
-            case 'widgetConfigure':
+            case 'widgets/configure':
                 configuredWidget = {}
                 // merge given config onto widget state
                 configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload.conf)
                 return mergeDeepRight(state, configuredWidget)
-            case 'widgetUpdate':
+            case 'widgets/update':
                 configuredWidget = {}
                 // merge given payload onto widget state
                 configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload)
                 return mergeDeepRight(state, configuredWidget)
-            case 'widgetAddForPage':
+            case 'widgets/addForPage':
                 newWidgets = {}
                 if (action.payload.length > 0) {
                     action.payload.forEach(widget => {
@@ -293,7 +300,7 @@ const applicationReducers = {
                         // TODO find out why we can't use vite alias here
                         import('./components/widgets/' + widget.name + '/conf.js').then(async conf => {
                             store.dispatch({
-                                type: 'widgetPreconfigure',
+                                type: 'widgets/preconfigure',
                                 payload: {
                                     conf: conf.default,
                                     uuid: widget.uuid
@@ -311,18 +318,6 @@ const applicationReducers = {
             default:
                 return state;
         }
-    }
-}
-const effects = {
-    notificationAdd: () => {
-        debugger
-        store.dispatch({
-            type: 'notificationAdd',
-            payload: {
-                action: action.type,
-                type: 'log'
-            }
-        })
     }
 }
 

@@ -72,7 +72,7 @@ const stateSubscriber = $store.select(state => state.notifications).subscribe(va
 const toggleNotifier = (newValue) => {
     panel.value = 0
     $store.dispatch({
-        type: 'notificationToggle',
+        type: 'notifications/toggle',
         payload: {
             toggled: newValue
         }
@@ -87,7 +87,7 @@ const handleHover = (itemId) => {
 }
 const markUnRead = (index) => {
     $store.dispatch({
-        type: 'notificationMarkUnread',
+        type: 'notifications/markUnread',
         payload: {
             index
         }
@@ -95,7 +95,7 @@ const markUnRead = (index) => {
 }
 const markRead = (index) => {
     $store.dispatch({
-        type: 'notificationMarkRead',
+        type: 'notifications/markAsRead',
         payload: {
             index
         }

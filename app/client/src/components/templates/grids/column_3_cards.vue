@@ -54,7 +54,6 @@ const loadWidget = (name) =>
 onMounted(() => {
   if (props.contents) {
     props.contents.forEach((element, index) => {
-      debugger;
       if (!element.widget) return;
       switch (index) {
         //TODO find a generic way to add yet unknown components to vue component instance
