@@ -3,8 +3,7 @@ import {
     LoggerExtension,
     ReduxDevtoolsExtension,
     UndoExtension,
-    ImmutableStateExtension,
-    actions$
+    ImmutableStateExtension
 } from 'mini-rx-store';
 import getEnvVariable from './lib/getEnvVariable'
 import { mergeDeepRight, clone } from 'ramda'
@@ -96,7 +95,6 @@ const applicationReducers = {
         }
     },
     user: (state, action) => {
-
         switch (action.type) {
             case 'user/update':
                 return action.payload
@@ -134,7 +132,6 @@ const applicationReducers = {
                         })
                     }
                 })
-
                 return {
                     ...state, items
                 }
@@ -222,14 +219,12 @@ const applicationReducers = {
                     }
                 })
                 return mergeDeepRight(state, action.payload)
-
             default:
                 return state;
         }
     },
     pages: (state, action) => {
         let newPage
-
         switch (action.type) {
             // initially add a new preconfigured page store. Will be handled in routes files in beforeEnter hook
             case 'pages/add':
@@ -274,7 +269,6 @@ const applicationReducers = {
                 // merge widget config with widget state when we initially configure widget 
                 configuredWidget[action.payload.uuid] = mergeDeepRight(action.payload.conf, state[action.payload.uuid])
                 return mergeDeepRight(state, configuredWidget)
-
             case 'widgets/configure':
                 configuredWidget = {}
                 // merge given config onto widget state
@@ -307,7 +301,6 @@ const applicationReducers = {
                     })
                     return mergeDeepRight(state, newWidgets)
                 }
-
             default:
                 return state;
         }
