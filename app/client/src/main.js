@@ -61,7 +61,6 @@ const sendTestRequest = async () => {
     app.config.globalProperties.$api = axios
     app.provide('$api', axios)
     app.provide('$store', store)
-    app.provide('$t', i18n)
     router.beforeEach((to, from) => {
       if (to !== from) {
         // add default params to every route

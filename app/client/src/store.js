@@ -52,22 +52,41 @@ const applicationState = {
 }
 let pagesLookup = false
 let widgetsLookup = false
+// TODO find out how actual effects work without ts support. This works the "same" way for now
 const metaReducer = [(reducer) => {
-    return function newReducer(state, action) {
-        debugger
+    return function widgetAdd(state, action) {
+        if (action.type == "pages/add") {
+            const page = action.payload
+            // if we have a widget config for this page we need to setup the widget states
+            if (page.slots) {
+                const widgets = []
+                page.slots.forEach(slot => {
+                    const widget = slot.widget
+                    if (widget) {
+                        if (!widget.uuid) {
+                            widget.uuid = uuidv4()
+                        }
+                        //TODO move this into either a side effect function or into the widgets state reducer
+                        // make a generic widget state map
+                        widgets.push({
+                            uuid: widget.uuid,
+                            name: widget.name,
+                            ...widget.props
+                        })
+                    }
+
+                })
+                // add page specific widget configs to state
+                store.dispatch({
+                    type: 'widgets/add',
+                    payload: widgets
+                })
+            }
+        }
         const nextState = reducer(state, action);
-        console.log('state', state);
-        console.log('action', action);
-        console.log('next state', nextState);
         return nextState;
     }
-}]/*
-const applicationEffects = actions$.pipe((state, action) => {
-    debugger
-    return state
-}, (state, action) => {
-    debugger
-})*/
+}]
 const applicationReducers = {
     route: (state, action) => {
         switch (action.type) {
@@ -78,6 +97,7 @@ const applicationReducers = {
         }
     },
     user: (state, action) => {
+
         switch (action.type) {
             case 'user/update':
                 return action.payload
@@ -230,32 +250,6 @@ const applicationReducers = {
                     // if the page already exists do nothing
                     return state
                 }
-
-                // if we have a widget config for this page we need to setup the widget states
-                if (page.slots) {
-                    const widgets = []
-                    page.slots.forEach(slot => {
-                        const widget = slot.widget
-                        if (widget) {
-                            if (!widget.uuid) {
-                                widget.uuid = uuidv4()
-                            }
-                            //TODO move this into either a side effect function or into the widgets state reducer
-                            // make a generic widget state map
-                            widgets.push({
-                                uuid: widget.uuid,
-                                name: widget.name,
-                                ...widget.props
-                            })
-                        }
-
-                    })
-                    // add page specific widget configs to state
-                    store.dispatch({
-                        type: 'widgets/addForPage',
-                        payload: widgets
-                    })
-                }
                 newPage = {}
                 newPage[page.pageName] = page
                 return mergeDeepRight(state, newPage)
@@ -292,7 +286,7 @@ const applicationReducers = {
                 // merge given payload onto widget state
                 configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload)
                 return mergeDeepRight(state, configuredWidget)
-            case 'widgets/addForPage':
+            case 'widgets/add':
                 newWidgets = {}
                 if (action.payload.length > 0) {
                     action.payload.forEach(widget => {
@@ -325,7 +319,7 @@ export const store = configureStore({
     extensions,
     reducers: applicationReducers,
     initialState: applicationState,
-    // metaReducers: metaReducer
+    metaReducers: metaReducer
 });
 // subscribe to page and widget changes so we can lookup those maps via pages/widgets variables
 if (pagesLookup === false) {

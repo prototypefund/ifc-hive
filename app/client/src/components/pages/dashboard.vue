@@ -9,8 +9,7 @@
       data-test-id="dashboardContainerGrid"
       :data-test-name="state.grid"
       :contents="state.slots"
-    >
-    </Grid>
+    />
   </v-container>
 </template>
 
@@ -69,10 +68,14 @@ function counter() {
   });
 }
 const changeGrid = () => {
+  let grid = "column_3_cards_dark";
+  if (state.value.grid === "column_3_cards_dark") {
+    grid = "column_3_cards";
+  }
   $store.dispatch({
     type: "currentPage/update",
     payload: {
-      grid: "column_3_cards_dark",
+      grid,
     },
   });
 };
