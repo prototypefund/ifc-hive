@@ -54,6 +54,7 @@ let widgetsLookup = false
 // TODO find out how actual effects work without ts support. This works the "same" way for now
 const metaReducer = [(reducer) => {
     return (state, action) => {
+        // meta "effect like" reducer for widget add before page add
         if (action.type == "pages/add") {
             const page = action.payload
             // if we have a widget config for this page we need to setup the widget states
@@ -65,20 +66,24 @@ const metaReducer = [(reducer) => {
                         if (!widget.uuid) {
                             widget.uuid = uuidv4()
                         }
-                        // make a generic widget state map
-                        widgets.push({
-                            uuid: widget.uuid,
-                            name: widget.name,
-                            ...widget.props
-                        })
+                        if (!state.widgets[widget.uuid]) {
+                            // make a generic widget state map
+                            widgets.push({
+                                uuid: widget.uuid,
+                                name: widget.name,
+                                ...widget.props
+                            })
+                        }
                     }
-
                 })
                 // add page specific widget configs to state
-                store.dispatch({
-                    type: 'widgets/add',
-                    payload: widgets
-                })
+                if (widgets.length > 0) {
+                    store.dispatch({
+                        type: 'widgets/add',
+                        payload: widgets
+                    })
+                }
+
             }
         }
         return reducer(state, action)
