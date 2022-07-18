@@ -2,7 +2,7 @@
   <v-container v-if="contents" data-test-id="column_3_cardsContainer">
     <v-row no-gutters>
       <v-col :class="getSlotClass(contents[0])">
-        <v-card class="pa-2 ma-2" v-if="contents[0]" data-test-id="slot">
+        <v-card class="pa-2 ma-2" v-if="contents[0]" data-test-id="slot" flat>
           <component0
             v-if="contents[0].widget"
             :uuid="contents[0].widget.uuid"
@@ -12,7 +12,7 @@
       </v-col>
 
       <v-col :class="getSlotClass(contents[1])">
-        <v-card class="pa-2 ma-2" v-if="contents[1]" data-test-id="slot">
+        <v-card class="pa-2 ma-2" v-if="contents[1]" data-test-id="slot" flat>
           <component1
             v-if="contents[1].widget"
             :uuid="contents[1].widget.uuid"
@@ -22,7 +22,7 @@
       </v-col>
 
       <v-col :class="getSlotClass(contents[2])">
-        <v-card class="pa-2 ma-2" v-if="contents[2]" data-test-id="slot">
+        <v-card class="pa-2 ma-2" v-if="contents[2]" data-test-id="slot" flat>
           <component2
             v-if="contents[2].widget"
             :uuid="contents[2].widget.uuid"

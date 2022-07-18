@@ -43,8 +43,6 @@ const sendTestRequest = async () => {
       // If you need to specify other options, you can set other options
       // ...
     })
-
-
     const vuetify = createVuetify({
       locale: createVueI18nAdapter({
         i18n,
@@ -61,6 +59,8 @@ const sendTestRequest = async () => {
     app.config.globalProperties.$api = axios
     app.provide('$api', axios)
     app.provide('$store', store)
+
+    /* Rooter hook BeforeEach */
     router.beforeEach((to, from) => {
       if (to !== from) {
         // add default params to every route
@@ -72,6 +72,8 @@ const sendTestRequest = async () => {
         });
       }
     })
+
+    /* Rooter hook beforeResolve */
     router.beforeResolve((to, from) => {
       // change the currentPage, might often be just a change in url params
       if (to !== from) {

@@ -1,31 +1,56 @@
 <template>
   <v-app v-if="route && route.name">
+
+    <!-- Global Toolbar -->
     <v-app-bar color="grey-lighten-2">
       <v-app-bar-title>Toolbar > {{ $t(route.name) }}</v-app-bar-title>
       <template v-slot:append>
         <notifications />
       </template>
-
     </v-app-bar>
+
+    <!-- Navigation Drawer -->
     <v-navigation-drawer v-model="drawer" :rail="rail" permanent>
-      <v-list-item title="Navigation" value="Navigation">
-        <template v-slot:append>
-          <v-btn v-if="!rail" variant="text" icon="mdi-chevron-left" @click.stop="handleNavigation(true)"></v-btn>
-          <v-btn v-if="rail" variant="text" icon="mdi-chevron-right" @click.stop="handleNavigation(false)">
-          </v-btn>
-        </template>
-      </v-list-item>
+        <!-- Title -->
+        <v-list-item title="Navigation" value="Navigation">
+          <!-- Close icon -->
+          <template v-slot:append>
+            <v-btn
+              v-if="!rail"
+              variant="text"
+              icon="mdi-chevron-left"
+              @click.stop="handleNavigation(true)">
+            </v-btn>
+
+            <!-- open icon -->
+            <v-btn
+              v-if="rail"
+              variant="text"
+              icon="mdi-chevron-right"
+              @click.stop="handleNavigation(false)">
+            </v-btn>
+          </template>
+        </v-list-item>
 
       <v-divider></v-divider>
 
+      <!-- Navigation List -->
       <v-list density="compact" nav>
-        <v-list-item v-for="item in navItems" link :key="item.title" :prepend-icon="item.icon" :title="$t(item.route)"
-          :value="item.title" @click="navigate(item)">
+        <v-list-item
+          v-for="item in navItems"
+          link
+          :key="item.title"
+          :prepend-icon="item.icon"
+          :title="$t(item.route)"
+          :value="item.title"
+          @click="navigate(item)">
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-main>
-      <v-card>
+
+    <!-- Main content -->
+    <v-main >
+      <v-card flat>
         <router-view />
       </v-card>
     </v-main>
@@ -33,7 +58,7 @@
   </v-app>
 </template>
 <script>
-import notifications from '@/notifications.vue'
+import notifications from '@w/notifications/default.vue'
 export default {
   components: {
     notifications
@@ -59,7 +84,7 @@ export default {
         }
       },
       {
-        icon: 'mdi-account',
+        icon: 'mdi-link-lock',
         route: 'app.daniel',
         params: {}
       }

@@ -18,42 +18,32 @@ export default {
         grid: 'column_3_cards',
         title: 'the lutzness of life',
         slots: [
-            {
-                column: 'v-col-6',
-                widget: {
-                    name: 'timeline',
-                    props: {
-                        query: {
-                            q: 'moin'
-                        },
-                        categories: ['fugg'],
-                        title: 'Widget 1',
-                    }
+          {
+            column: 'v-col-12',
+            widget: {
+              name: 'timeline',
+              props: {
+                query: {
+                  q: 'moin'
+                },
+                categories: ['fugg'],
+                title: 'Widget 1',
+              }
+            }
+          },
+          {
+            column: 'v-col-12',
+            widget: {
+              name: 'timeline',
+              props: {
+                title: 'anderer Titel',
+                query: {
+                  q: 'ich bin voll die andere query',
+                  filter: 'und ich bin ein anderer Filter!'
                 }
-            }, {
-                column: 'v-col-6',
-                widget:
-                {
-                    uuid: 'currPageDebug',
-                    name: 'debug',
-                    props: {
-                        type: 'currentPage'
-                    }
-                }
-            },
-            {
-                column: 'v-col-12',
-                widget: {
-                    name: 'timeline',
-                    props: {
-                        title: 'anderer Titel',
-                        query: {
-                            q: 'ich bin voll die andere query',
-                            filter: 'und ich bin ein anderer Filter!'
-                        }
-                    }
-                }
-            },
+              }
+            }
+          },
         ],
         count: 0,
     },

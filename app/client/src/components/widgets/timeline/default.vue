@@ -1,7 +1,6 @@
 <template>
   <v-timeline v-if="state && props.uuid">
     <h3>{{ state.title }}</h3>
-
     <v-timeline-item dot-color="amber-lighten-1" fill-dot size="x-small">
       <v-card>
         <v-card-title class="bg-purple-lighten-2">
