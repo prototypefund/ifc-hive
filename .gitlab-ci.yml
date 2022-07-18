@@ -19,14 +19,14 @@ build:
     - when: on_success
   script:
     - echo "building containers for integration environment if commit message DOES NOT start with WIP"
-    # do we have previous integration containers running? If so stop and delete them
-    - if [[ -n $(docker ps -q -f name=integration) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=integration)); fi;
-    # Set env variable API_BASE_URL
-    - export API_BASE_URL="https://integration.api.ifc-hive.karo.design"
-    # build services from scratch
-    - docker-compose -f docker-compose.yml -f docker-compose.integration.yml up -d --build
-    # remove dangling images
-    - docker rmi $(sudo docker images -f "dangling=true" -q) -f
+    # # do we have previous integration containers running? If so stop and delete them
+    # - if [[ -n $(docker ps -q -f name=integration) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=integration)); fi;
+    # # Set env variable API_BASE_URL
+    # - export API_BASE_URL="https://integration.api.ifc-hive.karo.design"
+    # # build services from scratch
+    # - docker-compose -f docker-compose.yml -f docker-compose.integration.yml up -d --build
+    # # remove dangling images
+    # - docker rmi $(sudo docker images -f "dangling=true" -q) -f
 
 # complete integration deployment
 test-api:
@@ -51,13 +51,13 @@ deploy-staging:
     - master
   script:
     - echo "Deploy to staging environment"
-    - git -C $STAGING_DIR_PATH pull
-    # do we have staging containers running? If so stop and delete them
-    - if [[ -n $(docker ps -q -f name=staging) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=staging)); fi;
-    # Set env variable API_BASE_URL
-    - export API_BASE_URL="https://staging.api.ifc-hive.karo.design"
-    # build services from scratch
-    - docker-compose -f $STAGING_DIR_PATH/docker-compose.yml -f $STAGING_DIR_PATH/docker-compose.staging.yml up -d --build
+    # - git -C $STAGING_DIR_PATH pull
+    # # do we have staging containers running? If so stop and delete them
+    # - if [[ -n $(docker ps -q -f name=staging) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=staging)); fi;
+    # # Set env variable API_BASE_URL
+    # - export API_BASE_URL="https://staging.api.ifc-hive.karo.design"
+    # # build services from scratch
+    # - docker-compose -f $STAGING_DIR_PATH/docker-compose.yml -f $STAGING_DIR_PATH/docker-compose.staging.yml up -d --build
 
 # deploy to production
 deploy-production:
@@ -70,10 +70,10 @@ deploy-production:
     - master
   script:
     - echo "Deploy to production environment"
-    - git -C $PRODUCTION_DIR_PATH pull
-    # do we have production containers running? If so stop and delete them
-    - if [[ -n $(docker ps -q -f name=production) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=production)); fi;
-    # build services from scratch
-    - docker-compose -f $PRODUCTION_DIR_PATH/docker-compose.yml -f $PRODUCTION_DIR_PATH/docker-compose.production.yml up -d --build
+    # - git -C $PRODUCTION_DIR_PATH pull
+    # # do we have production containers running? If so stop and delete them
+    # - if [[ -n $(docker ps -q -f name=production) ]]; then docker -v rm $(docker stop $(docker ps -q -f name=production)); fi;
+    # # build services from scratch
+    # - docker-compose -f $PRODUCTION_DIR_PATH/docker-compose.yml -f $PRODUCTION_DIR_PATH/docker-compose.production.yml up -d --build
 
   
