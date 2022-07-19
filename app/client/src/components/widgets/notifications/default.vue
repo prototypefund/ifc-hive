@@ -134,6 +134,7 @@ onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });
 </script>
+
 <style lang="css">
 .notificationDrawer > .v-overlay__content {
   right: 0px !important;
@@ -153,7 +154,7 @@ onUnmounted(() => {
 }
 
 .hovered * {
-  color: black !important;
+  color: white !important;
 }
 
 .unreadCount {

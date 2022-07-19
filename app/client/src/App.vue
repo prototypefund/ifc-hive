@@ -43,7 +43,9 @@
           :prepend-icon="item.icon"
           :title="$t(item.route)"
           :value="item.title"
+          class="nav-link"
           @click="navigate(item)">
+
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -70,11 +72,23 @@ export default {
     rail: true,
     navItems: [
       {
-        icon: 'mdi-view-dashboard',
+        icon: 'mdi-home',
         route: 'app.dashboard',
         params: {
           urlParams: 'navigation nach dashboard von nav'
         }
+      },
+      {
+        icon: 'mdi-format-list-bulleted',
+        route: 'app.settings',
+        params: {
+          urlParams: 'navigation nach settings von nav'
+        }
+      },
+      {
+        icon: 'mdi-file-document-multiple',
+        route: 'app.journal',
+        params: {}
       },
       {
         icon: 'mdi-account',
@@ -84,11 +98,12 @@ export default {
         }
       },
       {
-        icon: 'mdi-link-lock',
-        route: 'app.daniel',
-        params: {}
-      }
-
+        icon: 'mdi-cog',
+        route: 'app.settings',
+        params: {
+          urlParams: 'navigation nach settings von nav'
+        }
+      },
     ]
   }),
   created() {

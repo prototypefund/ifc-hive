@@ -2,8 +2,10 @@
   <v-container v-if="state" data-test-id="dashboardContainer" fluid pa-0>
     <h1>{{ $t(state.routeName) }} - {{ state.title }}</h1>
     <p>url params > {{ props.urlParams }} &lt; click value {{ state.count }}</p>
-    <v-btn @click="counter">addCount</v-btn>
-    <v-btn @click="changeGrid">changeGrid</v-btn>
+    <div class="mb-10">
+      <v-btn @click="counter">addCount</v-btn>
+      <v-btn @click="changeGrid">changeGrid</v-btn>
+    </div>
     <Grid
       v-if="state.slots"
       data-test-id="dashboardContainerGrid"

@@ -1,11 +1,7 @@
 <template>
-    <v-container v-if="state" fluid>
-        <h1>{{ $t(state.routeName) }} - {{ state.title }}</h1>
-        <p>url params > {{ props.urlParams }} &lt; click value {{ state.count }}</p>
-        <v-btn @click="counter">addCount</v-btn>
-        <v-btn @click="addWidget">addWidget</v-btn>
+      <v-toolbar color="blue">
+      </v-toolbar>
         <Grid :contents="state.slots"></Grid>
-    </v-container>
 </template>
 
 <script setup>
@@ -13,9 +9,11 @@ import { inject, shallowRef, onMounted, onUnmounted, defineAsyncComponent } from
 const $store = inject('$store')
 const state = shallowRef({})
 const Grid = shallowRef()
+
 const stateSubscriber = $store.select(state => state.currentPage).subscribe(val => {
     state.value = val
 })
+
 const gridSubscriber = $store.select(state => state.currentPage.grid).subscribe(val => {
     if (val) {
         Grid.value = defineAsyncComponent((props) => {
@@ -24,6 +22,7 @@ const gridSubscriber = $store.select(state => state.currentPage.grid).subscribe(
         })
     }
 })
+
 const props = defineProps({
     urlParams: {
         type: String,
@@ -49,17 +48,5 @@ onUnmounted(() => {
         }
     });
 })
-function counter() {
-    $store.dispatch({
-        type: 'currentPage/update',
-        payload: {
-            count: state.value.count + 1 || 0,
-            loading: true
-        }
-    });
-}
-const addWidget = () => {
-
-}
 </script>
 

@@ -14,6 +14,7 @@ import { store } from './store'
 import { createRouter, createWebHistory } from 'vue-router'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import { forEachHook, beforeResolveHook } from './lib/routerHooks.js'
 
 const API_BASE_URL = getEnvVariable('VITE_API_BASE_URL')
 
@@ -27,22 +28,31 @@ axios.defaults.baseURL = API_BASE_URL
  */
 const sendTestRequest = async () => {
   try {
-    // create root component
+
+    // create Vue root component
     const app = createApp(App)
+    // create router instance
     const router = createRouter({
-      // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
       history: createWebHistory(),
-      routes, // short for `routes: routes`
+      routes,
     })
+
+    /*
+     * configure i18n
+     * @TODO allow for lazy loading and componen specific locale files
+     */
     const i18n = createI18n({
       legacy: false, // you must set `false`, to use Composition API
       globalInjection: true,
       locale: 'de', // set locale
       fallbackLocale: 'en', // set fallback locale
       messages, // set locale messages
-      // If you need to specify other options, you can set other options
-      // ...
     })
+
+    /*
+     * Create vuetify instance
+     * @TODO move to separate file, e.g. with dynamic theme configuration
+     */
     const vuetify = createVuetify({
       locale: createVueI18nAdapter({
         i18n,
@@ -51,40 +61,24 @@ const sendTestRequest = async () => {
       components,
       directives,
     })
+
+    /*
+     * register plugins
+     */
     app.use(i18n)
     app.use(vuetify)
     app.use(router)
-    //app.use(i18n)
-    // add axios to all components
+
+    // Make axios availabe in all components
     app.config.globalProperties.$api = axios
     app.provide('$api', axios)
+    // make store availble in all components
     app.provide('$store', store)
 
-    /* Rooter hook BeforeEach */
-    router.beforeEach((to, from) => {
-      if (to !== from) {
-        // add default params to every route
-        if (!to.params.locale) to.params.locale = 'de'
-        // set the new route to the store
-        store.dispatch({
-          type: 'route/update',
-          payload: to
-        });
-      }
-    })
+    /* Rooter hooks */
+    router.beforeEach(forEachHook(store))
+    router.beforeResolve(beforeResolveHook(store))
 
-    /* Rooter hook beforeResolve */
-    router.beforeResolve((to, from) => {
-      // change the currentPage, might often be just a change in url params
-      if (to !== from) {
-        store.dispatch({
-          type: 'currentPage/set',
-          routeName: to.name,
-          payload: { ...to.params, query: to.query }
-        });
-      }
-
-    })
     // mount the app
     app.mount('#app')
   } catch (err) {

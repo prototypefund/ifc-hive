@@ -1,7 +1,7 @@
 // import routes from modules
 import dashboardComp from '@p/dashboard.vue'
 import settingsComp from '@p/settings.vue'
-import daniel from '@p/daniel.vue'
+import journal from '@p/journal.vue'
 import conf from '@p/conf.js'
 
 import { store } from './store'
@@ -39,15 +39,15 @@ export default [
         }
     },
     {
-        path: '/daniel',
-        name: 'app.daniel',
-        component: daniel,
+        path: '/journal',
+        name: 'app.journal',
+        component: journal,
         props: true,
         beforeEnter: (to, from) => {
             store.dispatch({
                 type: 'pages/add',
                 routeName: to.name,
-                payload: conf.daniel
+                payload: conf.journal
             });
         }
     }
