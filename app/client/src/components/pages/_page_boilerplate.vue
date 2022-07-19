@@ -1,8 +1,9 @@
 <template>
-      <v-toolbar>
-        <v-toolbar-title>Project Index</v-toolbar-title>
-      </v-toolbar>
-        <Grid :contents="state.slots"></Grid>
+  <!--
+    Place any desired template structure around the widget grid,
+    e.g. toolbar, sidebars, footers.
+  -->
+  <Grid :contents="state.slots"></Grid>
 </template>
 
 <script setup>
@@ -50,4 +51,3 @@ onUnmounted(() => {
     });
 })
 </script>
-
