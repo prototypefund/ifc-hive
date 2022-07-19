@@ -9,21 +9,18 @@
     class="notificationDrawer"
   >
     <template v-slot:activator="{ props }">
-      <v-btn v-bind="props" v-if="state.unreadCount > 0" icon="mdi-bell-circle"></v-btn>
-      <v-btn
-        v-bind="props"
-        v-if="state.unreadCount == 0"
-        icon="mdi-bell-circle-outline"
-      ></v-btn>
-      <v-chip
-        class="ma-2 unreadCount"
-        size="x-small"
-        :class="{ visible: state.unreadCount > 0 }"
-        color="red"
-        text-color="white"
+      <v-badge
+        overlap
+        :color="state.unreadCount > 0 ? 'error' : 'transparent'"
+        :content="state.unreadCount"
+        offset-y="10px"
+        offset-x="10px"
       >
-        {{ state.unreadCount }}
-      </v-chip>
+        <v-btn
+          v-bind="props"
+          icon="mdi-bell"
+        />
+      </v-badge>
     </template>
 
     <v-card left width="800">
@@ -134,7 +131,6 @@ onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });
 </script>
-
 <style lang="css">
 .notificationDrawer > .v-overlay__content {
   right: 0px !important;
@@ -154,7 +150,7 @@ onUnmounted(() => {
 }
 
 .hovered * {
-  color: white !important;
+  color: black !important;
 }
 
 .unreadCount {

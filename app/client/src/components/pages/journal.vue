@@ -1,7 +1,11 @@
 <template>
-      <v-toolbar color="blue">
-      </v-toolbar>
-        <Grid :contents="state.slots"></Grid>
+  <v-container fluid>
+    <v-toolbar color="blue" flat :dark="true">
+      <v-spacer></v-spacer>
+        <v-btn color="white" text>Some thing</v-btn>
+    </v-toolbar>
+    <Grid :contents="state.slots"></Grid>
+    </v-container>
 </template>
 
 <script setup>

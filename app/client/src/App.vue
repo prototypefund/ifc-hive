@@ -2,11 +2,15 @@
   <v-app v-if="route && route.name">
 
     <!-- Global Toolbar -->
-    <v-app-bar color="grey-lighten-2">
-      <v-app-bar-title>Toolbar > {{ $t(route.name) }}</v-app-bar-title>
-      <template v-slot:append>
-        <notifications />
-      </template>
+    <v-app-bar app color="grey-lighten-2">
+      <!-- Breadcrumb -->
+      <v-app-bar-title>
+        Journal
+        <v-icon color="grey" xsmall>mdi-chevron-right</v-icon>
+        {{ $t(route.name) }}</v-app-bar-title>
+
+      <!-- notifications -->
+      <notifications />
     </v-app-bar>
 
     <!-- Navigation Drawer -->
