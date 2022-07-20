@@ -84,7 +84,7 @@ export default {
       },
       {
         icon: 'mdi-format-list-bulleted',
-        route: 'app.settings',
+        route: 'app.projects',
         params: {
           urlParams: 'navigation nach settings von nav'
         }

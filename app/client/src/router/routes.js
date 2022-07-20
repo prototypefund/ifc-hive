@@ -4,7 +4,7 @@ import settingsComp from '@p/settings.vue'
 import journal from '@p/journal.vue'
 import conf from '@p/conf.js'
 import project_index from '@p/project_index.vue'
-import { store } from './store/index.js'
+import { store } from '../store/index.js'
 
 export default [
     /* Root */

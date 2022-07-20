@@ -5,10 +5,13 @@ import {
     UndoExtension,
     ImmutableStateExtension
 } from 'mini-rx-store';
-import getEnvVariable from './lib/getEnvVariable'
+import getEnvVariable from '../lib/getEnvVariable'
 import { mergeDeepRight, clone } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
 
+/*
+ * Apply different extensions depending on the environment
+ */
 const extensions = getEnvVariable('NODE_ENV') === 'production'
     ? [
         new LoggerExtension(),
@@ -49,11 +52,14 @@ const applicationState = {
     widgets: {},
     pages: {}
 }
+
 let pagesLookup = false
 let widgetsLookup = false
+
 // TODO find out how actual effects work without ts support. This works the "same" way for now
 const metaReducer = [(reducer) => {
     return (state, action) => {
+
         // meta "effect like" reducer for widget add before page add
         if (action.type == "pages/add") {
             const page = action.payload
@@ -76,6 +82,7 @@ const metaReducer = [(reducer) => {
                         }
                     }
                 })
+
                 // add page specific widget configs to state
                 if (widgets.length > 0) {
                     store.dispatch({
@@ -89,6 +96,7 @@ const metaReducer = [(reducer) => {
         return reducer(state, action)
     }
 }]
+
 const applicationReducers = {
     route: (state, action) => {
         switch (action.type) {
@@ -287,7 +295,7 @@ const applicationReducers = {
                     action.payload.forEach(widget => {
                         // get the config file for the current widget
                         // TODO find out why we can't use vite alias here
-                        import('./components/widgets/' + widget.name + '/conf.js').then(async conf => {
+                        import('../components/widgets/' + widget.name + '/conf.js').then(async conf => {
                             store.dispatch({
                                 type: 'widgets/preconfigure',
                                 payload: {
@@ -314,7 +322,8 @@ export const store = configureStore({
     reducers: applicationReducers,
     initialState: applicationState,
     metaReducers: metaReducer
-});
+})
+
 // subscribe to page and widget changes so we can lookup those maps via pages/widgets variables
 if (pagesLookup === false) {
     store.select(state => state.pages).subscribe(val => {
@@ -326,3 +335,5 @@ if (widgetsLookup === false) {
         widgetsLookup = val
     })
 }
+
+export default store

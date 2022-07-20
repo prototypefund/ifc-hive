@@ -1,4 +1,17 @@
 export default {
+  project_index: {
+    grid: 'column_3_cards_plain',
+    slots: [{
+      column: 'v-col-12',
+      widget:
+      {
+        name: 'projects',
+        props: {
+          type: 'currentPage'
+        }
+      }
+    }],
+  },
   journal: {
     grid: 'column_3_cards_plain',
     slots: [{
