@@ -1,11 +1,18 @@
 <template>
-  <v-container fluid>
-    <v-toolbar color="blue" flat :dark="true">
-      <v-spacer></v-spacer>
-        <v-btn color="white" text>Some thing</v-btn>
+  <v-container fluid class="pa-0">
+
+    <v-toolbar color="transparent" flat>
+      <v-spacer />
+      <v-toolbar-items>
+        <v-btn text color="primary">
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+      </v-toolbar-items>
     </v-toolbar>
-    <Grid :contents="state.slots"></Grid>
+
+    <Grid :contents="state.slots" class="mt-5"></Grid>
     </v-container>
+
 </template>
 
 <script setup>

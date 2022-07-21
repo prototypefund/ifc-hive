@@ -314,7 +314,16 @@ const applicationReducers = {
             default:
                 return state
         }
+    },
+  journal: (state, action) => {
+    let newEntry
+    switch (action.type) {
+      case 'journal/setCurrent':
+        break;
+      default:
+        return state
     }
+  }
 }
 
 export const store = configureStore({

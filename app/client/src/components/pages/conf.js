@@ -18,6 +18,7 @@ export default {
       column: 'v-col-12',
       widget:
       {
+        uuid: 'journal',
         name: 'journal',
         props: {
           type: 'currentPage'
