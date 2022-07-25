@@ -26,6 +26,7 @@ export default defineConfig({
             '@w': path.resolve(__dirname, './src/components/widgets'),
             '@p': path.resolve(__dirname, './src/components/pages'),
             '@t': path.resolve(__dirname, './src/components/templates'),
+            '@u': path.resolve(__dirname, './src/components/utils'),
         },
     }
 })

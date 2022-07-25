@@ -42,6 +42,10 @@ const applicationState = {
         navigationOpen: false,
         inspectorOpen: false,
     },
+    quickList: {
+        activetab: 0,
+        tabs: []
+    },
     notifications: {
         unreadCount: 0,
         toggled: false,
@@ -98,6 +102,32 @@ const metaReducer = [(reducer) => {
 }]
 
 const applicationReducers = {
+    quickList: (state, action) => {
+        switch (action.type) {
+            case 'quickList/add':
+                debugger
+                return {
+                    ...state, ...action.payload
+                }
+            case 'quickList/delete':
+                debugger
+                return {
+                    ...state, ...action.payload
+                }
+            case 'quickList/update':
+                debugger
+                return {
+                    ...state, ...action.payload
+                }
+            case 'quickList/clear':
+                debugger
+                return {
+                    ...state, ...action.payload
+                }
+            default:
+                return state
+        }
+    },
     route: (state, action) => {
         switch (action.type) {
             case 'route/update':
@@ -315,15 +345,15 @@ const applicationReducers = {
                 return state
         }
     },
-  journal: (state, action) => {
-    let newEntry
-    switch (action.type) {
-      case 'journal/setCurrent':
-        break;
-      default:
-        return state
+    journal: (state, action) => {
+        let newEntry
+        switch (action.type) {
+            case 'journal/setCurrent':
+                break;
+            default:
+                return state
+        }
     }
-  }
 }
 
 export const store = configureStore({
