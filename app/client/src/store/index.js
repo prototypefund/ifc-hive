@@ -103,69 +103,122 @@ const metaReducer = [(reducer) => {
 
 const applicationReducers = {
     quickList: (state, action) => {
-        switch (action.type) {
-            case 'quickList/add':
-                debugger
-                return {
-                    ...state, ...action.payload
-                }
-            case 'quickList/delete':
-                debugger
-                return {
-                    ...state, ...action.payload
-                }
-            case 'quickList/update':
-                debugger
-                return {
-                    ...state, ...action.payload
-                }
-            case 'quickList/clear':
-                debugger
-                return {
-                    ...state, ...action.payload
-                }
-            default:
-                return state
+        if (state) {
+            switch (action.type) {
+                case 'quickList/add':
+                    debugger
+                    return {
+                        ...state, ...action.payload
+                    }
+                case 'quickList/delete':
+                    debugger
+                    return {
+                        ...state, ...action.payload
+                    }
+                case 'quickList/update':
+                    debugger
+                    return {
+                        ...state, ...action.payload
+                    }
+                case 'quickList/clear':
+                    debugger
+                    return {
+                        ...state, ...action.payload
+                    }
+                default:
+                    return state
+            }
+        } else {
+            //if this happens we have to investigate the mini-rx-store
+            debugger
         }
     },
     route: (state, action) => {
-        switch (action.type) {
-            case 'route/update':
-                return JSON.parse(JSON.stringify(action.payload))
-            default:
-                return state
+        if (state) {
+            switch (action.type) {
+                case 'route/update':
+                    return JSON.parse(JSON.stringify(action.payload))
+                default:
+                    return state
+            }
+        } else {
+            //if this happens we have to investigate the mini-rx-store
+            debugger
         }
     },
     user: (state, action) => {
-        switch (action.type) {
-            case 'user/update':
-                return action.payload
-            default:
-                return state
+        if (state) {
+            switch (action.type) {
+                case 'user/update':
+                    return action.payload
+                default:
+                    return state
+            }
+        } else {
+            //if this happens we have to investigate the mini-rx-store
+            debugger
         }
     },
     notifications: (state, action) => {
-        let items
-        switch (action.type) {
-            case 'notifications/add':
-                items = JSON.parse(JSON.stringify(state.items))
-                action.payload.time = Date.now()
-                action.payload.state = 'unread'
-                store.dispatch({
-                    type: 'notifications/update',
-                    payload: {
-                        unreadCount: state.unreadCount + 1
+        if (state) {
+            let items
+            switch (action.type) {
+                case 'notifications/add':
+                    items = JSON.parse(JSON.stringify(state.items))
+                    action.payload.time = Date.now()
+                    action.payload.state = 'unread'
+                    store.dispatch({
+                        type: 'notifications/update',
+                        payload: {
+                            unreadCount: state.unreadCount + 1
+                        }
+                    })
+                    items.unshift(action.payload)
+                    return {
+                        ...state, items
                     }
-                })
-                items.unshift(action.payload)
-                return {
-                    ...state, items
-                }
-            case 'notifications/markAllAsRead':
-                items = JSON.parse(JSON.stringify(state.items))
-                items.forEach(item => {
-                    if (item.state === 'unread') {
-                        item.state = 'read'
+                case 'notifications/markAllAsRead':
+                    items = JSON.parse(JSON.stringify(state.items))
+                    items.forEach(item => {
+                        if (item.state === 'unread') {
+                            item.state = 'read'
+                            store.dispatch({
+                                type: 'notifications/update',
+                                payload: {
+                                    unreadCount: 0
+                                }
+                            })
+                        }
+                    })
+                    return {
+                        ...state, items
+                    }
+                case 'notifications/markAsRead':
+                    items = JSON.parse(JSON.stringify(state.items))
+                    items[action.payload.index].state = 'read'
+                    store.dispatch({
+                        type: 'notifications/update',
+                        payload: {
+                            unreadCount: state.unreadCount - 1
+                        }
+                    })
+                    return {
+                        ...state, items: items
+                    }
+                case 'notifications/markUnread':
+                    items = JSON.parse(JSON.stringify(state.items))
+                    items[action.payload.index].state = 'unread'
+                    store.dispatch({
+                        type: 'notifications/update',
+                        payload: {
+                            unreadCount: state.unreadCount + 1
+                        }
+                    })
+                    return {
+                        ...state, items: items
+                    }
+                case 'notifications/toggle':
+                    if (action.payload.toggled === false && state.toggled === true) {
                         store.dispatch({
                             type: 'notifications/update',
                             payload: {
@@ -173,187 +226,165 @@ const applicationReducers = {
                             }
                         })
                     }
-                })
-                return {
-                    ...state, items
-                }
-            case 'notifications/markAsRead':
-                items = JSON.parse(JSON.stringify(state.items))
-                items[action.payload.index].state = 'read'
-                store.dispatch({
-                    type: 'notifications/update',
-                    payload: {
-                        unreadCount: state.unreadCount - 1
+                    return {
+                        ...state, ...action.payload
                     }
-                })
-                return {
-                    ...state, items: items
-                }
-            case 'notifications/markUnread':
-                items = JSON.parse(JSON.stringify(state.items))
-                items[action.payload.index].state = 'unread'
-                store.dispatch({
-                    type: 'notifications/update',
-                    payload: {
-                        unreadCount: state.unreadCount + 1
-                    }
-                })
-                return {
-                    ...state, items: items
-                }
-            case 'notifications/toggle':
-                if (action.payload.toggled === false && state.toggled === true) {
-                    store.dispatch({
-                        type: 'notifications/update',
-                        payload: {
-                            unreadCount: 0
-                        }
-                    })
-                }
-                return {
-                    ...state, ...action.payload
-                }
-            case 'notifications/update':
-                return mergeDeepRight(state, action.payload)
-            default:
-                return state
+                case 'notifications/update':
+                    return mergeDeepRight(state, action.payload)
+                default:
+                    return state
+            }
+        } else {
+            //if this happens we have to investigate the mini-rx-store
+            debugger
         }
     },
     ui: (state, action) => {
-        switch (action.type) {
-            case 'ui/update':
-                return {
-                    ...state, ...action.payload
-                }
-            default:
-                return state
+        if (state) {
+            switch (action.type) {
+                case 'ui/update':
+                    return {
+                        ...state, ...action.payload
+                    }
+                default:
+                    return state
+            }
+        } else {
+            //if this happens we have to investigate the mini-rx-store
+            debugger
         }
     },
     currentPage: (state, action) => {
-        switch (action.type) {
-            // used in beforeResolve router hook, will trigger before each route change including param changes
-            case 'currentPage/set':
-                // create our json friendly pageName
-                let currPage = {}
-                const pageName = action.routeName.replace('.', '-')
-                // check if that requested page has already been preconfigured (should always be the case)
-                if (pagesLookup[pageName].pageName) {
-                    // create a new currentPage object based on the url params merged ontop of the default page config
-                    currPage = mergeDeepRight(pagesLookup[pageName], action.payload)
-                }
-                if (state.routeName) {
-                    // update our memorized preconfigured page with the new version which includes url params and user data
-                    store.dispatch({
-                        type: 'pages/update',
-                        stateName: state.pageName,
-                        payload: state
-                    })
-                }
-                return currPage
-            // simply let us update the state of the current page
-            case 'currentPage/update':
-                store.dispatch({
-                    type: 'notifications/add',
-                    payload: {
-                        action: action.type,
-                        type: 'log'
+        if (state) {
+            switch (action.type) {
+                // used in beforeResolve router hook, will trigger before each route change including param changes
+                case 'currentPage/set':
+                    // create our json friendly pageName
+                    let currPage = {}
+                    const pageName = action.routeName.replace('.', '-')
+                    // check if that requested page has already been preconfigured (should always be the case)
+                    if (pagesLookup[pageName].pageName) {
+                        // create a new currentPage object based on the url params merged ontop of the default page config
+                        currPage = mergeDeepRight(pagesLookup[pageName], action.payload)
                     }
-                })
-                return mergeDeepRight(state, action.payload)
-            default:
-                return state
+                    if (state.routeName) {
+                        // update our memorized preconfigured page with the new version which includes url params and user data
+                        store.dispatch({
+                            type: 'pages/update',
+                            stateName: state.pageName,
+                            payload: state
+                        })
+                    }
+                    return currPage
+                // simply let us update the state of the current page
+                case 'currentPage/update':
+                    store.dispatch({
+                        type: 'notifications/add',
+                        payload: {
+                            action: action.type,
+                            type: 'log'
+                        }
+                    })
+                    return mergeDeepRight(state, action.payload)
+                default:
+                    return state
+            }
+        } else {
+            //if this happens we have to investigate the mini-rx-store
+            debugger
         }
     },
     pages: (state, action) => {
-        let newPage
-        switch (action.type) {
-            // initially add a new preconfigured page store. Will be handled in routes files in beforeEnter hook
-            case 'pages/add':
-                store.dispatch({
-                    type: 'notifications/add',
-                    payload: {
-                        action: action.type,
-                        type: 'log'
+        if (state) {
+            let newPage
+            switch (action.type) {
+                // initially add a new preconfigured page store. Will be handled in routes files in beforeEnter hook
+                case 'pages/add':
+                    store.dispatch({
+                        type: 'notifications/add',
+                        payload: {
+                            action: action.type,
+                            type: 'log'
+                        }
+                    })
+                    // create a new page object based on the default page config
+                    const page = clone(mergeDeepRight(storePatterns.page, action.payload))
+                    page.pageName = action.routeName.replace('.', '-')
+                    page.routeName = action.routeName
+                    if (state[page.pageName]) {
+                        // if the page already exists do nothing
+                        return state
                     }
-                })
-                // create a new page object based on the default page config
-                const page = clone(mergeDeepRight(storePatterns.page, action.payload))
-                page.pageName = action.routeName.replace('.', '-')
-                page.routeName = action.routeName
-                if (state[page.pageName]) {
-                    // if the page already exists do nothing
-                    return state
-                }
-                newPage = {}
-                newPage[page.pageName] = page
-                return mergeDeepRight(state, newPage)
-            // update a configured page State usually called when current page changes
-            case 'pages/update':
-                if (state[action.stateName]) {
                     newPage = {}
-                    // if we had the last current page already, just merge their states based on the latest version coming from currentPage
-                    newPage[action.stateName] = mergeDeepRight(state[action.stateName], action.payload)
-                } else {
-                    debugger
-                }
-                return mergeDeepRight(state, newPage)
-            default:
-                return state
+                    newPage[page.pageName] = page
+                    return mergeDeepRight(state, newPage)
+                // update a configured page State usually called when current page changes
+                case 'pages/update':
+                    if (state[action.stateName]) {
+                        newPage = {}
+                        // if we had the last current page already, just merge their states based on the latest version coming from currentPage
+                        newPage[action.stateName] = mergeDeepRight(state[action.stateName], action.payload)
+                    } else {
+                        debugger
+                    }
+                    return mergeDeepRight(state, newPage)
+                default:
+                    return state
+            }
+        } else {
+            //if this happens we have to investigate the mini-rx-store
+            debugger
         }
     },
     widgets: (state, action) => {
-        let newWidgets, configuredWidget
-        switch (action.type) {
-            case 'widgets/preconfigure':
-                configuredWidget = {}
-                // merge widget config with widget state when we initially configure widget 
-                configuredWidget[action.payload.uuid] = mergeDeepRight(action.payload.conf, state[action.payload.uuid])
-                return mergeDeepRight(state, configuredWidget)
-            case 'widgets/configure':
-                configuredWidget = {}
-                // merge given config onto widget state
-                configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload.conf)
-                return mergeDeepRight(state, configuredWidget)
-            case 'widgets/update':
-                configuredWidget = {}
-                // merge given payload onto widget state
-                configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload)
-                return mergeDeepRight(state, configuredWidget)
-            case 'widgets/add':
-                newWidgets = {}
-                if (action.payload.length > 0) {
-                    action.payload.forEach(widget => {
-                        // get the config file for the current widget
-                        // TODO find out why we can't use vite alias here
-                        import('../components/widgets/' + widget.name + '/conf.js').then(async conf => {
-                            store.dispatch({
-                                type: 'widgets/preconfigure',
-                                payload: {
-                                    conf: conf.default,
-                                    uuid: widget.uuid
-                                }
+        if (state) {
+            let newWidgets, configuredWidget
+            switch (action.type) {
+                case 'widgets/preconfigure':
+                    configuredWidget = {}
+                    // merge widget config with widget state when we initially configure widget 
+                    configuredWidget[action.payload.uuid] = mergeDeepRight(action.payload.conf, state[action.payload.uuid])
+                    return mergeDeepRight(state, configuredWidget)
+                case 'widgets/configure':
+                    configuredWidget = {}
+                    // merge given config onto widget state
+                    configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload.conf)
+                    return mergeDeepRight(state, configuredWidget)
+                case 'widgets/update':
+                    configuredWidget = {}
+                    // merge given payload onto widget state
+                    configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload)
+                    return mergeDeepRight(state, configuredWidget)
+                case 'widgets/add':
+                    newWidgets = {}
+                    if (action.payload.length > 0) {
+                        action.payload.forEach(widget => {
+                            // get the config file for the current widget
+                            // TODO find out why we can't use vite alias here
+                            import('../components/widgets/' + widget.name + '/conf.js').then(async conf => {
+                                store.dispatch({
+                                    type: 'widgets/preconfigure',
+                                    payload: {
+                                        conf: conf.default,
+                                        uuid: widget.uuid
+                                    }
+                                })
                             })
+                            // add page specific config to widget instance state
+                            if (!newWidgets[widget.uuid]) {
+                                newWidgets[widget.uuid] = mergeDeepRight(storePatterns.widget, widget)
+                            }
                         })
-                        // add page specific config to widget instance state
-                        if (!newWidgets[widget.uuid]) {
-                            newWidgets[widget.uuid] = mergeDeepRight(storePatterns.widget, widget)
-                        }
-                    })
-                    return mergeDeepRight(state, newWidgets)
-                }
-            default:
-                return state
+                        return mergeDeepRight(state, newWidgets)
+                    }
+                default:
+                    return state
+            }
+        } else {
+            //if this happens we have to investigate the mini-rx-store
+            debugger
         }
     },
-    journal: (state, action) => {
-        let newEntry
-        switch (action.type) {
-            case 'journal/setCurrent':
-                break;
-            default:
-                return state
-        }
-    }
 }
 
 export const store = configureStore({
