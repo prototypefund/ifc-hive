@@ -33,7 +33,6 @@ const storePatterns = {
     }
 }
 
-
 let pagesLookup = false
 let widgetsLookup = false
 
@@ -91,7 +90,7 @@ const applicationReducers = {
                         props: action.payload.props
                     })
                     return {
-                        ...state, tabs, activeTab: 0
+                        ...state, tabs, tab: 0
                     }
                 case 'quickList/delete':
                     debugger
@@ -99,10 +98,7 @@ const applicationReducers = {
                         ...state, ...action.payload
                     }
                 case 'quickList/update':
-                    debugger
-                    return {
-                        ...state, ...action.payload
-                    }
+                    return mergeDeepRight(state, action.payload)
                 case 'quickList/clear':
                     debugger
                     return {

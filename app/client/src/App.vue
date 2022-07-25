@@ -16,15 +16,16 @@
 
     <!-- Navigation Drawer -->
     <NavigationSideBar :nav-items="navItems" />
-    <!-- quickList Drawer -->
-    <QuickListSideBar />
+
+
     <!-- Main content -->
     <v-main>
       <v-card flat>
         <router-view />
       </v-card>
     </v-main>
-
+    <!-- quickList Drawer -->
+    <QuickListSideBar />
 
   </v-app>
 </template>
@@ -81,7 +82,6 @@ export default {
     this.$store.select(state => state['route']).subscribe((val) => {
       this.route = val
     })
-
   },
   methods: {
 
