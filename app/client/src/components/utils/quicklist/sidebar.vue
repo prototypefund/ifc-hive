@@ -14,8 +14,8 @@
             </template>
         </v-list-item>
         <v-card>
-            <v-tabs background-color="deep-purple-darken-4" v-model="tab" center-active v-if="tabs.length > 0">
-                <v-tab v-for="(item, index) in tabs">
+            <v-tabs v-model="tab" center-active v-if="tabs.length > 0">
+                <v-tab v-for="(item, index) in tabs" :key="index">
                     {{ item.type }} - {{ item.docUUID }}
                 </v-tab>
             </v-tabs>
