@@ -5,7 +5,7 @@ export default {
   current: false,
   entries: [
     {
-      id: 6,
+      id: '6',
       subject: 'Vorraum nach Installation des Kassentresen',
       content: 'This is some formatted content',
       receivers: ['Daniel', "Christian"],
@@ -15,10 +15,10 @@ export default {
       hash: uuidv4(),
       tags: ['Plan', 'Zwischenstand', 'Vorraum', 'Besichtigung', 'Fehler'],
       images: 3,
-      path: [ { text: 'Planung'  }, { text: 'Interne Planung' } ],
+      path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
     },
     {
-      id: 5,
+      id: '5',
       subject: 'Planungsänderung Aufbau',
       content: 'This is some formatted content',
       receivers: ['Daniel', "Christian"],
@@ -28,7 +28,7 @@ export default {
       hash: uuidv4(),
       tags: ['Planung', 'Hamburg'],
       attachments: 2,
-      path: [ { text: 'Planung'  }, { text: 'Interne Planung' } ],
+      path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
       request: [
         {
           name: 'Till Pliestermann',
@@ -43,7 +43,7 @@ export default {
       ]
     },
     {
-      id: 4,
+      id: '4',
       subject: 'Und jetzt mal einer mit einem richtigen langen Titel. Das sollte auch noch verdaulich ausssehen.',
       content: 'This is some formatted content',
       receivers: ['Daniel', "Christian"],
@@ -51,7 +51,7 @@ export default {
       category: { color: 'success', title: 'Memo' },
       locked: 2,
       hash: uuidv4(),
-      path: [ { text: 'Planung'  }, { text: 'Interne Planung' } ],
+      path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
       request: [
         {
           name: 'Paul Krüger',
@@ -71,7 +71,7 @@ export default {
       ]
     },
     {
-      id: 3,
+      id: '3',
       subject: 'Meilenstein Planung geschlossen',
       content: null,
       receivers: ['Daniel', "Christian"],
@@ -79,14 +79,14 @@ export default {
       category: { color: 'blue', title: 'Planung' },
       locked: 3,
       hash: uuidv4(),
-      path: [ { text: 'Planung'  }, { text: 'Interne Planung' } ],
-      alert: { 
+      path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
+      alert: {
         content: "Meilenstein »Planung« geschlossen",
         color: 'success'
       }
     },
     {
-      id: 2,
+      id: '2',
       subject: 'Schließen von Meilenstein Planung',
       content: 'This is some formatted content',
       receivers: ['Daniel', "Christian"],
@@ -94,7 +94,7 @@ export default {
       category: { color: 'success', title: 'Planung' },
       locked: 3,
       hash: uuidv4(),
-      path: [ { text: 'Planung'  }, { text: 'Interne Planung' } ],
+      path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
       request: [
         {
           name: 'Paul Krüger',
@@ -114,7 +114,7 @@ export default {
       ]
     },
     {
-      id: 1,
+      id: '1',
       subject: 'Third',
       content: 'This is some formatted content',
       receivers: ['Daniel', "Christian"],
@@ -122,7 +122,7 @@ export default {
       category: { color: 'blue', title: 'Memo' },
       locked: 3,
       hash: uuidv4(),
-      path: [ { text: 'Planung'  }, { text: 'Interne Planung' } ],
+      path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
     }
   ]
 }

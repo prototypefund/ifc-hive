@@ -134,9 +134,6 @@ const applicationReducers = {
                 default:
                     return state
             }
-        } else {
-            //if this happens we have to investigate the mini-rx-store
-            debugger
         }
     },
     route: (state, action) => {
@@ -147,9 +144,6 @@ const applicationReducers = {
                 default:
                     return state
             }
-        } else {
-            //if this happens we have to investigate the mini-rx-store
-            debugger
         }
     },
     user: (state, action) => {
@@ -160,9 +154,6 @@ const applicationReducers = {
                 default:
                     return state
             }
-        } else {
-            //if this happens we have to investigate the mini-rx-store
-            debugger
         }
     },
     notifications: (state, action) => {
@@ -240,9 +231,6 @@ const applicationReducers = {
                 default:
                     return state
             }
-        } else {
-            //if this happens we have to investigate the mini-rx-store
-            debugger
         }
     },
     ui: (state, action) => {
@@ -255,9 +243,6 @@ const applicationReducers = {
                 default:
                     return state
             }
-        } else {
-            //if this happens we have to investigate the mini-rx-store
-            debugger
         }
     },
     currentPage: (state, action) => {
@@ -295,9 +280,6 @@ const applicationReducers = {
                 default:
                     return state
             }
-        } else {
-            //if this happens we have to investigate the mini-rx-store
-            debugger
         }
     },
     pages: (state, action) => {
@@ -337,9 +319,6 @@ const applicationReducers = {
                 default:
                     return state
             }
-        } else {
-            //if this happens we have to investigate the mini-rx-store
-            debugger
         }
     },
     widgets: (state, action) => {
@@ -386,9 +365,6 @@ const applicationReducers = {
                 default:
                     return state
             }
-        } else {
-            //if this happens we have to investigate the mini-rx-store
-            debugger
         }
     },
 }
