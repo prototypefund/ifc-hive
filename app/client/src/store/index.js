@@ -104,11 +104,17 @@ const metaReducer = [(reducer) => {
 const applicationReducers = {
     quickList: (state, action) => {
         if (state) {
+            let tabs
             switch (action.type) {
                 case 'quickList/add':
-                    debugger
+                    tabs = JSON.parse(JSON.stringify(state.tabs))
+                    tabs.unshift({
+                        type: action.payload.tabType,
+                        docUUID: action.payload.uuid,
+                        props: action.payload.props
+                    })
                     return {
-                        ...state, ...action.payload
+                        ...state, tabs, activeTab: 0
                     }
                 case 'quickList/delete':
                     debugger
