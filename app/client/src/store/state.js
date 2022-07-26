@@ -8,9 +8,10 @@ export const applicationState = {
     ui: {
         navigationOpen: false,
         inspectorOpen: false,
+        quickListOpen: false
     },
     quickList: {
-        activetab: 0,
+        tab: 0,
         tabs: []
     },
     notifications: {

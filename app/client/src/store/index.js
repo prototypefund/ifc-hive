@@ -6,7 +6,7 @@ import {
     ImmutableStateExtension
 } from 'mini-rx-store';
 import getEnvVariable from '../lib/getEnvVariable'
-import { mergeDeepRight, clone } from 'ramda'
+import { mergeDeepRight, clone, findIndex, propEq } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
 import { applicationState } from './state'
 
@@ -39,7 +39,6 @@ let widgetsLookup = false
 // TODO find out how actual effects work without ts support. This works the "same" way for now
 const metaReducer = [(reducer) => {
     return (state, action) => {
-
         // meta "effect like" reducer for widget add before page add
         if (action.type == "pages/add") {
             const page = action.payload
@@ -81,21 +80,51 @@ const applicationReducers = {
     quickList: (state, action) => {
         if (state) {
             let tabs
+            let tab
             switch (action.type) {
                 case 'quickList/add':
+                    // make sure that we only have on tab per display type and uuid
+                    tab = findIndex(propEq('docUUID', action.payload.uuid))(state.tabs)
+                    if (tab > -1) {
+                        if (findIndex(propEq('type', action.payload.uutabTypeid))(state.tabs)) {
+                            // if display types vary we may create a second tab for the same uuid
+                            return {
+                                ...state, tab
+                            }
+                        }
+                    }
                     tabs = JSON.parse(JSON.stringify(state.tabs))
+                    // create an object describing the view type and the docUUID as well as possible query or display parameters
                     tabs.unshift({
                         type: action.payload.tabType,
                         docUUID: action.payload.uuid,
                         props: action.payload.props
                     })
+                    // TODO move to effect
+                    // open the quickList bar
+                    store.dispatch({
+                        type: 'ui/update',
+                        payload: {
+                            quickListOpen: true
+                        }
+                    });
+                    // as we unshift new entries, the currently selected tab always needs to be 0
                     return {
                         ...state, tabs, tab: 0
                     }
                 case 'quickList/delete':
-                    debugger
+                    tabs = JSON.parse(JSON.stringify(state.tabs))
+                    tab = state.tab
+                    tabs.splice(action.payload.tabIndex, 1)
+                    // make sure that the new current tab is always right
+                    if (action.payload.tabIndex < state.tab) {
+                        tab = state.tab - 1
+                    }
+                    if ((action.payload.tabIndex === state.tab) && state.tab !== 0) {
+                        tab = 0
+                    }
                     return {
-                        ...state, ...action.payload
+                        ...state, tabs, tab
                     }
                 case 'quickList/update':
                     return mergeDeepRight(state, action.payload)
@@ -242,13 +271,6 @@ const applicationReducers = {
                     return currPage
                 // simply let us update the state of the current page
                 case 'currentPage/update':
-                    store.dispatch({
-                        type: 'notifications/add',
-                        payload: {
-                            action: action.type,
-                            type: 'log'
-                        }
-                    })
                     return mergeDeepRight(state, action.payload)
                 default:
                     return state
@@ -261,13 +283,7 @@ const applicationReducers = {
             switch (action.type) {
                 // initially add a new preconfigured page store. Will be handled in routes files in beforeEnter hook
                 case 'pages/add':
-                    store.dispatch({
-                        type: 'notifications/add',
-                        payload: {
-                            action: action.type,
-                            type: 'log'
-                        }
-                    })
+
                     // create a new page object based on the default page config
                     const page = clone(mergeDeepRight(storePatterns.page, action.payload))
                     page.pageName = action.routeName.replace('.', '-')

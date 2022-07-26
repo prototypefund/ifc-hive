@@ -1,38 +1,35 @@
 <template>
-    <v-navigation-drawer permanent location="right" v-model="quickList" :rail="quickListRail">
-        <!-- Title -->
-        <v-list-item title="QuickList" value="QuickList">
-            <!-- Close icon -->
-            <template v-slot:append>
-                <v-btn v-if="!quickListRail" variant="text" icon="mdi-chevron-right"
-                    @click.stop="handleQuicklist(true)">
-                </v-btn>
+    <v-card color="grey-lighten-2" :class="{ closed: !quickListRail }" class="quickListWrapper">
+        <div class="quickListHandler">
+            <v-btn v-if="!quickListRail" variant="text" icon="mdi-chevron-left" @click.stop="handleQuicklist(true)">
+            </v-btn>
+            <v-btn v-if="quickListRail" variant="text" icon="mdi-chevron-right" @click.stop="handleQuicklist(false)">
+            </v-btn>
+        </div>
 
-                <!-- open icon -->
-                <v-btn v-if="quickListRail" variant="text" icon="mdi-chevron-left" @click.stop="handleQuicklist(false)">
-                </v-btn>
-            </template>
-        </v-list-item>
-        <v-card>
-            <v-tabs v-model="tab" center-active v-if="tabs.length > 0">
-                <v-tab v-for="(item, index) in tabs" :key="index">
-                    {{ item.type }} - {{ item.docUUID }}
-                </v-tab>
-            </v-tabs>
-            <v-window v-model="tab">
-                <v-window-item v-for="(item, index) in tabs">
-                    {{ item }}
-                </v-window-item>
-            </v-window>
-        </v-card>
-    </v-navigation-drawer>
+        <v-card-title>
+        </v-card-title>
+        <v-card-subtitle>
+            Quicklist
+        </v-card-subtitle>
+        <v-tabs v-model="tab" center-active v-if="tabs.length > 0">
+            <v-tab v-for="(item, index) in tabs" :key="index" @click.middle="closeTab(index)">
+                {{ item.type }} - {{ item.docUUID }}
+            </v-tab>
+        </v-tabs>
+        <v-window v-model="tab">
+            <v-window-item v-for="(item, index) in tabs">
+                {{ item }}
+            </v-window-item>
+        </v-window>
+    </v-card>
 </template>
 <script>
 export default {
     inject: ['$api', '$store'],
     data: () => ({
         quickList: true,
-        quickListRail: true,
+        quickListRail: false,
         tabs: [],
         currStateTab: 0,
     }),
@@ -53,7 +50,7 @@ export default {
     },
     created() {
         this.$store.select(state => state['ui'].quickListOpen).subscribe((val) => {
-            this.quickListRail = !val
+            this.quickListRail = val
         })
         this.$store.select(state => state['quickList'].tabs).subscribe((val) => {
             this.tabs = val
@@ -64,20 +61,45 @@ export default {
         })
     },
     methods: {
+        closeTab(index) {
+            this.$store.dispatch({
+                type: 'quickList/delete',
+                payload: {
+                    tabIndex: index
+                }
+            });
+        },
         handleQuicklist(val) {
-            if (val !== this.quickListRail) {
-                this.$store.dispatch({
-                    type: 'ui/update',
-                    payload: {
-                        quickListOpen: !val
-                    }
-                });
-            }
+            this.$store.dispatch({
+                type: 'ui/update',
+                payload: {
+                    quickListOpen: val
+                }
+            });
 
         },
     }
 }
 </script>
 <style>
+.quickListWrapper {
+    position: fixed !important;
+    z-index: 1007;
+    right: 0 !important;
+    top: 60px;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.quickListWrapper.closed {
+    top: 44px;
+    width: 40px;
+    height: 30px;
+}
+
+.quickListWrapper.closed>.quickListHandler>.v-btn {
+    height: 100% !important;
+}
 </style>
 
