@@ -1,5 +1,5 @@
 <template>
-    <v-card color="grey-lighten-2" :class="{ closed: !quickListRail }" class="quickListWrapper">
+    <v-card color="grey-lighten-2" :class="{ closed: !quickListRail }" flat class="quickListWrapper">
         <div class="quickListHandler">
             <v-btn v-if="!quickListRail" variant="text" icon="mdi-chevron-left" @click.stop="handleQuicklist(true)">
             </v-btn>
@@ -8,25 +8,30 @@
         </div>
 
         <v-card-title>
+            Quicklist
         </v-card-title>
         <v-card-subtitle>
-            Quicklist
+
         </v-card-subtitle>
         <v-tabs v-model="tab" center-active v-if="tabs.length > 0">
-            <v-tab v-for="(item, index) in tabs" :key="index" @click.middle="closeTab(index)">
+            <v-tab v-for="(item, index) in tabs" :key="item" @click.middle="closeTab(index)">
                 {{ item.type }} - {{ item.docUUID }}
             </v-tab>
         </v-tabs>
         <v-window v-model="tab">
-            <v-window-item v-for="(item, index) in tabs">
-                {{ item }}
+            <v-window-item v-for="(item, index) in tabs" :key="item">
+                <Detail v-if="item.type === 'detail'" :props="item.props" />
             </v-window-item>
         </v-window>
     </v-card>
 </template>
 <script>
+import Detail from './types/detail.vue'
 export default {
     inject: ['$api', '$store'],
+    components: {
+        Detail
+    },
     data: () => ({
         quickList: true,
         quickListRail: false,

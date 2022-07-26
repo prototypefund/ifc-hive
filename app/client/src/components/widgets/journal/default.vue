@@ -35,7 +35,8 @@
                   <h3 class="text-subtitle-1"> {{ entry.alert.content }}</h3>
                   {{ $filters.dateFormat(entry.date) }}
                 </v-alert>
-                <QuickListHandler :uuid="entry.id" tab-type="detail" action='add' @click="setCurrent(entry)">
+                <QuickListHandler :uuid="entry.id" :props="entry" tab-type="detail" action='add'
+                  @click="setCurrent(entry)">
                   <v-row v-if="!entry.alert" :class="{ ['bg-blue']: entry.id === current.id }" class="pt-0 mt-0 mb-2">
                     <v-col cols="12" sm="12" class="pt-0">
                       <span class="flex-shrink-0 mb-2">
@@ -124,54 +125,7 @@
           </v-timeline>
         </div>
       </v-col>
-      <v-col cols="12" md="6" lg="7">
-        <v-card flat v-if="current?.id" style="margin-left: 300px">
-          <v-card-text>
 
-            <div v-if="!current.alert">
-              <h1 style="line-height: 1.4em"> {{ current.subject }}</h1>
-            </div>
-
-            <div v-if="current.alert">
-              <v-alert :color="current.alert.color">
-                <h1>{{ current.alert.content }}</h1>
-              </v-alert>
-            </div>
-
-            <v-row class="my-4" v-if="current.images">
-              <v-col v-for="n in 3" :key="n" class="d-flex child-flex" cols="4">
-                <v-img :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                  :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`" aspect-ratio="1" cover
-                  class="bg-grey-lighten-2">
-                  <template v-slot:placeholder>
-                    <v-row class="fill-height ma-0" align="center" justify="center">
-                      <v-progress-circular indeterminate color="grey-lighten-5"></v-progress-circular>
-                    </v-row>
-                  </template>
-                </v-img>
-              </v-col>
-            </v-row>
-
-            <div class="mt-2 text-body-1">
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-              diam nonumy eirmod tempor invidunt <v-chip size="x-small" color="primary" @click=""># 14</v-chip> ut
-              labore et dolore magna
-              aliquyam erat, sed diam voluptua. At vero eos et accusam et
-              justo duo dolores et ea rebum. Stet clita kasd gubergren, no
-              sea takimata sanctus est Lorem ipsum dolor sit amet.
-            </div>
-
-            <v-btn color="primary">
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-
-            <v-text-field label="CC" hint="Trag hier ewas ein" class="mt-5" />
-
-            <v-text-field label="Subject" hint="Trag hier ewas ein" class="mt-5" />
-
-          </v-card-text>
-        </v-card>
-      </v-col>
     </v-row>
   </v-container>
 </template>
