@@ -16,10 +16,7 @@
         offset-y="10px"
         offset-x="10px"
       >
-        <v-btn
-          v-bind="props"
-          icon="mdi-bell"
-        />
+        <v-btn v-bind="props" icon="mdi-bell" />
       </v-badge>
     </template>
 
@@ -67,8 +64,8 @@
       <v-card-actions>
         <v-spacer></v-spacer>
 
-        <v-btn text @click="menu = false"> Cancel </v-btn>
-        <v-btn color="primary" text @click="menu = false"> Save </v-btn>
+        <v-btn text @click="toggled = false"> Cancel </v-btn>
+        <v-btn color="primary" text @click="menu = false"> Clear </v-btn>
       </v-card-actions>
     </v-card>
   </v-menu>

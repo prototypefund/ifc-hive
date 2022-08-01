@@ -1,13 +1,12 @@
 <template>
-  <v-app v-if="route && route.name">
-
+  <v-app v-if="page && page.pageName">
     <!-- Global Toolbar -->
     <v-app-bar app color="grey-lighten-2">
       <!-- Breadcrumb -->
       <v-app-bar-title>
         Journal
         <v-icon color="grey" xsmall>mdi-chevron-right</v-icon>
-        {{ $t(route.name) }}
+        {{ $t("pages." + page.pageName) }}
       </v-app-bar-title>
 
       <!-- notifications -->
@@ -17,7 +16,6 @@
     <!-- Navigation Drawer -->
     <NavigationSideBar :nav-items="navItems" />
 
-
     <!-- Main content -->
     <v-main>
       <v-card flat>
@@ -26,67 +24,66 @@
     </v-main>
     <!-- quickList Drawer -->
     <QuickListSideBar />
-
   </v-app>
 </template>
 <script>
-import Notifications from '@w/notifications/default.vue'
-import NavigationSideBar from '@u/navigation/sidebar.vue'
-import QuickListSideBar from '@u/quicklist/sidebar.vue'
+import Notifications from "@u/notifications/default.vue";
+import NavigationSideBar from "@u/navigation/sidebar.vue";
+import QuickListSideBar from "@u/quicklist/sidebar.vue";
 export default {
   components: {
     Notifications,
     NavigationSideBar,
-    QuickListSideBar
+    QuickListSideBar,
   },
-  inject: ['$api', '$store'],
+  inject: ["$api", "$store"],
   data: () => ({
-    route: false,
+    page: false,
     navItems: [
       {
-        icon: 'mdi-home',
-        route: 'app.dashboard',
+        icon: "mdi-home",
+        route: "app.dashboard",
         params: {
-          urlParams: 'navigation nach dashboard von nav'
-        }
+          urlParams: "navigation nach dashboard von nav",
+        },
       },
       {
-        icon: 'mdi-format-list-bulleted',
-        route: 'app.projects',
+        icon: "mdi-format-list-bulleted",
+        route: "app.projects",
         params: {
-          urlParams: 'navigation nach settings von nav'
-        }
+          urlParams: "navigation nach settings von nav",
+        },
       },
       {
-        icon: 'mdi-file-document-multiple',
-        route: 'app.journal',
-        params: {}
+        icon: "mdi-file-document-multiple",
+        route: "app.journal",
+        params: {},
       },
       {
-        icon: 'mdi-account',
-        route: 'app.settings',
+        icon: "mdi-account",
+        route: "app.settings",
         params: {
-          urlParams: 'navigation nach settings von nav'
-        }
+          urlParams: "navigation nach settings von nav",
+        },
       },
       {
-        icon: 'mdi-cog',
-        route: 'app.settings',
+        icon: "mdi-cog",
+        route: "app.settings",
         params: {
-          urlParams: 'navigation nach settings von nav'
-        }
+          urlParams: "navigation nach settings von nav",
+        },
       },
-    ]
+    ],
   }),
   created() {
-    this.$store.select(state => state['route']).subscribe((val) => {
-      this.route = val
-    })
+    this.$store
+      .select((state) => state["currentPage"])
+      .subscribe((val) => {
+        this.page = val;
+      });
   },
-  methods: {
-
-  }
-}
+  methods: {},
+};
 </script>
 <style>
 #app {
@@ -96,7 +93,6 @@ export default {
 
 html,
 body {
-  overflow: auto !important
+  overflow: auto !important;
 }
 </style>
-

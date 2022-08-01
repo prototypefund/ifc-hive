@@ -1,5 +1,5 @@
-import de from './de/default.js'
-import en from './en/default.js'
+import de from './de/index.js'
+import en from './en/index.js'
 
 export default {
   de,
