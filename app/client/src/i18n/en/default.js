@@ -5,7 +5,8 @@ export default {
   'app.settings': 'Settings',
   'app.daniel': 'Daniel\'s App',
   'app.journal': 'Journal',
+  'app.projects': 'Projects',
   timeline: {
     title: 'Project Timeline Tile'
-  },
+  }
 }

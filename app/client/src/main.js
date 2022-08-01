@@ -1,10 +1,10 @@
-import { createApp, defineAsyncComponent } from 'vue'
+import { createApp, h } from 'vue'
 import App from './App.vue'
 import axios from 'axios'
 import Markdown from 'vue3-markdown-it'
 import getEnvVariable from './lib/getEnvVariable'
 import store from './store/index.js'
-import i18n  from './setup/i18n.js'
+import i18n from './setup/i18n.js'
 import vuetify from './setup/vuetify.js'
 import router from './router/index.js'
 import filters from './setup/filters.js'
@@ -23,7 +23,10 @@ axios.defaults.baseURL = API_BASE_URL
  */
 try {
   // create Vue root component
-  const app = createApp(App)
+  const app = createApp({
+    render: () => h(App)
+  });
+
 
   /* register plugins */
   app.use(i18n)

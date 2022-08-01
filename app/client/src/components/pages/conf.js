@@ -20,9 +20,6 @@ export default {
       {
         uuid: 'journal',
         name: 'journal',
-        props: {
-          type: 'currentPage'
-        }
       }
     }],
     title: 'Daniel One Title'

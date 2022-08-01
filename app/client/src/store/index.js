@@ -123,6 +123,14 @@ const applicationReducers = {
                     if ((action.payload.tabIndex === state.tab) && state.tab !== 0) {
                         tab = 0
                     }
+                    if (tabs.length === 0) {
+                        store.dispatch({
+                            type: 'ui/update',
+                            payload: {
+                                quickListOpen: false
+                            }
+                        });
+                    }
                     return {
                         ...state, tabs, tab
                     }
