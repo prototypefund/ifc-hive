@@ -64,8 +64,8 @@
       <v-card-actions>
         <v-spacer></v-spacer>
 
-        <v-btn text @click="toggled = false"> Cancel </v-btn>
-        <v-btn color="primary" text @click="menu = false"> Clear </v-btn>
+        <v-btn text @click="toggled = false"> {{ $t("cancel") }} </v-btn>
+        <v-btn color="primary" text @click="menu = false"> {{ $t("clear") }} </v-btn>
       </v-card-actions>
     </v-card>
   </v-menu>

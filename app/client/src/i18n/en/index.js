@@ -1,8 +1,9 @@
 import pages from './pages'
 export default {
   pages,
-  title: 'test en',
-  fallBackTest: 'en blabla',
+  cancel: 'Cancel',
+  clear: 'Clear',
+  save: 'Save',
   timeline: {
     title: 'Project Timeline Tile'
   }
