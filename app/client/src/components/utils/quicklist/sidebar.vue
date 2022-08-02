@@ -35,7 +35,7 @@
         <v-icon class="tabHandler" @click="closeTab(index)">mdi-close-octagon</v-icon>
       </v-tab>
     </v-tabs>
-    <v-window v-model="tab">
+    <v-window v-model="tab" class="tabScrollContainer">
       <v-window-item v-for="(item, index) in tabs" :key="item">
         <Detail v-if="item.type === 'detail'" :props="item.props" />
       </v-window-item>
@@ -124,6 +124,12 @@ export default {
   height: 100%;
   overflow: hidden;
   border-left: 1px solid black !important;
+}
+
+.quickListWrapper .tabScrollContainer {
+  /* TODO change height here with actual absolute px height of quicklist full container -> I'm too stupid to get the ref clientHeight thingy to work atm */
+  max-height: 78%;
+  overflow: auto !important;
 }
 
 .quickListWrapper.closed {
