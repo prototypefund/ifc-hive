@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="state" data-test-id="dashboardContainer" fluid pa-0>
-    <h1>{{ $t(state.routeName) }} - {{ state.title }}</h1>
+    <h1>{{ $t("pages." + state.pageName) }} - {{ state.title }}</h1>
     <p>url params > {{ props.urlParams }} &lt; click value {{ state.count }}</p>
     <div class="mb-10">
       <v-btn @click="counter">addCount</v-btn>

@@ -337,17 +337,15 @@ const applicationReducers = {
                         action.payload.forEach(widget => {
                             // get the config file for the current widget
                             // TODO find out why we can't use vite alias here
-                            try {
-                                import('../components/widgets/' + widget.name + '/conf.js').then(async conf => {
-                                    store.dispatch({
-                                        type: 'widgets/preconfigure',
-                                        payload: {
-                                            conf: conf.default,
-                                            uuid: widget.uuid
-                                        }
-                                    })
+                            import('../components/widgets/' + widget.name + '/conf.js').then(conf => {
+                                store.dispatch({
+                                    type: 'widgets/preconfigure',
+                                    payload: {
+                                        conf: conf.default,
+                                        uuid: widget.uuid
+                                    }
                                 })
-                            } catch (e) {
+                            }).catch(err => {
                                 store.dispatch({
                                     type: 'widgets/preconfigure',
                                     payload: {
@@ -355,8 +353,7 @@ const applicationReducers = {
                                         uuid: widget.uuid
                                     }
                                 })
-                            }
-
+                            })
                             // add page specific config to widget instance state
                             if (!newWidgets[widget.uuid]) {
                                 newWidgets[widget.uuid] = mergeDeepRight(storePatterns.widget, widget)
