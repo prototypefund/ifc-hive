@@ -8,6 +8,7 @@
 
 <script setup>
 import { inject, shallowRef, onMounted, onUnmounted, defineAsyncComponent } from "vue";
+import gridLoader from "@lib/gridLoader";
 const $store = inject("$store");
 const state = shallowRef({});
 const Grid = shallowRef();
@@ -19,12 +20,9 @@ const stateSubscriber$ = $store
 const gridSubscriber$ = $store
   .select((state) => state.currentPage.grid)
   .subscribe((val) => {
-    if (val) {
-      Grid.value = defineAsyncComponent((props) => {
-        //TODO find out why vite alias dont work. Add try catch here
-        return import(`../templates/grids/${val}.vue`);
-      });
-    }
+    Grid.value = defineAsyncComponent((props) => {
+      return gridLoader(val);
+    });
   });
 const props = defineProps({
   urlParams: {
