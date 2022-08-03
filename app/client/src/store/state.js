@@ -24,3 +24,12 @@ export const applicationState = {
     widgets: {},
     pages: {}
 }
+export const storePatterns = {
+    page: {
+        loading: true,
+        slots: []
+    },
+    widget: {
+        title: false
+    }
+}

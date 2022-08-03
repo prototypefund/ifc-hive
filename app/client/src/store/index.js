@@ -8,7 +8,7 @@ import {
 import getEnvVariable from '../lib/getEnvVariable'
 import { mergeDeepRight, clone, findIndex, propEq } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
-import { applicationState } from './state'
+import { applicationState, storePatterns } from './state'
 
 /*
  * Apply different extensions depending on the environment
@@ -26,12 +26,6 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
     ];
 // TODO move this stup to seperate config and helper files
 // helper functions and lookup maps
-const storePatterns = {
-    page: {
-        loading: true,
-        slots: []
-    }
-}
 
 let pagesLookup = false
 let widgetsLookup = false
@@ -343,15 +337,26 @@ const applicationReducers = {
                         action.payload.forEach(widget => {
                             // get the config file for the current widget
                             // TODO find out why we can't use vite alias here
-                            import('../components/widgets/' + widget.name + '/conf.js').then(async conf => {
+                            try {
+                                import('../components/widgets/' + widget.name + '/conf.js').then(async conf => {
+                                    store.dispatch({
+                                        type: 'widgets/preconfigure',
+                                        payload: {
+                                            conf: conf.default,
+                                            uuid: widget.uuid
+                                        }
+                                    })
+                                })
+                            } catch (e) {
                                 store.dispatch({
                                     type: 'widgets/preconfigure',
                                     payload: {
-                                        conf: conf.default,
+                                        conf: {},
                                         uuid: widget.uuid
                                     }
                                 })
-                            })
+                            }
+
                             // add page specific config to widget instance state
                             if (!newWidgets[widget.uuid]) {
                                 newWidgets[widget.uuid] = mergeDeepRight(storePatterns.widget, widget)
