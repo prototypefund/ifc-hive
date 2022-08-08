@@ -1,0 +1,20 @@
+<template>
+  <v-card v-if="props">
+    There was an error while loading your widget
+    <pre>
+    {{ props }}
+    </pre>
+  </v-card>
+</template>
+<script setup>
+const props = defineProps({
+  props: {
+    type: Object,
+    required: true,
+  },
+  uuid: {
+    type: String,
+    required: true,
+  },
+});
+</script>
