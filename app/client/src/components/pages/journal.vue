@@ -15,7 +15,7 @@
 
 <script setup>
 import { inject, shallowRef, onMounted, onUnmounted } from "vue";
-import Grid from "@t/grids/grid.vue";
+import Grid from "@t/grids/handler.vue";
 const $store = inject("$store");
 const state = shallowRef({});
 
