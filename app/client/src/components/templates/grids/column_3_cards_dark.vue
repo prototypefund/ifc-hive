@@ -62,9 +62,9 @@ const props = defineProps({
     required: true,
   },
 });
-const loadWidget = (name) =>
+const loadWidget = (name, face) =>
   defineAsyncComponent(() => {
-    return widgetLoader(name);
+    return widgetLoader(name, face);
   });
 onMounted(() => {
   if (props.contents) {

@@ -32,13 +32,10 @@ export default {
       {
         column: 'v-col-12',
         widget: {
-          name: 'timeline',
+          name: 'detail',
+          face: 'user',
           props: {
-            query: {
-              q: 'moin'
-            },
-            categories: ['fugg'],
-            title: 'Widget 1',
+            title: 'Detail Ansicht',
           }
         }
       },

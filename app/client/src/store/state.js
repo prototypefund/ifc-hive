@@ -30,6 +30,9 @@ export const storePatterns = {
         slots: []
     },
     widget: {
-        title: false
+        title: false,
+        uuid: false,
+        name: false,
+        face: false,
     }
 }
