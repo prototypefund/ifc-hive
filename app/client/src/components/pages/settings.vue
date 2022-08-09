@@ -7,22 +7,14 @@
 </template>
 
 <script setup>
-import { inject, shallowRef, onMounted, onUnmounted, defineAsyncComponent } from "vue";
-import gridLoader from "@lib/gridLoader";
+import { inject, shallowRef, onMounted, onUnmounted } from "vue";
+import Grid from "@t/grids/grid.vue";
 const $store = inject("$store");
 const state = shallowRef({});
-const Grid = shallowRef();
 const stateSubscriber$ = $store
   .select((state) => state.currentPage)
   .subscribe((val) => {
     state.value = val;
-  });
-const gridSubscriber$ = $store
-  .select((state) => state.currentPage.grid)
-  .subscribe((val) => {
-    Grid.value = defineAsyncComponent((props) => {
-      return gridLoader(val);
-    });
   });
 const props = defineProps({
   urlParams: {
@@ -41,7 +33,6 @@ onMounted(() => {
 });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
-  gridSubscriber$.unsubscribe();
   $store.dispatch({
     type: "currentPage/update",
     payload: {
