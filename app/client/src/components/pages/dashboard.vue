@@ -9,7 +9,7 @@
     <Grid
       v-if="state.slots"
       data-test-id="dashboardContainerGrid"
-      :data-test-name="state.grid"
+      :grid="state.grid"
       :contents="state.slots"
     />
   </v-container>

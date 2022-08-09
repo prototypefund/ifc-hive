@@ -1,5 +1,6 @@
 <template>
-  <Grid :contents="props.contents" />
+  <pre>{{ props }}</pre>
+  <!--Grid :contents="props.contents" /-->
 </template>
 <script setup>
 import { inject, shallowRef, onUnmounted, defineAsyncComponent } from "vue";
@@ -11,9 +12,9 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  dataTestName: {
+  grid: {
     type: String,
-    required: false,
+    required: true,
   },
 });
 const gridSubscriber$ = $store

@@ -2,7 +2,7 @@
   <v-container v-if="state">
     <h1>{{ $t("pages." + state.pageName) }} - {{ state.title }}</h1>
     <p>url params > {{ props.urlParams }} &lt;</p>
-    <Grid :contents="state.slots"></Grid>
+    <Grid :contents="state.slots" :grid="state.grid"></Grid>
   </v-container>
 </template>
 

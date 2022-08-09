@@ -9,7 +9,7 @@
       </v-toolbar-items>
     </v-toolbar>
 
-    <Grid :contents="state.slots" class="mt-5"></Grid>
+    <Grid :contents="state.slots" :grid="state.grid" class="mt-5"></Grid>
   </v-container>
 </template>
 
