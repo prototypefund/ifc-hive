@@ -24,9 +24,18 @@ export const applicationState = {
     widgets: {},
     pages: {}
 }
+export const configPatterns = {
+    grid: {
+        type: "default",
+        items: "card",
+        columns: 3
+    }
+
+}
 export const storePatterns = {
     page: {
         loading: true,
+        grid: configPatterns.grid,
         slots: []
     },
     widget: {
@@ -34,5 +43,6 @@ export const storePatterns = {
         uuid: false,
         name: false,
         face: false,
+        props: false
     }
 }

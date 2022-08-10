@@ -1,6 +1,10 @@
 export default {
   project_index: {
-    grid: 'column_3_cards_plain',
+    grid: {
+      type: 'default',
+      items: 'card',
+      columns: 3
+    },
     slots: [{
       column: 'v-col-12',
       widget:
@@ -13,7 +17,11 @@ export default {
     }],
   },
   journal: {
-    grid: 'column_3_cards_plain',
+    grid: {
+      type: 'default',
+      items: 'card',
+      columns: 3
+    },
     slots: [{
       column: 'v-col-12',
       widget:
@@ -26,7 +34,11 @@ export default {
   },
 
   dashboard: {
-    grid: 'column_3_cards',
+    grid: {
+      type: 'default',
+      items: 'card',
+      columns: 1
+    },
     title: 'the lutzness of life',
     slots: [
       {
@@ -57,7 +69,11 @@ export default {
   },
 
   settings: {
-    grid: 'column_3_cards_dark',
+    grid: {
+      type: 'default',
+      items: 'card',
+      columns: 3
+    },
     title: 'the rolfness of life',
     slots: [
       {

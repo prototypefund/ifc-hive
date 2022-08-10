@@ -6,20 +6,15 @@
       <v-btn @click="counter">addCount</v-btn>
       <v-btn @click="changeGrid">changeGrid</v-btn>
     </div>
-    <Grid
-      v-if="state.slots"
-      data-test-id="dashboardContainerGrid"
-      :grid="state.grid"
-      :contents="state.slots"
-    />
+    <Grid v-if="state.slots" />
   </v-container>
 </template>
 
 <script setup>
-import { inject, shallowRef, onMounted, onUnmounted } from "vue";
+import { inject, ref, onMounted, onUnmounted } from "vue";
 import Grid from "@t/grids/handler.vue";
 const $store = inject("$store");
-const state = shallowRef({});
+const state = ref({});
 
 const stateSubscriber$ = $store
   .select((state) => state.currentPage)
@@ -60,9 +55,13 @@ function counter() {
   });
 }
 const changeGrid = () => {
-  let grid = "column_3_cards_dark";
-  if (state.value.grid === "column_3_cards_dark") {
-    grid = "column_3_cards";
+  let grid = {
+    type: "default",
+    items: "card",
+    columns: 3,
+  };
+  if (state.value.grid.type === "default") {
+    grid.type = "dark";
   }
   $store.dispatch({
     type: "currentPage/update",
