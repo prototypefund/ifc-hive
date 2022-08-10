@@ -1,39 +1,74 @@
 <template>
-  <GridType v-if="rows.length > 0">
-    <v-row no-gutters v-for="n in rowCount">
-      {{ n }}
-      <v-col
-        v-for="(content, index) in props.contents && index <= rowCount"
-        :class="getSlotClass(content)"
-      >
+  <GridType>
+    <v-row no-gutters v-for="row in rows">
+      <v-col v-for="column in row" :class="getSlotClass(column)">
         <GridItem>
-          {{ index }}<br />
-          {{ content }}
+          <component
+            :is="column.component"
+            :uuid="column.widget.uuid"
+            :props="column.widget.props || {}"
+          ></component>
         </GridItem>
       </v-col>
     </v-row>
-    <pre>{{ gridConfig }}</pre>
   </GridType>
 </template>
 <script setup>
-import { inject, shallowRef, onUnmounted, defineAsyncComponent, ref } from "vue";
+import {
+  inject,
+  shallowRef,
+  onUnmounted,
+  onMounted,
+  defineAsyncComponent,
+  ref,
+} from "vue";
 import { gridTypeLoader, gridItemLoader } from "@lib/gridLoader";
+import widgetLoader from "@lib/widgetLoader";
 const $store = inject("$store");
-const gridConfig = ref();
-const rows = ref([]);
+const gridColumnsCount = shallowRef();
+const gridSlots = ref();
+const rows = shallowRef([]);
 const GridType = shallowRef();
 const GridItem = shallowRef();
-const makeRows = () => {
-  for (let i = 0; i < gridConfig.value.columns; i++) {
-    debugger;
+
+const handleRows = () => {
+  // always start with empty rows
+  rows.value = [];
+  // get row count
+  const rowCount = Math.ceil(gridSlots.value.length / gridColumnsCount.value);
+  // clone slots so we can splice off that object
+  const slotClone = JSON.parse(JSON.stringify(gridSlots.value));
+  for (let i = 1; i <= rowCount; i++) {
+    // get the needed amount of columns per row
+    let columnsPerRow = slotClone.splice(0, gridColumnsCount.value);
+    columnsPerRow.forEach((column) => {
+      // if the current column contains a widget, load it
+      if (column.widget && column.widget.name) {
+        column.component = defineAsyncComponent(() => {
+          return widgetLoader(column.widget.name, column.widget.face);
+        });
+      }
+    });
+    // add compiled columns to row
+    rows.value.push(columnsPerRow);
   }
-  rows.value.push({});
-  rowCount.value = Math.ceil(props.contents.length / gridConfig.value.columns) || 1;
 };
-const gridSubscriber$ = $store
-  .select((state) => state.currentPage.grid)
+
+const gridColumnsCountSubscriber$ = $store
+  .select((state) => state.currentPage.grid.columns)
   .subscribe((val) => {
-    gridConfig.value = val;
+    gridColumnsCount.value = val;
+    if (rows.value.length > 0) {
+      handleRows();
+    }
+  });
+const slotSubscriber$ = $store
+  .select((state) => state.currentPage.slots)
+  .subscribe((val) => {
+    gridSlots.value = val;
+    if (rows.value.length > 0) {
+      handleRows();
+    }
   });
 const gridTypeSubscriber$ = $store
   .select((state) => state.currentPage.grid.type)
@@ -50,15 +85,12 @@ const gridItemSubscriber$ = $store
     });
   });
 
-const slotSubscriber$ = $store
-  .select((state) => state.currentPage.slots)
-  .subscribe((val) => {
-    let maguggn = Math.ceil(val.length / gridConfig.value.columns);
-    debugger;
-  });
+onMounted(() => {
+  handleRows();
+});
 onUnmounted(() => {
   slotSubscriber$.unsubscribe();
-  gridSubscriber$.unsubscribe();
+  gridColumnsCountSubscriber$.unsubscribe();
   gridTypeSubscriber$.unsubscribe();
   gridItemSubscriber$.unsubscribe();
 });

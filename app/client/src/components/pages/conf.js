@@ -37,12 +37,12 @@ export default {
     grid: {
       type: 'default',
       items: 'card',
-      columns: 1
+      columns: 2
     },
     title: 'the lutzness of life',
     slots: [
       {
-        column: 'v-col-12',
+        column: 'v-col-6',
         widget: {
           name: 'detail',
           face: 'user',
@@ -52,7 +52,7 @@ export default {
         }
       },
       {
-        column: 'v-col-12',
+        column: 'v-col-6',
         widget: {
           name: 'timeline',
           props: {
