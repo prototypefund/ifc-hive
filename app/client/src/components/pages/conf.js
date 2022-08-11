@@ -19,7 +19,7 @@ export default {
   journal: {
     grid: {
       type: 'default',
-      items: 'card',
+      items: 'card_flat',
       columns: 3
     },
     slots: [{
