@@ -96,6 +96,6 @@ onUnmounted(() => {
 });
 const getSlotClass = (slot) => {
   if (!slot) return "";
-  return slot && slot.column ? slot.column : "";
+  return slot && slot.class ? slot.class : "";
 };
 </script>

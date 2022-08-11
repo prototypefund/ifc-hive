@@ -6,7 +6,7 @@ export default {
       columns: 3
     },
     slots: [{
-      column: 'v-col-12',
+      class: 'v-col-12',
       widget:
       {
         name: 'projects',
@@ -23,7 +23,7 @@ export default {
       columns: 3
     },
     slots: [{
-      column: 'v-col-12',
+      class: 'v-col-12',
       widget:
       {
         uuid: 'journal',
@@ -42,7 +42,7 @@ export default {
     title: 'testSpaß für Groß und klein',
     slots: [
       {
-        column: 'v-col-3',
+        class: 'v-col-6',
         widget: {
           name: 'detail',
           face: 'user',
@@ -51,7 +51,7 @@ export default {
           }
         }
       }, {
-        column: 'v-col-3',
+        class: 'v-col-3',
         widget: {
           uuid: 'currPageDebug',
           name: 'debug',
@@ -62,7 +62,7 @@ export default {
         }
       },
       {
-        column: 'v-col-3',
+        class: 'v-col-3',
         widget: {
           name: 'timeline',
           props: {
@@ -86,7 +86,7 @@ export default {
     title: 'funoFun',
     slots: [
       {
-        column: 'v-col-12',
+        class: 'v-col-12',
         widget: {
           name: 'timeline',
           props: {
@@ -109,7 +109,7 @@ export default {
     title: 'the rolfness of life',
     slots: [
       {
-        column: 'v-col-6',
+        class: 'v-col-6',
         widget: {
           uuid: 'currPageDebug',
           name: 'debug',
@@ -119,7 +119,7 @@ export default {
 
         }
       }, {
-        column: 'v-col-6',
+        class: 'v-col-6',
         widget:
         {
           uuid: 'currPageDebug',
@@ -129,7 +129,7 @@ export default {
           }
         }
       }, {
-        column: 'v-col-12',
+        class: 'v-col-12',
         widget:
         {
           uuid: 'currPageDebug',
