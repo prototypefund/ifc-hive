@@ -3,7 +3,7 @@
     Place any desired template structure around the widget grid,
     e.g. toolbar, sidebars, footers.
   -->
-  <Grid />
+  <Grid v-if="state.slots" />
 </template>
 
 <script setup>

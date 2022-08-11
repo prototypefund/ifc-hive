@@ -80,13 +80,13 @@ export default {
   dashboard: {
     grid: {
       type: 'default',
-      items: 'card',
+      items: 'card_flat',
       columns: 2
     },
     title: 'funoFun',
     slots: [
       {
-        column: 'v-col-3',
+        column: 'v-col-12',
         widget: {
           name: 'timeline',
           props: {
