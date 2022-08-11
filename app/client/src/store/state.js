@@ -7,7 +7,6 @@ export const applicationState = {
     },
     ui: {
         navigationOpen: false,
-        inspectorOpen: false,
         quickListOpen: false
     },
     quickList: {
@@ -26,9 +25,18 @@ export const applicationState = {
 }
 export const configPatterns = {
     grid: {
+        // defines the wrapping html template for the whole grid
         type: "default",
+        // defines the wrapping html template for the single item within the grid
         items: "card",
+        // defines the amount of columns per row
         columns: 3
+    },
+    slot: {
+        // defines a css class which will be used for the v-col the slot widget is housed in
+        class: false,
+        // defines the widget configuration, see widget storePattern
+        widget: false
     }
 
 }
@@ -39,10 +47,15 @@ export const storePatterns = {
         slots: []
     },
     widget: {
+        // should usually be a i18n key
         title: false,
+        // will usually be set automatically, if set manually, be aware that duplicated uuid lead to shared widget store
         uuid: false,
+        // the type of widget which represents a folder name under widgets and a config
         name: false,
+        // the specific .vue file for the widget
         face: false,
+        // whatever props you want to hand to the widget
         props: false
     }
 }
