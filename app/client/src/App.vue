@@ -60,10 +60,10 @@ export default {
         params: {},
       },
       {
-        icon: "mdi-account",
-        route: "app.settings",
+        icon: "mdi-chili-hot",
+        route: "app.testboard",
         params: {
-          urlParams: "navigation nach settings von nav",
+          urlParams: "navigation nach testboard von nav",
         },
       },
       {

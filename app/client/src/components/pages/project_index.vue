@@ -2,7 +2,7 @@
   <v-toolbar>
     <v-toolbar-title>Project Index</v-toolbar-title>
   </v-toolbar>
-  <Grid :contents="state.slots" :grid="state.grid"></Grid>
+  <Grid />
 </template>
 
 <script setup>

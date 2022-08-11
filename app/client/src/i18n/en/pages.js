@@ -4,4 +4,5 @@ export default {
     'app-daniel': 'Daniel\'s App',
     'app-journal': 'Journal',
     'app-projects': 'Projects',
+    'app-testboard': 'TestBoard',
 }

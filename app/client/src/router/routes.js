@@ -1,5 +1,6 @@
 // import routes from modules
 import dashboardComp from '@p/dashboard.vue'
+import testboardComp from '@p/testboard.vue'
 import settingsComp from '@p/settings.vue'
 import journal from '@p/journal.vue'
 import conf from '@p/conf.js'
@@ -23,6 +24,19 @@ export default [
                 type: 'pages/add',
                 routeName: to.name,
                 payload: conf.dashboard
+            });
+        }
+    },
+    {
+        path: '/testboard',
+        name: 'app.testboard',
+        component: testboardComp,
+        props: true,
+        beforeEnter: (to, from) => {
+            store.dispatch({
+                type: 'pages/add',
+                routeName: to.name,
+                payload: conf.testboard
             });
         }
     },

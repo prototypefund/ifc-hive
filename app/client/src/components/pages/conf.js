@@ -33,16 +33,16 @@ export default {
     title: 'Daniel One Title'
   },
 
-  dashboard: {
+  testboard: {
     grid: {
       type: 'default',
       items: 'card',
       columns: 2
     },
-    title: 'the lutzness of life',
+    title: 'testSpaß für Groß und klein',
     slots: [
       {
-        column: 'v-col-6',
+        column: 'v-col-3',
         widget: {
           name: 'detail',
           face: 'user',
@@ -50,9 +50,19 @@ export default {
             title: 'Detail Ansicht',
           }
         }
+      }, {
+        column: 'v-col-3',
+        widget: {
+          uuid: 'currPageDebug',
+          name: 'debug',
+          props: {
+            type: 'currentPage'
+          }
+
+        }
       },
       {
-        column: 'v-col-6',
+        column: 'v-col-3',
         widget: {
           name: 'timeline',
           props: {
@@ -67,7 +77,29 @@ export default {
     ],
     count: 0,
   },
-
+  dashboard: {
+    grid: {
+      type: 'default',
+      items: 'card',
+      columns: 2
+    },
+    title: 'funoFun',
+    slots: [
+      {
+        column: 'v-col-3',
+        widget: {
+          name: 'timeline',
+          props: {
+            title: 'anderer Titel',
+            query: {
+              q: 'ich bin voll die andere query',
+              filter: 'und ich bin ein anderer Filter!'
+            }
+          }
+        }
+      },
+    ],
+  },
   settings: {
     grid: {
       type: 'default',
