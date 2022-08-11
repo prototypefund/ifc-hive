@@ -12,7 +12,7 @@ import Grid from "@t/grids/handler.vue";
 const $store = inject("$store");
 const state = shallowRef({});
 
-const stateSubscriber = $store
+const stateSubscriber$ = $store
   .select((state) => state.currentPage)
   .subscribe((val) => {
     state.value = val;
@@ -34,7 +34,7 @@ onMounted(() => {
   });
 });
 onUnmounted(() => {
-  stateSubscriber.unsubscribe();
+  stateSubscriber$.unsubscribe();
   $store.dispatch({
     type: "currentPage/update",
     payload: {
