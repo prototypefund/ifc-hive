@@ -1,15 +1,6 @@
 <template>
-  <v-container fluid class="pa-0">
-    <v-toolbar color="transparent" flat>
-      <v-spacer />
-      <v-toolbar-items>
-        <v-btn text color="primary">
-          <v-icon>mdi-pencil</v-icon>
-        </v-btn>
-      </v-toolbar-items>
-    </v-toolbar>
-
-    <Grid class="mt-5"></Grid>
+  <v-container fluid pa-0>
+    <Grid></Grid>
   </v-container>
 </template>
 
