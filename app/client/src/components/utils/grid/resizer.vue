@@ -25,15 +25,11 @@ const widgetState = ref({});
 const colCounts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const emit = defineEmits(["changeColCount"]);
 const props = defineProps({
-  type: {
-    type: String,
-    default: "widgets",
-  },
-  column: {
+  columnIndex: {
     type: Number,
   },
-  slotClass: {
-    type: String,
+  columnClass: {
+    type: Number,
   },
   uuid: {
     type: String,
@@ -41,7 +37,7 @@ const props = defineProps({
   },
 });
 const widgetStateSubscriber$ = $store
-  .select((widgetState) => widgetState[props.type][props.uuid])
+  .select((state) => state.widgets[props.uuid])
   .subscribe((val) => {
     widgetState.value = val;
   });
@@ -49,17 +45,19 @@ const widgetStateSubscriber$ = $store
 const colCount = computed({
   // getter
   get() {
-    const classParts = props.slotClass.split("-");
-    return parseInt(classParts[classParts.length - 1]);
+    return parseInt(props.columnClass);
   },
   // setter
   set(newValue) {
-    emit("changeColCount", newValue, props.column);
+    emit("changeColCount", newValue, props.columnIndex);
   },
 });
 
-onMounted(() => {});
+onMounted(() => {
+  console.log("resizer on");
+});
 onUnmounted(() => {
   widgetStateSubscriber$.unsubscribe();
+  console.log("resizer out");
 });
 </script>

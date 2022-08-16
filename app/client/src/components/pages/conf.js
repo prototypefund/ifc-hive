@@ -7,7 +7,7 @@ export default {
     },
     slots: [{
       class: 'spezialclass',
-      column: '12',
+      column: 12,
       widget:
       {
         name: 'projects',
@@ -26,7 +26,7 @@ export default {
     },
     slots: [{
       class: 'journalspaß',
-      column: '12',
+      column: 12,
       widget:
       {
         uuid: 'journal',
@@ -45,7 +45,7 @@ export default {
     title: 'testSpaß für Groß und klein',
     slots: [
       {
-        column: '6',
+        column: 6,
         widget: {
           name: 'detail',
           face: 'user',
@@ -54,7 +54,7 @@ export default {
           }
         }
       }, {
-        column: '6',
+        column: 6,
         widget: {
           uuid: 'currPageDebug',
           name: 'debug',
@@ -67,7 +67,7 @@ export default {
       },
       {
         class: 'huhu',
-        column: '12',
+        column: 12,
         widget: {
           name: 'timeline',
           props: {
@@ -92,7 +92,7 @@ export default {
     slots: [
       {
         class: 'nice',
-        column: '12',
+        column: 12,
         widget: {
           name: 'timeline',
           props: {
@@ -116,7 +116,7 @@ export default {
     slots: [
       {
         class: 'SuperClasse',
-        column: '4',
+        column: 4,
         widget: {
           name: 'debug',
           uuid: 'currPageDebug',
@@ -128,7 +128,7 @@ export default {
         }
       }, {
         class: 'hierkommenKlassenRein',
-        column: '4',
+        column: 4,
         widget:
         {
           name: 'debug',
@@ -139,7 +139,7 @@ export default {
         }
       }, {
         class: 'ich bin ein klassenstring',
-        column: '4',
+        column: 4,
         widget:
         {
           name: 'debug',

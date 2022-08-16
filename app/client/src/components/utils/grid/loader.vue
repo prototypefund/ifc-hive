@@ -1,13 +1,17 @@
 <template>
   <GridType>
     <v-row no-gutters v-for="row in rows">
-      <v-col v-for="column in row" :class="getSlotClass(column) + getColClass(column)">
+      <v-col
+        v-for="column in row"
+        :class="getSlotClass(column) + getColClass(column)"
+        v-if="row"
+      >
         <GridItem>
           <template v-slot:header>
             <Resizer
               type="widgets"
-              :slotClass="getColClass(column)"
-              :column="column.slot"
+              :columnClass="column.column"
+              :columnIndex="column.slot"
               :uuid="column.widget.uuid"
               @changeColCount="changeColCount"
             >
@@ -31,6 +35,7 @@ import {
   onMounted,
   defineAsyncComponent,
   ref,
+  nextTick,
 } from "vue";
 import { gridTypeLoader, gridItemLoader } from "@lib/gridLoader";
 import Resizer from "./resizer.vue";
@@ -52,6 +57,7 @@ const handleRows = () => {
   slotClone.forEach((slot, index) => {
     slot.slot = index;
   });
+  // TODO find out why the resizer is not rerendered on row update -> needed for select dropdown positioning
   for (let i = 1; i <= rowCount; i++) {
     // get the needed amount of columns per row
     let columnsPerRow = slotClone.splice(0, gridColumnsCount.value);
@@ -66,6 +72,7 @@ const handleRows = () => {
     // add compiled columns to row
     rows.value.push(columnsPerRow);
   }
+  console.dir(rows.value);
 };
 
 const gridColumnsCountSubscriber$ = $store
