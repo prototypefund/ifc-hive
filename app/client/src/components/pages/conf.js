@@ -11,6 +11,7 @@ export default {
       {
         name: 'projects',
         props: {
+          title: "stuhlnase",
           type: 'currentPage'
         }
       }
@@ -56,6 +57,7 @@ export default {
           uuid: 'currPageDebug',
           name: 'debug',
           props: {
+            title: "döner",
             type: 'currentPage'
           }
 
@@ -109,32 +111,33 @@ export default {
     title: 'the rolfness of life',
     slots: [
       {
-        class: 'v-col-6',
+        class: 'v-col-4',
         widget: {
-          uuid: 'currPageDebug',
           name: 'debug',
+          uuid: 'currPageDebug',
           props: {
+            title: "döner",
             type: 'pages'
           }
 
         }
       }, {
-        class: 'v-col-6',
+        class: 'v-col-4',
         widget:
         {
-          uuid: 'currPageDebug',
           name: 'debug',
           props: {
+            title: "ralf",
             type: 'currentPage'
           }
         }
       }, {
-        class: 'v-col-12',
+        class: 'v-col-4',
         widget:
         {
-          uuid: 'currPageDebug',
           name: 'debug',
           props: {
+            title: "sein Mudda",
             type: 'widgets'
           }
         }

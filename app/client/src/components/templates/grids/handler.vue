@@ -3,6 +3,9 @@
     <v-row no-gutters v-for="row in rows">
       <v-col v-for="column in row" :class="getSlotClass(column)">
         <GridItem>
+          <template v-slot:header>
+            <Resizer type="widgets" :uuid="column.widget.uuid"></Resizer>
+          </template>
           <component
             :is="column.component"
             :uuid="column.widget.uuid"
@@ -23,6 +26,7 @@ import {
   ref,
 } from "vue";
 import { gridTypeLoader, gridItemLoader } from "@lib/gridLoader";
+import Resizer from "./resizer.vue";
 import widgetLoader from "@lib/widgetLoader";
 const $store = inject("$store");
 const gridColumnsCount = shallowRef();
