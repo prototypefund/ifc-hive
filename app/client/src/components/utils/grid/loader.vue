@@ -1,10 +1,17 @@
 <template>
   <GridType>
     <v-row no-gutters v-for="row in rows">
-      <v-col v-for="column in row" :class="getSlotClass(column)">
+      <v-col v-for="column in row" :class="getSlotClass(column) + getColClass(column)">
         <GridItem>
           <template v-slot:header>
-            <Resizer type="widgets" :uuid="column.widget.uuid"></Resizer>
+            <Resizer
+              type="widgets"
+              :slotClass="getColClass(column)"
+              :column="column.slot"
+              :uuid="column.widget.uuid"
+              @changeColCount="changeColCount"
+            >
+            </Resizer>
           </template>
           <component
             :is="column.component"
@@ -42,6 +49,9 @@ const handleRows = () => {
   const rowCount = Math.ceil(gridSlots.value.length / gridColumnsCount.value);
   // clone slots so we can splice off that object
   const slotClone = JSON.parse(JSON.stringify(gridSlots.value));
+  slotClone.forEach((slot, index) => {
+    slot.slot = index;
+  });
   for (let i = 1; i <= rowCount; i++) {
     // get the needed amount of columns per row
     let columnsPerRow = slotClone.splice(0, gridColumnsCount.value);
@@ -89,6 +99,16 @@ const gridItemSubscriber$ = $store
     });
   });
 
+const changeColCount = (newClass, column) => {
+  const gridClone = JSON.parse(JSON.stringify(gridSlots.value));
+  gridClone[column].column = newClass;
+  $store.dispatch({
+    type: "currentPage/update",
+    payload: {
+      slots: gridClone,
+    },
+  });
+};
 onMounted(() => {
   handleRows();
 });
@@ -101,5 +121,9 @@ onUnmounted(() => {
 const getSlotClass = (slot) => {
   if (!slot) return "";
   return slot && slot.class ? slot.class : "";
+};
+const getColClass = (slot) => {
+  if (!slot) return "";
+  return slot && slot.column ? " v-col-" + slot.column : "";
 };
 </script>

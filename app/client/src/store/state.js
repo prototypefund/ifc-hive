@@ -35,6 +35,8 @@ export const configPatterns = {
     slot: {
         // defines a css class which will be used for the v-col the slot widget is housed in
         class: false,
+        // defines the col count
+        column: 12,
         // defines the widget configuration, see widget storePattern
         widget: false
     }
@@ -55,7 +57,5 @@ export const storePatterns = {
         name: false,
         // the specific .vue file for the widget
         face: false,
-        // whatever props you want to hand to the widget
-        props: false
     }
 }
