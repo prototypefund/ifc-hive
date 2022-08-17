@@ -100,56 +100,32 @@ const handleRows = () => {
 };
 
 const gridItem = computed({
-  // getter
   get() {
     return currentPage.value.grid.items;
   },
-  // setter
   set(newValue) {
-    let grid = {
+    gridUpdater({
       items: newValue,
-    };
-    $store.dispatch({
-      type: "currentPage/update",
-      payload: {
-        grid,
-      },
     });
   },
 });
 const gridType = computed({
-  // getter
   get() {
     return currentPage.value.grid.type;
   },
-  // setter
   set(newValue) {
-    let grid = {
+    gridUpdater({
       type: newValue,
-    };
-    $store.dispatch({
-      type: "currentPage/update",
-      payload: {
-        grid,
-      },
     });
   },
 });
 const colCount = computed({
-  // getter
   get() {
     return currentPage.value.grid.columns;
   },
-  // setter
   set(newValue) {
-    let grid = {
+    gridUpdater({
       columns: newValue,
-    };
-    $store.dispatch({
-      type: "currentPage/update",
-      payload: {
-        grid,
-      },
     });
   },
 });
@@ -190,6 +166,15 @@ const gridItemSubscriber$ = $store
       return gridItemLoader(val);
     });
   });
+
+const gridUpdater = (grid) => {
+  $store.dispatch({
+    type: "currentPage/update",
+    payload: {
+      grid,
+    },
+  });
+};
 
 const changeColCount = (newClass, column) => {
   const gridClone = JSON.parse(JSON.stringify(gridSlots.value));
