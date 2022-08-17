@@ -38,7 +38,7 @@ import {
   nextTick,
 } from "vue";
 import { gridTypeLoader, gridItemLoader } from "@lib/gridLoader";
-import Resizer from "./resizer.vue";
+import Resizer from "./widgetToolBar.vue";
 import widgetLoader from "@lib/widgetLoader";
 const $store = inject("$store");
 const gridColumnsCount = shallowRef();
@@ -72,7 +72,6 @@ const handleRows = () => {
     // add compiled columns to row
     rows.value.push(columnsPerRow);
   }
-  console.dir(rows.value);
 };
 
 const gridColumnsCountSubscriber$ = $store
