@@ -36,8 +36,8 @@ import {
   onMounted,
   defineAsyncComponent,
   ref,
-  nextTick,
 } from "vue";
+import draggable from "vuedraggable";
 import { gridTypeLoader, gridItemLoader } from "@lib/gridLoader";
 import Resizer from "./widgetToolBar.vue";
 import widgetLoader from "@lib/widgetLoader";
@@ -48,6 +48,8 @@ const editMode = shallowRef(false);
 const rows = shallowRef([]);
 const GridType = shallowRef();
 const GridItem = shallowRef();
+
+const drag = shallowRef(false);
 
 const handleRows = () => {
   // always start with empty rows

@@ -23,7 +23,7 @@
 import { inject, ref, computed, onUnmounted, onMounted } from "vue";
 const $store = inject("$store");
 const widgetState = ref({});
-const colCounts = [2, 4, 6, 8, 12];
+const colCounts = [4, 6, 8, 12];
 const emit = defineEmits(["changeColCount"]);
 const props = defineProps({
   columnIndex: {
