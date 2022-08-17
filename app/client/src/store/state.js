@@ -7,7 +7,8 @@ export const applicationState = {
     },
     ui: {
         navigationOpen: false,
-        quickListOpen: false
+        quickListOpen: false,
+        editMode: true
     },
     quickList: {
         tab: 0,

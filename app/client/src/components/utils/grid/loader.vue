@@ -3,12 +3,13 @@
     <v-row no-gutters v-for="row in rows">
       <v-col
         v-for="column in row"
-        :class="getSlotClass(column) + getColClass(column)"
+        :class="getSlotClass(column) + ' ' + getColClass(column)"
         v-if="row"
       >
         <GridItem>
           <template v-slot:header>
             <Resizer
+              v-if="editMode"
               type="widgets"
               :columnClass="column.column"
               :columnIndex="column.slot"
@@ -43,6 +44,7 @@ import widgetLoader from "@lib/widgetLoader";
 const $store = inject("$store");
 const gridColumnsCount = shallowRef();
 const gridSlots = ref();
+const editMode = shallowRef(false);
 const rows = shallowRef([]);
 const GridType = shallowRef();
 const GridItem = shallowRef();
@@ -73,6 +75,12 @@ const handleRows = () => {
     rows.value.push(columnsPerRow);
   }
 };
+
+const editModeSubscriber$ = $store
+  .select((state) => state.ui.editMode)
+  .subscribe((val) => {
+    editMode.value = val;
+  });
 
 const gridColumnsCountSubscriber$ = $store
   .select((state) => state.currentPage.grid.columns)
@@ -119,6 +127,7 @@ onMounted(() => {
   handleRows();
 });
 onUnmounted(() => {
+  editModeSubscriber$.unsubscribe();
   slotSubscriber$.unsubscribe();
   gridColumnsCountSubscriber$.unsubscribe();
   gridTypeSubscriber$.unsubscribe();
@@ -130,6 +139,6 @@ const getSlotClass = (slot) => {
 };
 const getColClass = (slot) => {
   if (!slot) return "";
-  return slot && slot.column ? " v-col-" + slot.column : "";
+  return slot && slot.column ? "v-col-" + slot.column : "";
 };
 </script>

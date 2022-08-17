@@ -1,5 +1,6 @@
 <template>
   <v-toolbar v-if="widgetState" dense>
+    <v-btn flat icon="mdi-drag" />
     <v-toolbar-title>{{
       widgetState.title || widgetState.name || props.type
     }}</v-toolbar-title>
@@ -22,7 +23,7 @@
 import { inject, ref, computed, onUnmounted, onMounted } from "vue";
 const $store = inject("$store");
 const widgetState = ref({});
-const colCounts = [4, 6, 8, 12];
+const colCounts = [2, 4, 6, 8, 12];
 const emit = defineEmits(["changeColCount"]);
 const props = defineProps({
   columnIndex: {
