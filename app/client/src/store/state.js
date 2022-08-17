@@ -6,8 +6,11 @@ export const applicationState = {
         permissions: []
     },
     ui: {
+        // indicates the left navigation bar state
         navigationOpen: false,
+        // indicates the right quicklist bar state
         quickListOpen: false,
+        // indicates if the widget toolbar and other ui edit stuff is displayed
         editMode: false
     },
     quickList: {
