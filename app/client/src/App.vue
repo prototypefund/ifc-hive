@@ -8,7 +8,18 @@
         <v-icon color="grey" xsmall>mdi-chevron-right</v-icon>
         {{ $t("pages." + page.pageName) }}
       </v-app-bar-title>
-
+      <v-btn
+        v-if="!editMode"
+        flat
+        icon="mdi-view-dashboard-edit-outline"
+        @click="changeEditMode"
+      />
+      <v-btn
+        v-if="editMode"
+        flat
+        icon="mdi-view-dashboard-edit"
+        @click="changeEditMode"
+      />
       <!-- notifications -->
       <Notifications />
     </v-app-bar>
@@ -39,6 +50,7 @@ export default {
   inject: ["$api", "$store"],
   data: () => ({
     page: false,
+    editMode: false,
     navItems: [
       {
         icon: "mdi-home",
@@ -77,12 +89,26 @@ export default {
   }),
   created() {
     this.$store
-      .select((state) => state["currentPage"])
+      .select((state) => state.currentPage)
       .subscribe((val) => {
         this.page = val;
       });
+    this.$store
+      .select((state) => state.ui.editMode)
+      .subscribe((val) => {
+        this.editMode = val;
+      });
   },
-  methods: {},
+  methods: {
+    changeEditMode: function () {
+      this.$store.dispatch({
+        type: "ui/update",
+        payload: {
+          editMode: !this.editMode,
+        },
+      });
+    },
+  },
 };
 </script>
 <style>

@@ -49,8 +49,6 @@ const rows = shallowRef([]);
 const GridType = shallowRef();
 const GridItem = shallowRef();
 
-const drag = shallowRef(false);
-
 const handleRows = () => {
   // always start with empty rows
   rows.value = [];
