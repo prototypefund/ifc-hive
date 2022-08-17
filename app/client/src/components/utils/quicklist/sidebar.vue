@@ -119,7 +119,7 @@ export default {
   position: fixed !important;
   z-index: 1007;
   right: 0 !important;
-  top: 60px;
+  top: 45px;
   width: 50%;
   height: 100%;
   overflow: hidden;

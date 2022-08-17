@@ -1,7 +1,7 @@
 <template>
   <v-app v-if="page && page.pageName">
     <!-- Global Toolbar -->
-    <v-app-bar app color="grey-lighten-2">
+    <v-app-bar density="compact" flat app color="grey-lighten-2">
       <!-- Breadcrumb -->
       <v-app-bar-title>
         Journal
