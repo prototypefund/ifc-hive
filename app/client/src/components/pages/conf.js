@@ -3,7 +3,7 @@ export default {
     grid: {
       type: 'default',
       items: 'card',
-      columns: 3
+      columns: 1
     },
     slots: [{
       class: 'spezialclass',
@@ -22,7 +22,7 @@ export default {
     grid: {
       type: 'default',
       items: 'card_flat',
-      columns: 3
+      columns: 1
     },
     slots: [{
       class: 'journalspaß',
@@ -86,7 +86,7 @@ export default {
     grid: {
       type: 'default',
       items: 'card_flat',
-      columns: 2
+      columns: 1
     },
     title: 'funoFun',
     slots: [

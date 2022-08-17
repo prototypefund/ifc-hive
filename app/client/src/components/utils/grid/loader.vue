@@ -1,5 +1,16 @@
 <template>
   <GridType>
+    <v-row v-if="editMode">
+      <v-col cols="4">
+        <v-select :items="colCounts" v-model="colCount" label="Column Count"></v-select>
+      </v-col>
+      <v-col cols="4">
+        <v-select :items="gridTypes" v-model="gridType" label="Grid Type"></v-select>
+      </v-col>
+      <v-col cols="4">
+        <v-select :items="gridItems" v-model="gridItem" label="Grid Item"></v-select>
+      </v-col>
+    </v-row>
     <v-row no-gutters v-for="row in rows">
       <v-col
         v-for="column in row"
@@ -36,6 +47,7 @@ import {
   onMounted,
   defineAsyncComponent,
   ref,
+  computed,
 } from "vue";
 import draggable from "vuedraggable";
 import { gridTypeLoader, gridItemLoader } from "@lib/gridLoader";
@@ -44,10 +56,21 @@ import widgetLoader from "@lib/widgetLoader";
 const $store = inject("$store");
 const gridColumnsCount = shallowRef();
 const gridSlots = ref();
+const currentPage = ref({});
 const editMode = shallowRef(false);
 const rows = shallowRef([]);
 const GridType = shallowRef();
 const GridItem = shallowRef();
+
+const colCounts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const gridTypes = ["card", "default", "dark"];
+const gridItems = ["card_flat", "card", "default"];
+
+const currentPageSubscriber$ = $store
+  .select((state) => state.currentPage)
+  .subscribe((val) => {
+    currentPage.value = val;
+  });
 
 const handleRows = () => {
   // always start with empty rows
@@ -75,6 +98,61 @@ const handleRows = () => {
     rows.value.push(columnsPerRow);
   }
 };
+
+const gridItem = computed({
+  // getter
+  get() {
+    return currentPage.value.grid.items;
+  },
+  // setter
+  set(newValue) {
+    let grid = {
+      items: newValue,
+    };
+    $store.dispatch({
+      type: "currentPage/update",
+      payload: {
+        grid,
+      },
+    });
+  },
+});
+const gridType = computed({
+  // getter
+  get() {
+    return currentPage.value.grid.type;
+  },
+  // setter
+  set(newValue) {
+    let grid = {
+      type: newValue,
+    };
+    $store.dispatch({
+      type: "currentPage/update",
+      payload: {
+        grid,
+      },
+    });
+  },
+});
+const colCount = computed({
+  // getter
+  get() {
+    return currentPage.value.grid.columns;
+  },
+  // setter
+  set(newValue) {
+    let grid = {
+      columns: newValue,
+    };
+    $store.dispatch({
+      type: "currentPage/update",
+      payload: {
+        grid,
+      },
+    });
+  },
+});
 
 const editModeSubscriber$ = $store
   .select((state) => state.ui.editMode)
@@ -132,6 +210,7 @@ onUnmounted(() => {
   gridColumnsCountSubscriber$.unsubscribe();
   gridTypeSubscriber$.unsubscribe();
   gridItemSubscriber$.unsubscribe();
+  currentPageSubscriber$.unsubscribe();
 });
 const getSlotClass = (slot) => {
   if (!slot) return "";
