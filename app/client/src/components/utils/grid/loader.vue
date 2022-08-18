@@ -175,7 +175,6 @@ const gridUpdater = (grid) => {
 };
 
 const changeColCount = (newClass, column) => {
-  debugger;
   const gridClone = JSON.parse(JSON.stringify(gridSlots.value));
   gridClone[column].column = newClass;
   $store.dispatch({
