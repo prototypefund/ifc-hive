@@ -19,15 +19,14 @@
       >
         <GridItem>
           <template v-slot:header>
-            <Resizer
+            <WidgetToolBar
               v-if="editMode"
               type="widgets"
               :columnClass="column.column"
               :columnIndex="column.slot"
               :uuid="column.widget.uuid"
               @changeColCount="changeColCount"
-            >
-            </Resizer>
+            />
           </template>
           <component
             :is="column.component"
@@ -49,9 +48,8 @@ import {
   ref,
   computed,
 } from "vue";
-import draggable from "vuedraggable";
 import { gridTypeLoader, gridItemLoader } from "@lib/gridLoader";
-import Resizer from "./widgetToolBar.vue";
+import WidgetToolBar from "./widgetToolBar.vue";
 import widgetLoader from "@lib/widgetLoader";
 const $store = inject("$store");
 const gridColumnsCount = shallowRef();
@@ -177,10 +175,14 @@ const gridUpdater = (grid) => {
 };
 
 const changeColCount = (newClass, column) => {
+  debugger;
   const gridClone = JSON.parse(JSON.stringify(gridSlots.value));
   gridClone[column].column = newClass;
-  gridUpdater({
-    slots: gridClone,
+  $store.dispatch({
+    type: "currentPage/update",
+    payload: {
+      slots: gridClone,
+    },
   });
 };
 onMounted(() => {

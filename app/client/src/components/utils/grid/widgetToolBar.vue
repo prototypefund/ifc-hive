@@ -51,6 +51,7 @@ const colCount = computed({
   // setter
   set(newValue) {
     emit("changeColCount", newValue, props.columnIndex);
+    return newValue;
   },
 });
 
