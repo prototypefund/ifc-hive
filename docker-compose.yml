@@ -5,7 +5,7 @@
 # - development
 # - testing
 # - production
-version: "3"
+version: "3.7"
 services:
   # Docs Service http://localhost:8089
   ifc-hive-docs:

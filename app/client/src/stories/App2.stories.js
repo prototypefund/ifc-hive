@@ -1,8 +1,10 @@
-import MyButton from './Button.vue';
+
+
+import MyButton from '../components/pages/dashboard.vue';
 
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export
 export default {
-  title: 'Example/Button',
+  title: 'Demo/dashboard',
   component: MyButton,
   // More on argTypes: https://storybook.js.org/docs/vue/api/argtypes
   argTypes: {
@@ -23,30 +25,13 @@ const Template = (args) => ({
   setup() {
     return { args };
   },
-  // And then the `args` are bound to your component with `v-bind="args"`
-  template: '<my-button v-bind="args" />',
+  // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
+  template: '<my-button/>',
 });
 
 export const Primary = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Primary.args = {
   primary: true,
-  label: 'Button',
-};
-
-export const Secondary = Template.bind({});
-Secondary.args = {
-  label: 'Button',
-};
-
-export const Large = Template.bind({});
-Large.args = {
-  size: 'large',
-  label: 'Button',
-};
-
-export const Small = Template.bind({});
-Small.args = {
-  size: 'small',
   label: 'Button',
 };
