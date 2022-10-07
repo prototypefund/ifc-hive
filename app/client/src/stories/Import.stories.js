@@ -1,12 +1,11 @@
-import '../../vite.config';
-import { vitest } from 'vitest';
-import MyButton from '../main.js';
 
+// require('../../vite.config.js');
+
+import path from 'path'
 
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export
 export default {
-  title: 'Demo/App',
-  component: MyButton,
+  title: 'Demo/Imports',
   // More on argTypes: https://storybook.js.org/docs/vue/api/argtypes
   argTypes: {
     backgroundColor: { control: 'color' },
@@ -21,13 +20,10 @@ export default {
 // More on component templates: https://storybook.js.org/docs/vue/writing-stories/introduction#using-args
 const Template = (args) => ({
   // Components used in your story `template` are defined in the `components` object
-  components: { MyButton },
-  // The story's `args` need to be mapped into the template through the `setup()` method
   setup() {
     return { args };
   },
-  // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
-  template: '<my-button/>',
+  template: '<p>Done</p>',
 });
 
 export const Primary = Template.bind({});
@@ -36,3 +32,4 @@ Primary.args = {
   primary: true,
   label: 'Button',
 };
+// /home/tower/vue/ifc-hive/app/client/src/components/utils/navigation/sidebar.vue

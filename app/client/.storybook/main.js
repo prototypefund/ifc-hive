@@ -4,10 +4,18 @@ const { mergeConfig } = require('vite');
 module.exports = {
   async viteFinal(config, { configType }) {
     // return the customized config
+    function path_resolve(a,b) {return a + '/../' + b;}
     return mergeConfig(config, {
       // customize the Vite config here
       resolve: {
-        alias: { foo: 'bar' },
+        alias: {
+            '@': path_resolve(__dirname, './src/components'),
+            '@w': path_resolve(__dirname, './src/components/widgets'),
+            '@p': path_resolve(__dirname, './src/components/pages'),
+            '@t': path_resolve(__dirname, './src/components/templates'),
+            '@u': path_resolve(__dirname, './src/components/utils'),
+            '@lib': path_resolve(__dirname, './src/lib'),
+        },
       },
     });
   },
