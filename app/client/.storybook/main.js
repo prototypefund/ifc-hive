@@ -17,6 +17,7 @@ module.exports = {
     function path_resolve(a,b) {return a + '/../' + b;}
     return mergeConfig(config, {
       // customize the Vite config here
+// https://github.com/storybookjs/builder-vite/issues/85#issuecomment-900831050
       resolve: {
         alias: {
             '@': path_resolve(__dirname, './src/components'),
