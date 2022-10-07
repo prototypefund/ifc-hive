@@ -1,15 +1,6 @@
 // use `mergeConfig` to recursively merge Vite options
 const { mergeConfig } = require('vite');
 
-/*
-const Vue = require('vue');
-const MyStore = require('mini-rx-store');
-const store = require('../src/store');
-
-Vue.use(MyStore);
-Vue.prototype.$store = store;*/
-
-
 
 module.exports = {
   async viteFinal(config, { configType }) {
@@ -17,7 +8,6 @@ module.exports = {
     function path_resolve(a,b) {return a + '/../' + b;}
     return mergeConfig(config, {
       // customize the Vite config here
-// https://github.com/storybookjs/builder-vite/issues/85#issuecomment-900831050
       resolve: {
         alias: {
             '@': path_resolve(__dirname, './src/components'),
