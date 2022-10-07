@@ -1,7 +1,5 @@
 
 
-import { store } from '../store/index.js'
-
 import MyButton from '../components/pages/dashboard.vue';
 
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export

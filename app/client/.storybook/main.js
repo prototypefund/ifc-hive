@@ -1,6 +1,16 @@
 // use `mergeConfig` to recursively merge Vite options
 const { mergeConfig } = require('vite');
 
+/*
+const Vue = require('vue');
+const MyStore = require('mini-rx-store');
+const store = require('../src/store');
+
+Vue.use(MyStore);
+Vue.prototype.$store = store;*/
+
+
+
 module.exports = {
   async viteFinal(config, { configType }) {
     // return the customized config

@@ -1,17 +1,9 @@
 
 import getEnvVariable from '../lib/getEnvVariable'
 
-
-
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export
 export default {
-  title: 'Demo/getEnvVariable',
- // component: MyButton,
-  // More on argTypes: https://storybook.js.org/docs/vue/api/argtypes
-  argTypes: {
-    backgroundColor: { control: 'color' },
-    onClick: {},
-  },
+  title: 'Demo/EnvVariables',
 };
 
 // More on component templates: https://storybook.js.org/docs/vue/writing-stories/introduction#using-args
@@ -29,8 +21,6 @@ const Template = (args) => ({
 export const Primary = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Primary.args = {
-  primary: true,
-  label: 'Button',
   API_BASE_URL:    getEnvVariable('VITE_API_BASE_URL'),
-  NODE_ENV: 'NODE_ENV' +  getEnvVariable('NODE_ENV'),
+  NODE_ENV:   getEnvVariable('NODE_ENV')
 };
