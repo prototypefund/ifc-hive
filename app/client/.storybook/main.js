@@ -1,8 +1,9 @@
 // use `mergeConfig` to recursively merge Vite options
+
 const { mergeConfig } = require('vite');
+//const { use } = require('vue');
 
-
-module.exports = {
+config = {
   async viteFinal(config, { configType }) {
     // return the customized config
     function path_resolve(a,b) {return a + '/../' + b;}
@@ -38,3 +39,39 @@ module.exports = {
     "storyStoreV7": true
   }
 }
+
+/*
+
+const { createI18n, useI18n } = require('vue-i18n')
+const { createVueI18nAdapter } = require('vuetify/locale/adapters/vue-i18n')
+const { messages } =  require('../i18n/messages')
+// import messages from '../i18n/messages'
+
+const i18n = createI18n({
+  legacy: false, // you must set `false`, to use Composition API
+  globalInjection: true,
+  locale: 'de', // set locale
+  fallbackLocale: 'en', // set fallback locale
+  messages, // set locale messages
+})
+
+const locale = createVueI18nAdapter({
+  i18n,
+  useI18n,
+})
+*/
+
+// require('esm')(module);
+
+
+
+/*
+module.exports = config
+require = require('esm')(module);
+V = require('vue')
+V2 = require('../src/setup/i18n.js')
+//V.use("");
+require = require('esm')(module);
+module.exports = require('./realMain.js');
+*/
+module.exports = config

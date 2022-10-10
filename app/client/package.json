@@ -39,12 +39,15 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-storybook": "^0.6.4",
+    "esm": "^3.2.25",
     "mini-rx-store": "^3.1.0",
     "ramda": "0.28.0",
     "roboto-fontface": "^0.10.0",
     "rxjs": "7.5.4",
     "sass": "^1.51.0",
     "semver": "7.3.5",
+    "storybook-addon-i18n": "^5.1.13",
+    "terser": "^5.4.0",
     "uuid": "^8.3.2",
     "vite": "3.1.6",
     "vitest": "^0.12.2",
@@ -57,8 +60,7 @@
     "vue3-markdown-it": "^1.0.10",
     "vuedraggable": "latest",
     "vuetify": "3.0.0-beta.1",
-    "webfontloader": "^1.0.0",
-    "terser": "^5.4.0"
+    "webfontloader": "^1.0.0"
   },
   "imports": {
     "#src/*": "./src/*.js"

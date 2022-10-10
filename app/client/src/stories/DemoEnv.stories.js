@@ -1,6 +1,13 @@
 
 import getEnvVariable from '../lib/getEnvVariable'
 
+import store from '../store/index.js'
+store.dispatch({
+  type: 'pages/add',
+  routeName: 'toname',
+  payload: 'aaaconftestboard'
+});
+
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export
 export default {
   title: 'Demo/EnvVariables',
