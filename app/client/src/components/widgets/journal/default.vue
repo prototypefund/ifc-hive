@@ -196,6 +196,7 @@ const stateSubscriber$ = $store
 const props = defineProps({
   props: {
     type: Object,
+    default: () => ({}),
   },
   uuid: {
     type: String,

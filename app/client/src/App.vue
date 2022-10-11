@@ -1,5 +1,5 @@
 <template>
-  <v-app v-if="page && page.pageName">
+  <v-app v-if="(page && page.pageName) || isInTest">
     <!-- Global Toolbar -->
     <v-app-bar density="compact" flat app color="grey-lighten-2">
       <!-- Breadcrumb -->
@@ -25,12 +25,13 @@
     </v-app-bar>
 
     <!-- Navigation Drawer -->
-    <NavigationSideBar :nav-items="navItems" />
+    <NavigationSideBar v-if="!isInTest" :nav-items="navItems" />
 
     <!-- Main content -->
     <v-main>
       <v-card flat>
-        <router-view />
+        <router-view v-if="!isInTest" />
+        <slot v-if="isInTest" />
       </v-card>
     </v-main>
     <!-- quickList Drawer -->
@@ -48,6 +49,12 @@ export default {
     QuickListSideBar,
   },
   inject: ["$api", "$store"],
+  props: {
+    isInTest: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data: () => ({
     page: false,
     editMode: false,

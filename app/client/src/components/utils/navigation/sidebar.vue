@@ -51,7 +51,7 @@ export default {
   }),
   props: {
     navItems: {
-      default: [],
+      default: () => [],
       type: Array,
     },
   },

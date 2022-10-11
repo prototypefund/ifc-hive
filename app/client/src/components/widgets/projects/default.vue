@@ -1,11 +1,9 @@
 <template>
   <v-container fluid class="pa-0">
     <v-card color="grey-lighten-3" flat>
-      <v-card-text>
-        Why is the wrong thing called?
-      </v-card-text>
+      <v-card-text> Why is the wrong thing called? </v-card-text>
     </v-card>
-    </v-container>
+  </v-container>
 </template>
 
 <script setup>
@@ -23,6 +21,7 @@ const stateSubscriber$ = $store
 const props = defineProps({
   props: {
     type: Object,
+    default: () => ({}),
   },
   uuid: {
     type: String,
