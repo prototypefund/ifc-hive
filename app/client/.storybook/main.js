@@ -6,7 +6,7 @@ config = {
     // return the customized config
     return mergeConfig(config, {
       // customize the Vite config here
-      resolve: (await import('../vite.config.js')).default.resolve,
+      resolve: (await import('../vite.config.mjs')).default.resolve,
     });
   },
   "stories": [
