@@ -30,7 +30,7 @@
     <!-- Main content -->
     <v-main>
       <v-card flat>
-        <router-view v-if="!isInTest" />
+        <router-view v-if="isInTest === 0" />
         <slot v-if="isInTest" />
       </v-card>
     </v-main>
@@ -51,8 +51,8 @@ export default {
   inject: ["$api", "$store"],
   props: {
     isInTest: {
-      type: Boolean,
-      default: false,
+      type: Number,
+      default: 0,
     },
   },
   data: () => ({
