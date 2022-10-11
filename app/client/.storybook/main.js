@@ -12,9 +12,9 @@ config = {
           '@': '../src/components',
           '@w': '../src/components/widgets',
           '@p': '../src/components/pages',
-          '@t': '.../src/components/templates',
+          '@t': '../src/components/templates',
           '@u': '../src/components/utils',
-          '@lib': '../src/lib',
+          '@lib': '../src/lib'
         },
       }
     });

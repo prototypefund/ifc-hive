@@ -23,7 +23,8 @@ export const applicationState = {
         history: [],
         items: []
     },
-    currentPage: {},
+    currentPage: {
+    },
     widgets: {},
     pages: {}
 }

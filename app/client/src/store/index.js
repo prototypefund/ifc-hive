@@ -76,8 +76,8 @@ const applicationReducers = {
             let tabs
             let tab
             switch (action.type) {
-                case 'quickList/set':
-                    return action.payload
+                case 'init':
+                    return applicationState.quickList
                 case 'quickList/add':
                     // make sure that we only have on tab per display type and uuid
                     tab = findIndex(propEq('docUUID', action.payload.uuid))(state.tabs)
@@ -145,8 +145,8 @@ const applicationReducers = {
     route: (state, action) => {
         if (state) {
             switch (action.type) {
-                case 'route/set':
-                    return action.payload
+                case 'init':
+                    return applicationState.route
                 case 'route/update':
                     return JSON.parse(JSON.stringify(action.payload))
                 default:
@@ -157,8 +157,8 @@ const applicationReducers = {
     user: (state, action) => {
         if (state) {
             switch (action.type) {
-                case 'user/set':
-                    return action.payload
+                case 'init':
+                    return applicationState.user
                 case 'user/update':
                     return action.payload
                 default:
@@ -170,8 +170,8 @@ const applicationReducers = {
         if (state) {
             let items
             switch (action.type) {
-                case 'notifications/set':
-                    return action.payload
+                case 'init':
+                    return applicationState.notifications
                 case 'notifications/add':
                     items = JSON.parse(JSON.stringify(state.items))
                     action.payload.time = Date.now()
@@ -249,8 +249,8 @@ const applicationReducers = {
         if (state) {
 
             switch (action.type) {
-                case 'ui/set':
-                    return action.payload
+                case 'init':
+                    return applicationState.ui
                 case 'ui/update':
                     return {
                         ...state, ...action.payload
@@ -263,6 +263,8 @@ const applicationReducers = {
     currentPage: (state, action) => {
         if (state) {
             switch (action.type) {
+                case 'init':
+                    return applicationState.currentPage
                 // used in beforeResolve router hook, will trigger before each route change including param changes
                 case 'currentPage/set':
                     if (!action.routeName) return state
@@ -295,11 +297,10 @@ const applicationReducers = {
         if (state) {
             let newPage
             switch (action.type) {
-                case 'pages/set':
-                    return action.payload
+                case 'init':
+                    return applicationState.pages
                 // initially add a new preconfigured page store. Will be handled in routes files in beforeEnter hook
                 case 'pages/add':
-
                     // create a new page object based on the default page config
                     const page = clone(mergeDeepRight(storePatterns.page, action.payload))
                     page.pageName = action.routeName.replace('.', '-')
@@ -330,8 +331,8 @@ const applicationReducers = {
         if (state) {
             let newWidgets, configuredWidget
             switch (action.type) {
-                case 'widgets/set':
-                    return action.payload
+                case 'init':
+                    return applicationState.widgets
                 case 'widgets/preconfigure':
                     configuredWidget = {}
                     // merge widget config with widget state when we initially configure widget 
