@@ -1,8 +1,7 @@
 import dashboardComp from '@p/dashboard.vue'
 import App from '../../App.vue'
-import { inject } from "vue";
 import conf from '@p/conf.js'
-import {initStore, prepareStore} from '../../../.storybook/storeHelper.js'
+import { initStore, prepareStore } from '../../../.storybook/storeHelper.js'
 
 
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export
@@ -37,7 +36,7 @@ const HeadlessTemplate = (args) => ({
   setup() {
     initStore()
     // test.dashboard geeht nicht da prefix app. ist
-    prepareStore('test-dashboard', args)
+    prepareStore('dashboard', args)
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
@@ -48,6 +47,8 @@ export const Headless = HeadlessTemplate.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Headless.args = conf.dashboard;
 Headless.args.props = { urlParams: 'döner' }
+
+
 export const Full = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Full.args = conf.dashboard;

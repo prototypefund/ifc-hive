@@ -1,8 +1,7 @@
 import journalComp from '@p/journal.vue'
 import App from '../../App.vue'
-import { inject } from "vue";
 import conf from '@p/conf.js'
-import {initStore, prepareStore} from '../../../.storybook/storeHelper.js'
+import { initStore, prepareStore } from '../../../.storybook/storeHelper.js'
 
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export
 export default {
