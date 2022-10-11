@@ -11,6 +11,7 @@ const props = defineProps({
   props: {
     type: Object,
     required: true,
+    default: () => ({}),
   },
   uuid: {
     type: String,
