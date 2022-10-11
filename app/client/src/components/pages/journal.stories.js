@@ -36,7 +36,7 @@ const HeadlessTemplate = (args) => ({
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
-  template: '<journalComp/>',
+  template: '<v-card flat><journalComp v-bind="args.props"/></v-card>',
 });
 export const Headless = HeadlessTemplate.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
