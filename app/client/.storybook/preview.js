@@ -31,18 +31,24 @@ ERR!   id: '/home/tower/vue/ifc-hive/app/client/src/components/utils/quicklist/h
 
 */
 
-Vue.use("i18n")
+//vue.use("i18n")
 import { createApp, h, provide } from 'vue'
 // ambiguous indirect export: use 
 import i18n from '../src/setup/i18n.js'
 import vuetify from '../src/setup/vuetify.js'
 import store from '../src/store/index.js'
+
+
+ 
+
+
+
 // use(i18n)
 // provide('$store', store)
 //export default store
 //export default vuetify
 
-// import { use } from "vue";
+//import { use } from "vue";
 
 // export default {vuetify, i18n, store}
 /*

@@ -16,6 +16,7 @@ Vue.prototype.$store = store;
 */
 
 import dashboardComp from '@p/dashboard.vue'
+// import { Vue } from 'vue'
 
 /*
 import dashboardComp from '@p/settings.vue'
@@ -23,6 +24,8 @@ import { inject, ref, onMounted, onUnmounted, provide, createApp, reactive } fro
 
 src/components/pages/dashboard.vue:64:65
 */
+
+// Vue.use("asd")
 
 
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export
