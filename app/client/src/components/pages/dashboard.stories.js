@@ -10,7 +10,7 @@ export default {
   // More on argTypes: https://storybook.js.org/docs/vue/api/argtypes
   // provide doesn't work hear !!!
   argTypes: {
-
+    urlParams: 'döner'
   },
 };
 
@@ -37,7 +37,7 @@ const Template = (args) => ({
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
-  template: '<App is-in-test="true"><dashboardComp/>></App>',
+  template: '<App is-in-test=1><dashboardComp/>></App>',
 });
 
 const HeadlessTemplate = (args) => ({
@@ -63,12 +63,13 @@ const HeadlessTemplate = (args) => ({
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
-  template: '<dashboardComp/>',
+  template: '<dashboardComp v-bind="args.props"/>',
 });
 
 export const Headless = HeadlessTemplate.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Headless.args = conf.dashboard;
+Headless.args.props = { urlParams: 'döner' }
 export const Full = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Full.args = conf.dashboard;
