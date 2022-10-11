@@ -23,7 +23,15 @@ config = {
     "../src/**/*.stories.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)"
   ],
-  "addons": [],
+  "addons": [
+    "@storybook/addon-viewport",
+    "storybook-dark-mode",
+    "@storybook/addon-storysource",
+    "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    "@storybook/addon-interactions"
+
+  ],
   "framework": "@storybook/vue3",
   "core": {
     builder: "@storybook/builder-vite",
