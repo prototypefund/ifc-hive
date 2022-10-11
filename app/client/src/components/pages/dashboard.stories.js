@@ -40,7 +40,7 @@ const HeadlessTemplate = (args) => ({
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
-  template: '<dashboardComp v-bind="args.props"/>',
+  template: '<v-card flat><dashboardComp v-bind="args.props"/></v-card>',
 });
 
 export const Headless = HeadlessTemplate.bind({});
