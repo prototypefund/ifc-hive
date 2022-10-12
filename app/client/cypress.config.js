@@ -1,12 +1,6 @@
 // ts import { defineConfig } from "cypress";
 defineConfig = require('cypress').defineConfig
 
-// old config
-//{
-//  "testFiles": "**/*.spec.js",
-//  "componentFolder": "src",
-//}
-
 // yarn start-server-and-test preview http://127.0.0.1:4173/ 'cypress run --browser brave' 
 const execa = require("execa");
 const findBrowser = () => {
@@ -32,22 +26,20 @@ const findBrowser = () => {
   });
 };
 
-
 config = defineConfig({
   chromeWebSecurity: false,
   /* Setup for E2E framework */
   e2e: {
-    specPattern: "cypress/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}",
+    specPattern:["cypress/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}","**/*.component.cy.{js,jsx,ts,tsx}"], 
     baseUrl: "http://localhost:4173",
     video: false,
-    /*
     setupNodeEvents(on, config) {
-      return findBrowser().then((browser) => {
+        /*return findBrowser().then((browser) => {
         return {
           browsers: config.browsers.concat(browser),
         }
-      })
-    }*/
+      })*/
+    }
   },
   component: {
     specPattern: "src/**/__tests__/*.{cy,spec}.{js,ts,jsx,tsx}",
