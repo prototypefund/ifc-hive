@@ -29,9 +29,11 @@
 
     <!-- Main content -->
     <v-main>
-      <v-card flat>
-        <router-view v-if="isInTest === 0" />
-        <slot v-if="isInTest" />
+      <v-card flat v-if="isInTest">
+        <slot />
+      </v-card>
+      <v-card flat v-else>
+        <router-view />
       </v-card>
     </v-main>
     <!-- quickList Drawer -->
