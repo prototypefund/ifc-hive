@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 # 
 # This commit-msg hook will check the commit message for a valid format.
 # The format should follow the pattern:
