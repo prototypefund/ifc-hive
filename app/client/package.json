@@ -10,6 +10,15 @@
     "test:spec": "cypress open",
     "test:spec:ct": "cypress open-ct",
     "test:spec:run": "cypress run-ct ",
+    
+    "test:e2e": "start-server-and-test dev http://localhost:8081/ 'CYPRESS_BASE_URL=http://localhost:8081 CYPRESS_SERVER=APP cypress open --e2e --browser firefox'",
+    "test:e2e:ci": "start-server-and-test preview http://localhost:4173/ 'CYPRESS_SERVER=APP cypress run --e2e'",
+
+    "test:storybook:e2e": "start-server-and-test storybook:ci http://localhost:7007/ 'CYPRESS_BASE_URL=http://localhost:7007 CYPRESS_SERVER=SB cypress open --e2e --browser firefox'",
+    "test:storybook:e2e:ci": "start-server-and-test storybook:ci http://localhost:7007/ 'CYPRESS_BASE_URL=http://localhost:7007 CYPRESS_SERVER=SB cypress run --e2e'",
+    "storybook:ci": "NODE_ENV=development VITE_API_BASE_URL=localhost:8082 start-storybook -p 7007",
+
+    
     "storybook": "NODE_ENV=development VITE_API_BASE_URL=localhost:8082 start-storybook -p 6006",
     "storybook_dst": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -19,18 +28,16 @@
     "@cypress/vite-dev-server": "^2.2.2",
     "@cypress/vue": "^3.1.2",
     "@mdi/font": "^6.6.96",
-    "@storybook/vue3": "^6.5.12",
-    "@storybook/addon-storysource": "^6.5.12",
     "@storybook/addon-actions": "^6.5.12",
     "@storybook/addon-essentials": "^6.5.12",
     "@storybook/addon-interactions": "^6.5.12",
     "@storybook/addon-links": "^6.5.12",
-    "storybook-dark-mode": "^1.1.2",
+    "@storybook/addon-storysource": "^6.5.12",
+    "@storybook/vue3": "^6.5.12",
     "@vitejs/plugin-vue": "^3.1.2",
     "@vueuse/core": "^8.4.2",
     "axios": "^0.26.1",
     "babel-loader": "^8.2.5",
-    "cypress": "^9.6.1",
     "date-fns": "^2.28.0",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
@@ -46,6 +53,7 @@
     "rxjs": "7.5.4",
     "sass": "^1.51.0",
     "semver": "7.3.5",
+    "storybook-dark-mode": "^1.1.2",
     "terser": "^5.4.0",
     "uuid": "^8.3.2",
     "vite": "3.1.6",
@@ -65,6 +73,8 @@
     "#src/*": "./src/*.js"
   },
   "devDependencies": {
-    "@storybook/builder-vite": "^0.2.4"
+    "@storybook/builder-vite": "^0.2.4",
+    "cypress": "^10.10.0",
+    "start-server-and-test": "^1.14.0"
   }
 }
