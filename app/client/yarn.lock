@@ -11015,6 +11015,13 @@ storybook-dark-mode@^1.1.2:
     global "^4.4.0"
     memoizerific "^1.11.3"
 
+storybook-vue3-router@2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/storybook-vue3-router/-/storybook-vue3-router-2.3.1.tgz#41b235a16c09787dce8550b43cebff77e04139f4"
+  integrity sha512-e+nhYUoJJCW85TBrKnpaa4Wc6FAiiXFaYFdC49EY7n28jIEabPGq7j1isJN226QfFP45HLpcZb5i8z1Q1+LPUg==
+  dependencies:
+    vue-router "4.x"
+
 stream-browserify@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/stream-browserify/-/stream-browserify-2.0.2.tgz#87521d38a44aa7ee91ce1cd2a47df0cb49dd660b"
@@ -12088,7 +12095,7 @@ vue-resizable@^2.1.7:
   resolved "https://registry.yarnpkg.com/vue-resizable/-/vue-resizable-2.1.7.tgz#c29421810a95a8effaaa3f44b04980ab7afa4849"
   integrity sha512-zEbWhRR8iXT8+nt3u8rkfrNpkPNsPkf7HteBh+AlPIsJ7rf9fyNwMqr0Q4FRzIpNIpZD5Zrr4+3+YELU0vc1Iw==
 
-vue-router@^4.0.0:
+vue-router@4.x, vue-router@^4.0.0:
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.1.5.tgz#256f597e3f5a281a23352a6193aa6e342c8d9f9a"
   integrity sha512-IsvoF5D2GQ/EGTs/Th4NQms9gd2NSqV+yylxIyp/OYp8xOwxmU8Kj/74E9DTSYAyH5LX7idVUngN3JSj1X4xcQ==

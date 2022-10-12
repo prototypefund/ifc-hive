@@ -10,15 +10,11 @@
     "test:spec": "cypress open",
     "test:spec:ct": "cypress open-ct",
     "test:spec:run": "cypress run-ct ",
-    
     "test:e2e": "start-server-and-test dev http://localhost:8081/ 'CYPRESS_BASE_URL=http://localhost:8081 CYPRESS_SERVER=APP cypress open --e2e --browser firefox'",
     "test:e2e:ci": "start-server-and-test preview http://localhost:4173/ 'CYPRESS_SERVER=APP cypress run --e2e'",
-
     "test:storybook:e2e": "start-server-and-test storybook:ci http://localhost:7007/ 'CYPRESS_BASE_URL=http://localhost:7007 CYPRESS_SERVER=SB cypress open --e2e --browser firefox'",
     "test:storybook:e2e:ci": "start-server-and-test storybook:ci http://localhost:7007/ 'CYPRESS_BASE_URL=http://localhost:7007 CYPRESS_SERVER=SB cypress run --e2e'",
     "storybook:ci": "NODE_ENV=development VITE_API_BASE_URL=localhost:8082 start-storybook -p 7007",
-
-    
     "storybook": "NODE_ENV=development VITE_API_BASE_URL=localhost:8082 start-storybook -p 6006",
     "storybook_dst": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -34,6 +30,7 @@
     "@storybook/addon-links": "^6.5.12",
     "@storybook/addon-storysource": "^6.5.12",
     "@storybook/vue3": "^6.5.12",
+    "storybook-vue3-router": "2.3.1",
     "@vitejs/plugin-vue": "^3.1.2",
     "@vueuse/core": "^8.4.2",
     "axios": "^0.26.1",
