@@ -43,7 +43,7 @@
       </v-card>
     </v-main>
     <!-- quickList Drawer -->
-    <QuickListSideBar />
+    <QuickListSideBar :class="{ appBarRel: isInTest }" />
   </v-app>
 </template>
 <script>
@@ -128,6 +128,10 @@ export default {
 </script>
 <style>
 .appBarRel {
+  position: absolute !important;
+}
+
+.appBarRel.quickListWrapper {
   position: absolute !important;
 }
 
