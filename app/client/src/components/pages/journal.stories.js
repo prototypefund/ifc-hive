@@ -16,7 +16,7 @@ export default {
 
 const Template = (args) => ({
   // Components used in your story `template` are defined in the `components` object
-  components: { App, journalComp },
+  components: { App, comp },
   // The story's `args` need to be mapped into the template through the `setup()` method
   setup() {
     initStore()
@@ -28,7 +28,7 @@ const Template = (args) => ({
 });
 const HeadlessTemplate = (args) => ({
   // Components used in your story `template` are defined in the `components` object
-  components: { journalComp },
+  components: { comp },
   // The story's `args` need to be mapped into the template through the `setup()` method
   setup() {
     initStore()
