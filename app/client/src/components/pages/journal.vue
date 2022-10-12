@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid pa-0>
+  <v-container data-test-id="jornal_container" fluid pa-0>
     <Grid></Grid>
   </v-container>
 </template>

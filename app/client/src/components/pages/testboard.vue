@@ -3,7 +3,7 @@
     <h1>{{ $t("pages." + state.pageName) }} - {{ state.title }}</h1>
     <p>url params > {{ props.urlParams }} &lt; click value {{ state.count }}</p>
     <div class="mb-10">
-      <v-btn @click="counter">addCount</v-btn>
+      <v-btn data-test-id="testboard_count-button" @click="counter">addCount</v-btn>
     </div>
 
     <Grid v-if="state.slots" />
