@@ -1,6 +1,6 @@
 import { inject } from 'vue';
 
-function initStore() {
+const initStore = () => {
   const $store = inject("$store");
   $store.dispatch({
     type: `init`,
@@ -8,7 +8,7 @@ function initStore() {
   });
 }
 
-function prepareStore(name, args) {
+const prepareStore = (name, args) => {
   args.value = Math.floor(Math.random() * 100);
   args[`random_noise_0${Math.floor(Math.random() * 100)}`] = args.value;
   const $store = inject("$store");
@@ -25,4 +25,11 @@ function prepareStore(name, args) {
   });
 }
 
-export { initStore, prepareStore };
+const wrapComponent = (component, wrapper) => {
+  console.log(`<${wrapper} flat><${component} v-bind="args.props"/></${wrapper}>`)
+  return `<${wrapper} flat><${component} v-bind="args.props"/></${wrapper}>`
+}
+const wrapFullPage = (component, wrapper) => {
+  return `<${wrapper}  is-in-test=1><${component} v-bind="args.props"/></${wrapper}>`
+}
+export { initStore, prepareStore, wrapComponent, wrapFullPage };

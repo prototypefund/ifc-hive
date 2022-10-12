@@ -1,4 +1,4 @@
-import testboardComp from '@p/testboard.vue'
+import comp from '@p/testboard.vue'
 import App from '../../App.vue'
 import conf from '@p/conf.js'
 import { initStore, prepareStore } from '../../../.storybook/storeHelper.js'
@@ -18,7 +18,7 @@ export default {
 
 const Template = (args) => ({
   // Components used in your story `template` are defined in the `components` object
-  components: { App, testboardComp },
+  components: { App, comp },
   // The story's `args` need to be mapped into the template through the `setup()` method
   setup() {
     initStore()
@@ -26,11 +26,11 @@ const Template = (args) => ({
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
-  template: '<App is-in-test=1><testboardComp/>></App>',
+  template: wrapFullPage('comp', 'App'),
 });
 const HeadlessTemplate = (args) => ({
   // Components used in your story `template` are defined in the `components` object
-  components: { testboardComp },
+  components: { comp },
   // The story's `args` need to be mapped into the template through the `setup()` method
   setup() {
     initStore()
@@ -38,7 +38,7 @@ const HeadlessTemplate = (args) => ({
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
-  template: '<v-card flat><testboardComp v-bind="args.props"/></v-card>',
+  template: wrapComponent('comp', 'v-card'),
 });
 export const Headless = HeadlessTemplate.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args

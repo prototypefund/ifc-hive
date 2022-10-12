@@ -1,5 +1,5 @@
 <template>
-  <a @click="handleQuickListItem">
+  <a @click="handleQuickListItem" class="quickListHandler">
     <slot></slot>
   </a>
 </template>
@@ -57,3 +57,8 @@ onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });
 </script>
+<style lang="scss" scoped>
+.quickListHandler {
+  cursor: pointer;
+}
+</style>

@@ -1,7 +1,7 @@
-import dashboardComp from '@p/dashboard.vue'
+import comp from '@p/dashboard.vue'
 import App from '../../App.vue'
 import conf from '@p/conf.js'
-import { initStore, prepareStore } from '../../../.storybook/storeHelper.js'
+import { initStore, prepareStore, wrapComponent, wrapFullPage } from '../../../.storybook/storeHelper.js'
 
 
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export
@@ -18,7 +18,7 @@ export default {
 
 const Template = (args) => ({
   // Components used in your story `template` are defined in the `components` object
-  components: { App, dashboardComp },
+  components: { App, comp },
   // The story's `args` need to be mapped into the template through the `setup()` method
   setup() {
     initStore()
@@ -26,12 +26,12 @@ const Template = (args) => ({
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
-  template: '<App is-in-test=1><dashboardComp/>></App>',
+  template: wrapFullPage('comp', 'App'),
 });
 
 const HeadlessTemplate = (args) => ({
   // Components used in your story `template` are defined in the `components` object
-  components: { dashboardComp },
+  components: { comp },
   // The story's `args` need to be mapped into the template through the `setup()` method
   setup() {
     initStore()
@@ -40,7 +40,7 @@ const HeadlessTemplate = (args) => ({
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
-  template: '<v-card flat><dashboardComp v-bind="args.props"/></v-card>',
+  template: wrapComponent('comp', 'v-card'),
 });
 
 export const Headless = HeadlessTemplate.bind({});

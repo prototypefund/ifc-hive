@@ -1,7 +1,13 @@
 <template>
   <v-app v-if="(page && page.pageName) || isInTest">
     <!-- Global Toolbar -->
-    <v-app-bar density="compact" flat app color="grey-lighten-2">
+    <v-app-bar
+      density="compact"
+      flat
+      app
+      color="grey-lighten-2"
+      :class="{ appBarRel: isInTest }"
+    >
       <!-- Breadcrumb -->
       <v-app-bar-title>
         Journal
@@ -121,6 +127,10 @@ export default {
 };
 </script>
 <style>
+.appBarRel {
+  position: absolute !important;
+}
+
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
