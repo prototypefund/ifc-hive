@@ -11,7 +11,6 @@ export default {
   // More on argTypes: https://storybook.js.org/docs/vue/api/argtypes
   // provide doesn't work hear !!!
   argTypes: {
-    urlParams: 'döner'
   },
 };
 
@@ -46,7 +45,6 @@ const HeadlessTemplate = (args) => ({
 export const Headless = HeadlessTemplate.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
 Headless.args = conf.dashboard;
-Headless.args.props = { urlParams: 'döner' }
 
 
 export const Full = Template.bind({});
