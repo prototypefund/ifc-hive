@@ -1,15 +1,19 @@
 // https://docs.cypress.io/api/introduction/api.html
 
-import {isComonentTest, getURL} from './helper.js'
+import {isComonentTest, getURL, isIntegrationTest} from './helper.js'
 
 
 describe("Test Testborad Jornal ", () => {
 
-  it.only("visit Pages/Testboard and klick value", () => {
-    cy.visit("/");
-    cy.log("Server Contex", Cypress.env('TESTTYPE'), isComonentTest())
-    
-    cy.visit(getURL('pages/journal', 'Headless'))
+  it("visit Pages/Testboard and klick value", () => {
+    cy.log("Server Contex", Cypress.env('TESTTYPE'))
+    if (isIntegrationTest()) {
+      cy.visit("/");
+      cy.get('.v-list > :nth-child(3)').click()
+    } else {  
+      cy.visit(getURL('pages/journal', 'Headless'))
+    }
+
     cy.get('[data-test-id="jornal_container"]')
 
 

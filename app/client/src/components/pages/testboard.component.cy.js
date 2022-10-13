@@ -12,7 +12,7 @@ const prepareTestBord = (Type) => {
 const runCounterTest = () => {
   for(var i=0; i < 20; i++) {
     cy.contains("p", "click value "+i);
-    cy.get('[data-test-id="testboard-count-button"]').click();
+    cy.get('[data-test-id="testboard_count-button"]').click();
   }
 }
 
