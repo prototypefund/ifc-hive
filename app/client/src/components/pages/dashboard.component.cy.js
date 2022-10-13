@@ -5,7 +5,7 @@ import {isComonentTest, getURL} from './helper.js'
 describe("My First Test", () => {
   it("visits the app root url dual TEST", () => {
     if (isComonentTest()) {
-        cy.visit(getURL('Pages/Dashboard', 'Headless'))
+        cy.visitSB('Pages/Dashboard', 'Headless')
         cy.get('[data-test-id]')
     } else {
         cy.visit("/");
@@ -17,7 +17,7 @@ describe("My First Test", () => {
 
   it("visits the app root and go to about page", () => {
     if (isComonentTest()) {
-        cy.visit(getURL('Pages/Testboard', 'Full'))
+        cy.visitSB('Pages/Testboard', 'Full')
         // Wir müssen immer eine abfrage machen 
         cy.get('[data-test-id]');
     } else {
@@ -39,11 +39,10 @@ describe("My First Test", () => {
   });
   
   
-
   it("visits the app root url dual TEST", () => {
     cy.log("Server Contex", Cypress.env('TESTTYPE'))
     if (isComonentTest()) {
-        cy.visit(getURL('Pages/Dashboard', 'Headless'))
+        cy.visitSB('Pages/Dashboard', 'Headless')
         cy.get('[data-test-id]')
     } else {
         cy.visit("/");

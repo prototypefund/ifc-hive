@@ -11,7 +11,7 @@ describe("Test Testborad Jornal ", () => {
       cy.visit("/");
       cy.get('.v-list > :nth-child(3)').click()
     } else {  
-      cy.visit(getURL('pages/journal', 'Headless'))
+      cy.visitSB('pages/journal', 'Headless')
     }
 
     cy.get('[data-test-id="jornal_container"]')

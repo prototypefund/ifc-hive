@@ -4,7 +4,7 @@ import {isComonentTest, getURL} from './helper.js'
 
 
 const prepareTestBord = (Type) => {
-  cy.visit(getURL('Pages/Testboard', Type))
+  cy.visitSB('Pages/Testboard', Type)
   // Wir müssen immer eine abfrage machen 
   cy.get('[data-test-id="testboard_container"]')
 };
@@ -19,6 +19,7 @@ const runCounterTest = () => {
 
 describe("Test Testborad ", () => {
   it("visit Pages/Testboard and klick value", () => {
+
     cy.log("Server Contex", Cypress.env('TESTTYPE'), isComonentTest())
     if (isComonentTest()) {
       for(const name of ['Full', 'Headless']) {

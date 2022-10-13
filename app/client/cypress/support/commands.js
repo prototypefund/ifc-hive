@@ -24,3 +24,10 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+import {isComonentTest, getURL, isIntegrationTest} from './sbHelper.js'
+
+Cypress.Commands.add('visitSB', (title, name) => {
+    const dstUrl = getURL(title, name);
+    return cy.visit(dstUrl)
+ })
