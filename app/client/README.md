@@ -5,3 +5,37 @@ This template should help get you started developing with Vue 3 in Vite. The tem
 ## Recommended IDE Setup
 
 - [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+
+# Test Preperation
+If you want to run 2 non-headless sessions simultanusly make sure to select diffrent Browsers
+```
+docker-compose up --build -d
+cd app/client
+```
+
+## Integration Test non-headless for Development or Debuging
+Runs a Test against the RAW app via with Browser For Test Development/Debuging
+1) -> Test Preperation 
+```
+yarn test:integration
+OR presect a Browser
+yarn test:integration --browser firefox
+```
+
+## Integration Test Headless 
+Runs a Test against the RAW app via Comandline
+1) -> Test Preperation
+```
+yarn test:integration:ci
+```
+
+## Component Storybook Test non-headless for Development or Debuging
+Runs a Test against the Storybook RAW app via Comandline
+```
+yarn test:component
+```
+## Component Storybook Test Headless
+```
+yarn test:component:ci
+```
+
