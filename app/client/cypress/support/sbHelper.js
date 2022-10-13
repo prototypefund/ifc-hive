@@ -1,43 +1,63 @@
 
 
 const isComonentTest = () => {
-    return (Cypress.env('TESTTYPE')=='COMPONENT');
-  }
-  
-  const isIntegrationTest = () => {
-    return (Cypress.env('TESTTYPE')=='INTEGRATION');
-  }
-  
+  return (Cypress.env('TESTTYPE') == 'COMPONENT');
+}
+
+const isIntegrationTest = () => {
+  return (Cypress.env('TESTTYPE') == 'INTEGRATION');
+}
+
+/*
+'Pages/Testbo/sdfard', 'UxlllUUl2' -> 'pages-testbo-sdfard--uxlll-u-ul-2'
+'Pages/Testbo/sdfard', 'UxlllUUU2' -> 'pages-testbo-sdfard--uxlll-u-u-u-2' BUT SHOULD BE 'pages-testbo-sdfard--uxlll-uuu-2'
+*/
 
 
+/**
+ * @TODO Doesn't cover all cases need fix or derive the id
+ * @param {Title of the Storybook} title 
+ * @param {Name or Variable Name} name 
+ */
+const getQuerryId = (title, name) => {
+  /*
+    Axiom xlU -> xl-U
+    Axiom xUl -> x-Ul
+  */
 
-  const getURL = (title, name) => {
-  
-    function rewrite(str) {
-      var r_str = str[0].toLowerCase();
-      var j = 0;
-      var char = ''
-      for(var i = 1; i < str.length; i++) {
-        char = str[i];
-        if (char.toUpperCase() == str[i]) {
-          char = char.toLowerCase()
-          if(r_str[j]!='-') {
-            r_str = r_str + '-'
-            j++;
-          }
-        }
-       if (str[i]!='/') {
-         r_str = r_str + char
+  function rewrite(str) {
+    var r_str = str[0].toLowerCase();
+    var j = 0;
+    var char = ''
+    for (var i = 1; i < str.length; i++) {
+      char = str[i];
+      if (char.toUpperCase() == str[i]) {
+        char = char.toLowerCase()
+        if (r_str[j] != '-') {
+          r_str = r_str + '-'
           j++;
-       }
-     }
-     return r_str;
+        }
+      }
+      if (str[i] != '/') {
+        r_str = r_str + char
+        j++;
+      }
     }
-  
-    const r_title = rewrite(title)
-    const r_name = rewrite(name)
-    return `iframe.html?id=${r_title}--${r_name}&viewMode=story`;
+    return r_str;
   }
+  const r_title = rewrite(title)
+  const r_name = rewrite(name)
+  return `${r_title}--${r_name}`;
+}
 
+/**
+ * @param {Title of the Storybook} title 
+ * @param {Name or Variable Name} name 
+ * @returns Relative URL for Storybook
+ */
+const getRelativeURL = (title, name) => {
+  const qid = getQuerryId(title, name)
+  return `iframe.html?id=${qid}&viewMode=story`;
+}
 
-export { isComonentTest, isIntegrationTest, getURL };
+export { isComonentTest, isIntegrationTest, getRelativeURL };

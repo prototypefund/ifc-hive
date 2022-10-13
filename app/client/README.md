@@ -18,8 +18,6 @@ Runs a Test against the RAW app via with Browser For Test Development/Debuging
 1) -> Test Preperation 
 ```
 yarn test:integration
-OR presect a Browser
-yarn test:integration --browser firefox
 ```
 
 ## Integration Test Headless 

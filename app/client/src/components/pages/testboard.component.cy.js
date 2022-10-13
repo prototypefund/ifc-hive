@@ -1,34 +1,27 @@
 // https://docs.cypress.io/api/introduction/api.html
 
-import {isComonentTest, getURL} from './helper.js'
+import { isComonentTest } from './helper.js'
 
-
-const prepareTestBord = (Type) => {
-  cy.visitSB('Pages/Testboard', Type)
-  // Wir müssen immer eine abfrage machen 
-  cy.get('[data-test-id="testboard_container"]')
-};
 
 const runCounterTest = () => {
-  for(var i=0; i < 20; i++) {
-    cy.contains("p", "click value "+i);
+  for (var i = 0; i < 20; i++) {
+    cy.contains("p", "click value " + i);
     cy.get('[data-test-id="testboard_count-button"]').click();
   }
 }
 
-
 describe("Test Testborad ", () => {
   it("visit Pages/Testboard and klick value", () => {
-
     cy.log("Server Contex", Cypress.env('TESTTYPE'), isComonentTest())
     if (isComonentTest()) {
-      for(const name of ['Full', 'Headless']) {
-        prepareTestBord(name)
+      for (const name of ['Full', 'Headless']) {
+        cy.visitSB('Pages/Testboard', name)
+        cy.get('[data-test-id="testboard_container"]')
         runCounterTest();
       }
     } else {
       cy.visit("/");
-      cy.get('.v-list > :nth-child(4)').click();   
+      cy.get('.v-list > :nth-child(4)').click();
       runCounterTest();
     }
   });

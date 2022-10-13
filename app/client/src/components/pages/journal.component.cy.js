@@ -1,6 +1,6 @@
 // https://docs.cypress.io/api/introduction/api.html
 
-import {isComonentTest, getURL, isIntegrationTest} from './helper.js'
+import { isComonentTest, isIntegrationTest } from './helper.js'
 
 
 describe("Test Testborad Jornal ", () => {
@@ -10,7 +10,7 @@ describe("Test Testborad Jornal ", () => {
     if (isIntegrationTest()) {
       cy.visit("/");
       cy.get('.v-list > :nth-child(3)').click()
-    } else {  
+    } else {
       cy.visitSB('pages/journal', 'Headless')
     }
 
@@ -26,8 +26,8 @@ describe("Test Testborad Jornal ", () => {
       .each(element => {
         cy.wrap(element).should('contain', 'Planung')
       });
-  
+
 
   });
-  
+
 });
