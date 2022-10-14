@@ -1,25 +1,15 @@
 <template>
   <!-- Navigation Drawer -->
-  <v-navigation-drawer v-model="navigationDrawer" :rail="navigationRail" permanent>
+  <v-navigation-drawer v-model="navigationDrawer" data-test-id="sidebar_container" :rail="navigationRail" permanent>
     <!-- Title -->
     <v-list-item title="Navigation" value="Navigation">
       <!-- Close icon -->
       <template v-slot:append>
-        <v-btn
-          v-if="!navigationRail"
-          variant="text"
-          icon="mdi-chevron-left"
-          @click.stop="handleNavigation(true)"
-        >
+        <v-btn v-if="!navigationRail" variant="text" icon="mdi-chevron-left" @click.stop="handleNavigation(true)">
         </v-btn>
 
         <!-- open icon -->
-        <v-btn
-          v-if="navigationRail"
-          variant="text"
-          icon="mdi-chevron-right"
-          @click.stop="handleNavigation(false)"
-        >
+        <v-btn v-if="navigationRail" variant="text" icon="mdi-chevron-right" @click.stop="handleNavigation(false)">
         </v-btn>
       </template>
     </v-list-item>
@@ -28,16 +18,9 @@
 
     <!-- Navigation List -->
     <v-list density="compact" nav>
-      <v-list-item
-        v-for="item in navItems"
-        link
-        :key="item.title"
-        :prepend-icon="item.icon"
-        :title="$t('pages.' + item.route.replace('.', '-'))"
-        :value="item.title"
-        class="nav-link"
-        @click="navigate(item)"
-      >
+      <v-list-item v-for="item in navItems" link :key="item.title" :prepend-icon="item.icon"
+        :title="$t('pages.' + item.route.replace('.', '-'))" :value="item.title" class="nav-link"
+        :data-test-id="'sidebar_nav-' + item.route.replace('.', '-')" @click="navigate(item)">
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -82,4 +65,6 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+
+</style>

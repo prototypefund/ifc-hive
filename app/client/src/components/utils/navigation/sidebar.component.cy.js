@@ -1,17 +1,30 @@
 
-import { isComonentTest } from './helper.js'
+import { isComonentTest } from '../../pages/helper.js'
 
 
-describe("My First Test", () => {
-  it("visits the app root url dual TEST", () => {
+describe("Navigate True Sidebar", () => {
+  it.only("visits Sidebar", () => {
     if (isComonentTest()) {
       cy.visitSB('Pages/Dashboard', 'Headless')
-      cy.get('[data-test-id]')
     } else {
       cy.visit("/");
     }
-    // http://localhost:7007/iframe.html?id=pages-dashboard--headless
-    // http://localhost:7007/?path=/story/pages-dashboard--headless
+
+    /**
+     * 
+     * Wie impoprtiern der zu erwartenden Strings ? 
+     */
+    cy.get('[data-test-id]')
+    cy.get('[data-test-id="sidebar_nav-app-settings"]').click()
+    cy.get('[data-test-id="sidebar_nav-app-testboard"]').click()
+
+    // cy.get('[data-test-id="sidebar_nav-app-daniel"]').click()
+    cy.get('[data-test-id="sidebar_nav-app-journal"]').click()
+    cy.get('[data-test-id="sidebar_nav-app-projects"]').click()
+    cy.get('[data-test-id="sidebar_nav-app-dashboard"]').click()
+
+
+
     cy.contains("h1", "Dashboard - funoFun");
   });
 
@@ -22,8 +35,7 @@ describe("My First Test", () => {
       cy.get('[data-test-id]');
     } else {
       cy.visit("/");
-      cy.get('[data-test-id="sidebar_nav-app-testboard"]').click()
-
+      cy.get('.v-list > :nth-child(4)').click();
     }
 
     // cy.get('')

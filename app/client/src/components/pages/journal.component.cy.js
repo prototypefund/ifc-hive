@@ -9,7 +9,8 @@ describe("Test Testborad Jornal ", () => {
     cy.log("Server Contex", Cypress.env('TESTTYPE'))
     if (isIntegrationTest()) {
       cy.visit("/");
-      cy.get('.v-list > :nth-child(3)').click()
+      cy.get('[data-test-id="sidebar_nav-app-journal"]').click()
+
     } else {
       cy.visitSB('pages/journal', 'Headless')
     }
