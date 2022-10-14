@@ -26,7 +26,6 @@ config = {
   "addons": [
     "@storybook/addon-viewport",
     "storybook-dark-mode",
-    "storybook-vue3-router",
     "@storybook/addon-storysource",
     "@storybook/addon-links",
     "@storybook/addon-essentials",
