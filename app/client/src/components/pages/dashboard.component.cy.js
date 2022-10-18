@@ -2,8 +2,33 @@
 import { isComonentTest } from './helper.js'
 
 
+Cypress.Commands.add('asComponentTest', (data) => {
+  cy.visit('/')
+  cy.log(data)
+
+
+  it("visits the app root url dual TEST", () => {
+
+    if (isComonentTest()) {
+      cy.visitSB('Pages/Dashboard', 'Headless')
+      cy.get('[data-test-id]')
+    } else {
+      cy.visit("/");
+    }
+    // http://localhost:7007/iframe.html?id=pages-dashboard--headless
+    // http://localhost:7007/?path=/story/pages-dashboard--headless
+    cy.contains("h1", "Dashboard - funoFun");
+  })
+
+
+})
+
+
+/*
+
 describe("My First Test", () => {
   it("visits the app root url dual TEST", () => {
+
     if (isComonentTest()) {
       cy.visitSB('Pages/Dashboard', 'Headless')
       cy.get('[data-test-id]')
@@ -56,3 +81,4 @@ describe("My First Test", () => {
 
 
   // cy.visit('localhost:6006/iframe.html?id=component-editperson--filled-form-2&viewMode=story')
+*/

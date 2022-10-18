@@ -30,6 +30,7 @@ config = defineConfig({
   chromeWebSecurity: false,
   /* Setup for E2E framework */
   e2e: {
+    experimentalSessionAndOrigin:true,
     specPattern:["cypress/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}","**/*.component.cy.{js,jsx,ts,tsx}"], 
     baseUrl: "http://localhost:4173",
     video: false,

@@ -25,9 +25,16 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-import { getRelativeURL } from './sbHelper.js'
+import { getRelativeURL, isComonentTest } from './sbHelper.js'
 
 Cypress.Commands.add('visitSB', (title, name) => {
     const dstUrl = getRelativeURL(title, name);
-    return cy.visit(dstUrl)
+    if (isComonentTest()) {
+        return cy.visit(dstUrl)
+    } else {
+        // Cypress.config('baseUrl', 'http://localhost:6006/')
+        return cy.origin('http://localhost:6006', { args: { dstUrl } }, ({ dstUrl }) => {
+            cy.visit('http://localhost:6006/' + dstUrl)
+        })
+    }
 })
