@@ -26,7 +26,7 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 import { getRelativeURL, isComonentTest } from './sbHelper.js'
-
+// https://github.com/cypress-io/cypress/issues/8382
 Cypress.Commands.add('visitSB', (title, name) => {
     const dstUrl = getRelativeURL(title, name);
     if (isComonentTest()) {
