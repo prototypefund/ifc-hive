@@ -6,7 +6,7 @@ import { initStore, prepareStore, wrapComponent, wrapFullPage } from '../../../.
 
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export
 export default {
-  title: 'Pages/Testboard',
+  title: 'Navigation/SideBar',
   // component: dashboardComp,
   // More on argTypes: https://storybook.js.org/docs/vue/api/argtypes
   // provide doesn't work hear !!!

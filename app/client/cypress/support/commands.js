@@ -26,13 +26,14 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 import { getRelativeURL, isComonentTest } from './sbHelper.js'
+
 // https://github.com/cypress-io/cypress/issues/8382
 Cypress.Commands.add('visitSB', (title, name) => {
     const dstUrl = getRelativeURL(title, name);
     if (isComonentTest()) {
         return cy.visit(dstUrl)
     } else {
-        // Cypress.config('baseUrl', 'http://localhost:6006/')
+
         return cy.origin('http://localhost:6006', { args: { dstUrl } }, ({ dstUrl }) => {
             cy.visit('http://localhost:6006/' + dstUrl)
         })

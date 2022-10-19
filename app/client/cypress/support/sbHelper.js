@@ -4,9 +4,10 @@ const isComonentTest = () => {
   return (Cypress.env('TESTTYPE') == 'COMPONENT');
 }
 
+/*
 const isIntegrationTest = () => {
   return (Cypress.env('TESTTYPE') == 'INTEGRATION');
-}
+}*/
 
 /*
 'Pages/Testbo/sdfard', 'UxlllUUl2' -> 'pages-testbo-sdfard--uxlll-u-ul-2'
@@ -45,6 +46,16 @@ const getQuerryId = (title, name) => {
     }
     return r_str;
   }
+  function rewrite(str) {
+    var result = str.replace(/([A-Z]+)/g, " $1");
+    result = result.replace(/([A-Z][a-z])/g, " $1");
+    result = result.replace(/(_)/g, " ");
+    result = result.replace(/(\/)/g, " ");
+    result = result.replace(/([0-9]+)/g, " $1").trim();
+    result = result.replace(/\s+/g, "-");
+    return result.toLowerCase();
+  }
+
   const r_title = rewrite(title)
   const r_name = rewrite(name)
   return `${r_title}--${r_name}`;
@@ -60,4 +71,4 @@ const getRelativeURL = (title, name) => {
   return `iframe.html?id=${qid}&viewMode=story`;
 }
 
-export { isComonentTest, isIntegrationTest, getRelativeURL };
+export { isComonentTest, getRelativeURL };

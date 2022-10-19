@@ -11,3 +11,7 @@ const Template = (args) => ({
 export const Full = Template.bind({});
 export const HeadlessTemplate = Template.bind({});
 export const OthTherTTTemplate = Template.bind({});
+export const OthTherTTTemplate22 = Template.bind({});
+export const UxlllUUl2 = Template.bind({});
+export const UxlllUUU2 = Template.bind({});
+

@@ -19,11 +19,10 @@ Cypress.Commands.add('asComponentTest', (data) => {
     cy.get('[data-test-id="testboard_container"]')
     runCounterTest();
   }
-
 })
 
 
-it("visits the app root and go to about page", () => {
+it.only("visits the app root and go to about page", () => {
   if (isComonentTest()) {
     cy.visitSB('Pages/Testboard', 'Full')
     // Wir müssen immer eine abfrage machen 
@@ -31,23 +30,15 @@ it("visits the app root and go to about page", () => {
   } else {
     cy.visit("/");
     cy.get('[data-test-id="sidebar_nav-app-testboard"]').click()
-
   }
 
-  cy.get('.mb-10 > .v-btn').click();
-  cy.get('.mb-10 > .v-btn').click();
-  cy.get('.mb-10 > .v-btn').click();
-  cy.get('.mb-10 > .v-btn').click();
-  cy.get('.mb-10 > .v-btn').click();
-  cy.get('.mb-10 > .v-btn').click();
-  cy.get('.mb-10 > .v-btn').click();
+  for (var i = 0; i < 7; i++) {
+    cy.get('[data-test-id="testboard_count-button"]').click();
+  }
   cy.contains("p", "click value 7");
-});
+})
 
-
-
-
-isComonentTest() && describe("Test Testborad ", () => {
+describe("Test Testborad ", () => {
   it("visit Pages/Testboard and klick value", () => {
     cy.log("Server Contex", Cypress.env('TESTTYPE'), isComonentTest())
     if (isComonentTest()) {
@@ -58,7 +49,7 @@ isComonentTest() && describe("Test Testborad ", () => {
       }
     } else {
       cy.visit("/"); /// part of integration prep. 
-      cy.get('.v-list > :nth-child(4)').click();
+      cy.get('[data-test-id="testboard_count-button"]').click();
       runCounterTest();
     }
   });
