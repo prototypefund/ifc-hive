@@ -6,7 +6,11 @@ const runTest = (name, isComonentTest = true) => {
   Cypress.Commands.add('asComponentTest', (data) => { throw "BAD DEFINITION" })
   Cypress.Commands.add('context', () => { return "A" })
   window.testExecutionContex = () => { return { isComonentTest: isComonentTest } }
-  var rq = require(`../../src/components/pages/${name}.component.cy.js`)
+  if (isComonentTest) {
+    var rq = require(`../../src/components/pages/${name}.component.cy.js?isComonentTest0=A`)
+  } else {
+    var rq = require(`../../src/components/pages/${name}.component.cy.js?isComonentTest0=B`)
+  }
 
 }
 

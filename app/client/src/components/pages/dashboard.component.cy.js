@@ -6,9 +6,16 @@
  * http://localhost:7007/?path=/story/pages-dashboard--headless
  */
 
+
+const params = new Proxy(new URLSearchParams(window.location.search), {
+  get: (searchParams, prop) => searchParams.get(prop),
+});
+
+console.log(' params.isComonentTest0 ', params.isComonentTest0)
+
 const _isComonentTest = window.testExecutionContex().isComonentTest;
-// const isComonentTest = () => { return _isComonentTest }
-const isComonentTest = () => { return window.testExecutionContex().isComonentTest }
+const isComonentTest = () => { return _isComonentTest }
+// const isComonentTest = () => { return window.testExecutionContex().isComonentTest }
 
 console.log('IMPORT', window.testExecutionContex())
 console.log('IMPORT', _isComonentTest)
