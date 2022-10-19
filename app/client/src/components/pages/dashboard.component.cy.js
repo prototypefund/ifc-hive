@@ -1,33 +1,38 @@
 
-import { isComonentTest } from './helper.js'
+//import { isComonentTest } from './helper.js'
 
+/*
+ * http://localhost:7007/iframe.html?id=pages-dashboard--headless
+ * http://localhost:7007/?path=/story/pages-dashboard--headless
+ */
+
+const _isComonentTest = window.testExecutionContex().isComonentTest;
+// const isComonentTest = () => { return _isComonentTest }
+const isComonentTest = () => { return window.testExecutionContex().isComonentTest }
+
+console.log('IMPORT', window.testExecutionContex())
+console.log('IMPORT', _isComonentTest)
 
 Cypress.Commands.add('asComponentTest', (data) => {
   cy.visit('/')
   cy.log(data)
 
+  if (isComonentTest()) {
+    cy.visitSB('Pages/Dashboard', 'Headless')
+    cy.get('[data-test-id]')
+  } else {
+    cy.visit("/");
+  }
 
-  it("visits the app root url dual TEST", () => {
-
-    if (isComonentTest()) {
-      cy.visitSB('Pages/Dashboard', 'Headless')
-      cy.get('[data-test-id]')
-    } else {
-      cy.visit("/");
-    }
-    // http://localhost:7007/iframe.html?id=pages-dashboard--headless
-    // http://localhost:7007/?path=/story/pages-dashboard--headless
-    cy.contains("h1", "Dashboard - funoFun");
-  })
-
+  cy.contains("h1", "Dashboard - funoFun");
 
 })
 
 
-/*
+describe("Dash Board My First Test " + isComonentTest(), () => {
 
-describe("My First Test", () => {
-  it("visits the app root url dual TEST", () => {
+  it("visits the app root url dual TEST 1", () => {
+    cy.log(isComonentTest())
 
     if (isComonentTest()) {
       cy.visitSB('Pages/Dashboard', 'Headless')
@@ -35,38 +40,13 @@ describe("My First Test", () => {
     } else {
       cy.visit("/");
     }
-    // http://localhost:7007/iframe.html?id=pages-dashboard--headless
-    // http://localhost:7007/?path=/story/pages-dashboard--headless
     cy.contains("h1", "Dashboard - funoFun");
   });
 
-  it("visits the app root and go to about page", () => {
-    if (isComonentTest()) {
-      cy.visitSB('Pages/Testboard', 'Full')
-      // Wir müssen immer eine abfrage machen 
-      cy.get('[data-test-id]');
-    } else {
-      cy.visit("/");
-      cy.get('[data-test-id="sidebar_nav-app-testboard"]').click()
 
-    }
-
-    // cy.get('')
-
-    cy.get('.mb-10 > .v-btn').click();
-    cy.get('.mb-10 > .v-btn').click();
-
-    cy.get('.mb-10 > .v-btn').click();
-    cy.get('.mb-10 > .v-btn').click();
-    cy.get('.mb-10 > .v-btn').click();
-    cy.get('.mb-10 > .v-btn').click();
-    cy.get('.mb-10 > .v-btn').click();
-    cy.contains("p", "click value 7");
-  });
-
-
-  it("visits the app root url dual TEST", () => {
+  it("visits the app root url dual TEST 2", () => {
     cy.log("Server Contex", Cypress.env('TESTTYPE'))
+    cy.log("Server Contex isComonentTest", _isComonentTest, window.testExecutionContex.isComonentTest)
     if (isComonentTest()) {
       cy.visitSB('Pages/Dashboard', 'Headless')
       cy.get('[data-test-id]')
@@ -79,6 +59,6 @@ describe("My First Test", () => {
 });
 
 
-
+/*
   // cy.visit('localhost:6006/iframe.html?id=component-editperson--filled-form-2&viewMode=story')
 */

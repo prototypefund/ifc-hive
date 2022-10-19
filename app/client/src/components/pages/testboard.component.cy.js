@@ -23,6 +23,27 @@ Cypress.Commands.add('asComponentTest', (data) => {
 })
 
 
+it("visits the app root and go to about page", () => {
+  if (isComonentTest()) {
+    cy.visitSB('Pages/Testboard', 'Full')
+    // Wir müssen immer eine abfrage machen 
+    cy.get('[data-test-id]');
+  } else {
+    cy.visit("/");
+    cy.get('[data-test-id="sidebar_nav-app-testboard"]').click()
+
+  }
+
+  cy.get('.mb-10 > .v-btn').click();
+  cy.get('.mb-10 > .v-btn').click();
+  cy.get('.mb-10 > .v-btn').click();
+  cy.get('.mb-10 > .v-btn').click();
+  cy.get('.mb-10 > .v-btn').click();
+  cy.get('.mb-10 > .v-btn').click();
+  cy.get('.mb-10 > .v-btn').click();
+  cy.contains("p", "click value 7");
+});
+
 
 
 

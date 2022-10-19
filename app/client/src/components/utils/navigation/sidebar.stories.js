@@ -1,5 +1,5 @@
 import comp from '@p/testboard.vue'
-import App from '../../App.vue'
+import App from '../../../App.vue'
 import conf from '@p/conf.js'
 import { initStore, prepareStore, wrapComponent, wrapFullPage } from '../../../../.storybook/storeHelper.js'
 
