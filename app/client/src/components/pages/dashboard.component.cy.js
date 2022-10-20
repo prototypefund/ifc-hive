@@ -1,3 +1,7 @@
+/*
+ * Naming 
+ * <dashboard.vue> -> data-test-id="dashboard_container"
+ */
 
 import { isComonentTest } from './helper.js'
 

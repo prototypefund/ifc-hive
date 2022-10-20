@@ -9,12 +9,7 @@
     <div class="d-flex flex-column">
       <br /><br />
       <v-scale-transition>
-        <v-select
-          density="compact"
-          :items="colCounts"
-          v-model="colCount"
-          label="Breite"
-        ></v-select>
+        <v-select density="compact" :items="colCounts" v-model="colCount" label="Breite"></v-select>
       </v-scale-transition>
     </div>
   </v-toolbar>

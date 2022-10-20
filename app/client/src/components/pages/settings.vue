@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="state">
+  <v-container v-if="state" data-test-id="settings_container">
     <h1>{{ $t("pages." + state.pageName) }} - {{ state.title }}</h1>
     <p>url params > {{ props.urlParams }} &lt;</p>
     <Grid :contents="state.slots" :grid="state.grid"></Grid>

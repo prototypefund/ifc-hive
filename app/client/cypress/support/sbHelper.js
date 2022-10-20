@@ -16,6 +16,40 @@ const isIntegrationTest = () => {
 
 
 /**
+ * Lists the exported Stories from a Given stories.js
+ * import * as MySB from './test_sbHelper.stories.js'
+ * listStoriesFromClass(MySB)
+ * @param {*} clazz StoryBookClass
+ * @returns List of Stories [{title, varname, name, id }]
+ */
+const listStoriesFromClass = (clazz) => {
+  var result = []
+  const title = clazz.default.title
+  for (var varname in clazz) {
+    if (varname != 'default') {
+      const qid = getQuerryId(title, varname)
+      result.push({ title, varname, name: getNameFrom(varname), id: qid })
+      // F.default.title
+      cy.log(JSON.stringify(result))
+      console.log(result)
+    }
+  }
+  return result;
+}
+
+
+const getNameFrom = (nameOrVarname) => {
+  var result = nameOrVarname.replace(/([A-Z]+)/g, " $1");
+  result = result.replace(/([A-Z][a-z])/g, " $1");
+  result = result.replace(/(_)/g, " ");
+  result = result.replace(/(\/)/g, " ");
+  result = result.replace(/([0-9]+)/g, " $1").trim();
+  result = result.replace(/\s+/g, " ");
+  return result;
+}
+
+
+/**
  * @TODO Doesn't cover all cases need fix or derive the id
  * @param {Title of the Storybook} title 
  * @param {Name or Variable Name} name 
@@ -56,6 +90,12 @@ const getQuerryId = (title, name) => {
     return result.toLowerCase();
   }
 
+  function rewrite(str) {
+    var result = getNameFrom(str);
+    result = result.replace(/\s+/g, "-")
+    return result.toLowerCase();
+  }
+
   const r_title = rewrite(title)
   const r_name = rewrite(name)
   return `${r_title}--${r_name}`;
@@ -71,4 +111,4 @@ const getRelativeURL = (title, name) => {
   return `iframe.html?id=${qid}&viewMode=story`;
 }
 
-export { isComonentTest, getRelativeURL };
+export { isComonentTest, getRelativeURL, getNameFrom, getQuerryId, listStoriesFromClass };

@@ -1,18 +1,22 @@
 
-import * as F from './test_sbHelper.stories.js'
+import * as TestSB from './test_sbHelper.stories.js'
+import { isComonentTest, listStoriesFromClass } from '../../cypress/support/sbHelper.js'
+
 
 describe("Test Testborad ", () => {
-  it.only('test test', () => {
-    cy.log("title of Test ", F.default.title)
+  // isComonentTest() &&
+  it.only('Viste Tests test', () => {
+    const stories = listStoriesFromClass(TestSB)
+    cy.log("Title of Test", TestSB.default.title)
+    cy.log(JSON.stringify(stories))
 
-    for (var key in F) {
-      if (key != 'default') {
-        cy.log("title of Test ", key)
-        console.log("s", "" + key)
-        cy.visitSB(F.default.title, key)
-        cy.get('p').should('contain', 'TEST')
-      }
+    /**
+     * Iterate thrue Tests from Import
+     */
+    for (var storie of stories) {
+      cy.log(storie.title, storie.name)
+      cy.visitSB(storie.title, storie.name)
+      cy.get('p').should('contain', 'TEST')
     }
-
   });
 });

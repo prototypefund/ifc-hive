@@ -25,6 +25,16 @@ const prepareStore = (name, args) => {
   });
 }
 
+const dispatchStore = (name, type, args) => {
+  const $store = inject("$store");
+  const routeName = `app.${name}`
+  $store.dispatch({
+    type: type,
+    routeName,
+    payload: args,
+  });
+}
+
 const wrapComponent = (component, wrapper) => {
   console.log(`<${wrapper} flat><${component} v-bind="args.props"/></${wrapper}>`)
   return `<${wrapper} flat><${component} v-bind="args.props"/></${wrapper}>`
@@ -32,4 +42,4 @@ const wrapComponent = (component, wrapper) => {
 const wrapFullPage = (component, wrapper) => {
   return `<${wrapper}  is-in-test=1><${component} v-bind="args.props"/></${wrapper}>`
 }
-export { initStore, prepareStore, wrapComponent, wrapFullPage };
+export { initStore, prepareStore, dispatchStore, dumpStore, wrapComponent, wrapFullPage };

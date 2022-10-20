@@ -10,7 +10,6 @@ describe("Test Testborad Jornal ", () => {
     if (isIntegrationTest()) {
       cy.visit("/");
       cy.get('[data-test-id="sidebar_nav-app-journal"]').click()
-
     } else {
       cy.visitSB('pages/journal', 'Headless')
     }

@@ -1,38 +1,25 @@
 <template>
-  <GridType>
+  <GridType data-test-id="loader_container">
     <v-row v-if="editMode">
       <v-col cols="4">
         <v-select :items="colCounts" v-model="colCount" label="Column Count"></v-select>
       </v-col>
       <v-col cols="4">
-        <v-select :items="gridTypes" v-model="gridType" label="Grid Type"></v-select>
+        <v-select :items="gridTypes" v-model="gridType" label="Grid Type" data-test-id="loader_container-gridTypes">
+        </v-select>
       </v-col>
       <v-col cols="4">
         <v-select :items="gridItems" v-model="gridItem" label="Grid Item"></v-select>
       </v-col>
     </v-row>
     <v-row no-gutters v-for="row in rows">
-      <v-col
-        v-for="column in row"
-        :class="getSlotClass(column) + ' ' + getColClass(column)"
-        v-if="row"
-      >
+      <v-col v-for="column in row" :class="getSlotClass(column) + ' ' + getColClass(column)" v-if="row">
         <GridItem>
           <template v-slot:header>
-            <WidgetToolBar
-              v-if="editMode"
-              type="widgets"
-              :columnClass="column.column"
-              :columnIndex="column.slot"
-              :uuid="column.widget.uuid"
-              @changeColCount="changeColCount"
-            />
+            <WidgetToolBar v-if="editMode" type="widgets" :columnClass="column.column" :columnIndex="column.slot"
+              :uuid="column.widget.uuid" @changeColCount="changeColCount" />
           </template>
-          <component
-            :is="column.component"
-            :uuid="column.widget.uuid"
-            :props="column.widget.props || {}"
-          ></component>
+          <component :is="column.component" :uuid="column.widget.uuid" :props="column.widget.props || {}"></component>
         </GridItem>
       </v-col>
     </v-row>

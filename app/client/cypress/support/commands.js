@@ -27,13 +27,22 @@
 
 import { getRelativeURL, isComonentTest } from './sbHelper.js'
 
-// https://github.com/cypress-io/cypress/issues/8382
+
+/**
+ * Vistes a Storybook Page 
+ * And waits for the [data-test-id] to Render
+ * @param {Title of the Storybook} title 
+ * @param {Name or Variable Name} name 
+ */
 Cypress.Commands.add('visitSB', (title, name) => {
     const dstUrl = getRelativeURL(title, name);
     if (isComonentTest()) {
-        return cy.visit(dstUrl)
+        cy.visit(dstUrl)
+        /** Every  */
+        return cy.get('[data-test-id]')
     } else {
-
+        // Normaly Not used
+        // https://github.com/cypress-io/cypress/issues/8382
         return cy.origin('http://localhost:6006', { args: { dstUrl } }, ({ dstUrl }) => {
             cy.visit('http://localhost:6006/' + dstUrl)
         })
