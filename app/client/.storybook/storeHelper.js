@@ -42,4 +42,4 @@ const wrapComponent = (component, wrapper) => {
 const wrapFullPage = (component, wrapper) => {
   return `<${wrapper}  is-in-test=1><${component} v-bind="args.props"/></${wrapper}>`
 }
-export { initStore, prepareStore, dispatchStore, dumpStore, wrapComponent, wrapFullPage };
+export { initStore, prepareStore, dispatchStore, wrapComponent, wrapFullPage };

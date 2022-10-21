@@ -1,5 +1,4 @@
 
-
 const isComonentTest = () => {
   return (Cypress.env('TESTTYPE') == 'COMPONENT');
 }
@@ -8,11 +7,6 @@ const isComonentTest = () => {
 const isIntegrationTest = () => {
   return (Cypress.env('TESTTYPE') == 'INTEGRATION');
 }*/
-
-/*
-'Pages/Testbo/sdfard', 'UxlllUUl2' -> 'pages-testbo-sdfard--uxlll-u-ul-2'
-'Pages/Testbo/sdfard', 'UxlllUUU2' -> 'pages-testbo-sdfard--uxlll-u-u-u-2' BUT SHOULD BE 'pages-testbo-sdfard--uxlll-uuu-2'
-*/
 
 
 /**
@@ -27,11 +21,7 @@ const listStoriesFromClass = (clazz) => {
   const title = clazz.default.title
   for (var varname in clazz) {
     if (varname != 'default') {
-      const qid = getQuerryId(title, varname)
-      result.push({ title, varname, name: getNameFrom(varname), id: qid })
-      // F.default.title
-      cy.log(JSON.stringify(result))
-      console.log(result)
+      result.push({ title, varname, name: getNameFrom(varname), id: getQuerryId(title, varname) })
     }
   }
   return result;

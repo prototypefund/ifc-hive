@@ -1,6 +1,7 @@
 // import routes from modules
 import dashboardComp from '@p/dashboard.vue'
 import settingsComp from '@p/settings.vue'
+import avatarComp from '@p/avatar.vue'
 import journal from '@p/journal.vue'
 import conf from '@p/conf.js'
 import project_index from '@p/project_index.vue'
@@ -64,5 +65,18 @@ export default [
                 payload: conf.project_index
             });
         }
-    }
+    },
+    {
+        path: '/avatar',
+        name: 'app.avatar',
+        component: avatarComp,
+        props: true,
+        beforeEnter: (to, from) => {
+            store.dispatch({
+                type: 'pages/add',
+                routeName: to.name,
+                payload: conf.avatar
+            });
+        }
+    },
 ]

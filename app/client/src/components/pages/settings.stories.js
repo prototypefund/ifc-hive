@@ -1,7 +1,7 @@
 import comp from '@p/settings.vue'
 import App from '../../App.vue'
 import conf from '@p/conf.js'
-import { dumpStore, dispatchStore, initStore, prepareStore, wrapComponent, wrapFullPage } from '../../../.storybook/storeHelper.js'
+import { dispatchStore, initStore, prepareStore, wrapComponent, wrapFullPage } from '../../../.storybook/storeHelper.js'
 
 
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export

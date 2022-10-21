@@ -1,10 +1,14 @@
 // https://docs.cypress.io/api/introduction/api.html
 
+// import { cy } from 'date-fns/locale';
+import { isComonentTest } from '../support/sbHelper.js';
+
 describe("My First Test", () => {
   it("visits the app root url dual TEST", () => {
     cy.log("Server Contex", Cypress.env('SERVER'))
-    if (Cypress.env('SERVER') == 'SB') {
-      cy.visit("iframe.html?id=pages-dashboard--headless");
+    if (isComonentTest()) {
+      cy.visitSB('Pages/Dashboard', 'Headless')
+      //      cy.visit("iframe.html?id=pages-dashboard--headless");
       cy.get('[data-test-id]')
     } else {
       cy.visit("/");
@@ -17,16 +21,12 @@ describe("My First Test", () => {
   it("visits the app root and go to about page", () => {
     cy.visit("/");
     cy.log("Server Contex", Cypress.env('SERVER'))
-    if (Cypress.env('SERVER') == 'SB') {
-      cy.log('Sadsaf')
-      cy.visit("iframe.html?id=pages-testboard--full");
-      // Wir müssen immer eine abfrage machen 
-      cy.get('[data-test-id]')
+    if (isComonentTest()) {
+      cy.visitSB('Pages/testboard', 'Full')
     } else {
       cy.visit("/");
       cy.get('.v-list > :nth-child(4)').click();
     }
-
     cy.get('.mb-10 > .v-btn').click();
     cy.get('.mb-10 > .v-btn').click();
     cy.get('.mb-10 > .v-btn').click();
@@ -40,9 +40,8 @@ describe("My First Test", () => {
 
   it("visits the app root url dual TEST", () => {
     cy.log("Server Contex", Cypress.env('SERVER'))
-    if (Cypress.env('SERVER') == 'SB') {
-      cy.visit("iframe.html?id=pages-dashboard--headless");
-      cy.get('[data-test-id]')
+    if (isComonentTest()) {
+      cy.visitSB('Pages/Dashboard', 'Headless')
     } else {
       cy.visit("/");
     }
