@@ -13,14 +13,10 @@ export default {
         widget: {
           name: 'avatar',
           props: {
-            title: 'anderer Titel',
+            title: 'anderer blablablab',
             query: {
               q: 'ich bin voll die andere query',
               filter: 'und ich bin ein anderer Filter!'
-            },
-            person: {
-              name: "name",
-              email: "myEmail1"
             }
           }
         }

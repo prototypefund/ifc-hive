@@ -31,20 +31,20 @@
         <div class="form-group row m-1">
           <div class="col-sm border">
             <label class="row m-2 col-form-label" for="name">First name:</label>
-            <input class="form-control" placeholder="First name" type="text" id="vname" name="vname"
-              v-model="props.props.person.vname" size="10" /> <!-- :disabled="!editmode" -->
+            <input class="form-control" placeholder="First name" type="text" id="firstname" name="firstname"
+              v-model="firstname" size="10" /> <!-- :disabled="!editmode" -->
           </div>
           <div class="col-sm border">
             <label class="row m-2 col-form-label" for="name">Last name:</label>
-            <input class="form-control" placeholder="Last name" type="text" id="name" name="name"
-              v-model="props.props.person.name" size="10" data-testid="name" />
+            <input class="form-control" placeholder="Last name" type="text" id="name" name="name" v-model="name"
+              size="10" data-testid="name" />
           </div>
         </div>
         <div class="form-group row m-1">
           <div class="col-sm border">
             <label class="row m-2 col-form-label" for="email">Email:</label>
-            <input class="form-control" placeholder="Email" type="email" id="email" name="email"
-              v-model="props.props.person.email" size="20" data-testid="email" />
+            <input class="form-control" placeholder="Email" type="email" id="email" name="email" v-model="email"
+              size="20" data-testid="email" />
           </div>
         </div>
       </form>
@@ -52,7 +52,7 @@
   </v-timeline>
 </template>
 <script setup>
-import { inject, ref, onMounted, onUnmounted } from "vue";
+import { inject, ref, onMounted, computed, onUnmounted } from "vue";
 const $store = inject("$store");
 const state = ref({});
 const stateSubscriber$ = $store
@@ -73,50 +73,47 @@ const props = defineProps({
     }
   */
 });
-
-// use state.inputErrors insead
-const inputErrors = ref([])
-
-function validatePerson(p) {
-  const errors = []
-  if (p.name === '') {
-    console.log(p.name)
-    errors.push('Name required.')
-  }
-  function validateEmail(email) {
-    return email.match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    )
-  }
-
-  /**
-   * @TODO use a lib like this vee-validate or vuelidate instead ?
-   * https://vee-validate.logaretm.com/v3/guide/basics.html
-   * https://vuelidate-next.netlify.app/#alternative-syntax-composition-api
-   */
-  if (p.email === '') {
-    errors.push('Email required.')
-  } else {
-    if (!validateEmail(p.email)) {
-      errors.push('Bad email')
-    }
-  }
-  console.log(p.name)
-  console.log(errors)
-
-  return errors
-}
-
-function checkForm(event) {
-  // @submit.prevent="checkForm" event.preventDefault();
-  console.log('checkForm', event)
-  inputErrors.value = validatePerson(person.value)
-  if (inputErrors.value.length) {
-    console.log('Errorsddd', event)
-  }
-}
+const dataUpdater = (data) => {
+  $store.dispatch({
+    type: "widgets/update",
+    uuid: props.uuid,
+    payload: {
+      data
+    },
+  });
+};
 
 
+const firstname = computed({
+  get() {
+    return state.value.data.firstname;
+  },
+  set(firstname) {
+    dataUpdater({
+      firstname
+    });
+  },
+});
+const name = computed({
+  get() {
+    return state.value.data.name;
+  },
+  set(name) {
+    dataUpdater({
+      name
+    });
+  },
+});
+const email = computed({
+  get() {
+    return state.value.data.email;
+  },
+  set(email) {
+    dataUpdater({
+      email
+    });
+  },
+});
 onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();

@@ -8,8 +8,9 @@ export default {
         filter: "ich tue dinge",
         q: "ralf"
     },
-    entries: {
-        email: { content: "", category: { color: 'warning', title: 'Baudokumentation' }, },
-        name: { content: "myname", category: { color: 'warning', title: 'Baudokumentation' }, },
+    data: {
+        email: "lutz@maier.de",
+        name: "meier test 12",
+        firstname: "lutz hallo"
     }
 }

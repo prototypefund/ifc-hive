@@ -336,17 +336,17 @@ const applicationReducers = {
                 case 'widgets/preconfigure':
                     configuredWidget = {}
                     // merge widget config with widget state when we initially configure widget 
-                    configuredWidget[action.payload.uuid] = mergeDeepRight(action.payload.conf, state[action.payload.uuid])
+                    configuredWidget[action.uuid] = mergeDeepRight(action.payload.conf, state[action.uuid])
                     return mergeDeepRight(state, configuredWidget)
                 case 'widgets/configure':
                     configuredWidget = {}
                     // merge given config onto widget state
-                    configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload.conf)
+                    configuredWidget[action.uuid] = mergeDeepRight(state[action.uuid], action.conf)
                     return mergeDeepRight(state, configuredWidget)
                 case 'widgets/update':
                     configuredWidget = {}
                     // merge given payload onto widget state
-                    configuredWidget[action.payload.uuid] = mergeDeepRight(state[action.payload.uuid], action.payload)
+                    configuredWidget[action.uuid] = mergeDeepRight(state[action.uuid], action.payload)
                     return mergeDeepRight(state, configuredWidget)
                 case 'widgets/add':
                     newWidgets = {}
@@ -357,17 +357,19 @@ const applicationReducers = {
                             import('../components/widgets/' + widget.name + '/conf.js').then(conf => {
                                 store.dispatch({
                                     type: 'widgets/preconfigure',
+                                    uuid: widget.uuid,
                                     payload: {
-                                        conf: conf.default,
-                                        uuid: widget.uuid
+                                        conf: conf.default
+
                                     }
                                 })
                             }).catch(err => {
                                 store.dispatch({
                                     type: 'widgets/preconfigure',
+                                    uuid: widget.uuid,
                                     payload: {
                                         conf: {},
-                                        uuid: widget.uuid
+
                                     }
                                 })
                             })

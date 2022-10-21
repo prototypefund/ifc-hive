@@ -33,7 +33,4 @@ HeadlessEditMode.args = conf.avatar;
 
 
 export const HeadlessEditModeBadMail = HeadlessEditModeTemplate.bind({});
-HeadlessEditModeBadMail.args = JSON.parse(JSON.stringify(conf.avatar));
-
-HeadlessEditModeBadMail.args.slots[0].widget.props.inputErrors = ["bad email"]
-
+HeadlessEditModeBadMail.args = conf.avatar;
