@@ -7,20 +7,23 @@
         <v-icon size="large" icon="mdi-home-outline"></v-icon>
       </v-card-title>
       <form @submit.prevent="">
-        <p>state</p>
+        <p>state.entries</p>
         <v-card-text v-for="(entry, index) in state.entries" :key="index" size="small" style="text-align: left">
           {{index}} : {{entry.content}}
         </v-card-text>
-        <p>props</p>
-        <div data-test-id="widget_avatar-inputErrors">
-          <p v-if="props.props.inputErrors && props.props.inputErrors.length">
+        <p>state.person</p>
+        <v-card-text v-for="(entry, index) in state.person" :key="index" size="small" style="text-align: left">
+          {{index}} : {{entry}}
+        </v-card-text>
+        <div>
+          <p v-if="state.inputErrors && state.inputErrors.length" data-test-id="widget_avatar-inputErrors">
             <b>Please correct the following error(s):</b>
           <ul>
-            <li v-for="(error, index) in props.props.inputErrors" :key="index">{{ error }}</li>
+            <li v-for="(error, index) in state.inputErrors" :key="index">{{ error }}</li>
           </ul>
           </p>
         </div>
-
+        <p>props.props.person</p>
         <v-card-text v-for="(entry, index) in props.props.person" :key="index" size="small" style="text-align: left">
           {{index}} : {{entry}}
         </v-card-text>
@@ -70,6 +73,49 @@ const props = defineProps({
     }
   */
 });
+
+// use state.inputErrors insead
+const inputErrors = ref([])
+
+function validatePerson(p) {
+  const errors = []
+  if (p.name === '') {
+    console.log(p.name)
+    errors.push('Name required.')
+  }
+  function validateEmail(email) {
+    return email.match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    )
+  }
+
+  /**
+   * @TODO use a lib like this vee-validate or vuelidate instead ?
+   * https://vee-validate.logaretm.com/v3/guide/basics.html
+   * https://vuelidate-next.netlify.app/#alternative-syntax-composition-api
+   */
+  if (p.email === '') {
+    errors.push('Email required.')
+  } else {
+    if (!validateEmail(p.email)) {
+      errors.push('Bad email')
+    }
+  }
+  console.log(p.name)
+  console.log(errors)
+
+  return errors
+}
+
+function checkForm(event) {
+  // @submit.prevent="checkForm" event.preventDefault();
+  console.log('checkForm', event)
+  inputErrors.value = validatePerson(person.value)
+  if (inputErrors.value.length) {
+    console.log('Errorsddd', event)
+  }
+}
+
 
 onMounted(() => { });
 onUnmounted(() => {
