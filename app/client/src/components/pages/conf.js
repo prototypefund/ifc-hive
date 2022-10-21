@@ -11,7 +11,7 @@ export default {
         class: 'nice',
         column: 12,
         widget: {
-          name: 'avatar',
+          name: 'form',
           props: {
             title: 'anderer blablablab',
             query: {
