@@ -16,8 +16,8 @@ const HeadlessEditModeTemplate = (args) => ({
   // The story's `args` need to be mapped into the template through the `setup()` method
   setup() {
     initStore()
-    prepareStore('settings', args)
-    dispatchStore('settings', 'ui/update', { editMode: true }) // Bessere Weg das zu machen ??
+    prepareStore('avatar', args)
+    dispatchStore('avatar', 'ui/update', { editMode: true }) // Bessere Weg das zu machen ??
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
