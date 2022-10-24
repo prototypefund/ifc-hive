@@ -57,7 +57,6 @@ const getNameFrom = (nameOrVarname) => {
   result = result.replace(/(\$)/g, " ");
   result = result.replace(/([0-9]+)/g, " $1 ");
   result = result.replace(/\ [a-z]/g, (str) => { return str.toUpperCase(); })
-
   result = result.replace(/\s+/g, " ").trim();
   return result;
 }
