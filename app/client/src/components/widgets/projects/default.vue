@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-0">
+  <v-container fluid class="pa-0" data-test-container="widgets/projects/default">
     <v-card color="grey-lighten-3" flat>
       <v-card-text> Why is the wrong thing called? </v-card-text>
     </v-card>

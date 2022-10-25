@@ -2,18 +2,17 @@ import sbHelper, { getNameFrom, getQuerryId } from '../cypress/support/sbHelper'
 import { describe, expect, it, vi } from 'vitest';
 
 describe('getNameFrom', function () {
-    it('should return production', (ctx) => {
-        const result = getNameFrom('HalloWelt')
-        expect(result).toBe('Hallo Welt')
+    it('should return names', (ctx) => {
+        expect(getNameFrom('HalloWelt')).toBe('Hallo Welt')
         expect(getNameFrom('a7492BAA9_7993ZA8A27')).toBe('A 7492 BAA 9 7993 ZA 8 A 27')
         expect(getNameFrom('aB$a9')).toBe('A B A 9')
-         expect(getNameFrom('B1z0_')).toBe('B 1 Z 0')
-         expect(getNameFrom('BAa7_4490_$64$2z$a')).toBe('B Aa 7 4490 64 2 Z A')
+        expect(getNameFrom('B1z0_')).toBe('B 1 Z 0')
+        expect(getNameFrom('BAa7_4490_$64$2z$a')).toBe('B Aa 7 4490 64 2 Z A')
     });
 })
 
 describe('getNameFromAll', function () {
-    it('should return production', (ctx) => {
+    it('should return names', (ctx) => {
         expect(getNameFrom('A541$_1')).toBe('A 541 1')
         expect(getNameFrom('B1z0_')).toBe('B 1 Z 0')
         expect(getNameFrom('Bz850184B7955$_Az608')).toBe('Bz 850184 B 7955 Az 608')

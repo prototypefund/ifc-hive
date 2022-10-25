@@ -1,5 +1,5 @@
 <template>
-  <v-timeline>
+  <v-timeline data-test-container="widgets/form/default">
     <v-card
       dot-color="red-lighten-1"
       fill-dot

@@ -1,7 +1,3 @@
-/*
- * Naming 
- * <dashboard.vue> -> data-test-id="dashboard_container"
- */
 
 import { isComonentTest } from './helper.js'
 
@@ -9,20 +5,35 @@ import { isComonentTest } from './helper.js'
  * http://localhost:7007/iframe.html?id=pages-dashboard--headless
  * http://localhost:7007/?path=/story/pages-dashboard--headless
  */
-// const isComonentTest = () => { return false }
+/*
+ * Naming 
+ * <dashboard . vue> -> data-test-id="dashboard_container"
+ */
+
+Cypress.Commands.add('getInput', (testid) => {
+  return cy.get(`[data-test-id="${testid}"]`, {log:false}).find('input', {log:false})
+})
+
 describe("Visit Avatar", () => {
-  it("Type Email OK", () => {
+  it.only("Type Email OK", () => {
+  /** 
+   * Poiler Plate code
+   */
     cy.log(isComonentTest())
     if (isComonentTest()) {
       cy.visitSB('Pages/Avatar', 'HeadlessEditMode')
-      cy.get('[data-test-id]')
     } else {
       cy.visit("/");
     }
-    cy.get("#name").clear().type("muller");
-    cy.get("#vname").clear().type("hans");
-    cy.get("#email").clear().type("hansmuller@a1234.com");
-    cy.get("[data-testid=widget_avatar-inputErrors]").should('not.exist');
+    // data-test-container="pages/avatar"
+    // data-test-container="widgets/form/default"
+    cy.get('[data-test-container="pages/avatar"]')
+     .within(() => {
+      cy.getInput('firstname').clear().type("Moo");    
+      cy.getInput('name').type("Koo");
+      cy.getInput('email').type("email@milch.lol");
+    })
+    cy.get("[data-test-id=widget_avatar-inputErrors]").should('not.exist')
   });
 
   it("Type Email Bad", () => {
@@ -33,9 +44,20 @@ describe("Visit Avatar", () => {
     } else {
       cy.visit("/");
     }
-    cy.get("#name").type("123");
-    cy.get("#email").clear().type("a1234.com");
-    cy.get("[data-test-id=widget_avatar-inputErrors]").should('exist').should('contain', 'email')
+
+    cy.get('[data-test-container="pages/avatar"]')
+      .within(() => {
+        cy.getInput('firstname').clear().type("Moo");    
+     cy.getInput('name').type("Koo");
+     cy.getInput('email').clear().type("emah");
+     cy.get('[data-test-container="widgets/form/default"]')
+     .find('widget_avatar-inputErrors').should('exist').should('contain', 'email')
+     //.should('exist').should('contain', 'email')
+      // cy.get("[data-test-id=widget_avatar-inputErrors]").should('exist').should('contain', 'email')
+   })
+
+
+   
   });
 
   it("Visit Bad Email Preset", () => {

@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="props">
+  <v-card v-if="props" data-test-container="widgets/error/default">
     There was an error while loading your widget
     <pre>
     {{ props }}

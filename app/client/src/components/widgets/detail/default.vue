@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="state">
+  <v-card v-if="state" data-test-container="widgets/detail/default">
     <h3>{{ props.props.type }}</h3>
     <pre>{{ state }}</pre>
   </v-card>

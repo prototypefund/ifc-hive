@@ -1,5 +1,5 @@
 <template>
-  <v-timeline v-if="state && props.uuid">
+  <v-timeline v-if="state && props.uuid" data-test-container="widgets/timeline/default">
     <h3>{{ state.title }}</h3>
     <v-timeline-item dot-color="amber-lighten-1" fill-dot size="x-small">
       <v-card>

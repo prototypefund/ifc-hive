@@ -1,5 +1,5 @@
 <template>
-  <v-row v-if="state">
+  <v-row v-if="state" data-test-container="widgets/jornal/default">
     <v-col cols="12" md="6" lg="4" color="green">
       <div>
         <v-timeline side="end" align="end" class="mt-5">
