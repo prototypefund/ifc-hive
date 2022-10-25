@@ -14,7 +14,7 @@ describe("Test Testborad Jornal ", () => {
       cy.visitSB('pages/journal', 'Headless')
     }
 
-    cy.get('[data-test-id="jornal_container"]')
+    cy.get('[data-test-container="pages/jornal"]')
 
 
     cy.get('.v-timeline-item__body')

@@ -39,7 +39,7 @@ Cypress.Commands.add('visitSB', (title, name) => {
     if (isComonentTest()) {
         cy.visit(dstUrl)
         /** Every  */
-        return cy.get('[data-test-id]')
+        return cy.get('[data-test-id],[data-test-container]')
     } else {
         // Normaly Not used
         // https://github.com/cypress-io/cypress/issues/8382

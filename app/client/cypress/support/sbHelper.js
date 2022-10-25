@@ -1,24 +1,25 @@
 
+/**
+ * Returns If the we are in an Component Test (Storrybook) Envirnent
+ * @returns {true} if we are inside Storrybook
+ */
 const isComonentTest = () => {
   return (Cypress.env('TESTTYPE') == 'COMPONENT');
 }
 
-/*
-const isIntegrationTest = () => {
-  return (Cypress.env('TESTTYPE') == 'INTEGRATION');
-}*/
-
-
 /**
  * Lists the exported Stories from a Given stories.js
+ * @example
  * import * as MySB from './test_sbHelper.stories.js'
+ * 
  * listStoriesFromClass(MySB)
+ * 
  * @param {*} clazz StoryBookClass
  * @returns List of Stories [{title, varname, name, id }]
  */
 const listStoriesFromClass = (clazz) => {
   var result = []
-  const title = clazz.default.title
+  const title = `${clazz.default.title}`
   for (var varname in clazz) {
     if (varname != 'default') {
       result.push({ title, varname, name: getNameFrom(varname), id: getQuerryId(title, varname) })
@@ -28,7 +29,7 @@ const listStoriesFromClass = (clazz) => {
 }
 
 
-const getNameFrom = (nameOrVarname) => {
+const getTitleFrom = (nameOrVarname) => {
   var result = nameOrVarname.replace(/([A-Z]+)/g, " $1");
   result = result.replace(/([A-Z][a-z])/g, " $1");
   result = result.replace(/(_)/g, " ");
@@ -38,47 +39,35 @@ const getNameFrom = (nameOrVarname) => {
   return result;
 }
 
+/**
+ * Convertes the Storie Variable name into the Story Name
+ * @example
+ * getNameFrom('TestCaseXYZ') => 'Test Case XYZ'
+ * @param {string} nameOrVarname 
+ * @returns 
+ */
+const getNameFrom = (nameOrVarname) => {
+  var result = nameOrVarname
+  result = result.replace(/([A-Z]+)/g, " $1");
+  result = result[0].toUpperCase() + result.substring(1)
+  // result = result.replace(/([A-Z][a-z])/g, " $1");
+  result = result.replace(/([A-Z][a-z])/g, " $1");
+  result = result.replace(/(_)/g, " ");
+  result = result.replace(/(\/)/g, " ");
+  result = result.replace(/(\$)/g, " ");
+  result = result.replace(/([0-9]+)/g, " $1 ");
+  result = result.replace(/\ [a-z]/g, (str) => { return str.toUpperCase(); })
+
+  result = result.replace(/\s+/g, " ").trim();
+  return result;
+}
 
 /**
  * @TODO Doesn't cover all cases need fix or derive the id
- * @param {Title of the Storybook} title 
- * @param {Name or Variable Name} name 
+ * @param {string} title Title of the Storybook 
+ * @param {string} name Name or Variable Name 
  */
 const getQuerryId = (title, name) => {
-  /*
-    Axiom xlU -> xl-U
-    Axiom xUl -> x-Ul
-  */
-
-  function rewrite(str) {
-    var r_str = str[0].toLowerCase();
-    var j = 0;
-    var char = ''
-    for (var i = 1; i < str.length; i++) {
-      char = str[i];
-      if (char.toUpperCase() == str[i]) {
-        char = char.toLowerCase()
-        if (r_str[j] != '-') {
-          r_str = r_str + '-'
-          j++;
-        }
-      }
-      if (str[i] != '/') {
-        r_str = r_str + char
-        j++;
-      }
-    }
-    return r_str;
-  }
-  function rewrite(str) {
-    var result = str.replace(/([A-Z]+)/g, " $1");
-    result = result.replace(/([A-Z][a-z])/g, " $1");
-    result = result.replace(/(_)/g, " ");
-    result = result.replace(/(\/)/g, " ");
-    result = result.replace(/([0-9]+)/g, " $1").trim();
-    result = result.replace(/\s+/g, "-");
-    return result.toLowerCase();
-  }
 
   function rewrite(str) {
     var result = getNameFrom(str);
@@ -92,8 +81,8 @@ const getQuerryId = (title, name) => {
 }
 
 /**
- * @param {Title of the Storybook} title 
- * @param {Name or Variable Name} name 
+ * @param {string} title Title of the Storybook 
+ * @param {string} name Name or Variable Name 
  * @returns Relative URL for Storybook
  */
 const getRelativeURL = (title, name) => {
