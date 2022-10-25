@@ -1,6 +1,6 @@
 
 import * as TestSB from './test_sbHelper.stories.js'
-import { isComonentTest, listStoriesFromClass } from '../../cypress/support/sbHelper.js'
+import { listStoriesFromClass } from '../../cypress/support/sbHelper.js'
 
 
 describe("Test Testborad ", () => {
@@ -15,7 +15,7 @@ describe("Test Testborad ", () => {
      */
     for (var storie of stories) {
       cy.log(storie.title, storie.name)
-      cy.visitSB(storie.title, storie.name)
+      cy.visitStorybook(storie.title, storie.name)
       cy.get('p').should('contain', 'TEST')
     }
   });

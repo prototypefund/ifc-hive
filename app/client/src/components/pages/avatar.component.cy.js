@@ -15,13 +15,13 @@ Cypress.Commands.add('getInput', (testid) => {
 })
 
 describe("Visit Avatar", () => {
-  it.only("Type Email OK", () => {
+  it("Type Email OK", () => {
   /** 
    * Poiler Plate code
    */
     cy.log(isComonentTest())
     if (isComonentTest()) {
-      cy.visitSB('Pages/Avatar', 'HeadlessEditMode')
+      cy.visitStorybook('Pages/Avatar', 'HeadlessEditMode')
     } else {
       cy.visit("/");
     }
@@ -39,8 +39,7 @@ describe("Visit Avatar", () => {
   it("Type Email Bad", () => {
     cy.log(isComonentTest())
     if (isComonentTest()) {
-      cy.visitSB('Pages/Avatar', 'HeadlessEditMode')
-      cy.get('[data-test-id]')
+      cy.visitStorybook('Pages/Avatar', 'HeadlessEditMode')
     } else {
       cy.visit("/");
     }
@@ -48,12 +47,16 @@ describe("Visit Avatar", () => {
     cy.get('[data-test-container="pages/avatar"]')
       .within(() => {
         cy.getInput('firstname').clear().type("Moo");    
-     cy.getInput('name').type("Koo");
-     cy.getInput('email').clear().type("emah");
-     cy.get('[data-test-container="widgets/form/default"]')
-     .find('widget_avatar-inputErrors').should('exist').should('contain', 'email')
+        cy.getInput('name').clear().type("Koo");
+        cy.getInput('email').type("email@milch.lol").clear().type('Vergessen');
+
+        cy.getInput('firstname').clear().type("Moo");    
+        cy.getInput('name').type("Koo");
+        cy.getInput('email').clear().type("emah");
+        cy.get('[data-test-container="widgets/form/default"]')
+        .find('widget_avatar-inputErrors').should('exist').should('contain', 'email')
      //.should('exist').should('contain', 'email')
-      // cy.get("[data-test-id=widget_avatar-inputErrors]").should('exist').should('contain', 'email')
+     // cy.get("[data-test-id=widget_avatar-inputErrors]").should('exist').should('contain', 'email')
    })
 
 
@@ -63,7 +66,7 @@ describe("Visit Avatar", () => {
   it("Visit Bad Email Preset", () => {
     cy.log(isComonentTest())
     if (isComonentTest()) {
-      cy.visitSB('Pages/Avatar', 'HeadlessEditModeBadMail')
+      cy.visitStorybook('Pages/Avatar', 'HeadlessEditModeBadMail')
       cy.get('[data-test-id]')
     } else {
       cy.visit("/");

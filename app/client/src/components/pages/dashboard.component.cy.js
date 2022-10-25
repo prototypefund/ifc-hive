@@ -15,7 +15,7 @@ describe("Dash Board My First Test ", () => {
   it("visits the app root url dual TEST 1", () => {
     cy.log(isComonentTest())
     if (isComonentTest()) {
-      cy.visitSB('Pages/Dashboard', 'Headless')
+      cy.visitStorybook('Pages/Dashboard', 'Headless')
       cy.get('[data-test-id]')
     } else {
       cy.visit("/");
@@ -26,7 +26,7 @@ describe("Dash Board My First Test ", () => {
 
   it("visits the app root url dual TEST 2", () => {
     if (isComonentTest()) {
-      cy.visitSB('Pages/Dashboard', 'Headless')
+      cy.visitStorybook('Pages/Dashboard', 'Headless')
       cy.get('[data-test-id]')
     } else {
       cy.visit("/");

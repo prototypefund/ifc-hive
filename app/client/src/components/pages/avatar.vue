@@ -17,7 +17,7 @@ const stateSubscriber$ = $store
   .subscribe((val) => {
     state.value = val;
   });
-const props = defineProps({
+  const props = defineProps({
   urlParams: {
     type: String,
     default: "default param",

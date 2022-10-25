@@ -4,7 +4,7 @@ import { isComonentTest } from './helper.js'
 
 it.only("Change Settings", () => {
   if (isComonentTest()) {
-    cy.visitSB('Pages/Settings', 'HeadlessEditMode')
+    cy.visitStorybook('Pages/Settings', 'HeadlessEditMode')
   } else {
     cy.visit("/");
     cy.get('[data-test-id="sidebar_nav-app-settings"]').click()

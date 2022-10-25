@@ -7,7 +7,7 @@ describe("My First Test", () => {
   it("visits the app root url dual TEST", () => {
     cy.log("Server Contex", Cypress.env('SERVER'))
     if (isComonentTest()) {
-      cy.visitSB('Pages/Dashboard', 'Headless')
+      cy.visitStorybook('Pages/Dashboard', 'Headless')
       //      cy.visit("iframe.html?id=pages-dashboard--headless");
       cy.get('[data-test-id]')
     } else {
@@ -22,7 +22,7 @@ describe("My First Test", () => {
     cy.visit("/");
     cy.log("Server Contex", Cypress.env('SERVER'))
     if (isComonentTest()) {
-      cy.visitSB('Pages/testboard', 'Full')
+      cy.visitStorybook('Pages/testboard', 'Full')
     } else {
       cy.visit("/");
       cy.get('.v-list > :nth-child(4)').click();
@@ -41,7 +41,7 @@ describe("My First Test", () => {
   it("visits the app root url dual TEST", () => {
     cy.log("Server Contex", Cypress.env('SERVER'))
     if (isComonentTest()) {
-      cy.visitSB('Pages/Dashboard', 'Headless')
+      cy.visitStorybook('Pages/Dashboard', 'Headless')
     } else {
       cy.visit("/");
     }

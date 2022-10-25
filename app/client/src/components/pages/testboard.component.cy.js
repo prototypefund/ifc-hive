@@ -15,7 +15,7 @@ Cypress.Commands.add('asComponentTest', (data) => {
   cy.log(data)
 
   for (const name of ['Full', 'Headless']) {
-    cy.visitSB('Pages/Testboard', name)
+    cy.visitStorybook('Pages/Testboard', name)
     cy.get('[data-test-id="testboard_container"]')
     runCounterTest();
   }
@@ -24,7 +24,7 @@ Cypress.Commands.add('asComponentTest', (data) => {
 
 it.only("visits the app root and go to about page", () => {
   if (isComonentTest()) {
-    cy.visitSB('Pages/Testboard', 'Full')
+    cy.visitStorybook('Pages/Testboard', 'Full')
     // Wir müssen immer eine abfrage machen 
     cy.get('[data-test-id]');
   } else {
@@ -43,7 +43,7 @@ describe("Test Testborad ", () => {
     cy.log("Server Contex", Cypress.env('TESTTYPE'), isComonentTest())
     if (isComonentTest()) {
       for (const name of ['Full', 'Headless']) {
-        cy.visitSB('Pages/Testboard', name)
+        cy.visitStorybook('Pages/Testboard', name)
         cy.get('[data-test-id="testboard_container"]')
         runCounterTest();
       }

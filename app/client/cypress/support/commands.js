@@ -34,7 +34,7 @@ import { getRelativeURL, isComonentTest } from './sbHelper.js'
  * @param {Title of the Storybook} title 
  * @param {Name or Variable Name} name 
  */
-Cypress.Commands.add('visitSB', (title, name) => {
+Cypress.Commands.add('visitStorybook', (title, name) => {
     const dstUrl = getRelativeURL(title, name);
     if (isComonentTest()) {
         cy.visit(dstUrl)

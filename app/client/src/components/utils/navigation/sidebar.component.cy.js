@@ -5,7 +5,7 @@ import { isComonentTest } from '../../pages/helper.js'
 describe("Navigate True Sidebar", () => {
   it("visits Sidebar", () => {
     if (isComonentTest()) {
-      cy.visitSB('Pages/Dashboard', 'Full')
+      cy.visitStorybook('Pages/Dashboard', 'Full')
       cy.get('[data-test-id]');
     } else {
       cy.visit("/");
@@ -28,7 +28,7 @@ describe("Navigate True Sidebar", () => {
   it("visits the app root url dual TEST", () => {
     cy.log("Server Contex", Cypress.env('TESTTYPE'))
     if (isComonentTest()) {
-      cy.visitSB('Pages/Dashboard', 'Headless')
+      cy.visitStorybook('Pages/Dashboard', 'Headless')
       cy.get('[data-test-id]')
     } else {
       cy.visit("/");

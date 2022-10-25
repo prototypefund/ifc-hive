@@ -12,6 +12,7 @@
         <v-text-field
           data-test-id="firstname"
           v-model="firstname"
+          :rules="firstnameDefinitions"
           :counter="10"
           label="firstname"
           required
@@ -19,6 +20,7 @@
         </v-text-field>
         <v-text-field
           data-test-id="name"
+          :rules="nameDefinitions"
           v-model="name"
           :counter="10"
           label="Name"
@@ -26,6 +28,7 @@
         ></v-text-field>
         <v-text-field
           data-test-id="email"
+          :rules="emailDefinitions"
           v-model="email"
           label="E-mail"
           required
@@ -50,11 +53,6 @@ const props = defineProps({
   uuid: {
     type: String,
   },
-  /*
-    person0: {
-      type: Object
-    }
-  */
 });
 const dataUpdater = (data) => {
   $store.dispatch({
@@ -76,6 +74,12 @@ const firstname = computed({
     });
   },
 });
+const firstnameDefinitions = computed({
+  get() {
+    return state.value.definitions.firstname;
+  },
+});
+
 const name = computed({
   get() {
     return state.value.data.name;
@@ -86,6 +90,12 @@ const name = computed({
     });
   },
 });
+const nameDefinitions = computed({
+  get() {
+    return state.value.definitions.name;
+  },
+});
+
 const email = computed({
   get() {
     return state.value.data.email;
@@ -96,6 +106,15 @@ const email = computed({
     });
   },
 });
+
+
+const emailDefinitions = computed({
+  get() {
+    return state.value.definitions.email;
+  },
+});
+
+
 onMounted(() => {});
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();

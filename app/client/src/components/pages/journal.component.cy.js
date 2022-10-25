@@ -11,7 +11,7 @@ describe("Test Testborad Jornal ", () => {
       cy.visit("/");
       cy.get('[data-test-id="sidebar_nav-app-journal"]').click()
     } else {
-      cy.visitSB('pages/journal', 'Headless')
+      cy.visitStorybook('pages/journal', 'Headless')
     }
 
     cy.get('[data-test-container="pages/jornal"]')

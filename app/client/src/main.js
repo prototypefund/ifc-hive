@@ -24,7 +24,7 @@ axios.defaults.baseURL = API_BASE_URL
 try {
   // create Vue root component
   const app = createApp({
-    render: () => h(App)
+    render: () => h(App),
   });
 
 
