@@ -48,3 +48,22 @@ Cypress.Commands.add('visitStorybook', (title, name) => {
         })
     }
 })
+
+Cypress.Commands.add('getInput', (testid) => {
+    return cy.get(`[data-test-id="${testid}"]`, { log: false }).find('input', { log: false })
+})
+
+Cypress.Commands.add('getContainer', (widgetcomponentest) => {
+    // Teste das die Anzal der Wigets stimmt
+    // Teste das die Widgets einzeln Exsitiern
+    cy.get('[data-test-container]')
+        .each(
+            x => {
+                cy.wrap(x)
+                    .invoke('attr', 'data-test-container')
+                    .then(attribs => {
+                        widgetcomponentest.value.push(`${attribs}`)
+                    })
+            }
+        )
+})
