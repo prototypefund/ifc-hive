@@ -4908,10 +4908,10 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha512-NJGVKPS81XejHcLhaLJS7plab0fK3slPh11mESeeDq2W4ZI5kUKK/LRRdVDvjJseojbPB7ZwjnyOybg3Igea/A==
 
-cypress@^10.10.0:
-  version "10.10.0"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-10.10.0.tgz#fd671297b2ca3e64dfffd55fe3857c388cfbb695"
-  integrity sha512-bU8r44x1NIYAUNNXt3CwJpLOVth7HUv2hUhYCxZmgZ1IugowDvuHNpevnoZRQx1KKOEisLvIJW+Xen5Pjn41pg==
+cypress@10.11.0:
+  version "10.11.0"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-10.11.0.tgz#e9fbdd7638bae3d8fb7619fd75a6330d11ebb4e8"
+  integrity sha512-lsaE7dprw5DoXM00skni6W5ElVVLGAdRUUdZjX2dYsGjbY/QnpzWZ95Zom1mkGg0hAaO/QVTZoFVS7Jgr/GUPA==
   dependencies:
     "@cypress/request" "^2.88.10"
     "@cypress/xvfb" "^1.2.4"
@@ -12256,10 +12256,10 @@ vuedraggable@latest:
   dependencies:
     sortablejs "1.10.2"
 
-vuetify@^3.0.0-beta.1:
-  version "3.0.0-beta.13"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.0.0-beta.13.tgz#04af3a85b3852617da9bc50263f1128cd43e83fa"
-  integrity sha512-CgDyKCIBZ0ogKUxRw3gNswx9GA6eSSp7otZcJapWJCVuon/RooQPQjf3bDuRb5ZpJ55NkX13ugjl2nq+b0U8SA==
+vuetify@^3.0.0-beta.15:
+  version "3.0.0-beta.15"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.0.0-beta.15.tgz#315573fc617a8983bf5868cfaee8e8a02d1804c3"
+  integrity sha512-Tw4StO4JJxwzN7RIAJ+nBVTaftlk3TqfqCtMLwJY/SO/ciVru+sHtahOpXIbp8B43d/DIRql3mfnrz1ooTSXtQ==
 
 wait-on@6.0.0:
   version "6.0.0"
