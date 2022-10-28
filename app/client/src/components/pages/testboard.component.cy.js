@@ -1,6 +1,6 @@
 // https://docs.cypress.io/api/introduction/api.html
 
-import { isComonentTest } from './helper.js'
+import { isComonentTest } from '../../../cypress/support/sbHelper.js'
 
 const runCounterTest = () => {
   for (var i = 0; i < 20; i++) {
@@ -13,7 +13,6 @@ const runCounterTest = () => {
 Cypress.Commands.add('asComponentTest', (data) => {
   cy.visit('/')
   cy.log(data)
-
   for (const name of ['Full', 'Headless']) {
     cy.visitStorybook('Pages/Testboard', name)
     cy.get('[data-test-id="testboard_container"]')

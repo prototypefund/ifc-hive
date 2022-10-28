@@ -25,11 +25,8 @@ const HeadlessEditModeTemplate = (args) => ({
 });
 
 
-
 export const HeadlessEditMode = HeadlessEditModeTemplate.bind({});
 HeadlessEditMode.args = conf.avatar;
-
-
 
 
 export const HeadlessEditModeBadMail = HeadlessEditModeTemplate.bind({});

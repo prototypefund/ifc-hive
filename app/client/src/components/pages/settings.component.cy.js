@@ -1,6 +1,6 @@
 // https://docs.cypress.io/api/introduction/api.html
 
-import { isComonentTest } from './helper.js'
+import { isComonentTest } from '../../../cypress/support/sbHelper.js'
 
 it.only("Change Settings", () => {
   if (isComonentTest()) {

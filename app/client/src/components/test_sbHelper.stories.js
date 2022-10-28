@@ -10,10 +10,13 @@ const Template = (args) => ({
   template: '<p data-test-id="p">TEST {{args}}</p>'
 });
 
+export const Ab_C = Template.bind({});
+export const AbC = Template.bind({});
 
 
 export const Full = Template.bind({}, { myArg: 'args' });
 export const HeadlessTemplate = Template.bind({});
+export const Headless_Template = Template.bind({});
 export const OthTherTTTemplate = Template.bind({});
 export const OthTherTTTemplate22 = Template.bind({});
 export const UxlllUUl2 = Template.bind({});

@@ -1,6 +1,5 @@
 
-import { isComonentTest } from '../../pages/helper.js'
-
+import { isComonentTest } from '../../../../cypress/support/sbHelper.js'
 
 describe("Navigate True Sidebar", () => {
   it("visits Sidebar", () => {
@@ -22,8 +21,6 @@ describe("Navigate True Sidebar", () => {
     }
 
   });
-
-
 
   it("visits the app root url dual TEST", () => {
     cy.log("Server Contex", Cypress.env('TESTTYPE'))

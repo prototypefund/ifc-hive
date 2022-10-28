@@ -1,79 +1,87 @@
 
-import { isComonentTest } from './helper.js'
+import { isComonentTest } from '../../../cypress/support/sbHelper.js'
 
-/*
- * http://localhost:7007/iframe.html?id=pages-dashboard--headless
- * http://localhost:7007/?path=/story/pages-dashboard--headless
- */
-/*
- * Naming 
- * <dashboard . vue> -> data-test-id="dashboard_container"
- */
+//const path = '../../s.js'
 
-Cypress.Commands.add('getInput', (testid) => {
-  return cy.get(`[data-test-id="${testid}"]`, {log:false}).find('input', {log:false})
-})
+// eval(`require('${path}');`)
+//const f = import('../../s.js')
+//const g = eval(`require('${path}');`)
+
+
+import { ref, watchSyncEffect } from 'vue'
+const widgetcomponentest = ref([])
+var loadDependencyErrors = [];
 
 describe("Visit Avatar", () => {
-  it("Type Email OK", () => {
-  /** 
-   * Poiler Plate code
-   */
+
+  before(() => {
+    // cy.log("fff", f)
+    /* 1 Ermittle was in den childs sein soll */
     cy.log(isComonentTest())
     if (isComonentTest()) {
       cy.visitStorybook('Pages/Avatar', 'HeadlessEditMode')
     } else {
       cy.visit("/");
+      // Klick some where...
+      // check Route
     }
-    // data-test-container="pages/avatar"
-    // data-test-container="widgets/form/default"
-    cy.get('[data-test-container="pages/avatar"]')
-     .within(() => {
-      cy.getInput('firstname').clear().type("Moo");    
-      cy.getInput('name').type("Koo");
-      cy.getInput('email').type("email@milch.lol");
-    })
-    cy.get("[data-test-id=widget_avatar-inputErrors]").should('not.exist')
-  });
-
-  it("Type Email Bad", () => {
-    cy.log(isComonentTest())
-    if (isComonentTest()) {
-      cy.visitStorybook('Pages/Avatar', 'HeadlessEditMode')
-    } else {
-      cy.visit("/");
-    }
-
     cy.get('[data-test-container="pages/avatar"]')
       .within(() => {
-        cy.getInput('firstname').clear().type("Moo");    
-        cy.getInput('name').clear().type("Koo");
-        cy.getInput('email').type("email@milch.lol").clear().type('Vergessen');
+        cy.getContainer(widgetcomponentest)
+      })
+  })
 
-        cy.getInput('firstname').clear().type("Moo");    
-        cy.getInput('name').type("Koo");
-        cy.getInput('email').clear().type("emah");
-        cy.get('[data-test-container="widgets/form/default"]')
-        .find('widget_avatar-inputErrors').should('exist').should('contain', 'email')
-     //.should('exist').should('contain', 'email')
-     // cy.get("[data-test-id=widget_avatar-inputErrors]").should('exist').should('contain', 'email')
-   })
+  /* initialisiere die richtige page */
+  beforeEach(() => {
+    cy.log('Before')
+    cy.visitStorybook('Pages/Avatar', 'HeadlessEditMode')
+  })
+
+  afterEach(() => {
+    cy.log('afterEach')
+  })
 
 
-   
-  });
+  after(() => {
+    cy.log('After')
+  })
 
-  it("Visit Bad Email Preset", () => {
-    cy.log(isComonentTest())
-    if (isComonentTest()) {
-      cy.visitStorybook('Pages/Avatar', 'HeadlessEditModeBadMail')
-      cy.get('[data-test-id]')
-    } else {
-      cy.visit("/");
+  /* Teste das alles da ist was da sein soll */
+  it("Teste das alles da ist", () => {
+    const widgets = widgetcomponentest.value.filter(item => item.startsWith('widgets/'));
+    cy.wrap(widgets)
+      .should('have.length.at.least', 1)         // min 1 widgets
+      .should('have.length.of.at.most', 2)       // max 2 widgets
+      .should('have.length', 1)                  // = 1 widgets
+      .should('contain', 'widgets/form/default') // = 1 widgets
+  })
+
+  // require(`../../components/widgets/form/default.component.cy.js?e=1dsfsfsdf`)
+
+
+  for (const componentName of widgetcomponentest.value) {
+    if (componentName.startsWith('widgets')) {
+
+      // const target 
+      try {
+        console.log(`../../components/${componentName}.component.cy.js`)
+        require(`../../components/${componentName}.component.cy.js?rnd=65465`) //
+      }
+      catch (e) {
+        console.log('oh no big error')
+        console.log(e)
+        loadDependencyErrors.push(componentName)
+      }
     }
-    // cy.get("#email").clear().type("a1234.com");
-    cy.get("[data-test-id=widget_avatar-inputErrors]").should('exist').should('contain', 'email')
-  });
+  }
+
+  it('load Dependecys OK', () => {
+    //cy.wrap(loadDependencyErrors).should('length', 0)
+  })
+
+  /*
+    const imported = import(`../../components/${itemName}.component.cy.js`).catch((e) => { })
+  */
 
 
 });

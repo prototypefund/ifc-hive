@@ -1,15 +1,31 @@
 <template>
   <v-app v-if="(page && page.pageName) || isInTest">
     <!-- Global Toolbar -->
-    <v-app-bar density="compact" flat app color="grey-lighten-2" :class="{ appBarRel: isInTest }">
+    <v-app-bar
+      density="compact"
+      flat
+      app
+      color="grey-lighten-2"
+      :class="{ appBarRel: isInTest }"
+    >
       <!-- Breadcrumb -->
       <v-app-bar-title>
         Journal
         <v-icon color="grey" xsmall>mdi-chevron-right</v-icon>
         {{ $t("pages." + page.pageName) }}
       </v-app-bar-title>
-      <v-btn v-if="!editMode" flat icon="mdi-view-dashboard-edit-outline" @click="changeEditMode" />
-      <v-btn v-if="editMode" flat icon="mdi-view-dashboard-edit" @click="changeEditMode" />
+      <v-btn
+        v-if="!editMode"
+        flat
+        icon="mdi-view-dashboard-edit-outline"
+        @click="changeEditMode"
+      />
+      <v-btn
+        v-if="editMode"
+        flat
+        icon="mdi-view-dashboard-edit"
+        @click="changeEditMode"
+      />
       <!-- notifications -->
       <Notifications />
     </v-app-bar>

@@ -1,12 +1,6 @@
 <template>
   <v-timeline data-test-container="widgets/form/default">
-    <v-card
-      dot-color="red-lighten-1"
-      fill-dot
-      size="x-small"
-      v-if="state && props.uuid"
-      data-test-container="widgets/form/default"
-    >
+    <v-card dot-color="red-lighten-1" fill-dot size="x-small" v-if="state && props.uuid">
       <h3>{{ state.title }}</h3>
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-text-field
@@ -107,13 +101,11 @@ const email = computed({
   },
 });
 
-
 const emailDefinitions = computed({
   get() {
     return state.value.definitions.email;
   },
 });
-
 
 onMounted(() => {});
 onUnmounted(() => {

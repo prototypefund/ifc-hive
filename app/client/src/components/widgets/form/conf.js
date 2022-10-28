@@ -10,14 +10,13 @@ export default {
         email: "lutz@maier.de",
         name: "meier test 12",
         firstname: "lutz hallo",
-
     },
     definitions: {
         email: [
             v => !!v || 'E-mail is required',
             v => /.+@.+/.test(v) || 'E-mail must be valid',
           ],
-          name: [
+        name: [
             v => !!v || 'Name is required',
             v => v.length <= 10 || 'Name must be less than 10 characters',
           ],

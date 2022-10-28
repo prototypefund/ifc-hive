@@ -1,13 +1,13 @@
 // https://docs.cypress.io/api/introduction/api.html
 
-import { isComonentTest, isIntegrationTest } from './helper.js'
+import { isComonentTest } from '../../../cypress/support/sbHelper.js'
 
 
 describe("Test Testborad Jornal ", () => {
 
   it("visit Pages/Testboard and klick value", () => {
     cy.log("Server Contex", Cypress.env('TESTTYPE'))
-    if (isIntegrationTest()) {
+    if (!isComonentTest()) {
       cy.visit("/");
       cy.get('[data-test-id="sidebar_nav-app-journal"]').click()
     } else {
