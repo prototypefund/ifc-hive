@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 describe('getNameFrom', function () {
     it('should return names', (ctx) => {
+        expect(getNameFrom('')).toBe('')
+        expect(getNameFrom('A')).toBe('A')
         expect(getNameFrom('HalloWelt')).toBe('Hallo Welt')
         expect(getNameFrom('a7492BAA9_7993ZA8A27')).toBe('A 7492 BAA 9 7993 ZA 8 A 27')
         expect(getNameFrom('aB$a9')).toBe('A B A 9')
@@ -778,6 +780,6 @@ describe('getNameFromAll', function () {
         expect(getNameFrom('aBa0$757942za2')).toBe('A Ba 0 757942 Za 2')
         expect(getNameFrom('B7Z233A$')).toBe('B 7 Z 233 A')
         expect(getNameFrom('Z15z1')).toBe('Z 15 Z 1')
-        
+
     });
 })
