@@ -1,8 +1,8 @@
-[
-    {
-        "dst": "dashboard"
-    },
-    {
-        "dst": "testboard"
+{
+    "avatar": {
+        "page": "pages/avatar",
+        "widgets": [
+            "widgets/form/default"
+        ]
     }
-]
+}

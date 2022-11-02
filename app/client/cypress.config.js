@@ -3,6 +3,13 @@ defineConfig = require('cypress').defineConfig
 
 // yarn start-server-and-test preview http://127.0.0.1:4173/ 'cypress run --browser brave' 
 const execa = require("execa");
+
+const fs = require('fs')
+const path = require('path')
+
+// vitePreprocessor = require('cypress-vite').vitePreprocessor
+
+
 const findBrowser = () => {
   // the path is hard-coded for simplicity
   const browserPath = "/snap/bin/brave";
@@ -30,16 +37,23 @@ config = defineConfig({
   chromeWebSecurity: false,
   /* Setup for E2E framework */
   e2e: {
-    experimentalSessionAndOrigin:true,
-    specPattern:["cypress/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}","**/*.component.cy.{js,jsx,ts,tsx}"], 
+    experimentalSessionAndOrigin: true,
+    specPattern: ["cypress/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}", "**/*.component.cy.{js,jsx,ts,tsx}"],
     baseUrl: "http://localhost:4173",
     video: false,
-    setupNodeEvents(on, config) {
-        /*return findBrowser().then((browser) => {
-        return {
-          browsers: config.browsers.concat(browser),
-        }
+    async setupNodeEvents(on, config) {
+      // on('file:preprocessor', vitePreprocessor())
+
+      const visit = fs.readFileSync('cypress/fixtures/visit.json', 'utf8')
+      config.env.visitTests = visit
+
+      /*return findBrowser().then((browser) => {
+      return {
+        browsers: config.browsers.concat(browser),
+      }
       })*/
+      config.env.usersList = ["widgets/form/default"]
+      return config
     }
   },
   component: {

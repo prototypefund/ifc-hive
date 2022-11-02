@@ -70,6 +70,7 @@
   "devDependencies": {
     "@storybook/builder-vite": "^0.2.4",
     "cypress": "10.11.0",
+    "cypress-vite": "^1.2.1",
     "start-server-and-test": "^1.14.0"
   }
 }

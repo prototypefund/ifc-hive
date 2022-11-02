@@ -1,71 +1,68 @@
 import { isComonentTest } from '../../../../cypress/support/sbHelper.js'
 
+
 it("Type Email OK", () => {
   cy.getInput('firstname').clear().type("Moo");
-  cy.getInput('name').type("Koo");
-  cy.getInput('email').type("email@milch.lol");
-  cy.get("[data-test-id=widget_avatar-inputErrors]").should('not.exist')
+  cy.getInput('name').clear().type("Koo");
+  cy.getInput('email').clear().type("email@milch.lol");
+  cy.getInputError('firstname').should('not.exist')
+  cy.getInputError('name').should('not.exist')
+  cy.getInputError('email').should('not.exist')
 });
-
 
 it("Type Email OK 2", () => {
   cy.get('[data-test-container="widgets/form/default"]')
     .within(() => {
       cy.getInput('firstname').clear().type("Moo");
-      cy.getInput('name').type("Koo");
-      cy.getInput('email').type("email@milch.lol");
-      cy.get("[data-test-id=widget_avatar-inputErrors]")
-        .should('not.exist')
+      cy.getInput('name').clear().type("Koo");
+      cy.getInput('email').clear().type("Moo.Koo@some-mail.com");
+      cy.getInputError('firstname').should('not.exist')
+      cy.getInputError('name').should('not.exist')
+      cy.getInputError('email').should('not.exist')
     })
 });
+
 
 it("Type Bad Email", () => {
   cy.get('[data-test-container="widgets/form/default"]')
     .within(() => {
-      cy.getInput('firstname').clear().type("Moo");
+      cy.getInput('firstname').clear().type("Herman");
       cy.getInput('name').clear().type("Koo");
       cy.getInput('email').type("email@milch.lol").clear().type('Vergessen');
+      cy.getInputError('firstname').should('not.exist')
+      cy.getInputError('name').should('not.exist')
+      // Check there was an error!
+      cy.getInputError('email').should('exist')
+      // With localized Message
+      cy.getInputError('email').should('contain', 'E-mail')
 
-      // cy.get('[data-test-container="widgets/form/default"]')
-      cy.find('widget_avatar-inputErrors')
-        .should('exist')
-        .should('contain', 'email')
-      //.should('exist').should('contain', 'email')
-      // cy.get("[data-test-id=widget_avatar-inputErrors]").should('exist').should('contain', 'email')
     })
 });
 
 
-it("Type Name and Email", () => {
-  cy.getInput('firstname').clear().type("Mooooooooooooooooooooooooooooooooooooooo")
-  cy.getInput('name').type("Koo");
-  cy.getInput('email').clear().type("emah")
-
+it("Type Bad Email and Too Long Name", () => {
   cy.get('[data-test-container="widgets/form/default"]')
-    .find('widget_avatar-inputErrors')
-    .should('exist')
-    .should('contain', 'email')
-
-  //.should('exist').should('contain', 'email')
-  // cy.get("[data-test-id=widget_avatar-inputErrors]").should('exist').should('contain', 'email')
+    .within(() => {
+      cy.getInput('email').clear().type("emah")
+      cy.getInputError('email').should('exist')
+      cy.getInput('firstname').clear().type("Mooooooooooooooooooooooooooooooooooooooo")
+      // Expect the name to be too Long      
+      cy.getInput('firstname').clear().type("abcdefghij")
+      // Expect the name to be too Long
+      cy.getInputError('firstname').should('not.exist')
+      cy.getInput('name').type("Koo1234568");
+      cy.getInputError('name').should('exist')
+    })
 });
-/*
-const gridItemLoader = function (itemName = 'card') {
-  return import(`../components/templates/grids/items/${itemName}.vue`).catch(e => {
-    return import(`../components/templates/grids/error.vue`)
-  })
-}*/
 
-/*
-  it("Visit Bad Email Preset", () => {
-    cy.log(isComonentTest())
-    if (isComonentTest()) {
-      cy.visitStorybook('Pages/Avatar', 'HeadlessEditModeBadMail')
-      cy.get('[data-test-id]')
-    } else {
-      cy.visit("/");
-    }
-    // cy.get("#email").clear().type("a1234.com");
-    cy.get("[data-test-id=widget_avatar-inputErrors]").should('exist').should('contain', 'email')
-  }); 
-*/
+
+it("Type Name Corner Case", () => {
+  cy.get('[data-test-container="widgets/form/default"]')
+    .within(() => {
+      cy.getInput('firstname').clear().type("abcdefghij")
+      // Expect the name to be too Long
+      cy.getInputError('firstname').should('not.exist')
+    })
+});
+
+

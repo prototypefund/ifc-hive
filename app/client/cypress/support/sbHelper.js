@@ -123,4 +123,44 @@ const getRelativeURL = (title, name) => {
   return `iframe.html?id=${qid}&viewMode=story`;
 }
 
-export { isComonentTest, getRelativeURL, getNameFrom, getQuerryId, listStoriesFromClass };
+
+/**
+ * 
+ * @param {string} callingPage Page Name
+ * @returns 
+ */
+const importWigetTests = (pageName) => {
+  const loadDependencyErrors = []
+  const tests = JSON.parse(Cypress.env('visitTests'))
+  const myWidgets = tests[pageName]['widgets']
+  for (const componentName of myWidgets) {
+    const requiredFile = `src/components/${componentName}.component.cy.js`;
+
+    try {
+      //console.log(`LOAD DEPENDENCY ../../components/${componentName}.component.cy.js`)
+      //require(`../../components/${componentName}.component.cy.js`)
+      for (var required in require.cache) {
+        if (required.split('?')[0].endsWith(requiredFile)) {
+          delete require.cache[required]
+          console.log('Remove Dependency', requiredFile)
+        }
+      }
+      console.log('Load Dependency', requiredFile)
+      require(`../../src/components/${componentName}.component.cy.js`)
+    }
+    catch (e) {
+      console.log(e)
+      var r = {}
+      r[componentName] = e
+      loadDependencyErrors.push(r)
+    }
+  }
+  return loadDependencyErrors;
+}
+
+
+
+
+
+
+export { isComonentTest, getRelativeURL, getNameFrom, getQuerryId, listStoriesFromClass, importWigetTests };

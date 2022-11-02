@@ -1,16 +1,23 @@
 
-import { isComonentTest } from '../../../cypress/support/sbHelper.js'
-
-//const path = '../../s.js'
-
-// eval(`require('${path}');`)
-//const f = import('../../s.js')
-//const g = eval(`require('${path}');`)
+import { isComonentTest, importWigetTests } from '../../../cypress/support/sbHelper.js'
 
 
 import { ref, watchSyncEffect } from 'vue'
 const widgetcomponentest = ref([])
-var loadDependencyErrors = [];
+Cypress.Commands.add('getContainer', (widgetcomponentest) => {
+  // Teste das die Anzal der Wigets stimmt
+  // Teste das die Widgets einzeln Exsitiern
+  cy.get('[data-test-container]')
+    .each(
+      x => {
+        cy.wrap(x)
+          .invoke('attr', 'data-test-container')
+          .then(attribs => {
+            widgetcomponentest.value.push(`${attribs}`)
+          })
+      }
+    )
+})
 
 describe("Visit Avatar", () => {
 
@@ -21,7 +28,7 @@ describe("Visit Avatar", () => {
     if (isComonentTest()) {
       cy.visitStorybook('Pages/Avatar', 'HeadlessEditMode')
     } else {
-      cy.visit("/");
+      cy.visit("/avatar");
       // Klick some where...
       // check Route
     }
@@ -34,17 +41,15 @@ describe("Visit Avatar", () => {
   /* initialisiere die richtige page */
   beforeEach(() => {
     cy.log('Before')
-    cy.visitStorybook('Pages/Avatar', 'HeadlessEditMode')
+    if (isComonentTest()) {
+      cy.visitStorybook('Pages/Avatar', 'HeadlessEditMode')
+    } else {
+      cy.visit("/avatar");
+    }
   })
 
-  afterEach(() => {
-    cy.log('afterEach')
-  })
 
 
-  after(() => {
-    cy.log('After')
-  })
 
   /* Teste das alles da ist was da sein soll */
   it("Teste das alles da ist", () => {
@@ -52,36 +57,21 @@ describe("Visit Avatar", () => {
     cy.wrap(widgets)
       .should('have.length.at.least', 1)         // min 1 widgets
       .should('have.length.of.at.most', 2)       // max 2 widgets
-      .should('have.length', 1)                  // = 1 widgets
+      //.should('have.length', 1)                  // = 1 widgets
       .should('contain', 'widgets/form/default') // = 1 widgets
   })
 
-  // require(`../../components/widgets/form/default.component.cy.js?e=1dsfsfsdf`)
 
 
-  for (const componentName of widgetcomponentest.value) {
-    if (componentName.startsWith('widgets')) {
 
-      // const target 
-      try {
-        console.log(`../../components/${componentName}.component.cy.js`)
-        require(`../../components/${componentName}.component.cy.js?rnd=65465`) //
-      }
-      catch (e) {
-        console.log('oh no big error')
-        console.log(e)
-        loadDependencyErrors.push(componentName)
-      }
-    }
-  }
-
+  const loadDependencyErrors = importWigetTests('avatar')
   it('load Dependecys OK', () => {
-    //cy.wrap(loadDependencyErrors).should('length', 0)
+    cy.wrap(loadDependencyErrors).should('length', 0)
   })
+
 
   /*
     const imported = import(`../../components/${itemName}.component.cy.js`).catch((e) => { })
   */
-
-
 });
+
