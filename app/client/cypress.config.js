@@ -7,7 +7,7 @@ const execa = require("execa");
 const fs = require('fs')
 const path = require('path')
 
-// vitePreprocessor = require('cypress-vite').vitePreprocessor
+vitePreprocessor = require('cypress-vite')
 
 
 const findBrowser = () => {
@@ -42,8 +42,10 @@ config = defineConfig({
     baseUrl: "http://localhost:4173",
     video: false,
     async setupNodeEvents(on, config) {
-      // on('file:preprocessor', vitePreprocessor())
-
+      on(
+        'file:preprocessor',
+        vitePreprocessor(path.resolve(__dirname, './vite.config.js')),
+      )
       const visit = fs.readFileSync('cypress/fixtures/visit.json', 'utf8')
       config.env.visitTests = visit
 
