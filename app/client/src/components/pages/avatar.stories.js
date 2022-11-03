@@ -9,15 +9,26 @@ export default {
   },
 };
 
+const Template = (args) => ({
+  // Components used in your story `template` are defined in the `components` object
+  components: { App, comp },
+  // The story's `args` need to be mapped into the template through the `setup()` method
+  setup() {
+    initStore()
+    prepareStore('avatar', args)
+    return { args };
+  },
+  // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
+  template: wrapFullPage('comp', 'App'),
+});
 
-const HeadlessEditModeTemplate = (args) => ({
+const HeadlessTemplate = (args) => ({
   // Components used in your story `template` are defined in the `components` object
   components: { comp },
   // The story's `args` need to be mapped into the template through the `setup()` method
   setup() {
     initStore()
     prepareStore('avatar', args)
-    dispatchStore('avatar', 'ui/update', { editMode: true }) // Bessere Weg das zu machen ??
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
@@ -25,9 +36,11 @@ const HeadlessEditModeTemplate = (args) => ({
 });
 
 
-export const HeadlessEditMode = HeadlessEditModeTemplate.bind({});
-HeadlessEditMode.args = conf.avatar;
+export const Headless = HeadlessTemplate.bind({});
+// More on args: https://storybook.js.org/docs/vue/writing-stories/args
+Headless.args = conf.avatar;
 
 
-export const HeadlessEditModeBadMail = HeadlessEditModeTemplate.bind({});
-HeadlessEditModeBadMail.args = conf.avatar;
+export const Full = Template.bind({});
+// More on args: https://storybook.js.org/docs/vue/writing-stories/args
+Full.args = conf.avatar;

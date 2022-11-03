@@ -1,0 +1,6 @@
+{
+  "appId": "com.ifcHive.app",
+  "appName": "ifc-hive",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
