@@ -19,14 +19,16 @@
           :counter="10"
           label="Name"
           required
-        ></v-text-field>
+        >
+        </v-text-field>
         <v-text-field
           data-test-id="email"
           :rules="emailDefinitions"
           v-model="email"
           label="E-mail"
           required
-        ></v-text-field>
+        >
+        </v-text-field>
       </v-form>
     </v-card>
   </v-timeline>
