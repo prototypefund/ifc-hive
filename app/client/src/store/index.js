@@ -354,6 +354,7 @@ const applicationReducers = {
                         action.payload.forEach(widget => {
                             // get the config file for the current widget
                             // TODO find out why we can't use vite alias here
+                            // Possible Related to https://github.com/rollup/plugins/tree/master/packages/dynamic-import-vars#limitations
                             import('../components/widgets/' + widget.name + '/conf.js').then(conf => {
                                 store.dispatch({
                                     type: 'widgets/preconfigure',
