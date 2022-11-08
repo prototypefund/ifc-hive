@@ -52,6 +52,7 @@
     "@capacitor/core": "^4.x",
     "@capacitor/cli": "^4.x",
     "@capacitor/android": "^4.x",
+    "@capacitor/splash-screen": "^4.x",
     "storybook-dark-mode": "^1.x",
     "@storybook/addon-actions": "^6.x",
     "@storybook/addon-essentials": "^6.x",
