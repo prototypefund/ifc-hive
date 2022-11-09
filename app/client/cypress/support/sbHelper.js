@@ -1,4 +1,3 @@
-
 /**
  * Nice To Know and how to avoid name Collisions.
  * Every Storybook can be accsessd over the normal Webiterface.
@@ -123,6 +122,11 @@ const getRelativeURL = (title, name) => {
   return `iframe.html?id=${qid}&viewMode=story`;
 }
 
+/**
+ * Dynamic Vite Imports
+ * 
+ * https://github.com/rollup/plugins/tree/master/packages/dynamic-import-vars#limitations
+ */
 
 /**
  * 
@@ -137,16 +141,14 @@ const importWigetTests = (pageName) => {
     const requiredFile = `src/components/${componentName}.component.cy.js`;
 
     try {
-      //console.log(`LOAD DEPENDENCY ../../components/${componentName}.component.cy.js`)
-      //require(`../../components/${componentName}.component.cy.js`)
       for (var required in require.cache) {
         if (required.split('?')[0].endsWith(requiredFile)) {
           delete require.cache[required]
           console.log('Remove Dependency', requiredFile)
         }
       }
-      console.log('Load Dependency', requiredFile)
-      require(`../../src/components/${componentName}.component.cy.js`)
+      console.log('Load Dependency', requiredFile, 'Component Name', componentName)
+      import(`../../src/components/${componentName}.component.cy.js`)
     }
     catch (e) {
       console.log(e)
@@ -158,9 +160,4 @@ const importWigetTests = (pageName) => {
   return loadDependencyErrors;
 }
 
-
-
-
-
-
-export { isComonentTest, getRelativeURL, getNameFrom, getQuerryId, listStoriesFromClass, importWigetTests };
+export { isComonentTest, getRelativeURL, getNameFrom, getQuerryId, listStoriesFromClass };

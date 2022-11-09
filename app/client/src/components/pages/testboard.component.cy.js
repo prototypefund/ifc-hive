@@ -1,9 +1,21 @@
-// https://docs.cypress.io/api/introduction/api.html
 
 import { isComonentTest } from '../../../cypress/support/sbHelper.js'
+import { testWidgets } from '../../../cypress/testHelper.js'
+
+const source = 'pages/testboard'
+
+const prepareTest = () => {
+  if (isComonentTest()) {
+    cy.visitStorybook(source, 'Headless')
+  } else {
+    cy.visit("/");
+    cy.get('[data-test-id="sidebar_nav-app-testboard"]').click()
+  }
+
+}
 
 const runCounterTest = () => {
-  for (var i = 0; i < 20; i++) {
+  for (var i = 0; i < 3; i++) {
     cy.contains("p", "click value " + i);
     cy.get('[data-test-id="testboard_count-button"]').click();
   }
@@ -20,30 +32,29 @@ Cypress.Commands.add('asComponentTest', (data) => {
   }
 })
 
+describe(`Visit ${source}`, () => {
 
-it.only("visits the app root and go to about page", () => {
-  if (isComonentTest()) {
-    cy.visitStorybook('Pages/Testboard', 'Full')
-    // Wir müssen immer eine abfrage machen 
-    cy.get('[data-test-id]');
-  } else {
-    cy.visit("/");
-    cy.get('[data-test-id="sidebar_nav-app-testboard"]').click()
-  }
+  /* initialisiere die richtige page */
+  beforeEach(() => {
+    prepareTest()
+  })
 
-  for (var i = 0; i < 7; i++) {
-    cy.get('[data-test-id="testboard_count-button"]').click();
-  }
-  cy.contains("p", "click value 7");
-})
+  testWidgets(source, prepareTest)
 
-describe("Test Testborad ", () => {
+  it("visits the app root and go to about page", () => {
+
+    for (var i = 0; i < 7; i++) {
+      cy.get('[data-test-id="testboard_count-button"]').click();
+    }
+    cy.contains("p", "click value 7");
+  })
+
   it("visit Pages/Testboard and klick value", () => {
     cy.log("Server Contex", Cypress.env('TESTTYPE'), isComonentTest())
     if (isComonentTest()) {
       for (const name of ['Full', 'Headless']) {
         cy.visitStorybook('Pages/Testboard', name)
-        cy.get('[data-test-id="testboard_container"]')
+        // cy.get('[data-test-id="testboard_container"]')
         runCounterTest();
       }
     } else {
@@ -52,4 +63,5 @@ describe("Test Testborad ", () => {
       runCounterTest();
     }
   });
+
 });

@@ -1,5 +1,6 @@
 <template>
-  <v-timeline v-if="state && props.uuid" data-test-container="widgets/timeline/default">
+  <v-timeline v-if="state && props.uuid" data-test-container="widgets/timeline/default"
+    :data-test-container-uuid=props.uuid>
     <h3>{{ state.title }}</h3>
     <v-timeline-item dot-color="amber-lighten-1" fill-dot size="x-small">
       <v-card>
@@ -42,7 +43,7 @@ const props = defineProps({
     type: String,
   },
 });
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });

@@ -1,8 +1,35 @@
 {
-    "avatar": {
+    "pages/avatar": {
         "page": "pages/avatar",
-        "widgets": [
-            "widgets/form/default"
-        ]
-    }
+        "widgets": {
+            "widgets/form/default": 1
+        }
+    },
+    "pages/dashboard": {
+        "page": "pages/dashboard",
+        "widgets": {
+            "widgets/timeline/default": 1
+        }
+    },
+    "pages/journal": {
+        "page": "pages/journal",
+        "widgets": {
+            "widgets/journal/default": 1
+        }
+    },
+    "pages/settings": {
+        "page": "pages/settings",
+        "widgets": {
+            "widgets/debug/default": 3
+        }
+    },
+    "pages/testboard": {
+        "page": "pages/testboard",
+        "widgets": {
+            "widgets/detail/user": 1,
+            "widgets/debug/default": 1,
+            "widgets/timeline/default": 1
+        }
+    },
+    "widgets/debug/default": 1
 }

@@ -28,7 +28,7 @@ const props = defineProps({
   },
 });
 
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });

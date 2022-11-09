@@ -1,20 +1,32 @@
-// https://docs.cypress.io/api/introduction/api.html
 
 import { isComonentTest } from '../../../cypress/support/sbHelper.js'
+import { testWidgets } from '../../../cypress/testHelper.js'
 
 
-describe("Test Testborad Jornal ", () => {
+const source = 'pages/journal'
+
+const prepareTest = () => {
+  if (isComonentTest()) {
+    cy.visitStorybook(source, 'Headless')
+  } else {
+    cy.visit("/");
+    cy.get('[data-test-id="sidebar_nav-app-journal"]').click()
+  }
+}
+
+describe(`Visit ${source}`, () => {
+
+  /* initialisiere die richtige page */
+  beforeEach(() => {
+    prepareTest()
+  })
+
+  testWidgets(source, prepareTest)
+
 
   it("visit Pages/Testboard and klick value", () => {
-    cy.log("Server Contex", Cypress.env('TESTTYPE'))
-    if (!isComonentTest()) {
-      cy.visit("/");
-      cy.get('[data-test-id="sidebar_nav-app-journal"]').click()
-    } else {
-      cy.visitStorybook('pages/journal', 'Headless')
-    }
 
-    cy.get('[data-test-container="pages/jornal"]')
+    cy.get('[data-test-container="pages/journal"]')
 
 
     cy.get('.v-timeline-item__body')
@@ -29,5 +41,4 @@ describe("Test Testborad Jornal ", () => {
 
 
   });
-
 });

@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="state" data-test-container="widgets/detail/user">
+  <v-card v-if="state && props.uuid" data-test-container="widgets/detail/user" :data-test-container-uuid=props.uuid>
     <h3>{{ props.props.type }}</h3>
     <pre>{{ state }}</pre>
   </v-card>
@@ -25,7 +25,7 @@ const stateSubscriber$ = $store
   .subscribe((val) => {
     state.value = val;
   });
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });

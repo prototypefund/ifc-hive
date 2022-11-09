@@ -1,33 +1,15 @@
 <template>
-  <v-timeline data-test-container="widgets/form/default">
-    <v-card dot-color="red-lighten-1" fill-dot size="x-small" v-if="state && props.uuid">
+  <v-timeline v-if="state && props.uuid" data-test-container="widgets/form/default"
+    :data-test-container-uuid=props.uuid>
+    <v-card dot-color="red-lighten-1" fill-dot size="x-small">
       <h3>{{ state.title }}</h3>
       <v-form ref="form" v-model="valid" lazy-validation>
-        <v-text-field
-          data-test-id="firstname"
-          v-model="firstname"
-          :rules="firstnameDefinitions"
-          :counter="10"
-          label="firstname"
-          required
-        >
+        <v-text-field data-test-id="firstname" v-model="firstname" :rules="firstnameDefinitions" :counter="10"
+          label="firstname" required>
         </v-text-field>
-        <v-text-field
-          data-test-id="name"
-          :rules="nameDefinitions"
-          v-model="name"
-          :counter="10"
-          label="Name"
-          required
-        >
+        <v-text-field data-test-id="name" :rules="nameDefinitions" v-model="name" :counter="10" label="Name" required>
         </v-text-field>
-        <v-text-field
-          data-test-id="email"
-          :rules="emailDefinitions"
-          v-model="email"
-          label="E-mail"
-          required
-        >
+        <v-text-field data-test-id="email" :rules="emailDefinitions" v-model="email" label="E-mail" required>
         </v-text-field>
       </v-form>
     </v-card>
@@ -109,7 +91,7 @@ const emailDefinitions = computed({
   },
 });
 
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });
