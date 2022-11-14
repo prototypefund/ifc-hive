@@ -248,7 +248,6 @@ const applicationReducers = {
     },
     ui: (state, action) => {
         if (state) {
-
             switch (action.type) {
                 case 'init':
                     return applicationState.ui
