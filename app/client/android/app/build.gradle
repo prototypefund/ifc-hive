@@ -1,7 +1,21 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    signingConfigs {
+        debug {
+            storeFile file('/home/christian/Applications/work/Android/KeyStore/projectJournal.jks')
+            storePassword '123456'
+            keyAlias 'key1'
+            keyPassword '123456'
+        }
+        release {
+        storeFile file('/home/christian/Applications/work/Android/KeyStore/projectJournal.jks')
+            storePassword '123456'
+            keyAlias 'key0'
+            keyPassword '123456'
+        }
+    }
+    compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.ifcHive.app"
         minSdkVersion rootProject.ext.minSdkVersion
