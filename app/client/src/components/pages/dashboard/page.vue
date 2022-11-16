@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="state" data-test-container="pages/dashboard" fluid pa-0>
-    <h1>{{ $t("pages." + state.pageName) }} - {{ state.title }}</h1>
+    <h1>{{ $t("pages." + state.uuid) }} - {{ state.title }}</h1>
     <p>url params > {{ props.urlParams }} &lt; click value {{ state.count }}</p>
     <Grid v-if="state.slots" />
   </v-container>

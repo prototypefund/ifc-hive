@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="state" data-test-container="pages/settings">
-    <h1>{{ $t("pages." + state.pageName) }} - {{ state.title }}</h1>
+    <h1>{{ $t("pages." + state.uuid) }} - {{ state.title }}</h1>
     <p>url params > {{ props.urlParams }} &lt;</p>
     <Grid :contents="state.slots" :grid="state.grid"></Grid>
   </v-container>

@@ -266,19 +266,19 @@ const applicationReducers = {
                 // used in beforeResolve router hook, will trigger before each route change including param changes
                 case 'currentPage/set':
                     if (!action.routeName) return state
-                    // create our json friendly pageName
+                    // create our json friendly uuid
                     let currPage = {}
-                    const pageName = action.routeName.replace('.', '-')
+                    const uuid = action.routeName.replace('.', '-')
                     // check if that requested page has already been preconfigured (should always be the case)
-                    if (pagesLookup[pageName].pageName) {
+                    if (pagesLookup[uuid].uuid) {
                         // create a new currentPage object based on the url params merged ontop of the default page config
-                        currPage = mergeDeepRight(pagesLookup[pageName], action.payload)
+                        currPage = mergeDeepRight(pagesLookup[uuid], action.payload)
                     }
                     if (state.routeName) {
                         // update our memorized preconfigured page with the new version which includes url params and user data
                         store.dispatch({
                             type: 'pages/update',
-                            stateName: state.pageName,
+                            stateName: state.uuid,
                             payload: state
                         })
                     }
@@ -301,14 +301,14 @@ const applicationReducers = {
                 case 'pages/add':
                     // create a new page object based on the default page config
                     const page = clone(mergeDeepRight(storePatterns.page, action.payload))
-                    page.pageName = action.routeName.replace('.', '-')
+                    page.uuid = page.uuid || action.routeName.replace('.', '-')
                     page.routeName = action.routeName
-                    if (state[page.pageName]) {
+                    if (state[page.uuid]) {
                         // if the page already exists do nothing
                         return state
                     }
                     newPage = {}
-                    newPage[page.pageName] = page
+                    newPage[page.uuid] = page
                     return mergeDeepRight(state, newPage)
                 // update a configured page State usually called when current page changes
                 case 'pages/update':
