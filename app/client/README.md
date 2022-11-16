@@ -145,29 +145,29 @@ Take me to [the Page default config](#pageConfig)
 ```json
 {
 // will be set based on the name of the vue router route you've used, or whatever you configure in your route file
-    routeName: "Vue3routeName",
+    "routeName": "Vue3routeName",
     // will usually be set automatically, if set manually, be aware that duplicated uuid lead to shared page store
-    uuid: false,
+    "uuid": false,
 // obvious
-    loading: true,
+    "loading": true,
 // grid config for a page
-    grid: {
+    "grid": {
 // defines the wrapping html template for the whole grid
-        type: "default",
+        "type": "default",
 // defines the wrapping html template for the single item within the grid
-        items: "card",
+        "items": "card",
 // defines the amount of columns per row
-        columns: 3
+        "columns": 3
     },
 // the array containing the configs for the 1-n slots
-    slots: [
+    "slots": [
         {
 // defines a css class which will be used for the v-col the slot widget is housed in
-            class: false,
+            "class": false,
 // defines the width of the widget by using flexbox grid col numbers 1-12
-            column: 12,
+            "column": 12,
 // defines the widget configuration, see widget storePattern
-            widget: {}
+            "widget": {}
         }
     ]
 }
@@ -179,13 +179,13 @@ Note that you can add as much parameters, apart from the above, as you like.
 ```json
 {
 // should usually be a i18n key
-    title: false,
+    "title": false,
 // will usually be set automatically, if set manually, be aware that duplicated uuid lead to shared widget store
-    uuid: false,
+    "uuid": false,
 // the type of widget which represents a folder name under widgets and a config
-    name: false,
+    "name": false,
 // the specific .vue file for the widget
-    face: false,
+    "face": false,
 }
 ```
 Note that you can add as much parameters, apart from the above, as you like. 
