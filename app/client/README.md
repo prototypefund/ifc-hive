@@ -112,7 +112,21 @@ Take me to [the Page default config](#pageConfig)
 
 ## Creating you own widget
 ### Folder structure
-
+To locate all the current widgets and to create you own, navigate to 
+```
+src/components/widgets
+```
+The best starting point from there is to take a look into the boilerplate folder.
+All Widgets are structured in the same way which must not be violated. A widget always contains out of the following files
+```
+├── myWidetName
+│   ├── default.vue // the actual code of the default widget
+│   ├── default.component.cy.js // contains the cypress tests for the default widget
+│   ├── FACENAME.vue // optional, the actual code of specific widget face 
+│   ├── FACENAME.component.cy.js // optional, contains the cypress tests for the FACE widget
+│   ├── conf.js // optional, contains page specific config which override default conf
+└── └── story.js // a storyfile for storybook
+```
 ### Boilerplate
 
 ### Store
