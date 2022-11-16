@@ -38,3 +38,4 @@ yarn test:component:ci
 ```
 
 # Developer How To
+https://repo.karo.design/pacifico/projektjournal/-/blob/e9cc6980ba4cfb4ae71624928914167b031bb0b4/app/client/src/store/state.js#L1-L20
