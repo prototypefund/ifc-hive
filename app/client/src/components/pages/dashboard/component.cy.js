@@ -1,5 +1,5 @@
-import { isComonentTest } from '../../../cypress/support/sbHelper.js'
-import { injectWidgets } from '../../../cypress/testHelper.js'
+import { isComonentTest } from '../../../../cypress/support/sbHelper.js'
+import { injectWidgets } from '../../../../cypress/testHelper.js'
 
 
 const source = 'pages/dashboard'

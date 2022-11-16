@@ -1,12 +1,12 @@
 import comp from './page.vue'
-import App from '../../App.vue'
-import conf from '@p/conf.js'
+import App from '../../../App.vue'
+import conf from './conf.json'
 import { initStore, prepareStore, wrapComponent, wrapFullPage } from '../../../../.storybook/storeHelper.js'
 
 
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export
 export default {
-  title: 'Pages/Boilerplate',
+  title: 'Pages/BOILERPLATE',
   // component: dashboardComp,
   // More on argTypes: https://storybook.js.org/docs/vue/api/argtypes
   // provide doesn't work hear !!!
@@ -20,7 +20,7 @@ const Template = (args) => ({
   // The story's `args` need to be mapped into the template through the `setup()` method
   setup() {
     initStore()
-    prepareStore('dashboard', args)
+    prepareStore('BOILERPLATE', args)
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
@@ -34,7 +34,7 @@ const HeadlessTemplate = (args) => ({
   setup() {
     initStore()
     // test.dashboard geeht nicht da prefix app. ist
-    prepareStore('dashboard', args)
+    prepareStore('BOILERPLATE', args)
     return { args };
   },
   // And then the `args` are bound to your component with `v-bind="args"`  v-bind="args" 
@@ -43,9 +43,9 @@ const HeadlessTemplate = (args) => ({
 
 export const Headless = HeadlessTemplate.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
-Headless.args = conf.dashboard;
+Headless.args = conf;
 
 
 export const Full = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
-Full.args = conf.dashboard;
+Full.args = conf;

@@ -1,7 +1,7 @@
-import comp from '@p/testboard.vue'
-import App from '../../App.vue'
-import conf from '@p/conf.js'
-import { initStore, prepareStore, wrapComponent, wrapFullPage } from '../../../.storybook/storeHelper.js'
+import comp from './page.vue'
+import App from '../../../App.vue'
+import conf from './conf.json'
+import { initStore, prepareStore, wrapComponent, wrapFullPage } from '../../../../.storybook/storeHelper.js'
 
 
 // More on default export: https://storybook.js.org/docs/vue/writing-stories/introduction#default-export
@@ -41,7 +41,7 @@ const HeadlessTemplate = (args) => ({
 });
 export const Headless = HeadlessTemplate.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
-Headless.args = conf.testboard;
+Headless.args = conf;
 export const Full = Template.bind({});
 // More on args: https://storybook.js.org/docs/vue/writing-stories/args
-Full.args = conf.testboard;
+Full.args = conf;
