@@ -1,9 +1,9 @@
 
-import { isComonentTest } from '../../../cypress/support/sbHelper.js'
-import { testWidgets } from '../../../cypress/testHelper.js'
+import { isComonentTest } from '../../../../cypress/support/sbHelper.js'
+import { testWidgets } from '../../../../cypress/testHelper.js'
 
 
-const source = 'pages/avatar'
+const source = 'pages/boilerplate'
 
 const prepareTest = () => {
   if (isComonentTest()) {

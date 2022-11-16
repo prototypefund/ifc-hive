@@ -9,8 +9,6 @@ import getEnvVariable from '../lib/getEnvVariable'
 import { mergeDeepRight, clone, findIndex, propEq } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
 import { applicationState, storePatterns } from './state'
-import { Exception } from 'sass';
-
 /*
  * Apply different extensions depending on the environment
  */

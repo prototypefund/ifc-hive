@@ -1,11 +1,13 @@
 // import routes from modules
-import dashboardComp from '@p/dashboard.vue'
-import testboardComp from '@p/testboard.vue'
-import settingsComp from '@p/settings.vue'
-import journal from '@p/journal.vue'
-import avatarComp from '@p/avatar.vue'
-import conf from '@p/conf.js'
-import project_index from '@p/project_index.vue'
+import dashboardComp from '@p/dashboard/page.vue'
+import dashboardConf from '@p/dashboard/conf.json'
+import settingsComp from '@p/settings/page.vue'
+import settingsConf from '@p/settings/conf.json'
+import journalComp from '@p/journal/page.vue'
+import journalConf from '@p/journal/conf.json'
+import testboardComp from '@p/testboard/page.vue'
+import testboardConf from '@p/testboard/conf.json'
+
 import { store } from '../store/index.js'
 
 export default [
@@ -24,20 +26,7 @@ export default [
             store.dispatch({
                 type: 'pages/add',
                 routeName: to.name,
-                payload: conf.dashboard
-            });
-        }
-    },
-    {
-        path: '/testboard',
-        name: 'app.testboard',
-        component: testboardComp,
-        props: true,
-        beforeEnter: (to, from) => {
-            store.dispatch({
-                type: 'pages/add',
-                routeName: to.name,
-                payload: conf.testboard
+                payload: dashboardConf
             });
         }
     },
@@ -50,48 +39,34 @@ export default [
             store.dispatch({
                 type: 'pages/add',
                 routeName: to.name,
-                payload: conf.settings
+                payload: settingsConf
             });
         }
     },
     {
         path: '/journal',
         name: 'app.journal',
-        component: journal,
+        component: journalComp,
         props: true,
         beforeEnter: (to, from) => {
             store.dispatch({
                 type: 'pages/add',
                 routeName: to.name,
-                payload: conf.journal
+                payload: journalConf
             });
         }
     },
     {
-        path: '/projects',
-        name: 'app.projects',
-        component: project_index,
+        path: '/testboard',
+        name: 'app.testboard',
+        component: testboardComp,
         props: true,
         beforeEnter: (to, from) => {
             store.dispatch({
                 type: 'pages/add',
                 routeName: to.name,
-                payload: conf.project_index
+                payload: testboardConf
             });
         }
     },
-    {
-        path: '/avatar',
-        name: 'app.avatar',
-        component: avatarComp,
-        props: true,
-        beforeEnter: (to, from) => {
-            store.dispatch({
-                type: 'pages/add',
-                routeName: to.name,
-                payload: conf.avatar
-            });
-        }
-    },
-
 ]
