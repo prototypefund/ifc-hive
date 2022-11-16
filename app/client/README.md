@@ -6,6 +6,48 @@ This template should help get you started developing with Vue 3 in Vite. The tem
 
 - [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
 
+### Full recommended extensionlist
+```
+code --install-extension aaron-bond.better-comments
+code --install-extension bierner.color-info
+code --install-extension christian-kohler.npm-intellisense
+code --install-extension christian-kohler.path-intellisense
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension ecmel.vscode-html-css
+code --install-extension esbenp.prettier-vscode
+code --install-extension formulahendry.auto-close-tag
+code --install-extension formulahendry.auto-rename-tag
+code --install-extension Marko-JS.marko-vscode
+code --install-extension mikestead.dotenv
+code --install-extension MisterJ.vue-volar-extention-pack
+code --install-extension ms-azuretools.vscode-docker
+code --install-extension MS-CEINTL.vscode-language-pack-de
+code --install-extension ms-vscode-remote.remote-containers
+code --install-extension ms-vscode-remote.remote-ssh
+code --install-extension ms-vscode-remote.remote-ssh-edit
+code --install-extension ms-vscode.remote-explorer
+code --install-extension Natizyskunk.sftp
+code --install-extension naumovs.color-highlight
+code --install-extension oliversturm.fix-json
+code --install-extension redhat.java
+code --install-extension sdras.vue-vscode-snippets
+code --install-extension sibiraj-s.vscode-scss-formatter
+code --install-extension steoates.autoimport
+code --install-extension stylelint.vscode-stylelint
+code --install-extension syler.sass-indented
+code --install-extension VisualStudioExptTeam.intellicode-api-usage-examples
+code --install-extension VisualStudioExptTeam.vscodeintellicode
+code --install-extension vscjava.vscode-java-debug
+code --install-extension vscjava.vscode-java-dependency
+code --install-extension vscjava.vscode-java-pack
+code --install-extension vscjava.vscode-java-test
+code --install-extension vscjava.vscode-maven
+code --install-extension Vue.volar
+code --install-extension Wscats.vue
+code --install-extension xabikos.JavaScriptSnippets
+code --install-extension yzhang.markdown-all-in-one
+```
+
 # Test Preperation
 If you want to run 2 non-headless sessions simultanusly make sure to select diffrent Browsers
 ```
@@ -45,11 +87,54 @@ The whole application, based on vue3, vuetify and the mini-rx-store is loosely c
 Whilst you are basically pretty free to setup configurations for you pages and widgets as you see fit, there are some required ones which are usually preset to default values if no seperate conf file, which overrides the system default, is provided. It's also important to know that every component and every piece of data is referenced by uuids. Those uuid's however are generated automatically as long as you do not provide a name attribute in your configs. If you do so, be aware that also a selfset name needs to be unique if you do not wish to have the same instance of page or widget in multiple locations.
 
 ## Creating you own page
+### Folder structure
+To locate all the current pages and to create you own, navigate to 
+```
+src/components/pages
+```
+The best starting point from there is to take a look into the boilerplate folder.
+All Pages are structured in the same way which must not be violated. A page always contains out of the following files
+```
+├── myPageName
+│   ├── component.cy.js // contains the cypress tests
+│   ├── conf.js // optional, contains page specific config which override default conf
+│   ├── page.vue // the actual code
+└── └── story.js // a storyfile for storybook
+```
 
+#### page.vue
+Here we see the most important things you definitely need to do to get your page working.
+
+```
+<v-container v-if="state" data-test-container="pages/boilerplate" fluid pa-0>
+    <Grid v-if="state.slots" />
+```
+At first note that, whatever main rapping element you choose, you must have a v-if="state" in there to prevent false rendering. We also encourage you to use the same naming scheme and concept as we do. Every component, may it be template, widget, page or whatnot should provide a "data-test-container" attribute in it's main DOM element. The value of this attribute should be according to it's file path as from "components/"
+
+The "Grid" component will provide you a blackbox you should not think about too much, it simply allows the user to customize the appearance of the pages contents. You on the otherhand may just provide additional information or functionallity within the page file which is unique to this page and cannot be a widget
+
+The rest of the code within the boilerplate/page.vue must be kept in order to have a working base for you page. Note that the subscriber variables alway end on an $ which signalizes that the content of this variable is a redux observable and therefore needs to be unsubscribed whenever you leave the page to prevent memory leaks.
+### Store
+
+#### Configuration
+Take me to [the Page default config](#pageConfig)
+#### Usage
+
+## Creating you own widget
+### Folder structure
+
+### Boilerplate
+
+### Store
+#### Configuration
+Take me to [the Page default config](#pageConfig)
+#### Usage
 
 
 ## Default Configurations for application concepts
-Required page configuration:
+
+### <a name="pageConfig"></a>Required page configuration:
+
 ```json
 {
 // will be set based on the name of the vue router route you've used, or whatever you configure in your route file
@@ -82,7 +167,8 @@ Required page configuration:
 ```
 Note that you can add as much parameters, apart from the above, as you like. 
 
-Required widget configuration:
+### <a name="widgetConfig"></a>Required widget configuration:
+
 ```json
 {
 // should usually be a i18n key

@@ -10,23 +10,17 @@
 </template>
 
 <script setup>
-import { inject, shallowRef, onMounted, onUnmounted, defineAsyncComponent } from "vue";
+import { inject, ref, onMounted, onUnmounted } from "vue";
 import Grid from "@u/grid/loader.vue";
 const $store = inject("$store");
-const state = shallowRef({});
+const state = ref({});
+
 
 const stateSubscriber$ = $store
   .select((state) => state.currentPage)
   .subscribe((val) => {
     state.value = val;
   });
-
-const props = defineProps({
-  urlParams: {
-    type: String,
-    default: "default param",
-  },
-});
 
 onMounted(() => {
   $store.dispatch({
