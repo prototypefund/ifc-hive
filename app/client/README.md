@@ -2,6 +2,13 @@
 
 This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
+# Mini-RX-Store
+[Here](https://github.com/spierala/mini-rx-store) you find the documentation of the Mini-ry-Store store Framework.
+If you feel fancy and want to brag about cool stuff you know, [visit the redux documentation](https://redux.js.org/api/api-reference) to learn cool stuff which you might want to use after a while using this framework
+
+# Vuetify3
+[Here](https://next.vuetifyjs.com/en/) you find the documentation of the Vuetify3 UI-Component Library
+
 ## Recommended IDE Setup
 
 - [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
@@ -48,36 +55,6 @@ code --install-extension xabikos.JavaScriptSnippets
 code --install-extension yzhang.markdown-all-in-one
 ```
 
-# Test Preperation
-If you want to run 2 non-headless sessions simultanusly make sure to select diffrent Browsers
-```
-docker-compose up --build -d
-cd app/client
-```
-
-## Integration Test non-headless for Development or Debuging
-Runs a Test against the RAW app via with Browser For Test Development/Debuging
-1) -> Test Preperation 
-```
-yarn test:integration
-```
-
-## Integration Test Headless 
-Runs a Test against the RAW app via Comandline
-1) -> Test Preperation
-```
-yarn test:integration:ci
-```
-
-## Component Storybook Test non-headless for Development or Debuging
-Runs a Test against the Storybook RAW app via Comandline
-```
-yarn test:component
-```
-## Component Storybook Test Headless
-```
-yarn test:component:ci
-```
 
 # Developer How To
 ## Basic Idea
@@ -111,13 +88,15 @@ Here we see the most important things you definitely need to do to get your page
 ```
 At first note that, whatever main rapping element you choose, you must have a v-if="state" in there to prevent false rendering. We also encourage you to use the same naming scheme and concept as we do. Every component, may it be template, widget, page or whatnot should provide a "data-test-container" attribute in it's main DOM element. The value of this attribute should be according to it's file path as from "components/"
 
+We also encourage you to use the Vue3 Compose API over the Options API
+
 The "Grid" component will provide you a blackbox you should not think about too much, it simply allows the user to customize the appearance of the pages contents. You on the otherhand may just provide additional information or functionallity within the page file which is unique to this page and cannot be a widget
 
 The rest of the code within the boilerplate/page.vue must be kept in order to have a working base for you page. Note that the subscriber variables alway end on an $ which signalizes that the content of this variable is a redux observable and therefore needs to be unsubscribed whenever you leave the page to prevent memory leaks.
 
-#### component.cy.js
-
 #### conf.js
+
+#### component.cy.js
 
 #### story.js
 
@@ -125,7 +104,11 @@ The rest of the code within the boilerplate/page.vue must be kept in order to ha
 
 #### Configuration
 Take me to [the Page default config](#pageConfig)
+
 #### Usage
+
+
+
 
 ## Creating you own widget
 ### Folder structure
@@ -133,6 +116,7 @@ Take me to [the Page default config](#pageConfig)
 ### Boilerplate
 
 ### Store
+
 #### Configuration
 Take me to [the Page default config](#pageConfig)
 #### Usage
@@ -184,8 +168,40 @@ Note that you can add as much parameters, apart from the above, as you like.
     "uuid": false,
 // the type of widget which represents a folder name under widgets and a config
     "name": false,
-// the specific .vue file for the widget
-    "face": false,
+// the specific .vue file for the widget, by default a file called default is needed
+    "face": false
 }
 ```
 Note that you can add as much parameters, apart from the above, as you like. 
+
+
+# Test Preperation
+If you want to run 2 non-headless sessions simultanusly make sure to select diffrent Browsers
+```
+docker-compose up --build -d
+cd app/client
+```
+
+## Integration Test non-headless for Development or Debuging
+Runs a Test against the RAW app via with Browser For Test Development/Debuging
+1) -> Test Preperation 
+```
+yarn test:integration
+```
+
+## Integration Test Headless 
+Runs a Test against the RAW app via Comandline
+1) -> Test Preperation
+```
+yarn test:integration:ci
+```
+
+## Component Storybook Test non-headless for Development or Debuging
+Runs a Test against the Storybook RAW app via Comandline
+```
+yarn test:component
+```
+## Component Storybook Test Headless
+```
+yarn test:component:ci
+```
