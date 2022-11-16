@@ -23,9 +23,12 @@ export const applicationState = {
         history: [],
         items: []
     },
+    // the actual config object of the page you see right now. This will be moved into the pages lookup once you change pages
     currentPage: {
     },
+    // a lookup map for all the widgets which are currently known to the application context
     widgets: {},
+    // a lookup map for all the pages which are currently known to the application context. Is used as base for the currentPage and will receive up2date page states from currentPage once you change pages
     pages: {}
 }
 export const configPatterns = {
@@ -40,7 +43,7 @@ export const configPatterns = {
     slot: {
         // defines a css class which will be used for the v-col the slot widget is housed in
         class: false,
-        // defines the col count
+        // defines the width of the widget by using flexbox grid col numbers 1-12
         column: 12,
         // defines the widget configuration, see widget storePattern
         widget: false
@@ -49,8 +52,11 @@ export const configPatterns = {
 }
 export const storePatterns = {
     page: {
+        // obvious
         loading: true,
+        // grid config for a page
         grid: configPatterns.grid,
+        // the array containing the configs for the 1-n slots
         slots: []
     },
     widget: {
