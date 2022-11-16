@@ -1,6 +1,5 @@
 import { isComonentTest } from '../../../../cypress/support/sbHelper.js'
 import { testWidgets } from '../../../../cypress/testHelper.js'
-/*
 
 const source = 'pages/boilerplate'
 
@@ -25,4 +24,3 @@ describe(`Visit ${source}`, () => {
   testWidgets(source, prepareTest)
 
 });
-*/

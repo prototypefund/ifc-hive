@@ -2,13 +2,15 @@
   <v-card v-if="state && props.uuid" data-test-container="widgets/boilerplate/default"
     :data-test-container-uuid=props.uuid>
     <h3>{{ props.props.type }}</h3>
+    <v-form>
+      <v-text-field v-model="title" label="title"></v-text-field>
+      <v-text-field v-model="iLike" label="iLike"></v-text-field>
+    </v-form>
     <pre>{{ state }}</pre>
-    <v-input v-model="title" :counter="10" label="title" required></v-input>
-    <v-input v-model="iLike" :counter="10" label="iLike" required></v-input>
   </v-card>
 </template>
 <script setup>
-import { inject, ref, onMounted, onUnmounted } from "vue";
+import { inject, ref, onMounted, onUnmounted, computed } from "vue";
 const $store = inject("$store");
 const state = ref({});
 const stateSubscriber$ = $store
@@ -31,7 +33,7 @@ const iLike = computed({
   get() {
     return state.value.iLike;
   },
-  set(title) {
+  set(iLike) {
     $store.dispatch({
       type: "widgets/update",
       uuid: props.uuid,
