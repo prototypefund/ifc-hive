@@ -1,16 +1,14 @@
 import { isComonentTest } from '../../../../cypress/support/sbHelper.js'
-import { injectWidgets } from '../../../../cypress/testHelper.js'
+import { testWidgets } from '../../../../cypress/testHelper.js'
 
 
 const source = 'pages/dashboard'
 
 const prepareTest = () => {
   if (isComonentTest()) {
-    cy.visitStorybook('Pages/Dashboard', 'Headless')
+    cy.visitStorybook(source, 'Headless')
   } else {
-    cy.visit("/dashboard");
-    // Klick some where...
-    // check Route
+    cy.visit("/");
   }
 }
 
@@ -20,10 +18,11 @@ describe(`Visit ${source}`, () => {
     prepareTest()
   })
 
-  injectWidgets(source, prepareTest)
 
-  it("visits the app root url dual TEST 1", () => {
-    cy.contains("h1", "Dashboard - funoFun");
+
+  it("has rendered Dashboard Dom", () => {
+    cy.get('[data-test-container="pages/dashboard"]')
+      .should('be.visible')
   });
-
+  testWidgets(source, prepareTest)
 });

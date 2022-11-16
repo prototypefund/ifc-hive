@@ -1,8 +1,8 @@
 const tests = (within) => {
 
-  it("Visit the Timeline TEST 1", () => {
+  it("Widget Timeline has Test", () => {
     within(() => {
-      cy.log('Timeline is pressent')
+      cy.log('Timeline has Test')
       expect(true)
     })
   });

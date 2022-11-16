@@ -1,9 +1,12 @@
 <template>
-  <!--
-    Place any desired template structure around the widget grid,
-    e.g. toolbar, sidebars, footers.
-  -->
-  <Grid v-if="state.slots" />
+
+  <v-container v-if="state" data-test-container="pages/boilerplate" fluid pa-0>
+    <!--
+      Place any desired template structure around the widget grid,
+      e.g. toolbar, sidebars, footers.
+    -->
+    <Grid v-if="state.slots" />
+  </v-container>
 </template>
 
 <script setup>

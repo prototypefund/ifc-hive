@@ -17,10 +17,9 @@ const injectWidget = (data_test_container, widgetIndex, prepareTest) => {
     const to_import = data_test_container.split('/')
     to_import.shift()
     // TODO Vite Alias doesn't work if we move this File into ./support/
-    import(`@w/${to_import[0]}/${to_import[1]}.component.template.cy.js`)
+    import(`@w/${to_import[0]}/${to_import[1]}.component.cy.js`)
         .then(mod => {
-            const testName = `Auto Generated Widgets Test ${data_test_container} for widgetIndex ${widgetIndex}`
-            console.log('Injecting', testName);
+            const testName = `Will Import Test from ${data_test_container} for widget in SlotIndex ${widgetIndex}`
 
             describe(testName, () => {
                 const within = (callback) => {
@@ -34,8 +33,8 @@ const injectWidget = (data_test_container, widgetIndex, prepareTest) => {
             })
         })
         .catch(err => {
-            describe(`Import error @w/${to_import[0]}/${to_import[1]}.component.template.cy.js`, () => {
-                it('Error', () => {
+            describe(`Import error @w/${to_import[0]}/${to_import[1]}.component.cy.js`, () => {
+                it('has no test', () => {
                     expect(err.message).to.be.equal('')
                 })
             })

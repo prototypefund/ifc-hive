@@ -10,9 +10,9 @@
     "test:integration": "CYPRESS_BASE_URL=http://localhost:8081 CYPRESS_TESTTYPE=INTEGRATION cypress open --e2e --browser firefox",
     "test:integration:ci": "CYPRESS_BASE_URL=http://localhost:8081 CYPRESS_TESTTYPE=INTEGRATION cypress run --e2e",
     "test:integrationnd": "start-server-and-test dev http://localhost:8081/ 'CYPRESS_BASE_URL=http://localhost:8081 CYPRESS_TESTTYPE=INTEGRATION cypress open --e2e --browser firefox'",
-    "test:component": "start-server-and-test storybook:ci http://localhost:7007/ 'CYPRESS_BASE_URL=http://localhost:7007 CYPRESS_TESTTYPE=COMPONENT cypress open --e2e --browser firefox'",
-    "test:component:ci": "start-server-and-test storybook:ci http://localhost:7007/ 'CYPRESS_BASE_URL=http://localhost:7007 CYPRESS_TESTTYPE=COMPONENT cypress run --e2e'",
-    "storybook:ci": "NODE_ENV=development VITE_API_BASE_URL=localhost:8082 start-storybook -p 7007",
+    "test:component": "start-server-and-test storybook:ci http://localhost:6006/ 'CYPRESS_BASE_URL=http://localhost:6006 CYPRESS_TESTTYPE=COMPONENT cypress open --e2e --browser firefox'",
+    "test:component:ci": "start-server-and-test storybook:ci http://localhost:6006/ 'CYPRESS_BASE_URL=http://localhost:6006 CYPRESS_TESTTYPE=COMPONENT cypress run --e2e'",
+    "storybook:ci": "NODE_ENV=development VITE_API_BASE_URL=localhost:8082 start-storybook -p 6006",
     "storybook": "NODE_ENV=development VITE_API_BASE_URL=localhost:8082 start-storybook -p 6006",
     "storybook_dst": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
