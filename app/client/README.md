@@ -114,6 +114,13 @@ At first note that, whatever main rapping element you choose, you must have a v-
 The "Grid" component will provide you a blackbox you should not think about too much, it simply allows the user to customize the appearance of the pages contents. You on the otherhand may just provide additional information or functionallity within the page file which is unique to this page and cannot be a widget
 
 The rest of the code within the boilerplate/page.vue must be kept in order to have a working base for you page. Note that the subscriber variables alway end on an $ which signalizes that the content of this variable is a redux observable and therefore needs to be unsubscribed whenever you leave the page to prevent memory leaks.
+
+#### component.cy.js
+
+#### conf.js
+
+#### story.js
+
 ### Store
 
 #### Configuration
