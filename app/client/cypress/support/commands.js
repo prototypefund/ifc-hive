@@ -71,7 +71,7 @@ Cypress.Commands.add('getContainer', (widgetcomponentest) => {
                     .invoke('attr', 'data-test-container')
                     .then(container => {
                         cy.wrap(x)
-                            .invoke('attr', 'data-test-uuid')
+                            .invoke('attr', 'data-test-container-uuid')
                             .then(uuid => {
                                 widgetcomponentest.value.push({ name: container, uuid })
                             })
@@ -97,7 +97,7 @@ Cypress.Commands.add('getWidgetsFromID', (taget) => {
                         cy.wrap(x)
                             .invoke('attr', 'data-test-container')
                             .then(container => {
-                                cy.wrap(x).should('contain.attr', 'data-test-uuid').then(
+                                cy.wrap(x).should('contain.attr', 'data-test-container-uuid').then(
                                     uuid => {
                                         if (!result[container]) {
                                             result[container] = []
