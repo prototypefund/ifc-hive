@@ -1,6 +1,6 @@
 <template>
   <v-card v-if="state && props.uuid" data-test-container="widgets/detail/user" :data-test-container-uuid=props.uuid>
-    <h3>{{ props.props.type }}</h3>
+    <h3>{{ p    rops.props.type }}</h3>
     <pre>{{ state }}</pre>
   </v-card>
 </template>
