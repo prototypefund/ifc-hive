@@ -105,9 +105,6 @@ The rest of the code within the boilerplate/page.vue must be kept in order to ha
 #### Configuration
 Take me to [the Page default config](#pageConfig)
 
-#### Usage
-
-
 
 
 ## Creating you own widget
@@ -127,13 +124,24 @@ All Widgets are structured in the same way which must not be violated. A widget 
 │   ├── conf.js // optional, contains page specific config which override default conf
 └── └── story.js // a storyfile for storybook
 ```
-### Boilerplate
+
+#### default.vue/FACE.vue
+Here we see the most important things you definitely need to do to get your widget working.
+
+```
+<v-card v-if="state && props.uuid" data-test-container="widgets/boilerplate/default" :data-test-container-uuid=props.uuid>
+```
+
+At first note that, whatever main rapping element you choose, you must have a v-if="state && props.uuid" in there to prevent false rendering. We also encourage you to use the same naming scheme and concept as we do. Every component, may it be template, widget, page or whatnot should provide a "data-test-container" attribute in it's main DOM element. The value of this attribute should be according to it's file path as from "components/"
+
+To be able to test a specific widget we also need to add a "data-test-container-uuid" which contains the widgets uuid which by default we obtain from the props 
+We also encourage you to use the Vue3 Compose API over the Options API
+
+The rest of the code within the boilerplate/default/FACE.vue must be kept in order to have a working base for you widget (the iLike and title vars and form elements are just for showcase purposes and may be removed). Note that the subscriber variables alway end on an $ which signalizes that the content of this variable is a redux observable and therefore needs to be unsubscribed whenever you leave the page to prevent memory leaks.
 
 ### Store
+Take me to [the Widget default config](#widgetConfig)
 
-#### Configuration
-Take me to [the Page default config](#pageConfig)
-#### Usage
 
 
 ## Default Configurations for application concepts
