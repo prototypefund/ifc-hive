@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="state && props.uuid" data-test-container="widgets/boilerplate/default"
     :data-test-container-uuid=props.uuid>
-    <h3>{{ p  rops.props.type }}</h3>
+    <h3>{{ props.props.type }}</h3>
     <v-form>
       <v-text-field v-model="title" label="title"></v-text-field>
       <v-text-field v-model="iLike" label="iLike"></v-text-field>
