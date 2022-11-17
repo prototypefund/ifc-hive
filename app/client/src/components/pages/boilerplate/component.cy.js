@@ -1,5 +1,5 @@
 import { isComonentTest } from '../../../../cypress/support/sbHelper.js'
-import { testWidgets } from '../../../../cypress/testHelper.js'
+import { testWidgets } from '../../../../cypress/support/testHelper.js'
 
 const source = 'pages/boilerplate'
 

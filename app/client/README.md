@@ -116,7 +116,7 @@ src/components/widgets
 The best starting point from there is to take a look into the boilerplate folder.
 All Widgets are structured in the same way which must not be violated. A widget always contains out of the following files
 ```
-├── myWidetName
+├── myWidgetName
 │   ├── default.vue // the actual code of the default widget
 │   ├── default.component.cy.js // contains the cypress tests for the default widget
 │   ├── FACENAME.vue // optional, the actual code of specific widget face 
@@ -152,7 +152,7 @@ Take me to [the Widget default config](#widgetConfig)
 {
 // will be set based on the name of the vue router route you've used, or whatever you configure in your route file
     "routeName": "Vue3routeName",
-    // will usually be set automatically, if set manually, be aware that duplicated uuid lead to shared page store
+// will usually be set automatically, if set manually, be aware that duplicated uuid lead to shared page store
     "uuid": false,
 // obvious
     "loading": true,

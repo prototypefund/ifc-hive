@@ -1,4 +1,3 @@
-import { ref } from 'vue'
 /*
 see https://github.com/rollup/plugins/tree/master/packages/dynamic-import-vars#limitations
 Thema dynamic-tests
