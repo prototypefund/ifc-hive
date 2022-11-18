@@ -5,6 +5,13 @@
   "bundledWebRuntime": false,
   "loggingBehavior": "debug",
   "plugins": {
+    "PushNotifications": {
+      "presentationOptions": [
+        "badge",
+        "sound",
+        "alert"
+      ]
+    },
     "SplashScreen": {
       "launchShowDuration": 5000,
       "launchAutoHide": false,

@@ -4,6 +4,11 @@ import { Camera } from '@capacitor/camera';
 import { Toast } from '@capacitor/toast';
 import { Motion } from '@capacitor/motion';
 import { Geolocation } from '@capacitor/geolocation';
+import { TextZoom } from '@capacitor/text-zoom';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { ScreenReader } from '@capacitor/screen-reader';
+import { Network } from '@capacitor/network';
+
 
 let module = Capacitor
 if (Capacitor.getPlatform() !== 'web') {
@@ -13,7 +18,10 @@ if (Capacitor.getPlatform() !== 'web') {
   Capacitor.Toast = Toast
   Capacitor.Motion = Motion
   Capacitor.Geolocation = Geolocation
-
+  Capacitor.TextZoom = TextZoom
+  Capacitor.PushNotifications = PushNotifications
+  Capacitor.ScreenReader = ScreenReader
+  Capacitor.Network = Network
 } else {
   module = false
 }
