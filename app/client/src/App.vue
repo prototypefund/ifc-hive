@@ -10,13 +10,14 @@
         <v-icon color="grey" xsmall>mdi-chevron-right</v-icon>
         {{ $t("pages." + page.uuid) }}
       </v-app-bar-title>
+      <v-spacer></v-spacer>
       <v-icon color="grey" xsmall>mdi-check-network</v-icon>
       <div v-if="$mobile && networkState">
         <v-icon color="grey" xsmall v-if="networkState.connectionType === 'wifi'">mdi-wifi</v-icon>
         <v-icon color="grey" xsmall v-if="networkState.connectionType === 'cellular'">mdi-signal-cellular-3</v-icon>
         <v-icon color="grey" xsmall v-if="networkState.connectionType === 'none'">mdi-wifi-off</v-icon>
-        {{ networkState }}
       </div>
+      <v-spacer></v-spacer>
       <v-btn v-if="!editMode" flat icon="mdi-view-dashboard-edit-outline" @click="changeEditMode" />
       <v-btn v-if="editMode" flat icon="mdi-view-dashboard-edit" @click="changeEditMode" />
       <!-- notifications -->
@@ -113,13 +114,11 @@ export default {
         duration: 'long'
       }).then(async () => {
         this.$mobile.SplashScreen.hide();
-        this.$mobile.Network.getStatus((status) => {
-          this.networkState = status
-        })
+
         this.$mobile.Network.addListener('networkStatusChange', status => {
           this.networkState = status
         });
-
+        this.networkState = await this.$mobile.Network.getStatus();
       })
     }
 
