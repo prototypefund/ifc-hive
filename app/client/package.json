@@ -57,6 +57,7 @@
     "@capacitor/toast": "^4.x",
     "@capacitor/motion": "^4.x",
     "@capacitor/geolocation": "^4.x",
+    "@ionic/pwa-elements": "^3.x",
     "storybook-dark-mode": "^1.x",
     "@storybook/addon-actions": "^6.x",
     "@storybook/addon-essentials": "^6.x",

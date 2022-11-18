@@ -3,11 +3,11 @@
   "appName": "ifc-hive",
   "webDir": "dist",
   "bundledWebRuntime": false,
-  "hideLogs": false,
+  "loggingBehavior": "debug",
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 8000,
-      "launchAutoHide": true,
+      "launchShowDuration": 5000,
+      "launchAutoHide": false,
       "backgroundColor": "#ffffffff",
       "androidSplashResourceName": "splash",
       "androidScaleType": "CENTER_CROP",

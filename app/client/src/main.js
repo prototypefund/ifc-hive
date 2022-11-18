@@ -8,6 +8,7 @@ import i18n from './setup/i18n.js'
 import vuetify from './setup/vuetify.js'
 import router from './router/index.js'
 import filters from './setup/filters.js'
+import capacitor from './setup/capacitor'
 
 // get env variables
 const API_BASE_URL = getEnvVariable('VITE_API_BASE_URL')
@@ -31,6 +32,7 @@ try {
   /* register plugins */
   app.use(i18n)
   app.use(vuetify)
+  app.use(capacitor)
   app.use(router)
   app.use(Markdown)
 
@@ -39,6 +41,8 @@ try {
   app.provide('$api', axios)
   // make store availble in all components
   app.provide('$store', store)
+  // make capacitor availble in all components 
+  app.provide('$mobile', capacitor || false)
 
   // add global properties to app
   app.config.globalProperties.$filters = filters

@@ -20,6 +20,7 @@
     <!-- Main content -->
     <v-main>
       <v-card flat v-if="isInTest">
+        <pre>{{ permissionTest }}</pre>
         <slot />
       </v-card>
       <v-card flat v-else>
@@ -31,6 +32,8 @@
   </v-app>
 </template>
 <script>
+// only needed for mobile and will be handled in mounted
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import Notifications from "@u/notifications/default.vue";
 import NavigationSideBar from "@u/navigation/sidebar.vue";
 import QuickListSideBar from "@u/quicklist/sidebar.vue";
@@ -40,7 +43,7 @@ export default {
     NavigationSideBar,
     QuickListSideBar,
   },
-  inject: ["$api", "$store"],
+  inject: ["$api", "$store", "$mobile"],
   props: {
     isInTest: {
       type: Number,
@@ -48,6 +51,7 @@ export default {
     },
   },
   data: () => ({
+    permissionTest: false,
     page: false,
     editMode: false,
     navItems: [
@@ -90,6 +94,19 @@ export default {
       .subscribe((val) => {
         this.editMode = val;
       });
+  },
+  mounted() {
+    if (this.$mobile) {
+      defineCustomElements(window);
+      // TODO leave this here or move it to a hook file which comes from capacitor src?
+      this.$mobile.Toast.show({
+        text: 'Capacitor ist ne geile Sau wenn das Grundframework ne geile Sau ist!',
+        duration: 'long'
+      }).then(async () => {
+        this.$mobile.SplashScreen.hide(this.$mobile.Toast.requestPermissions((res) => this.permissionTest = res));
+      })
+    }
+
   },
   methods: {
     changeEditMode: function () {
