@@ -1,6 +1,11 @@
 {
   "appId": "com.ifcHive.app",
   "appName": "ifc-hive",
-  "webDir": "public",
-  "bundledWebRuntime": false
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 50000
+    }
+  }
 }
