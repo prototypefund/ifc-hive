@@ -11,7 +11,7 @@
       </v-badge-->
     </template>
 
-    <v-card left width="800">
+    <v-card left width="80%">
       <v-expansion-panels v-model="panel">
         <v-expansion-panel>
           <v-expansion-panel-title>Neu</v-expansion-panel-title>

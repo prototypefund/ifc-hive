@@ -5,17 +5,15 @@
     <v-list-item title="Navigation" value="Navigation">
       <!-- Close icon -->
       <template v-slot:append>
-        <v-btn v-if="!navigationRail" variant="text" icon="mdi-chevron-left" @click.stop="handleNavigation(true)">
-        </v-btn>
-
+        <v-btn v-if="!navigationRail" variant="text" icon="mdi-chevron-left" @click.stop="handleNavigation(true)" />
         <!-- open icon -->
-        <v-btn v-if="navigationRail" variant="text" icon="mdi-chevron-right" @click.stop="handleNavigation(false)">
-        </v-btn>
+        <v-btn v-if="navigationRail" variant="text" icon="mdi-chevron-right" @click.stop="handleNavigation(false)" />
       </template>
     </v-list-item>
 
-    <v-divider></v-divider>
-
+    <v-divider />
+    <ConnectionBar v-if="$mobile && !navigationRail" />
+    <v-divider />
     <!-- Navigation List -->
     <v-list density="compact" nav>
       <v-list-item v-for="item in navItems" link :key="item.title" :prepend-icon="item.icon"
@@ -26,8 +24,12 @@
   </v-navigation-drawer>
 </template>
 <script>
+import ConnectionBar from "@u/mobile/connection/iconbar.vue";
 export default {
-  inject: ["$api", "$store"],
+  inject: ["$api", "$store", "$mobile"],
+  components: {
+    ConnectionBar
+  },
   data: () => ({
     navigationDrawer: true,
     navigationRail: true,

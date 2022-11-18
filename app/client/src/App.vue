@@ -10,14 +10,9 @@
         <v-icon color="grey" xsmall>mdi-chevron-right</v-icon>
         {{ $t("pages." + page.uuid) }}
       </v-app-bar-title>
-      <v-spacer></v-spacer>
-      <v-icon color="grey" xsmall>mdi-check-network</v-icon>
-      <div v-if="$mobile && networkState">
-        <v-icon color="grey" xsmall v-if="networkState.connectionType === 'wifi'">mdi-wifi</v-icon>
-        <v-icon color="grey" xsmall v-if="networkState.connectionType === 'cellular'">mdi-signal-cellular-3</v-icon>
-        <v-icon color="grey" xsmall v-if="networkState.connectionType === 'none'">mdi-wifi-off</v-icon>
-      </div>
-      <v-spacer></v-spacer>
+      <v-spacer />
+      <Camera />
+      <v-spacer />
       <v-btn v-if="!editMode" flat icon="mdi-view-dashboard-edit-outline" @click="changeEditMode" />
       <v-btn v-if="editMode" flat icon="mdi-view-dashboard-edit" @click="changeEditMode" />
       <!-- notifications -->
@@ -29,6 +24,7 @@
 
     <!-- Main content -->
     <v-main>
+
       <v-card flat v-if="isInTest">
         <slot />
       </v-card>
@@ -45,12 +41,14 @@
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import Notifications from "@u/notifications/default.vue";
 import NavigationSideBar from "@u/navigation/sidebar.vue";
+import Camera from "@u/mobile/camera/icon.vue";
 import QuickListSideBar from "@u/quicklist/sidebar.vue";
 export default {
   components: {
     Notifications,
     NavigationSideBar,
     QuickListSideBar,
+    Camera
   },
   inject: ["$api", "$store", "$mobile"],
   props: {
@@ -61,7 +59,6 @@ export default {
   },
   data: () => ({
     page: false,
-    networkState: 'unknown',
     editMode: false,
     navItems: [
       {
@@ -106,7 +103,6 @@ export default {
   },
   mounted() {
     if (this.$mobile) {
-      console.log("diggi?")
       defineCustomElements(window);
       // TODO leave this here or move it to a hook file which comes from capacitor src?
       this.$mobile.Toast.show({
@@ -114,11 +110,6 @@ export default {
         duration: 'long'
       }).then(async () => {
         this.$mobile.SplashScreen.hide();
-
-        this.$mobile.Network.addListener('networkStatusChange', status => {
-          this.networkState = status
-        });
-        this.networkState = await this.$mobile.Network.getStatus();
       })
     }
 
