@@ -1147,6 +1147,11 @@
   resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-4.4.0.tgz#780421ecc88522aa692452a205d1587eab7a4f81"
   integrity sha512-vPoUcoJ1CZ5pxjceN/HVnq5FuNo+V1/kBj/NH48nAiMzBbZPEDmplguGC8Dj2qbKjhkJ+LMSL26VTfnsyHMJbA==
 
+"@capacitor/camera@^4.x":
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/@capacitor/camera/-/camera-4.1.4.tgz#5d019f88d1f3547b537270e35bcb96084eb48df6"
+  integrity sha512-7f4n7PlnstYsdGyxc0Kc4hIyS6csFLOjXvffm7pJsuy9pSo+kfdOPdYgGg360QwbUAmA+Yv+J1ZW1eFIwgvWrQ==
+
 "@capacitor/cli@^4.x":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-4.4.0.tgz#e5170d6bc063704ca5ca9bc2f93d7ca5b30cd3fb"
@@ -1177,10 +1182,25 @@
   dependencies:
     tslib "^2.1.0"
 
+"@capacitor/geolocation@^4.x":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/geolocation/-/geolocation-4.1.0.tgz#1941b5ca4288d7cb5c80940649d4416322b37ee2"
+  integrity sha512-hfI4MUcu1zcJPTvm0g6V3telTGwq9sCU8EnY4hFJpLedbIQeWPthCOSbFtNHAU5mVaAP1Zls3x6TsXL8TX08EA==
+
+"@capacitor/motion@^4.x":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/motion/-/motion-4.0.2.tgz#f5e91b82de65e46b34d3b8be8518be4496eb1a39"
+  integrity sha512-reLCkCwyM6ntGrd5jWL98kQi5wlUqkh/HpYIWpAis6qXIL9rIEvkFNG5oAG5B7Jepz3kO2WIFoou+OgfPHF8aw==
+
 "@capacitor/splash-screen@^4.x":
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/@capacitor/splash-screen/-/splash-screen-4.1.1.tgz#7e7935991d9bacc9ec5508c07168cfba65b0904b"
   integrity sha512-cOwp9aAdTOknfISSZcQBVPbKkG57v85HQZdbtl86FfEPFXOs9aJF2OQYBYl1UA03qByEnRQvDNYSn4gFf6THrg==
+
+"@capacitor/toast@^4.x":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/toast/-/toast-4.1.0.tgz#1710163aa128f8640d2237587cfb49ad4ee880c5"
+  integrity sha512-hU3GoA1dT+dsMuDOlEeiaU2mdd4VCLvIzgbp7Vk0Mqy9tbg++W4t7hcewlawzJGs6FxH59rIekf2lz7m4ir33w==
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
