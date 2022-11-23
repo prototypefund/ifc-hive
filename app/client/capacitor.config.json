@@ -3,7 +3,6 @@
   "appName": "ifc-hive",
   "webDir": "dist",
   "bundledWebRuntime": false,
-<<<<<<< HEAD
   "loggingBehavior": "debug",
   "plugins": {
     "PushNotifications": {
@@ -16,12 +15,6 @@
     "SplashScreen": {
       "launchShowDuration": 5000,
       "launchAutoHide": false,
-=======
-  "plugins": {
-    "SplashScreen": {
-      "launchShowDuration": 3000,
-      "launchAutoHide": true,
->>>>>>> 4a2904e (feat #1: capacitor configuration)
       "backgroundColor": "#ffffffff",
       "androidSplashResourceName": "splash",
       "androidScaleType": "CENTER_CROP",
