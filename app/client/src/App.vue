@@ -11,7 +11,7 @@
         {{ $t("pages." + page.uuid) }}
       </v-app-bar-title>
       <v-spacer />
-      <Camera />
+      <Camera v-if="$mobile" />
       <v-spacer />
       <v-btn v-if="!editMode" flat icon="mdi-view-dashboard-edit-outline" @click="changeEditMode" />
       <v-btn v-if="editMode" flat icon="mdi-view-dashboard-edit" @click="changeEditMode" />
@@ -112,7 +112,6 @@ export default {
         this.$mobile.SplashScreen.hide();
       })
     }
-
   },
   methods: {
     changeEditMode: function () {
