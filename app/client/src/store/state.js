@@ -13,12 +13,15 @@ export const applicationState = {
         // indicates if the widget toolbar and other ui edit stuff is displayed
         editMode: false
     },
+    toolbar: {
+
+    },
     quickList: {
         tab: 0,
         tabs: []
     },
     notifications: {
-        unreadCount: 0,
+        unreadCount: 10,
         toggled: false,
         history: [],
         items: []

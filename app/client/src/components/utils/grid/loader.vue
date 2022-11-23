@@ -12,7 +12,7 @@
         <v-select :items="gridItems" v-model="gridItem" label="Grid Item"></v-select>
       </v-col>
     </v-row>
-    <v-row no-gutters v-for="row in rows">
+    <v-row v-for="row in rows">
       <v-col v-for="column in row" :class="getSlotClass(column) + ' ' + getColClass(column)" v-if="row">
         <GridItem>
           <template v-slot:header>

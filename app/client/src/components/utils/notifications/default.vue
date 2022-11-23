@@ -1,17 +1,23 @@
+//TODO wait until vuetify fixes the v-badge
 <template>
   <v-menu v-model="toggled" :close-on-click="false" :close-on-content-click="false" location="end" v-if="state"
     transition="scale-transition" class="notificationDrawer">
     <template v-slot:activator="{ props }">
-      {{ state.unreadCount }}
-      <v-btn v-bind="props" icon="mdi-bell" />
 
-      <!--v-badge :color="state.unreadCount > 0 ? 'error' : 'transparent'" :content="state.unreadCount" offset-y="10px"
-        offset-x="10px">
-        <v-btn v-bind="props" icon="mdi-bell" />
-      </v-badge-->
+      <!--v-btn v-bind="props" class="text-none" stacked>
+      
+      <v-badge :content="state.unreadCount" >
+        {{ state.unreadCount }}
+        <v-icon>mdi-bell-outline</v-icon>
+      </v-badge>
+      </!--v-btn-->
+      <v-btn v-bind="props" class="text-none" :color="state.unreadCount > 0 ? 'error' : 'black'" stacked>
+        {{ state.unreadCount }}
+        <v-icon>mdi-bell-outline</v-icon>
+      </v-btn>
     </template>
 
-    <v-card left width="80%">
+    <v-card left>
       <v-expansion-panels v-model="panel">
         <v-expansion-panel>
           <v-expansion-panel-title>Neu</v-expansion-panel-title>

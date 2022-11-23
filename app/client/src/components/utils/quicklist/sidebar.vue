@@ -1,41 +1,20 @@
 <template>
-  <v-card
-    color="grey-lighten-2"
-    :class="{ closed: !quickListRail }"
-    flat
-    class="quickListWrapper"
-  >
-    <div class="quickListHandler">
-      <v-btn
-        v-if="!quickListRail"
-        variant="text"
-        icon="mdi-chevron-left"
-        @click.stop="handleQuicklist(true)"
-      >
-      </v-btn>
-      <v-btn
-        v-if="quickListRail"
-        variant="text"
-        icon="mdi-chevron-right"
-        @click.stop="handleQuicklist(false)"
-      >
-      </v-btn>
-    </div>
+  <v-card flat class="quickListWrapper" :class="{ open: quickListRail }">
+    <v-toolbar :collapse="!quickListRail" density="compact" class="quickListToolbar">
+      <v-toolbar-title>Quicklist</v-toolbar-title>
 
-    <v-card-title> Quicklist </v-card-title>
-    <v-card-subtitle> </v-card-subtitle>
-    <v-tabs v-model="tab" fixed-tabs v-if="tabs.length > 0">
-      <v-tab
-        v-for="(item, index) in tabs"
-        :key="item"
-        @click.middle="closeTab(index)"
-        class="quickListTab"
-      >
+      <v-btn icon @click.stop="handleQuicklist(!quickListRail)">
+        <v-icon v-if="!quickListRail">mdi-chevron-left</v-icon>
+        <v-icon v-if="quickListRail">mdi-chevron-right</v-icon>
+      </v-btn>
+    </v-toolbar>
+    <v-tabs v-model="tab" fixed-tabs v-if="tabs.length > 0 && quickListRail">
+      <v-tab v-for="(item, index) in tabs" :key="item" @click.middle="closeTab(index)" class="quickListTab">
         {{ item.type }} - {{ item.docUUID }}
         <v-icon class="tabHandler" @click="closeTab(index)">mdi-close-octagon</v-icon>
       </v-tab>
     </v-tabs>
-    <v-window v-model="tab" class="tabScrollContainer">
+    <v-window v-model="tab" class="tabScrollContainer" v-if="quickListRail">
       <v-window-item v-for="(item, index) in tabs" :key="item">
         <Detail v-if="item.type === 'detail'" :props="item.props" />
       </v-window-item>
@@ -114,23 +93,33 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="css">
 .quickListWrapper {
   position: fixed !important;
   z-index: 1007;
   right: 0 !important;
-  top: 45px;
-  width: 50%;
-  height: 100%;
-  overflow: hidden;
-  border-left: 1px solid black !important;
+  top: 47px;
+  max-width: 50%;
+  overflow: auto;
+  background-color: transparent;
 }
 
-.quickListWrapper .tabScrollContainer {
-  /* TODO change height here with actual absolute px height of quicklist full container -> I'm too stupid to get the ref clientHeight thingy to work atm */
-  max-height: 78%;
-  overflow: auto !important;
+.quickListWrapper.open {
+  max-height: 100%;
+  padding-bottom: 80px;
+  border-left: 1px solid #E0E0E0 !important;
+  border-bottom: 1px solid #E0E0E0 !important;
 }
+
+.quickListWrapper .v-toolbar--collapse {
+  border-bottom-left-radius: 24px !important;
+  border-bottom-right-radius: 0 !important;
+}
+</style>
+<!--style>
+
+
+
 
 .quickListWrapper.closed {
   top: 44px;
@@ -153,4 +142,4 @@ export default {
   cursor: pointer;
   right: 0px;
 }
-</style>
+</!--style-->
