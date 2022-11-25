@@ -16,6 +16,21 @@ services:
     build: ./app/api
     depends_on:
       - mongo
+  # Registry Swarm Service http://localhost:8083
+  ifc-hive-reg0:
+    build: ./app/reg
+    depends_on:
+      - ifc-hive-api
+  # Registry Swarm Service http://localhost::8084
+  ifc-hive-reg1:
+    build: ./app/reg
+    depends_on:
+      - ifc-hive-api
+  # Registry Swarm Service http://localhost::8085
+  ifc-hive-reg2:
+    build: ./app/reg
+    depends_on:
+      - ifc-hive-api
   # Web-client http://localhost:8081
   ifc-hive-client:
     build: ./app/client

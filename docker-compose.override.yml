@@ -43,6 +43,60 @@ services:
     ports:
       - "8082:3000"
 
+  # Registry Service
+  ifc-hive-reg0:
+    container_name: ifc-dev-reg0
+    build:
+      context: ./app/reg
+      args:
+        NODE_ENV: development
+    volumes:
+      - ./app/reg:/app
+      #- /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - REG_HOST=ifc-dev-reg0
+      - REG_TOKEN_SECRET=pacifico
+      - REG_TOKEN_MAX_AGE=86400
+      - REG_CLUSTER_CA_KEY=1
+    command: yarn run dev
+    ports:
+      - "8083:3000"
+  ifc-hive-reg1:
+    container_name: ifc-dev-reg1
+    build:
+      context: ./app/reg
+      args:
+        NODE_ENV: development
+    volumes:
+      - ./app/reg:/app
+      #- /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - REG_HOST=ifc-dev-reg1
+      - REG_TOKEN_SECRET=customer1
+      - REG_TOKEN_MAX_AGE=86400
+    command: yarn run dev
+    ports:
+      - "8084:3000"
+  ifc-hive-reg2:
+    container_name: ifc-dev-reg2
+    build:
+      context: ./app/reg
+      args:
+        NODE_ENV: development
+    volumes:
+      - ./app/reg:/app
+      #- /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - REG_HOST=ifc-dev-reg2
+      - REG_TOKEN_SECRET=customer2
+      - REG_TOKEN_MAX_AGE=86400
+    command: yarn run dev
+    ports:
+      - "8085:3000"
+
   # Web-client
   ifc-hive-client:
     container_name: ifc-dev-client

@@ -1,0 +1,44 @@
+{
+  "name": "ifc-hive-reg",
+  "version": "0.0.1",
+  "description": "IFC Hive Register",
+  "main": "src/server.js",
+  "type": "module",
+  "repository": "https://repo.karo.design/daniel/ifc-hive",
+  "author": "Jan Schukat",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./src/server",
+    "dev": "npx nodemon ./src/server",
+    "test": "npx c8 tap --reporter=spec --100"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "bcrypt": "^5.0.1",
+    "blake3": "^2.1.7",
+    "c8": "^7.11.2",
+    "fastify": "^4.0.0",
+    "@fastify/cors": "^8.0.0",
+    "fastify-healthcheck": "^4.1.0",
+    "@fastify/jwt": "^5.0.0",
+    "fastify-raw-body": "^4.1.1",
+    "@fastify/sensible": "^5.0.0",
+    "@fastify/swagger": "^8.1.0",
+    "mongoose": "^6.2.10",
+    "nanoid": "^3.3.3",
+    "vary": "^1.1.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "nodemon": "^2.0.15",
+    "pino-pretty": "^7.6.0",
+    "tap": "^16.0.1"
+  },
+  "imports": {
+    "#src/*": "./src/*"
+  }
+}
