@@ -1,14 +1,11 @@
 // import routes from modules
-import dashboardComp from '@p/dashboard/page.vue'
-import dashboardConf from '@p/dashboard/conf.json'
-import settingsComp from '@p/settings/page.vue'
-import settingsConf from '@p/settings/conf.json'
-import journalComp from '@p/journal/page.vue'
-import journalConf from '@p/journal/conf.json'
-import testboardComp from '@p/testboard/page.vue'
-import testboardConf from '@p/testboard/conf.json'
-
 import { store } from '../store/index.js'
+
+const dashboardComp = () => import('../components/pages/dashboard/page.vue')
+const settingsComp = () => import('../components/pages/settings/page.vue')
+const journalComp = () => import('../components/pages/journal/page.vue')
+const testboardComp = () => import('../components/pages/testboard/page.vue')
+const loadConf = (page) => import(`../components/pages/${page}/conf.json`)
 
 export default [
     /* Root */
@@ -22,12 +19,14 @@ export default [
         name: 'app.dashboard',
         component: dashboardComp,
         props: true,
-        beforeEnter: (to, from) => {
-            store.dispatch({
-                type: 'pages/add',
-                routeName: to.name,
-                payload: dashboardConf
-            });
+        beforeEnter: async (to, from) => {
+            loadConf('dashboard').then(conf => {
+                store.dispatch({
+                    type: 'pages/add',
+                    routeName: to.name,
+                    payload: conf
+                });
+            })
         }
     },
     {
@@ -36,11 +35,13 @@ export default [
         component: settingsComp,
         props: true,
         beforeEnter: (to, from) => {
-            store.dispatch({
-                type: 'pages/add',
-                routeName: to.name,
-                payload: settingsConf
-            });
+            loadConf('settings').then(conf => {
+                store.dispatch({
+                    type: 'pages/add',
+                    routeName: to.name,
+                    payload: conf
+                });
+            })
         }
     },
     {
@@ -49,11 +50,13 @@ export default [
         component: journalComp,
         props: true,
         beforeEnter: (to, from) => {
-            store.dispatch({
-                type: 'pages/add',
-                routeName: to.name,
-                payload: journalConf
-            });
+            loadConf('journal').then(conf => {
+                store.dispatch({
+                    type: 'pages/add',
+                    routeName: to.name,
+                    payload: conf
+                });
+            })
         }
     },
     {
@@ -62,11 +65,13 @@ export default [
         component: testboardComp,
         props: true,
         beforeEnter: (to, from) => {
-            store.dispatch({
-                type: 'pages/add',
-                routeName: to.name,
-                payload: testboardConf
-            });
+            loadConf('testboard').then(conf => {
+                store.dispatch({
+                    type: 'pages/add',
+                    routeName: to.name,
+                    payload: conf
+                });
+            })
         }
     },
 ]

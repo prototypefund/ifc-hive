@@ -1,17 +1,17 @@
 <template>
-  <v-card flat v-if="entry.id">
+  <v-card flat v-if="item && item._id">
     <v-card-text>
-      <div v-if="!entry.alert">
-        <h1 style="line-height: 1.4em">{{ entry.subject }}</h1>
+      <div v-if="!item.alert">
+        <h1 style="line-height: 1.4em">{{ item.subject }}</h1>
       </div>
 
-      <div v-if="entry.alert">
-        <v-alert :color="entry.alert.color">
-          <h1>{{ entry.alert.content }}</h1>
+      <div v-if="item.alert">
+        <v-alert :color="item.alert.color">
+          <h1>{{ item.alert.content }}</h1>
         </v-alert>
       </div>
 
-      <v-row class="my-4" v-if="entry.images">
+      <v-row class="my-4" v-if="item.images">
         <v-col v-for="n in 3" :key="n" class="d-flex child-flex" cols="4">
           <v-img :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
             :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`" aspect-ratio="1" cover
@@ -70,12 +70,31 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { inject, ref, onMounted, onUnmounted } from "vue";
+const $store = inject("$store");
+
 const props = defineProps({
+  uuid: {
+    type: String,
+    required: true
+  },
+  docUUID: {
+    type: String,
+    required: true
+  },
   props: {
     type: Object,
-    default: () => ({}),
+    default: ({})
   },
 });
-const entry = ref(props.props);
+const item = ref({});
+const dateItemSubscriber$ = $store
+  .select((state) => state.data[props.docUUID])
+  .subscribe((val) => {
+    item.value = val;
+  });
+onMounted(() => { });
+onUnmounted(() => {
+  dateItemSubscriber$.unsubscribe();
+});
 </script>

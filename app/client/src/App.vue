@@ -21,7 +21,7 @@
 
     <!-- Navigation Drawer -->
     <NavigationSideBar v-if="!isInTest" :nav-items="navItems" />
-
+    <ToolBar :class="{ appBarRel: isInTest }" />
     <!-- Main content -->
     <v-main>
 
@@ -32,8 +32,8 @@
         <router-view />
       </v-card>
     </v-main>
-    <!-- quickList Drawer -->
-    <QuickListSideBar :class="{ appBarRel: isInTest }" />
+    <!-- quicklist Drawer -->
+
   </v-app>
 </template>
 <script>
@@ -42,12 +42,12 @@ import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import Notifications from "@u/notifications/default.vue";
 import NavigationSideBar from "@u/navigation/sidebar.vue";
 import Camera from "@u/mobile/camera/icon.vue";
-import QuickListSideBar from "@u/quicklist/sidebar.vue";
+import ToolBar from "@u/toolbar/default.vue";
 export default {
   components: {
     Notifications,
     NavigationSideBar,
-    QuickListSideBar,
+    ToolBar,
     Camera
   },
   inject: ["$api", "$store", "$mobile"],
@@ -112,6 +112,20 @@ export default {
         this.$mobile.SplashScreen.hide();
       })
     }
+    // TODO find a way to have the quicklist handler know the uuid of the widget. As for now we need to set a uuid
+    this.$store.dispatch({
+      type: "toolbar/add",
+      payload: {
+        page: false,
+        title: 'quickList',
+        icon: 'mdi-text-box-search-outline',
+        iconActive: 'mdi-text-box-search',
+        widget: {
+          name: 'quickList',
+          uuid: 'quickList'
+        }
+      },
+    });
   },
   methods: {
     changeEditMode: function () {

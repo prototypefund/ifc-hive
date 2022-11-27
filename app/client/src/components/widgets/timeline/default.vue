@@ -17,7 +17,7 @@
 
 <script setup>
 import { inject, ref, onMounted, onUnmounted, computed } from "vue";
-import QuickListHandler from "@u/quicklist/handler.vue";
+import QuickListHandler from "@w/quickList/handler.vue";
 
 const $store = inject("$store");
 const state = ref({});

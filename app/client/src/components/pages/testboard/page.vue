@@ -5,13 +5,12 @@
     <div class="mb-10">
       <v-btn data-test-id="testboard_count-button" @click="counter">addCount</v-btn>
     </div>
-
     <Grid v-if="state.slots" />
   </v-container>
 </template>
 
 <script setup>
-import { inject, ref, onMounted, onUnmounted, computed } from "vue";
+import { inject, ref, onMounted, onUnmounted } from "vue";
 import Grid from "@u/grid/loader.vue";
 const $store = inject("$store");
 const state = ref({});

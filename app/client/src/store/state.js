@@ -1,5 +1,6 @@
 export const applicationState = {
     route: {},
+    data: {},
     user: {
         name: false,
         email: false,
@@ -8,20 +9,15 @@ export const applicationState = {
     ui: {
         // indicates the left navigation bar state
         navigationOpen: false,
-        // indicates the right quicklist bar state
-        quickListOpen: false,
+        // indicates the currently selected Tool for the toolbar
+        currentTool: false,
         // indicates if the widget toolbar and other ui edit stuff is displayed
-        editMode: false
+        editMode: false,
     },
-    toolbar: {
-
-    },
-    quickList: {
-        tab: 0,
-        tabs: []
-    },
+    // will contain tools. Logic behind that is the same as with pages
+    toolbar: {},
     notifications: {
-        unreadCount: 10,
+        unreadCount: 0,
         toggled: false,
         history: [],
         items: []

@@ -3,8 +3,7 @@
     <v-col cols="12" md="6" lg="4" color="green">
       <div>
         <v-timeline side="end" align="end" class="mt-5">
-          <v-timeline-item v-for="(entry, index) in state.entries" :key="index" size="small"
-            :dot-color="entry.category.color">
+          <v-timeline-item v-for="(entry, index) in data" :key="index" size="small" :dot-color="entry.category.color">
             <v-card-text class="pa-0">
               <v-chip label color="primary" size="small" class="mr-4"># {{ entry.id }}</v-chip>
               <div class="mr-4 d-inline-block text-body-2" v-for="path in entry.path" :key="path">
@@ -29,7 +28,7 @@
                 <h3 class="text-subtitle-1">{{ entry.alert.content }}</h3>
                 {{ $filters.dateFormat(entry.date) }}
               </v-alert>
-              <QuickListHandler :uuid="entry.id" :props="entry" tab-type="detail" action="add">
+              <QuickListHandler uuid="quickList" :dataUUID="entry._id" tab-type="detail" action="add">
                 <v-row v-if="!entry.alert" :class="{ ['bg-blue']: entry.id === current.id }" class="pt-0 mt-0 mb-2">
                   <v-col cols="12" sm="12" class="pt-0">
                     <span class="flex-shrink-0 mb-2">
@@ -129,17 +128,24 @@
 </template>
 
 <script setup>
-import { inject, ref, onMounted, onUnmounted, computed } from "vue";
-import QuickListHandler from "@u/quicklist/handler.vue";
+import { inject, ref, onMounted, onUnmounted } from "vue";
+import QuickListHandler from "@w/quickList/handler.vue";
 
 const $store = inject("$store");
 const state = ref({});
+const data = ref({});
 const current = ref({ id: false });
 
 const stateSubscriber$ = $store
   .select((state) => state.widgets[props.uuid])
   .subscribe((val) => {
     state.value = val;
+  });
+  // TODO remove this. Currently we always show all entries in data
+const dataSubscriber$ = $store
+  .select((state) => state.data)
+  .subscribe((val) => {
+    data.value = val;
   });
 
 const props = defineProps({
@@ -155,6 +161,7 @@ const props = defineProps({
 onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
+  dataSubscriber$.unsubscribe()
 });
 </script>
 

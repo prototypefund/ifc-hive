@@ -1,12 +1,13 @@
 <template>
   <!-- Navigation Drawer -->
-  <v-navigation-drawer v-model="navigationDrawer" data-test-id="sidebar_container" :rail="navigationRail" permanent>
+  <v-navigation-drawer v-model="navigationDrawer" data-test-container="utils/navigation/sidebar" :rail="navigationRail"
+    permanent>
     <!-- Title -->
-    <v-list-item title="Navigation" value="Navigation">
+
+    <v-list-item :title="$t('navigation')" :value="$t('navigation')">
       <!-- Close icon -->
       <template v-slot:append>
         <v-btn v-if="!navigationRail" variant="icon" icon="mdi-chevron-left" @click.stop="handleNavigation(true)" />
-        <!-- open icon -->
         <v-btn v-if="navigationRail" variant="icon" icon="mdi-chevron-right" @click.stop="handleNavigation(false)" />
       </template>
     </v-list-item>

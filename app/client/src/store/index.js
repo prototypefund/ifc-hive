@@ -6,7 +6,7 @@ import {
     ImmutableStateExtension
 } from 'mini-rx-store';
 import getEnvVariable from '../lib/getEnvVariable'
-import { mergeDeepRight, clone, findIndex, propEq } from 'ramda'
+import { mergeDeepRight, clone } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
 import { applicationState, storePatterns } from './state'
 /*
@@ -32,12 +32,13 @@ let widgetsLookup = false
 // TODO find out how actual effects work without ts support. This works the "same" way for now
 const metaReducer = [(reducer) => {
     return (state, action) => {
+        let page, widgets
         // meta "effect like" reducer for widget add before page add
         if (action.type == "pages/add") {
-            const page = action.payload
+            page = action.payload
             // if we have a widget config for this page we need to setup the widget states
             if (page.slots) {
-                const widgets = []
+                widgets = []
                 page.slots.forEach(slot => {
                     const widget = slot.widget
                     if (widget) {
@@ -70,44 +71,106 @@ const metaReducer = [(reducer) => {
 }]
 
 const applicationReducers = {
-    quickList: (state, action) => {
+    data: (state, action) => {
+        let data, items
+        if (state) {
+            switch (action.type) {
+                case 'init':
+                    return applicationState.data
+                case 'data/add':
+                    if (action.payload.data) {
+                        data = JSON.parse(JSON.stringify(state))
+                        items = {}
+                        action.payload.data.forEach(item => {
+                            if (item._id) {
+                                if (data[item._id]) {
+                                    // apparently we received an update for an existing data, so let's send a notification
+                                    store.dispatch({
+                                        type: 'notifications/add',
+                                        payload: {
+                                            type: 'itemUpdate',
+                                            uuid: item._id
+                                        }
+                                    })
+                                } else {
+                                    // its new data
+                                    items[item._id] = item
+                                }
+                            }
+                        })
+                    } else {
+                        // something went wrong so lets not do anything
+                        return state
+                    }
+                    return {
+                        ...state, ...items
+                    }
+                case 'data/update':
+                    debugger
+                    return state
+                case 'data/delete':
+                    debugger
+                    return state
+                case 'data/clear':
+                    debugger
+                    return state
+                default:
+                    return state
+            }
+        }
+    },
+    toolbar: (state, action) => {
+        let tool, widget
+        if (state) {
+            switch (action.type) {
+                case 'init':
+                    return applicationState.toolbar
+                case 'toolbar/add':
+                    tool = {}
+                    if (action.payload && action.payload.widget) {
+                        widget = action.payload.widget
+                        if (!widget.uuid) {
+                            widget.uuid = uuidv4()
+                        }
+                        if (!widgetsLookup[widget.uuid]) {
+                            // make a generic widget state map
+                            store.dispatch({
+                                type: 'widgets/add',
+                                payload: [{
+                                    uuid: widget.uuid,
+                                    name: widget.name,
+                                    ...widget.props
+                                }]
+                            })
+                        }
+                        tool[widget.uuid] = action.payload
+                    } else {
+                        // something went wrong so lets not do anything
+                        return state
+                    }
+                    return {
+                        ...state, ...tool
+                    }
+                case 'toolbar/update':
+                    return mergeDeepRight(state, action.payload)
+                default:
+                    return state
+            }
+        }
+    },
+    quicklist: (state, action) => {
         if (state) {
             let tabs
             let tab
             switch (action.type) {
                 case 'init':
-                    return applicationState.quickList
-                case 'quickList/add':
-                    // make sure that we only have on tab per display type and uuid
-                    tab = findIndex(propEq('docUUID', action.payload.uuid))(state.tabs)
-                    if (tab > -1) {
-                        if (findIndex(propEq('type', action.payload.uutabTypeid))(state.tabs)) {
-                            // if display types vary we may create a second tab for the same uuid
-                            return {
-                                ...state, tab
-                            }
-                        }
-                    }
-                    tabs = JSON.parse(JSON.stringify(state.tabs))
-                    // create an object describing the view type and the docUUID as well as possible query or display parameters
-                    tabs.unshift({
-                        type: action.payload.tabType,
-                        docUUID: action.payload.uuid,
-                        props: action.payload.props
-                    })
-                    // TODO move to effect
-                    // open the quickList bar
-                    store.dispatch({
-                        type: 'ui/update',
-                        payload: {
-                            quickListOpen: true
-                        }
-                    });
-                    // as we unshift new entries, the currently selected tab always needs to be 0
+                    return applicationState.quicklist
+                case 'quicklist/add':
+
                     return {
                         ...state, tabs, tab: 0
                     }
-                case 'quickList/delete':
+                case 'quicklist/delete':
                     tabs = JSON.parse(JSON.stringify(state.tabs))
                     tab = state.tab
                     tabs.splice(action.payload.tabIndex, 1)
@@ -129,9 +192,9 @@ const applicationReducers = {
                     return {
                         ...state, tabs, tab
                     }
-                case 'quickList/update':
+                case 'quicklist/update':
                     return mergeDeepRight(state, action.payload)
-                case 'quickList/clear':
+                case 'quicklist/clear':
                     debugger
                     return {
                         ...state, ...action.payload
@@ -175,15 +238,10 @@ const applicationReducers = {
                     items = JSON.parse(JSON.stringify(state.items))
                     action.payload.time = Date.now()
                     action.payload.state = 'unread'
-                    store.dispatch({
-                        type: 'notifications/update',
-                        payload: {
-                            unreadCount: state.unreadCount + 1
-                        }
-                    })
+
                     items.unshift(action.payload)
                     return {
-                        ...state, items
+                        ...state, items, unreadCount: state.unreadCount + 1
                     }
                 case 'notifications/markAllAsRead':
                     items = JSON.parse(JSON.stringify(state.items))
@@ -270,7 +328,7 @@ const applicationReducers = {
                     let currPage = {}
                     const uuid = action.routeName.replace('.', '-')
                     // check if that requested page has already been preconfigured (should always be the case)
-                    if (pagesLookup[uuid].uuid) {
+                    if (pagesLookup && pagesLookup[uuid].uuid) {
                         // create a new currentPage object based on the url params merged ontop of the default page config
                         currPage = mergeDeepRight(pagesLookup[uuid], action.payload)
                     }
