@@ -77,8 +77,8 @@ async function confirm(req, transaction, peers=true) {
  */
 
   const url = req.url
-  console.log(['CONFIRM?',req,peers])
-  const reg = req.reg || url.split('/')[1]    // registry from url or, on creation, passed on as an option
+  //console.log(['CONFIRM?',req,peers])
+  const reg = req.reg || url.split('/')[1].substr(0,52)    // registry from url or, on creation, passed on as an option
   delete req.reg
 
   const data = req.data
@@ -98,7 +98,7 @@ async function confirm(req, transaction, peers=true) {
   else if(peers === false) usepeers = []
   else usepeers = peers
 
-  console.log(['PEERS',req.url,usepeers])
+  console.log(['PEERS',req.url, swarms, usepeers])
   
   for(let p of usepeers) {
     if(p === certID) continue
@@ -319,14 +319,12 @@ export default function registry(a, opt, done) {
       const rid = ID.buffer(req.params.rid)
       if(!req.query)  req.body.cfg = [{ host: host, _id: certID }].concat(req.body.cfg)
       const refs = (await ref).map(e => e._id)
-      const entry = await chain(Ledger, rid, refs[1], refs, { cfg: cfg }, req.query)        
+      const entry = await chain(Ledger, rid, refs[1], refs, { cfg: req.body.cfg }, req.query)
       const tid = ID.string(entry._id)
 
       res.headers({'content-id': req.params.rid, 'etag': tid})
       res.code(200).send('"'+tid+'"')
-
-      confirm(req.url + '?'+ entry.T.valueOf(), req.body, tid, req.query, id)
-
+      confirm({ url: req.url+'?'+entry.T.valueOf(), method: 'POST', data: req.body }, tid, !!!req.query)
     } catch(e) { res.code(500).send(e) }
 
   })
@@ -349,22 +347,21 @@ export default function registry(a, opt, done) {
     
   })
 
-  a.get('/:rid',
+  a.get('/:rid', async function(req, res) {
   /*
    * return metadata and configuration of the registry
    */
-        async function(req, res) {
-          try {
-            const r = await Registry.findById(ID.buffer(req.params.rid)).exec()
-            const Ledger = m.model('L_'+req.params.rid, _Ledger)
+    try {
+      const r = await Registry.findById(ID.buffer(req.params.rid)).exec()
+      const Ledger = m.model('L_'+req.params.rid, _Ledger)
 
-            const c = await Ledger.findOne({ cfg: { $exists: true }}).sort({T:-1}).exec()
-            if(r) res.headers({'content-id': req.params.rid, 'etag': req.params.rid})
-            const { T, name, description } = r._doc
-            const d = { T, name, description, cfg: c.cfg }
-            res.code( r ? 200 : 404).send( d )
-          } catch(e) { res.code( 500).send(e) }
-        })
+      const c = await Ledger.findOne({ cfg: { $exists: true }}).sort({T:-1}).exec()
+      if(r) res.headers({'content-id': req.params.rid, 'etag': req.params.rid})
+      const { T, name, description } = r._doc
+      const d = { T, name, description, cfg: c.cfg }
+      res.code( r ? 200 : 404).send( d )
+    } catch(e) { res.code( 500).send(e) }
+  })
 
   a.get('/:rid/', async function(req, res) {
   /*
@@ -449,7 +446,7 @@ export default function registry(a, opt, done) {
     } catch(e) { res.code(500).send(e) }
   })
 
-  a.get('/*', async function (req, res) {
+  a.get('/-', async function (req, res) {
     const collections = await m.db.collections()
     for (let c of collections) console.log(c.namespace)
     res.code(200).send([certID, host])

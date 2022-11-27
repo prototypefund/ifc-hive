@@ -76,7 +76,6 @@ export default function files(a, opt, done) {
       const metadata = {}
       const headers = {}
       const refs = []
-
       
       if(req.params.did === req.params.hash) { // new document
         const ref0 = await Ledger.findOne().sort({T:1}).exec()    // register init entry
@@ -104,21 +103,25 @@ export default function files(a, opt, done) {
                     headers: { 'content-length': req.body.length, ...headers }}, tid, !!!req.query)
     } catch (e) { res.code( typeof e === 'number' ? e : 500).send(e) }
   })
- 
+
   a.head('/:rid/:did', async function(req, res) {
   /*
    * Check if document with 'did' exists, returns latest hash in header
    */
-    if (fs.existsSync(join(dir, req.params.rid.slice(0,2), req.params.rid.slice(2), req.params.did))) {
-      const Ledger = m.model('L_'+registry, _Ledger)
-      
-      res.header('etag', )
-      res.header('content-id', req.params.did)
-      
+    try {
+      const path = join(dir, req.url)
+      if(!fs.existsSync(path)) return res.code(404).send(`Not found.`)
+      const Ledger = m.model('L_'+req.params.rid, _Ledger)
+      const r = await Ledger.find().sort({T:1}).exec()
+      res.header('content-id',req.params.did)
+      const entries = await Ledger.find({ D: ID.buffer(req.params.did)}, 'V name mime' ).sort({T:1}).exec()
+      res.header('content-type', entries[0].mime)
+      res.header('content-location', entries[0].name)
+      console.log(entries.slice(-1)[0].V)
+      res.header('etag',ID.string(entries.slice(-1)[0].V))
       res.code(200).send()
     }
-    else res.code(404).send()
-
+    catch(e){ res.code(500).send(e)}
   })
 
   a.get('/:rid/:did', async function(req, res) {
@@ -127,63 +130,70 @@ export default function files(a, opt, done) {
    */
     try {
       const Ledger = m.model('L_'+req.params.rid, _Ledger)
-
       const r = await Ledger.find().sort({T:1}).exec()
-
-      //console.log(r)
-      //const mime = r[0].mime
-      //const name = r[0].name
-      //const latest = r.slice(-1)[0].hash
-      //res.header('content-type', mime)
-      //res.header('content-location', name)
-      res.code(200).send( '' )
-      //fs.readFile(join(dir,req.url,), (e, content) => {
-      //  if(e) throw e
-      //  res.code(200).send( content )
-      //})
+      res.header('content-id', req.params.did)
+      res.header('etag', req.params.hash)
+      const entries = await Ledger.find({ D: ID.buffer(req.params.did)}, 'V D name mime' ).sort({T:1}).exec()
+      res.header('content-location', entries[0].name)
+      const path = join(dir, req.url, ID.string(entries.slice(-1)[0].V))
+      const f = fs.createReadStream(path)
+      return res.code(200).type(entries[0].mime).send(f)
+    } catch (e) { res.code(500).send(e) }
+  })
+  
+  a.get('/:rid/:did/', async function(req, res) {
+  /*
+   * return the complete ledger history of all versions of the document, including signatures and signature requests
+   * the first one will always be the initial file entry
+   */
+    try {
+      const Ledger = m.model('L_'+req.params.rid, _Ledger)
+      const entries = await Ledger.find({ D: ID.buffer(req.params.did)}, 'T D V ref key signature name mime' ).exec()
+      res.code(200).send( entries )
     } catch (e) { res.code(500).send(e) }
   })
 
-  
-  //a.get('/:rid/:did/', async function(req, res) {
-  /*
-   * return the complete ledger history of all versions of the document, including signatures and signature requests
-   */
-
-  
-  // a.head('/:rid/:did/:hash', async function () {
+  a.head('/:rid/:did/:hash', async function (req, res) {
   /*
    * Check if the document with 'did' and the version 'hash' exists
    */
+     try {
+       const path = join(dir, req.url)
+       if(!fs.existsSync(path)) return res.code(404).send(`Not found.`)
+       res.header('content-id', req.params.did)
+       res.header('etag', req.params.hash)
+       const Ledger = m.model('L_'+req.params.rid, _Ledger)
+       const entry = await Ledger.findOne({ V: ID.buffer(req.params.did)}, 'name mime' ).exec()
+       res.header('content-location', entry.name)
+       res.code(200).type(entry.mime).send()
+     } catch (e) { res.code(500).send(e) }
+  })
 
-  //})
-
-  a.get('/:rid/:did/:hash', function (req, res) {
+  a.get('/:rid/:did/:hash', async function (req, res) {
   /*
    * return the specific document version
    */
     try {
-
       const path = join(dir, req.url)
-      // TODO: check root document heritage
-      res.header('content-id',req.params.did)
-      res.header('etag',req.params.hash)
-      fs.readFile(path, (err, data) => {
-        if (err) throw err;
-        res.code(200).send( data )
-      })
-
+      if(!fs.existsSync(path)) return res.code(404).send(`Not found.`)
+      res.header('content-id', req.params.did)
+      res.header('etag', req.params.hash)
+      const Ledger = m.model('L_'+req.params.rid, _Ledger)
+      const entry = await Ledger.findOne({ V: ID.buffer(req.params.did)}, 'name mime' ).exec()
+      res.header('content-location', entry.name)
+      const f = fs.createReadStream(path)
+      return res.code(200).type(entry.mime).send(f)
     } catch (e) { res.code(500).send(e) }
   })
 
   a.get('/:rid/:did/:hash/', async function (req, res) {
   /*
    * return the Ledger entries for the specfic document version
+   * the first one will always be the file entry
    */
     try {
       const Ledger = m.model('L_'+req.params.rid, _Ledger)
-
-      const entries = await Ledger.find({ V: ID.buffer(req.params.hash)}, 'T D V ref key signature' ).exec()
+      const entries = await Ledger.find({ V: ID.buffer(req.params.hash)}, 'T D V ref key signature name mime' ).exec()
       res.code(200).send( entries )
     } catch (e) { res.code(500).send(e) }
   })

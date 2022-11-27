@@ -25,6 +25,8 @@ let registry = null
 const file0 = "# Agenda\n1. Armee aufbauen\n2. Alle Länder besiegen\n"
 const file1 = file0 + "3. Krönen lassen\n"
 const file2 = file1 + "4. Profit\n"
+const cfg0 = [{host:'ifc-dev-reg1', _id:'13EF1C547123C60250CCD4C80D63A3869577DCAC'}]
+const cfg1 = cfg0.concat([{host:'ifc-dev-reg2', _id:'13EF1C547123C60250CCD4C80D63A3869577DCAD'}])
 const h0 = ID.string(ID.hash(file0))
 const h1 = ID.string(ID.hash(file1))
 const h2 = ID.string(ID.hash(file2))
@@ -55,25 +57,37 @@ t.only('Registry API', async t => {
   
   t.only('Creating and Querying Registry', async t => {
     const r0 = await ht.post('',{name: "Generalprobe Weltherrschaft", description: "Registry API Test",
-                                 cfg: [{host:'ifc-dev-reg1', _id:'13EF1C547123C60250CCD4C80D63A3869577DCAC'},{host:'ifc-dev-reg2', _id:'13EF1C547123C60250CCD4C80D63A3869577DCAD'}] })
+                                 cfg: cfg1 })
     registry = r0.headers['etag']
     t.equal(r0.status, 200, 'Registry Created: ' + registry)
     const r1 = await ht.get('')
     t.equal(r1.status, 200, 'Registries Listed: ' + JSON.stringify(r1.data))
     const r2 = await ht.get(registry)
     t.equal(r2.status, 200, 'Registry Info: ' + r2.data.name + ', ' + r2.data.description +
-            ', ' + r2.data.cfg[0].host + ' ...')
+            ', ' + r2.data.cfg[0].host + ', ' + r2.data.cfg[0].host + ' ...')
     const r3 = await ht.get(registry+'/')
     t.equal(r3.status, 200, 'Registry Ledger Created')
     t.equal(r3.data.length, 1, 'Ledger has only Root Element: ' + r3.data[0]._id + ' ' + r3.data.length)
     t.equal(r3.data[0].D, registry, 'Ledger Root Element initialized with Registry Key ' + registry)
-
+/*
     t.pass('Wait for network propagation')
     await new Promise(r => setTimeout(r,500))
     const rr1 = await ht1.get(registry+'/')
-    const rr2 = await ht2.get(registry+'/')
     t.equal(rr1.data[0].D, registry, 'Peer 1 Confirmed Mirror Registry: ' + registry)
-    t.equal(rr2.data[0].D, registry, 'Peer 2 Confirmed Mirror Registry: ' + registry)
+
+    const r4 = await ht.post(registry,{ cfg: cfg1})
+    t.equal(r4.status, 200, 'New Config Entry: ' + r4.data)
+    const r5 = await ht.get(registry)
+    t.equal(r5.status, 200, 'Added Peer 2: ' + r5.data.cfg[2].host)
+*/
+    t.pass('Wait for network propagation')
+    await new Promise(r => setTimeout(r,1000))
+    const rr3 = await ht1.get(registry+'/')
+    const rr4 = await ht2.get(registry+'/')
+    //console.log(r3.data,rr3.data,rr4.data)
+    t.equal(rr3.data[0].D+rr3.data[0]._id, registry+r3.data[0]._id, 'Peer 1 Confirmed Mirror Registry: ' + registry)
+    t.equal(rr4.data[0].D+rr4.data[0]._id, registry+r3.data[0]._id, 'Peer 2 Confirmed Mirror Registry: ' + registry)
+
   })
   
   t.only('Uploading and Checking Files', async t => {
@@ -205,14 +219,14 @@ t.only('Registry API', async t => {
 
   })
   
-  t.only('Cleanup', async t => {
+  t.test('Cleanup', async t => {
     setTimeout(async function() {
       const r0 = await ht.delete('/')
       const r1 = await ht1.delete('/')
       const r2 = await ht2.delete('/')
       console.log('...')
       console.log('Ledger Entries and Confirmations')
-      log.forEach( e => console.log(e))
+      log?.forEach( e => console.log(e))
     } , 3000)
   })
 })
