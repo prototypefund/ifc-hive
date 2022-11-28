@@ -60,15 +60,32 @@ const props = defineProps({
     default: "default param",
   },
 });
-
-onMounted(() => {
-
-});
-onUnmounted(() => {
-  stateSubscriber$.unsubscribe();
-});
 function closeTabConfirmed(index) {
-  debugger
+  const entries = JSON.parse(JSON.stringify(state.value.entries))
+  let entryIndex = state.value.entryIndex
+  entries.splice(index, 1)
+  // make sure that the new current tab is always right
+  if (index < entryIndex) {
+    entryIndex = entryIndex - 1
+  }
+  if ((index === entryIndex) && entryIndex !== 0) {
+    entryIndex = 0
+  }
+  if (entries.length === 0) {
+    $store.dispatch({
+      type: 'ui/update',
+      payload: {
+        currentTool: false
+      }
+    });
+  }
+  $store.dispatch({
+    type: "widgets/update",
+    uuid: props.uuid,
+    payload: {
+      ...state.value, entries, entryIndex
+    }
+  });
   this.overlay = false;
 
 }
@@ -77,14 +94,13 @@ function closeTab(index) {
   // TODO add confirm dialogue here, apparently overlay does not work atm in vuetify rc
   this.closeTabConfirmed(index);
 }
-function handleQuicklist(val) {
-  this.$store.dispatch({
-    type: "ui/update",
-    payload: {
-      currentTool: val,
-    },
-  });
-}
+onMounted(() => {
+
+});
+onUnmounted(() => {
+  stateSubscriber$.unsubscribe();
+});
+
 </script>
 <style lang="css" scoped>
 .quickListTab:hover .tabHandler {

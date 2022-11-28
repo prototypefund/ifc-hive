@@ -1,5 +1,6 @@
 <template>
-    <v-toolbar flat density="compact" class="toolBar" data-test-container="utils/tools/toolbar" v-if="state">
+    <v-app-bar density="compact" flat color="grey-lighten-2" class="toolBar" data-test-container="utils/tools/toolbar"
+        v-if="state">
         <v-toolbar-title>{{ $t("widgets.tools.title") }}</v-toolbar-title>
         <v-spacer></v-spacer>
         <span v-for="(tool, key) in state" :class="{ 'active': currentTool === key }">
@@ -9,11 +10,10 @@
                 <v-icon v-else>{{ tool.icon }}</v-icon>
             </v-btn>
         </span>
+    </v-app-bar>
 
-
-    </v-toolbar>
-
-    <v-container v-if="currentTool && currentComponent" class="toolContent">
+    <v-container v-if="currentTool && currentComponent" fluid class="toolContent primary"
+        :style="{ height: viewPortHeight + 'px' }">
         <v-slide-x-reverse-transition>
             <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}">
             </component>
@@ -29,6 +29,7 @@ export default {
     data: () => ({
         state: {},
         route: {},
+        viewPortHeight: 0,
         currentTool: false,
         currentComponent: false,
         stateSubscriber$: false,
@@ -49,16 +50,24 @@ export default {
         this.currentToolSubscriber$ = this.$store
             .select((state) => state.ui.currentTool)
             .subscribe((val) => {
-                this.currentTool = val
-                this.activateTool(val)
+                if (val !== this.currentTool) {
+                    this.currentTool = val
+                    this.activateTool(val)
+                }
             });
+        this.setHeight()
+        window.addEventListener('resize', this.setHeight, { passive: true })
     },
     destroyed() {
         this.stateSubscriber$.unsubscribe()
         this.routeSubscriber$.unsubscribe()
         this.currentToolSubscriber$.unsubscribe()
+        window.removeEventListener('resize', this.setHeight, { passive: true })
     },
     methods: {
+        setHeight() {
+            this.viewPortHeight = window.innerHeight - 96
+        },
         setCurrentTool(name) {
             this.$store.dispatch({
                 type: 'ui/update',
@@ -92,11 +101,6 @@ export default {
 };
 </script>
 <style lang="css" scoped>
-.toolBar {
-    margin-top: 48px;
-    margin-left: 48px
-}
-
 .active {
     background-color: #9E9E9E;
     border-bottom: 1px solid #9E9E9E !important;
@@ -104,13 +108,14 @@ export default {
 }
 
 .toolContent {
-    position: absolute;
+    position: fixed;
+    overflow: auto;
     padding: 0 !important;
     right: 0;
     top: 96px;
     width: 50% !important;
-    background-color: #fff;
     z-index: 900;
+    background-color: #fff;
     border: 1px solid #E0E0E0;
     border-top: 1px solid #9E9E9E !important;
 }

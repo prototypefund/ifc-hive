@@ -38,6 +38,7 @@ export default {
   data: () => ({
     navigationDrawer: true,
     navigationRail: true,
+    navigationRailSubscriber$: false,
   }),
   computed: {
     currentRoute: () => {
@@ -51,12 +52,14 @@ export default {
     },
   },
   created() {
-    console.dir(this.$router.name)
-    this.$store
+    this.navigationRailSubscriber$ = this.$store
       .select((state) => state.ui.navigationOpen)
       .subscribe((val) => {
         this.navigationRail = !val;
       });
+  },
+  destroyed() {
+    this.navigationRailSubscriber$.unsubscribe()
   },
   methods: {
     handleNavigation(val) {

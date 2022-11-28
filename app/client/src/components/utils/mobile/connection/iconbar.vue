@@ -19,6 +19,9 @@ const subscribeStatus = () => {
         networkState.value = status
     });
 }
+const unSubscribeStatus = () => {
+    $mobile.Network.removeListener('networkStatusChange');
+}
 onMounted(() => {
     if ($mobile) {
         subscribeStatus()
@@ -26,7 +29,9 @@ onMounted(() => {
     }
 });
 onUnmounted(() => {
-
+    if ($mobile) {
+        unSubscribeStatus()
+    }
 });
 </script>
 
