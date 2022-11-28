@@ -32,6 +32,19 @@ onMounted(() => {
       loading: false,
     },
   });
+  $store.dispatch({
+    type: "toolbar/add",
+    payload: {
+      title: 'Test',
+      page: 'app.dashboard',
+      icon: 'mdi-apple-safari',
+      iconActive: 'mdi-apple-safari',
+      widget: {
+        name: 'placeholder',
+        uuid: 'dashboardTest'
+      }
+    },
+  });
 });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();

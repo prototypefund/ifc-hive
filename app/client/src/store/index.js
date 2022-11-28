@@ -19,7 +19,7 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
     ]
     : [
         new LoggerExtension(),
-        new ReduxDevtoolsExtension({ name: 'pacifico applicationState' }),
+        new ReduxDevtoolsExtension({ name: 'pacifico applicationState', trace: true, traceLimit: 25 }),
         new ImmutableStateExtension(),
         new UndoExtension(),
     ];
@@ -92,6 +92,11 @@ const applicationReducers = {
                                             uuid: item._id
                                         }
                                     })
+                                    items[item._id] = data[item._id]
+                                    items[item._id]._updated = {
+                                        item: JSON.stringify(item),
+                                        updatedAt: new Date()
+                                    }
                                 } else {
                                     // its new data
                                     items[item._id] = item
@@ -243,17 +248,33 @@ const applicationReducers = {
                     return {
                         ...state, items, unreadCount: state.unreadCount + 1
                     }
+                case 'notifications/markAllAsSeen':
+                    items = JSON.parse(JSON.stringify(state.items))
+                    items.forEach(item => {
+                        if (item.state !== 'read') {
+                            item.state = 'seen'
+                        }
+                    })
+                    store.dispatch({
+                        type: 'notifications/update',
+                        payload: {
+                            unreadCount: 0
+                        }
+                    })
+                    return {
+                        ...state, items
+                    }
                 case 'notifications/markAllAsRead':
                     items = JSON.parse(JSON.stringify(state.items))
                     items.forEach(item => {
                         if (item.state === 'unread') {
                             item.state = 'read'
-                            store.dispatch({
-                                type: 'notifications/update',
-                                payload: {
-                                    unreadCount: 0
-                                }
-                            })
+                        }
+                    })
+                    store.dispatch({
+                        type: 'notifications/update',
+                        payload: {
+                            unreadCount: 0
                         }
                     })
                     return {
@@ -261,25 +282,33 @@ const applicationReducers = {
                     }
                 case 'notifications/markAsRead':
                     items = JSON.parse(JSON.stringify(state.items))
-                    items[action.payload.index].state = 'read'
-                    store.dispatch({
-                        type: 'notifications/update',
-                        payload: {
-                            unreadCount: state.unreadCount - 1
+                    if (items[action.payload.index].state !== 'read') {
+                        items[action.payload.index].state = 'read'
+                        if (state.unreadCount > 0) {
+                            store.dispatch({
+                                type: 'notifications/update',
+                                payload: {
+                                    unreadCount: state.unreadCount - 1
+                                }
+                            })
                         }
-                    })
+
+                    }
+
                     return {
                         ...state, items: items
                     }
                 case 'notifications/markUnread':
                     items = JSON.parse(JSON.stringify(state.items))
-                    items[action.payload.index].state = 'unread'
-                    store.dispatch({
-                        type: 'notifications/update',
-                        payload: {
-                            unreadCount: state.unreadCount + 1
-                        }
-                    })
+                    if (items[action.payload.index].state !== 'unread') {
+                        items[action.payload.index].state = 'unread'
+                        store.dispatch({
+                            type: 'notifications/update',
+                            payload: {
+                                unreadCount: state.unreadCount + 1
+                            }
+                        })
+                    }
                     return {
                         ...state, items: items
                     }
@@ -291,6 +320,10 @@ const applicationReducers = {
                                 unreadCount: 0
                             }
                         })
+                        store.dispatch({
+                            type: 'notifications/markAllAsSeen',
+                        })
+
                     }
                     return {
                         ...state, ...action.payload
@@ -351,20 +384,22 @@ const applicationReducers = {
     },
     pages: (state, action) => {
         if (state) {
-            let newPage
+            let newPage, pageUUID
             switch (action.type) {
                 case 'init':
                     return applicationState.pages
                 // initially add a new preconfigured page store. Will be handled in routes files in beforeEnter hook
                 case 'pages/add':
-                    // create a new page object based on the default page config
-                    const page = clone(mergeDeepRight(storePatterns.page, action.payload))
-                    page.uuid = page.uuid || action.routeName.replace('.', '-')
-                    page.routeName = action.routeName
-                    if (state[page.uuid]) {
+                    pageUUID = action.payload.uuid || action.routeName.replace('.', '-')
+                    if (state[pageUUID]) {
                         // if the page already exists do nothing
                         return state
                     }
+                    // create a new page object based on the default page config
+                    const page = clone(mergeDeepRight(storePatterns.page, action.payload))
+                    page.uuid = pageUUID
+                    page.routeName = action.routeName
+
                     newPage = {}
                     newPage[page.uuid] = page
                     return mergeDeepRight(state, newPage)

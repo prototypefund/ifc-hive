@@ -1,19 +1,23 @@
 <template>
     <v-toolbar flat density="compact" class="toolBar" data-test-container="utils/tools/toolbar" v-if="state">
         <v-toolbar-title>{{ $t("widgets.tools.title") }}</v-toolbar-title>
-
-        <span v-for="(tool, key) in state">
-            <v-btn @click="activateTool(key, tool)" v-if="checkVisibility(tool)" color>
+        <v-spacer></v-spacer>
+        <span v-for="(tool, key) in state" :class="{ 'active': currentTool === key }">
+            <v-btn @click="setCurrentTool(currentTool === key ? false : key)" v-if="checkVisibility(tool)" color>
                 <span>{{ $t('tools.' + tool.title) }} </span>
                 <v-icon v-if="currentTool === key">{{ tool.iconActive }}</v-icon>
                 <v-icon v-else>{{ tool.icon }}</v-icon>
             </v-btn>
         </span>
-        <v-spacer></v-spacer>
+
+
     </v-toolbar>
+
     <v-container v-if="currentTool && currentComponent" class="toolContent">
-        <component :is="currentComponent" uuid="quickList" :dataUUID="state[currentTool].widget.uuid"
-            :props="state[currentTool].widget.props || {}"></component>
+        <v-slide-x-reverse-transition>
+            <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}">
+            </component>
+        </v-slide-x-reverse-transition>
         <!--component v-bind:is="currentTool"></!--component-->
     </v-container>
 </template>
@@ -26,35 +30,51 @@ export default {
         state: {},
         route: {},
         currentTool: false,
-        currentComponent: false
+        currentComponent: false,
+        stateSubscriber$: false,
+        routeSubscriber$: false,
+        currentToolSubscriber$: false,
     }),
     created() {
-        this.$store
+        this.stateSubscriber$ = this.$store
             .select((state) => state.toolbar)
             .subscribe((val) => {
                 this.state = val;
             });
-        this.$store
+        this.routeSubscriber$ = this.$store
             .select((state) => state.route)
             .subscribe((val) => {
                 this.route = val;
             });
-        this.$store
+        this.currentToolSubscriber$ = this.$store
             .select((state) => state.ui.currentTool)
             .subscribe((val) => {
+                this.currentTool = val
                 this.activateTool(val)
             });
     },
+    destroyed() {
+        this.stateSubscriber$.unsubscribe()
+        this.routeSubscriber$.unsubscribe()
+        this.currentToolSubscriber$.unsubscribe()
+    },
     methods: {
-        activateTool(name, tool) {
-            if (this.currentTool === name) {
+        setCurrentTool(name) {
+            this.$store.dispatch({
+                type: 'ui/update',
+                payload: {
+                    currentTool: name
+                }
+            });
+        },
+        activateTool(name) {
+            if (!name) {
                 this.currentTool = false
                 this.currentComponent = false
             } else {
-                this.currentTool = name
                 this.currentComponent = defineAsyncComponent(() => {
                     return toolLoader(this.state[this.currentTool].widget.name, this.state[this.currentTool].widget.type, this.state[this.currentTool].widget.face);
-                });
+                })
             }
         },
         checkVisibility(tool) {
@@ -62,7 +82,7 @@ export default {
             if (!tool.page || tool.page === this.route.name) {
                 return true
             }
-            if (this.currentTool === tool.name) {
+            if (this.currentTool === tool.widget.uuid) {
                 // if the currentTool is not visible on this page, remove currentTool
                 this.currentTool = false
             }
@@ -71,20 +91,28 @@ export default {
     },
 };
 </script>
-<style lang="css">
+<style lang="css" scoped>
 .toolBar {
     margin-top: 48px;
     margin-left: 48px
+}
+
+.active {
+    background-color: #9E9E9E;
+    border-bottom: 1px solid #9E9E9E !important;
+    height: 100% !important;
 }
 
 .toolContent {
     position: absolute;
     padding: 0 !important;
     right: 0;
-    top: 95px;
+    top: 96px;
     width: 50% !important;
+    background-color: #fff;
     z-index: 900;
-    border: 1px solid #E0E0E0
+    border: 1px solid #E0E0E0;
+    border-top: 1px solid #9E9E9E !important;
 }
 </style>
 

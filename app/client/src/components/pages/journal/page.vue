@@ -58,6 +58,7 @@ onMounted(() => {
           _id: 'd6e-2d5e',
           tags: ['Planung', 'Hamburg'],
           attachments: 2,
+          images: 1,
           path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
           request: [
             {
@@ -82,6 +83,7 @@ onMounted(() => {
           locked: 2,
           _id: '89e-85d8e',
           path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
+          images: 10,
           request: [
             {
               name: 'Paul Krüger',
@@ -157,7 +159,6 @@ onMounted(() => {
       ]
     }
   })
-
   $store.dispatch({
     type: "toolbar/add",
     payload: {
@@ -168,7 +169,22 @@ onMounted(() => {
       widget: {
         name: 'journal',
         type: 'add',
-        uuid: 'journalAdd'
+        uuid: 'journal_add'
+      }
+    },
+  });
+  $store.dispatch({
+    type: "toolbar/add",
+    payload: {
+      title: 'chartJournal',
+      page: 'app.journal',
+      icon: 'mdi-chart-donut',
+      iconActive: 'mdi-chart-donut-variant',
+      widget: {
+        name: 'journal',
+        type: 'chart',
+        face: 'example',
+        uuid: 'journal_chart'
       }
     },
   });

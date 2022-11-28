@@ -6,7 +6,7 @@ const settingsComp = () => import('../components/pages/settings/page.vue')
 const journalComp = () => import('../components/pages/journal/page.vue')
 const testboardComp = () => import('../components/pages/testboard/page.vue')
 const loadConf = (page) => import(`../components/pages/${page}/conf.json`)
-
+const confCache = {}
 export default [
     /* Root */
     {
@@ -20,13 +20,16 @@ export default [
         component: dashboardComp,
         props: true,
         beforeEnter: async (to, from) => {
-            loadConf('dashboard').then(conf => {
-                store.dispatch({
-                    type: 'pages/add',
-                    routeName: to.name,
-                    payload: conf
-                });
-            })
+            if (!confCache.dashboard) {
+                loadConf('dashboard').then(conf => {
+                    confCache.dashboard = conf
+                    store.dispatch({
+                        type: 'pages/add',
+                        routeName: to.name,
+                        payload: conf
+                    });
+                })
+            }
         }
     },
     {
@@ -35,13 +38,16 @@ export default [
         component: settingsComp,
         props: true,
         beforeEnter: (to, from) => {
-            loadConf('settings').then(conf => {
-                store.dispatch({
-                    type: 'pages/add',
-                    routeName: to.name,
-                    payload: conf
-                });
-            })
+            if (!confCache.settings) {
+                loadConf('settings').then(conf => {
+                    confCache.settings = conf
+                    store.dispatch({
+                        type: 'pages/add',
+                        routeName: to.name,
+                        payload: conf
+                    });
+                })
+            }
         }
     },
     {
@@ -50,13 +56,16 @@ export default [
         component: journalComp,
         props: true,
         beforeEnter: (to, from) => {
-            loadConf('journal').then(conf => {
-                store.dispatch({
-                    type: 'pages/add',
-                    routeName: to.name,
-                    payload: conf
-                });
-            })
+            if (!confCache.journal) {
+                loadConf('journal').then(conf => {
+                    confCache.journal = conf
+                    store.dispatch({
+                        type: 'pages/add',
+                        routeName: to.name,
+                        payload: conf
+                    });
+                })
+            }
         }
     },
     {
@@ -65,13 +74,16 @@ export default [
         component: testboardComp,
         props: true,
         beforeEnter: (to, from) => {
-            loadConf('testboard').then(conf => {
-                store.dispatch({
-                    type: 'pages/add',
-                    routeName: to.name,
-                    payload: conf
-                });
-            })
+            if (!confCache.testboard) {
+                loadConf('testboard').then(conf => {
+                    confCache.testboard = conf
+                    store.dispatch({
+                        type: 'pages/add',
+                        routeName: to.name,
+                        payload: conf
+                    });
+                })
+            }
         }
     },
 ]

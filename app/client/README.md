@@ -94,6 +94,8 @@ The "Grid" component will provide you a blackbox you should not think about too 
 
 The rest of the code within the boilerplate/page.vue must be kept in order to have a working base for you page. Note that the subscriber variables alway end on an $ which signalizes that the content of this variable is a redux observable and therefore needs to be unsubscribed whenever you leave the page to prevent memory leaks.
 
+If the page contains other views, such as a edit dialogue etc which you don't want to open in an overlay but rather in an persistent toolbar, refer to the section "toolbar"
+
 #### conf.js
 
 #### component.cy.js
@@ -122,7 +124,10 @@ All Widgets are structured in the same way which must not be violated. A widget 
 │   ├── FACENAME.vue // optional, the actual code of specific widget face 
 │   ├── FACENAME.component.cy.js // optional, contains the cypress tests for the FACE widget
 │   ├── conf.js // optional, contains page specific config which override default conf
-└── └── story.js // a storyfile for storybook
+│   ├── story.js // a storyfile for storybook
+│   └── TYPE // a folder containing widget files to be used in the toolbar
+│       ├── FACENAME.vue // optional, the actual code of specific widget face 
+└──     └── FACENAME.component.cy.js // optional, contains the cypress tests for the FACE widget
 ```
 
 #### default.vue/FACE.vue
@@ -191,11 +196,42 @@ Note that you can add as much parameters, apart from the above, as you like.
 // the type of widget which represents a folder name under widgets and a config
     "name": false,
 // the specific .vue file for the widget, by default a file called default is needed
-    "face": false
+    "face": false,
+// a deeper abstractation level for widgets which are used as tools. ie. type:'add' create a folder called 'add' and create a default.vue or FACE.vue containing your add logic for a given widget
+    "type": false
 }
 ```
 Note that you can add as much parameters, apart from the above, as you like. 
 
+## Toolbar
+
+Every widget you create can also be used as a tool lauched from the toolbar. To do so simply go to the file which shall provide said function. Usually I'd recommend you to do this in the page.vue file or if you wan't it global die App.vue.
+
+To add a widget as a tool use the following command in your source File
+
+```js
+// either $store or this.$store depending if you use options or compose API
+  $store.dispatch({
+    type: "toolbar/add",
+    payload: {
+// the title to use in the toolbar next to the icon. Should be an i18n key
+      title: 'newJournal',
+// a whitlist field. If set the tool will just be visible on a page with the configured routeName, if false or not set the tool will be visible everywhere
+      page: 'app.journal',
+// a mdi icon you want for the inactive state      
+      icon: 'mdi-content-save-edit-outline',
+// a mdi icon you want for the active state
+      iconActive: 'mdi-content-save-edit',
+// a normal widget config object which follows the same principle as all the widget configs.
+      widget: {
+        name: 'journal',
+        type: 'add',
+// make sure to provide a uuid if you don't want to have multiple instances of a given tool (multiple instances might be buggy atm)
+        uuid: 'journal_add'
+      }
+    },
+  });
+```
 
 # Test Preperation
 If you want to run 2 non-headless sessions simultanusly make sure to select diffrent Browsers

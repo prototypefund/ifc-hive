@@ -1,7 +1,7 @@
 //TODO wait until vuetify fixes the v-badge
 <template>
-  <v-menu v-model="toggled" :close-on-click="false" :close-on-content-click="false" location="end" v-if="state"
-    transition="scale-transition" class="notificationDrawer">
+  <v-menu v-model="toggled" :close-on-click="false" :close-on-content-click="false" location="bottom" v-if="state"
+    transition="scroll-y-transition" class="notificationDrawer">
     <template v-slot:activator="{ props }">
 
       <!--v-btn v-bind="props" class="text-none" stacked>
@@ -33,6 +33,8 @@
                       @click="markUnRead(index)" icon="mdi-circle-small"></v-btn>
                     <v-btn v-if="entry.state === 'unread'" variant="text" color="grey lighten-1"
                       @click="markRead(index)" icon="mdi-circle-medium"></v-btn>
+                    <v-btn v-if="entry.state === 'seen'" variant="text" color="grey lighten-1" @click="markRead(index)"
+                      icon="mdi-circle-medium"></v-btn>
                   </v-list-item-avatar>
                 </template>
               </v-list-item>
@@ -110,13 +112,12 @@ onUnmounted(() => {
 });
 </script>
 <style lang="css">
-.notificationDrawer>.v-overlay__content {
-  right: 0px !important;
-  left: auto !important;
-}
-
 .fullListItem.unread {
   color: red;
+}
+
+.fullListItem.seen {
+  background-color: grey;
 }
 
 .fullListItem {
@@ -124,7 +125,7 @@ onUnmounted(() => {
 }
 
 .hovered {
-  background-color: red !important;
+  background-color: rgb(92, 91, 91) !important;
 }
 
 .hovered * {

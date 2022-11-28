@@ -67,5 +67,7 @@ export const storePatterns = {
         name: false,
         // the specific .vue file for the widget
         face: false,
+        // a deeper abstractation level for widgets which are used as tools. ie. type:'add' create a folder called 'add' and create a default.vue or FACE.vue containing your add logic for a given widget
+        type: false
     }
 }

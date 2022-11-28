@@ -29,11 +29,19 @@
         <slot />
       </v-card>
       <v-card flat v-else>
-        <router-view />
+        <Transition mode="slide-x">
+          <Suspense>
+            <template #default>
+              <router-view></router-view>
+            </template>
+            <template #fallback>
+              <loading-skeleton />
+            </template>
+          </Suspense>
+        </Transition>
       </v-card>
     </v-main>
     <!-- quicklist Drawer -->
-
   </v-app>
 </template>
 <script>
@@ -43,12 +51,14 @@ import Notifications from "@u/notifications/default.vue";
 import NavigationSideBar from "@u/navigation/sidebar.vue";
 import Camera from "@u/mobile/camera/icon.vue";
 import ToolBar from "@u/toolbar/default.vue";
+import loadingSkeleton from "@t/loadingSkeleton.vue";
 export default {
   components: {
     Notifications,
     NavigationSideBar,
     ToolBar,
-    Camera
+    Camera,
+    loadingSkeleton
   },
   inject: ["$api", "$store", "$mobile"],
   props: {

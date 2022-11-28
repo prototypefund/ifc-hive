@@ -7,7 +7,10 @@
       </v-tab>
     </v-tabs>
     <v-window v-model="entryIndex" class="tabScrollContainer">
-      <v-window-item v-for="(item, index) in state.entries" :key="item">
+      <v-window v-if="!state.entries || state.entries.length === 0">
+        <no-results-yet />
+      </v-window>
+      <v-window-item v-else v-for="(item, index) in state.entries" :key="item">
         <Detail v-if="item.type === 'detail'" :props="item.props" uuid="quickList" :docUUID="item.uuid" />
       </v-window-item>
     </v-window>
@@ -16,6 +19,7 @@
 <script setup>
 import { inject, ref, onMounted, onUnmounted, computed } from "vue";
 import Detail from './types/detail.vue'
+import noResultsYet from '@t/noResultsYet.vue'
 const $store = inject("$store");
 const state = ref({});
 

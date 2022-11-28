@@ -9,6 +9,7 @@ import vuetify from './setup/vuetify.js'
 import router from './router/index.js'
 import filters from './setup/filters.js'
 import capacitor from './setup/capacitor'
+import VueApexCharts from "vue3-apexcharts";
 
 // get env variables
 const API_BASE_URL = getEnvVariable('VITE_API_BASE_URL')
@@ -35,6 +36,7 @@ try {
   app.use(capacitor)
   app.use(router)
   app.use(Markdown)
+  app.use(VueApexCharts);
 
   // Make axios availabe in all components
   app.config.globalProperties.$api = axios

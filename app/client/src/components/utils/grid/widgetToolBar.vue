@@ -2,7 +2,7 @@
   <v-toolbar v-if="widgetState" dense>
     <v-btn flat icon="mdi-drag" />
     <v-toolbar-title>{{
-      widgetState.title || widgetState.name || props.type
+        widgetState.title || widgetState.name || props.type
     }}</v-toolbar-title>
     <v-spacer></v-spacer>
 
@@ -51,10 +51,8 @@ const colCount = computed({
 });
 
 onMounted(() => {
-  console.log("resizer on");
 });
 onUnmounted(() => {
   widgetStateSubscriber$.unsubscribe();
-  console.log("resizer out");
 });
 </script>

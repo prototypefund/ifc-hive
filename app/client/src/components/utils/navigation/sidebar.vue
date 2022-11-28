@@ -4,11 +4,13 @@
     permanent>
     <!-- Title -->
 
-    <v-list-item :title="$t('navigation')" :value="$t('navigation')">
+    <v-list-item density="comfortable" :title="$t('navigation')" :value="$t('navigation')">
       <!-- Close icon -->
       <template v-slot:append>
-        <v-btn v-if="!navigationRail" variant="icon" icon="mdi-chevron-left" @click.stop="handleNavigation(true)" />
-        <v-btn v-if="navigationRail" variant="icon" icon="mdi-chevron-right" @click.stop="handleNavigation(false)" />
+        <v-btn v-if="!navigationRail" density="comfortable" variant="icon" icon="mdi-chevron-left"
+          @click.stop="handleNavigation(true)" />
+        <v-btn v-if="navigationRail" density="comfortable" variant="icon" icon="mdi-chevron-right"
+          @click.stop="handleNavigation(false)" />
       </template>
     </v-list-item>
 
@@ -17,15 +19,17 @@
     <v-divider />
     <!-- Navigation List -->
     <v-list density="compact" nav>
-      <v-list-item v-for="item in navItems" link :key="item.title" :prepend-icon="item.icon"
-        :title="$t('pages.' + item.route.replace('.', '-'))" :value="item.title" class="nav-link"
-        :data-test-id="'sidebar_nav-' + item.route.replace('.', '-')" @click="navigate(item)">
+      <v-list-item :disabled="currentRoute === item.route" active-color="primary" v-for="item in navItems" link
+        :key="item.title" :prepend-icon="item.icon" :title="$t('pages.' + item.route.replace('.', '-'))"
+        :value="item.title" class="nav-link" :data-test-id="'sidebar_nav-' + item.route.replace('.', '-')"
+        @click="navigate(item)">
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>
 <script>
 import ConnectionBar from "@u/mobile/connection/iconbar.vue";
+import { useRouter } from 'vue-router';
 export default {
   inject: ["$api", "$store", "$mobile"],
   components: {
@@ -35,6 +39,11 @@ export default {
     navigationDrawer: true,
     navigationRail: true,
   }),
+  computed: {
+    currentRoute: () => {
+      return useRouter().currentRoute.value.name;
+    }
+  },
   props: {
     navItems: {
       default: () => [],
@@ -42,8 +51,9 @@ export default {
     },
   },
   created() {
+    console.dir(this.$router.name)
     this.$store
-      .select((state) => state["ui"].navigationOpen)
+      .select((state) => state.ui.navigationOpen)
       .subscribe((val) => {
         this.navigationRail = !val;
       });
