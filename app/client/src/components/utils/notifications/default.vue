@@ -48,7 +48,7 @@
         <v-spacer></v-spacer>
 
         <v-btn text @click="toggled = false"> {{ $t("cancel") }} </v-btn>
-        <v-btn color="primary" text @click="menu = false"> {{ $t("clear") }} </v-btn>
+        <v-btn color="primary" text @click="clearAll()"> {{ $t("clear") }} </v-btn>
       </v-card-actions>
     </v-card>
   </v-menu>
@@ -89,6 +89,12 @@ const handleHover = (itemId) => {
   } else {
     hover.value = itemId;
   }
+};
+const clearAll = () => {
+  $store.dispatch({
+    type: "notifications/clear",
+  });
+  toggleNotifier(false)
 };
 const markUnRead = (index) => {
   $store.dispatch({

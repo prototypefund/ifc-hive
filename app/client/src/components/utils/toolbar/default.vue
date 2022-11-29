@@ -4,12 +4,12 @@
         <v-toolbar-title>{{ $t("widgets.tools.title") }}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-tabs density="compact" v-model="currentTool" fixed-tabs>
-            <v-tab class="closeBtnWrapper active" :class="{ 'theFalseForMyRight': currentTool === false }"
-                :value="false">
+            <v-tab class="closeBtnWrapper active" :class="{ 'hidden': currentTool === false }" :value="false">
                 <v-btn variant="icon" icon="mdi-chevron-right" @click.stop="currentTool = false" />
             </v-tab>
             <template v-for="(tool, key) in state">
                 <v-tab :class="{ 'active': currentTool === key }" v-if="checkVisibility(tool)" :value="key">
+                    <a v-if="currentTool === key" class="closeOverlay" @click.stop="currentTool = false"></a>
                     <span>{{ $t('widgets.' + tool.title) }} </span>
                     <v-icon v-if="currentTool === key">{{ tool.iconActive }}</v-icon>
                     <v-icon v-else>{{ tool.icon }}</v-icon>
@@ -20,6 +20,7 @@
 
     <v-container v-if="currentTool && currentComponent" fluid class="toolContent primary"
         :style="{ height: viewPortHeight + 'px' }">
+        <hr class="contentLine" />
         <v-slide-x-reverse-transition>
             <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}"
                 class="toolComponentWrapper">
@@ -36,7 +37,6 @@ export default {
         state: {},
         route: {},
         viewPortHeight: 0,
-        currentComponent: false,
         currTool: false,
         stateSubscriber$: false,
         routeSubscriber$: false,
@@ -53,13 +53,6 @@ export default {
                         type: 'ui/update',
                         payload: {
                             currentTool: newValue
-                        }
-                    });
-                } else {
-                    this.$store.dispatch({
-                        type: 'ui/update',
-                        payload: {
-                            currentTool: false
                         }
                     });
                 }
@@ -127,15 +120,25 @@ export default {
     height: 100% !important;
 }
 
-.theFalseForMyRight {
+.contentLine {
+    border: 3px solid #9E9E9E
+}
+
+.closeOverlay {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+.hidden {
     display: none;
 }
 
-
-
 .toolContent {
     position: fixed;
-    overflow: auto;
     padding: 0 !important;
     right: 0;
     top: 96px;
@@ -143,6 +146,8 @@ export default {
     z-index: 900;
     height: 100%;
     background-color: #fff;
+    border: 1px solid #E0E0E0;
+    border-top: 0px
 }
 
 .toolContent>.v-row {
@@ -155,8 +160,8 @@ export default {
 .toolComponentWrapper {
     width: 100%;
     height: 100%;
-    border-top: 1px solid #9E9E9E !important;
-    border: 1px solid #E0E0E0
+    overflow: auto;
+
 }
 </style>
 

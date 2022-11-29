@@ -29,16 +29,19 @@
         <slot />
       </v-card>
       <v-card flat v-else>
-        <Transition mode="slide-x">
-          <Suspense>
-            <template #default>
-              <router-view></router-view>
-            </template>
-            <template #fallback>
+        <Suspense>
+          <template #default>
+            <Transition>
+              <router-view />
+            </Transition>
+          </template>
+          <template #fallback>
+            <Transition>
               <loading-skeleton />
-            </template>
-          </Suspense>
-        </Transition>
+            </Transition>
+
+          </template>
+        </Suspense>
       </v-card>
     </v-main>
     <!-- quicklist Drawer -->

@@ -163,52 +163,6 @@ const applicationReducers = {
             }
         }
     },
-    quicklist: (state, action) => {
-        if (state) {
-            let tabs
-            let tab
-            switch (action.type) {
-                case 'init':
-                    return applicationState.quicklist
-                case 'quicklist/add':
-
-                    return {
-                        ...state, tabs, tab: 0
-                    }
-                case 'quicklist/delete':
-                    tabs = JSON.parse(JSON.stringify(state.tabs))
-                    tab = state.tab
-                    tabs.splice(action.payload.tabIndex, 1)
-                    // make sure that the new current tab is always right
-                    if (action.payload.tabIndex < state.tab) {
-                        tab = state.tab - 1
-                    }
-                    if ((action.payload.tabIndex === state.tab) && state.tab !== 0) {
-                        tab = 0
-                    }
-                    if (tabs.length === 0) {
-                        store.dispatch({
-                            type: 'ui/update',
-                            payload: {
-                                quickListOpen: false
-                            }
-                        });
-                    }
-                    return {
-                        ...state, tabs, tab
-                    }
-                case 'quicklist/update':
-                    return mergeDeepRight(state, action.payload)
-                case 'quicklist/clear':
-                    debugger
-                    return {
-                        ...state, ...action.payload
-                    }
-                default:
-                    return state
-            }
-        }
-    },
     route: (state, action) => {
         if (state) {
             switch (action.type) {
@@ -248,6 +202,9 @@ const applicationReducers = {
                     return {
                         ...state, items, unreadCount: state.unreadCount + 1
                     }
+                case 'notifications/clear':
+                    return applicationState.notifications
+
                 case 'notifications/markAllAsSeen':
                     items = JSON.parse(JSON.stringify(state.items))
                     items.forEach(item => {

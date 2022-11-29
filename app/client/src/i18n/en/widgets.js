@@ -3,5 +3,6 @@ export default {
         title: 'Toolbar'
     },
     quickList: 'Quicklist',
-    newJournal: 'new Entry'
+    newJournal: 'new Entry',
+    chartJournal: 'Chart'
 }
