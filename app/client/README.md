@@ -127,7 +127,7 @@ All Widgets are structured in the same way which must not be violated. A widget 
 │   ├── story.js // a storyfile for storybook
 │   └── TYPE // a folder containing widget files to be used in the toolbar
 │       ├── FACENAME.vue // optional, the actual code of specific widget face 
-└──     └── FACENAME.component.cy.js // optional, contains the cypress tests for the FACE widget
+└────── └── FACENAME.component.cy.js // optional, contains the cypress tests for the FACE widget
 ```
 
 #### default.vue/FACE.vue

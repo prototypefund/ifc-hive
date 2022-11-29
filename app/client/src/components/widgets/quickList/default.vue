@@ -1,5 +1,5 @@
 <template>
-  <v-card flat class="quickListWrapper" color="grey" v-if="state" data-test-container="widgets/quicklist/default">
+  <v-card flat class="quickListWrapper" v-if="state" data-test-container="widgets/quicklist/default">
     <v-tabs v-model="entryIndex" fixed-tabs v-if="state.entries.length > 0">
       <v-tab v-for="(item, index) in state.entries" :key="item" @click.middle="closeTab(index)" class="quickListTab">
         {{ item.type }} - {{ item.uuid }}
@@ -105,6 +105,10 @@ onUnmounted(() => {
 <style lang="css" scoped>
 .quickListTab:hover .tabHandler {
   display: block !important;
+}
+
+.v-tabs {
+  background-color: #9E9E9E;
 }
 
 .tabHandler {
