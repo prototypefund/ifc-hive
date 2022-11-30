@@ -87,10 +87,10 @@ export default {
         params: {},
       },
       {
-        icon: "mdi-chili-hot",
-        route: "app.testboard",
+        icon: "mdi-human-male-board-poll",
+        route: "app.ticketboard",
         params: {
-          urlParams: "navigation nach testboard von nav",
+          urlParams: "navigation nach ticketboard von nav",
         },
       },
       {
@@ -133,9 +133,9 @@ export default {
         title: 'quickList',
         icon: 'mdi-text-box-search-outline',
         iconActive: 'mdi-text-box-search',
+        uuid: 'quickList',
         widget: {
           name: 'quickList',
-          uuid: 'quickList'
         }
       },
     });

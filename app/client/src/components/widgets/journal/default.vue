@@ -3,9 +3,10 @@
     <v-col cols="12" md="6" lg="4" color="green">
       <div>
         <v-timeline side="end" align="end" class="mt-5">
-          <v-timeline-item v-for="(entry, index) in data" :key="index" size="small" :dot-color="entry.category.color">
+          <v-timeline-item v-for="(entry, index) in data" :key="index" size="small"
+            :dot-color="entry.category ? entry.category.color || 'red' : 'black'">
             <v-card-text class="pa-0">
-              <v-chip label color="primary" size="small" class="mr-4"># {{ entry.id }}</v-chip>
+              <v-chip label color="primary" size="small" class="mr-4"># {{ (entry.id || entry._id) }}</v-chip>
               <div class="mr-4 d-inline-block text-body-2" v-for="path in entry.path" :key="path">
                 <span>{{ path.text }}</span>
               </div>
@@ -31,11 +32,11 @@
               <QuickListHandler uuid="quickList" :dataUUID="entry._id" tab-type="detail" action="add">
                 <v-row v-if="!entry.alert" :class="{ ['bg-blue']: entry.id === current.id }" class="pt-0 mt-0 mb-2">
                   <v-col cols="12" sm="12" class="pt-0">
-                    <span class="flex-shrink-0 mb-2">
+                    <span class="flex-shrink-0 mb-2" v-if="entry.date">
                       {{ $filters.dateFormat(entry.date) }}
                     </span>
                     <h2>{{ entry.subject }}</h2>
-                    <h4 class="text-subtitle-1 mt-0">
+                    <h4 class="text-subtitle-1 mt-0" v-if="entry.category">
                       {{ entry.category.title }}
                     </h4>
                   </v-col>
@@ -141,7 +142,7 @@ const stateSubscriber$ = $store
   .subscribe((val) => {
     state.value = val;
   });
-  // TODO remove this. Currently we always show all entries in data
+// TODO remove this. Currently we always show all entries in data
 const dataSubscriber$ = $store
   .select((state) => state.data)
   .subscribe((val) => {

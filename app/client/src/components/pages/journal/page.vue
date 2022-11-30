@@ -166,10 +166,10 @@ onMounted(() => {
       page: 'app.journal',
       icon: 'mdi-content-save-edit-outline',
       iconActive: 'mdi-content-save-edit',
+      uuid: 'journal_add',
       widget: {
         name: 'journal',
         type: 'add',
-        uuid: 'journal_add'
       }
     },
   });
@@ -180,11 +180,11 @@ onMounted(() => {
       page: 'app.journal',
       icon: 'mdi-chart-donut',
       iconActive: 'mdi-chart-donut-variant',
+      uuid: 'journal_chart',
       widget: {
         name: 'journal',
         type: 'chart',
         face: 'example',
-        uuid: 'journal_chart'
       }
     },
   });

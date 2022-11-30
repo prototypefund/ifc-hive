@@ -6,4 +6,5 @@ export default {
     'app-journal': 'Journal',
     'app-projects': 'Projekte',
     'app-testboard': 'TestBoard',
+    'app-ticketboard': 'Ticket Board',
 }

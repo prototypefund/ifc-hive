@@ -1,7 +1,8 @@
 <template>
     <v-app-bar density="compact" flat color="grey-lighten-2" class="toolBar" data-test-container="utils/toolbar/default"
         v-if="state">
-        <v-toolbar-title>{{ $t("widgets.tools.title") }}</v-toolbar-title>
+        <v-toolbar-title class="d-none d-sm-none d-md-flex d-lg-flex d-xl-flex">{{ $t("widgets.tools.title") }}
+        </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-tabs density="compact" v-model="currentTool" fixed-tabs>
             <v-tab class="closeBtnWrapper active" :class="{ 'hidden': currentTool === false }" :value="false">
@@ -10,7 +11,8 @@
             <template v-for="(tool, key) in state">
                 <v-tab :class="{ 'active': currentTool === key }" v-if="checkVisibility(tool)" :value="key">
                     <a v-if="currentTool === key" class="closeOverlay" @click.stop="currentTool = false"></a>
-                    <span>{{ $t('widgets.' + tool.title) }} </span>
+                    <span class="d-none d-sm-flex d-md-flex d-lg-flex d-xl-flex">{{ $t('widgets.' + tool.title) }}
+                    </span>
                     <v-icon v-if="currentTool === key">{{ tool.iconActive }}</v-icon>
                     <v-icon v-else>{{ tool.icon }}</v-icon>
                 </v-tab>

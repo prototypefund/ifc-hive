@@ -1,0 +1,136 @@
+<template>
+  <v-container v-if="state" data-test-container="pages/ticketboard/page" fluid pa-0>
+    <h1>{{ $t('pages.app-ticketboard') }}</h1>
+    <Grid v-if="state.slots" />
+  </v-container>
+</template>
+
+<script setup>
+import { inject, ref, onMounted, onUnmounted } from "vue";
+import Grid from "@u/grid/loader.vue";
+const $store = inject("$store");
+const state = ref({});
+
+
+const stateSubscriber$ = $store
+  .select((state) => state.currentPage)
+  .subscribe((val) => {
+    state.value = val;
+  });
+
+$store.dispatch({
+  type: "data/add",
+  payload: {
+    data: [
+      {
+        _id: "tag-todo",
+        title: "ToDo",
+        color: 'blue',
+        tag: true
+      },
+      {
+        _id: "tag-doing",
+        title: "Doing",
+        color: 'cyan',
+        tag: true
+      },
+      {
+        _id: "tag-test",
+        title: "Test",
+        color: 'orange',
+        tag: true
+      },
+      {
+        _id: "tag-qa",
+        title: "Quality Assurance",
+        color: 'yellow',
+        tag: true
+      },
+      {
+        _id: "tag-done",
+        title: "Done",
+        color: 'green',
+        tag: true
+      },
+      {
+        _id: "memo-10",
+        closed: false,
+        tags: ["badezimmer"],
+        title: "Fliesen im Badezimmer",
+        ticket: true
+      },
+      {
+        _id: "memo-1",
+        closed: false,
+        tags: ["tag-todo", "badezimmer"],
+        title: "Fliesen im Badezimmer",
+        ticket: true
+      },
+      {
+        _id: "memo-2",
+        closed: false,
+        tags: ["tag-todo", "badezimmer"],
+        title: "Fliesen im döner dinierraum",
+        ticket: true
+      },
+      {
+        _id: "memo-3",
+        closed: false,
+        tags: ["tag-qa", "badezimmer"],
+        title: "döner wa",
+        ticket: true
+      },
+      {
+        _id: "memo-4",
+        closed: false,
+        tags: ["tag-test", "badezimmer"],
+        title: "bin test",
+        ticket: true
+      },
+      {
+        _id: "memo-5",
+        closed: false,
+        tags: ["tag-todo", "badezimmer"],
+        title: "bintodo",
+        ticket: true
+      },
+      {
+        _id: "memo-6",
+        closed: false,
+        tags: ["tag-doing", "mache"],
+        title: "werde gemacht",
+        ticket: true
+      },
+      {
+        _id: "memo-8",
+        closed: true,
+        tags: ["tag-todo", "badezimmer"],
+        title: "closedr",
+        ticket: true
+      },
+    ]
+  }
+})
+
+
+
+
+
+onMounted(() => {
+  $store.dispatch({
+    type: "currentPage/update",
+    payload: {
+      loading: false,
+    },
+  });
+});
+onUnmounted(() => {
+  stateSubscriber$.unsubscribe();
+  $store.dispatch({
+    type: "currentPage/update",
+    payload: {
+      loading: true,
+    },
+  });
+});
+</script>

@@ -39,9 +39,9 @@ onMounted(() => {
       page: 'app.dashboard',
       icon: 'mdi-apple-safari',
       iconActive: 'mdi-apple-safari',
+      uuid: 'dashboardTest',
       widget: {
         name: 'placeholder',
-        uuid: 'dashboardTest'
       }
     },
   });

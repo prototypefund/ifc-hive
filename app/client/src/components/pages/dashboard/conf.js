@@ -1,4 +1,4 @@
-{
+export default {
     "grid": {
         "type": "default",
         "items": "card_flat",

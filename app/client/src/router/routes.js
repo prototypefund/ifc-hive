@@ -5,7 +5,8 @@ const dashboardComp = () => import('../components/pages/dashboard/page.vue')
 const settingsComp = () => import('../components/pages/settings/page.vue')
 const journalComp = () => import('../components/pages/journal/page.vue')
 const testboardComp = () => import('../components/pages/testboard/page.vue')
-const loadConf = (page) => import(`../components/pages/${page}/conf.json`)
+const ticketboardComp = () => import('../components/pages/ticketboard/page.vue')
+const loadConf = (page) => import(`../components/pages/${page}/conf.js`)
 const confCache = {}
 export default [
     /* Root */
@@ -22,11 +23,11 @@ export default [
         beforeEnter: async (to, from) => {
             if (!confCache.dashboard) {
                 loadConf('dashboard').then(conf => {
-                    confCache.dashboard = conf
+                    confCache.dashboard = conf.default
                     store.dispatch({
                         type: 'pages/add',
                         routeName: to.name,
-                        payload: conf
+                        payload: conf.default
                     });
                 })
             }
@@ -44,7 +45,7 @@ export default [
                     store.dispatch({
                         type: 'pages/add',
                         routeName: to.name,
-                        payload: conf
+                        payload: conf.default
                     });
                 })
             }
@@ -62,7 +63,7 @@ export default [
                     store.dispatch({
                         type: 'pages/add',
                         routeName: to.name,
-                        payload: conf
+                        payload: conf.default
                     });
                 })
             }
@@ -80,7 +81,25 @@ export default [
                     store.dispatch({
                         type: 'pages/add',
                         routeName: to.name,
-                        payload: conf
+                        payload: conf.default
+                    });
+                })
+            }
+        }
+    },
+    {
+        path: '/ticketboard',
+        name: 'app.ticketboard',
+        component: ticketboardComp,
+        props: true,
+        beforeEnter: (to, from) => {
+            if (!confCache.testboard) {
+                loadConf('ticketboard').then(conf => {
+                    confCache.ticketboard = conf
+                    store.dispatch({
+                        type: 'pages/add',
+                        routeName: to.name,
+                        payload: conf.default
                     });
                 })
             }
