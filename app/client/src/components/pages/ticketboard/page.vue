@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="state" data-test-container="pages/ticketboard/page" fluid pa-0>
+  <v-container v-if="state" data-test-container="pages/ticketboard/page" fluid pa-0 ma-0>
     <h1>{{ $t('pages.app-ticketboard') }}</h1>
     <Grid v-if="state.slots" />
   </v-container>
@@ -108,11 +108,32 @@ $store.dispatch({
         title: "closedr",
         ticket: true
       },
+      {
+        _id: "memo-9",
+        closed: false,
+        tags: ["tag-todo", "badezimmer"],
+        title: "dönerTodo",
+        ticket: true
+      },
     ]
   }
 })
 
-
+$store.dispatch({
+  type: "toolbar/add",
+  payload: {
+    title: 'chartJournal',
+    page: 'app.ticketboard',
+    icon: 'mdi-chart-donut',
+    iconActive: 'mdi-chart-donut-variant',
+    uuid: 'ticketboard_chart',
+    widget: {
+      name: 'journal',
+      type: 'chart',
+      face: 'example',
+    }
+  },
+});
 
 
 

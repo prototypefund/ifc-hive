@@ -12,6 +12,7 @@
       </v-window>
       <v-window-item v-else v-for="(item, index) in state.entries" :key="item">
         <Detail v-if="item.type === 'detail'" :props="item.props" uuid="quickList" :docUUID="item.uuid" />
+        <Ticket v-if="item.type === 'ticket'" :props="item.props" uuid="quickList" :docUUID="item.uuid" />
       </v-window-item>
     </v-window>
   </v-card>
@@ -19,6 +20,7 @@
 <script setup>
 import { inject, ref, onMounted, onUnmounted, computed } from "vue";
 import Detail from './types/detail.vue'
+import Ticket from './types/ticket.vue'
 import noResultsYet from '@t/noResultsYet.vue'
 const $store = inject("$store");
 const state = ref({});

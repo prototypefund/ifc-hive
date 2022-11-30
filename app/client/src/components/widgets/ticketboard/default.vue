@@ -1,7 +1,7 @@
 // TODO rework this mess
 <template>
-  <v-container v-if="(state && props.uuid && boardCount > 0)" data-test-container="widgets/ticketboard/default"
-    :data-test-container-uuid="props.uuid">
+  <v-container v-if="(state && props.uuid && boardCount > 0)" fluid pa-0
+    data-test-container="widgets/ticketboard/default" :data-test-container-uuid="props.uuid">
     <div class="ticketContainer">
       <v-table class="ticketTable" v-if="tickets" :style="{ width: boardCount * 380 + 'px' }">
         <tbody>
@@ -32,6 +32,7 @@ import { splitIdentifier, filterData } from "./helper.js"
 const $store = inject("$store");
 const state = ref({});
 const data = ref({});
+const viewPortHeight = shallowRef(0)
 const boardCount = shallowRef({});
 const tickets = ref({
   all: {},
@@ -87,8 +88,6 @@ const stateSubscriber$ = $store
     makeTickets(data.value)
   });
 
-
-
 const handleGenericsExclude = function () {
   if (state.value.filter) {
     const newState = JSON.parse(JSON.stringify(state.value))
@@ -133,15 +132,10 @@ onUnmounted(() => {
 </script>
 <style lang="css" scoped>
 .ticketContainer {
-  overflow-x: auto
+  overflow-x: auto;
 }
 
 .ticketTable {
   max-width: 20000px !important;
-  padding-bottom: 50px
-}
-
-.ticketEndlessRow td>.v-card {
-  height: 100%;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <v-app v-if="(page && page.uuid) || isInTest">
     <!-- Global Toolbar -->
-    <v-app-bar density="compact" flat app color="grey-lighten-2" :class="{ appBarRel: isInTest }">
+    <v-app-bar density="compact" flat app color="grey-lighten-2" :class="{ appBarRel: isInTest }" ref="appAppbar">
       <!-- Breadcrumb -->
       <v-app-bar-title>
         <router-link :to="{ path: '/' }">
@@ -21,7 +21,7 @@
 
     <!-- Navigation Drawer -->
     <NavigationSideBar v-if="!isInTest" :nav-items="navItems" />
-    <ToolBar :class="{ appBarRel: isInTest }" />
+    <ToolBar :class="{ appBarRel: isInTest }" ref="appToolbar" />
     <!-- Main content -->
     <v-main>
 
@@ -73,6 +73,8 @@ export default {
   data: () => ({
     page: false,
     editMode: false,
+    appBarHeight: false,
+    toolBarHeight: false,
     navItems: [
       {
         icon: "mdi-home",
@@ -139,8 +141,27 @@ export default {
         }
       },
     });
+    window.addEventListener('resize', this.setHeight, { passive: true })
+    // TODO find a better way instead of this ugly timeOutBullshit
+    setTimeout(() => this.setHeight(), 500)
   },
   methods: {
+    setHeight: async function () {
+      await this.$nextTick(function () {
+        const appBarHeight = this.$refs.appAppbar.height || 0
+        const toolBarHeight = this.$refs.appToolbar.height || 0
+        const topBarHeight = appBarHeight + toolBarHeight
+        const viewPortHeight = window.innerHeight - topBarHeight
+        this.$store.dispatch({
+          type: "ui/update",
+          payload: {
+            topBarHeight,
+            viewPortHeight
+          },
+        });
+      })
+
+    },
     changeEditMode: function () {
       this.$store.dispatch({
         type: "ui/update",

@@ -81,19 +81,19 @@ export default {
                     this.activateTool(val)
                 }
             });
-        this.setHeight()
-        window.addEventListener('resize', this.setHeight, { passive: true })
+        this.viewPortSuibscriber$ = this.$store
+            .select((state) => state.ui.viewPortHeight)
+            .subscribe((val) => {
+                this.viewPortHeight = val
+            });
     },
     destroyed() {
         this.stateSubscriber$.unsubscribe()
         this.routeSubscriber$.unsubscribe()
         this.currentToolSubscriber$.unsubscribe()
-        window.removeEventListener('resize', this.setHeight, { passive: true })
+        this.viewPortSuibscriber$.unsubscribe()
     },
     methods: {
-        setHeight() {
-            this.viewPortHeight = window.innerHeight - 96
-        },
         activateTool(name) {
             if (name) {
                 this.currentComponent = defineAsyncComponent(() => {

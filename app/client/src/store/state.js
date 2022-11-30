@@ -13,6 +13,8 @@ export const applicationState = {
         currentTool: false,
         // indicates if the widget toolbar and other ui edit stuff is displayed
         editMode: false,
+        viewPortHeight: false,
+        topBarHeight: false
     },
     // will contain tools. Logic behind that is the same as with pages
     toolbar: {},
