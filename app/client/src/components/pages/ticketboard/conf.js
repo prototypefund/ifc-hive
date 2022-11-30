@@ -14,7 +14,6 @@ export default {
                 props: { // and object which you can use to override the widgets default config in the context of this page
                     title: 'Ticketboard',
                     filter: {
-                        identifier: 'ticket:true',
                         excluded: [],
                         custom: [
                             {

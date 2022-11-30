@@ -1,28 +1,34 @@
 // TODO rework this mess
 <template>
-  <v-container v-if="(state && props.uuid && boardCount > 0)" class="ticketContainer"
-    data-test-container="widgets/ticketboard/default" :style="{ width: boardCount * 500 + 'px' }"
+  <v-container v-if="(state && props.uuid && boardCount > 0)" data-test-container="widgets/ticketboard/default"
     :data-test-container-uuid="props.uuid">
-    <v-table class="ticketTable" v-if="tickets">
-      <tbody>
-        <tr>
-          <td width="300" v-if="tickets.generics.open">
-            <ticket-item :column="tickets.generics.open" :data="data" />
-          </td>
-          <td width="300" v-for="(column, key) in tickets.custom" :key="key">
-            <ticket-item :column="column" :data="data" />
-          </td>
-          <td width="300" v-if="tickets.generics.closed">
-            <ticket-item :column="tickets.generics.closed" :data="data" />
-          </td>
-        </tr>
-      </tbody>
-    </v-table>
+    <div class="ticketContainer">
+      <v-table class="ticketTable" v-if="tickets" :style="{ width: boardCount * 380 + 'px' }">
+        <tbody>
+          <tr>
+            <td width="300" v-if="tickets.generics.open">
+              <ticket-item :column="tickets.generics.open" :data="data" />
+            </td>
+            <td width="300" v-for="(column, key) in tickets.custom" :key="key">
+              <ticket-item :column="column" :data="data" />
+            </td>
+            <td width="300" v-if="tickets.generics.closed">
+              <ticket-item :column="tickets.generics.closed" :data="data" />
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+    </div>
+
+    <pre>
+    {{ tickets }}
+    </pre>
   </v-container>
 </template>
 <script setup>
 import { inject, ref, shallowRef, onMounted, onUnmounted, computed } from "vue";
 import ticketItem from "@t/items/ticketCard.vue"
+import { splitIdentifier, filterData } from "./helper.js"
 const $store = inject("$store");
 const state = ref({});
 const data = ref({});
@@ -43,89 +49,15 @@ const props = defineProps({
     required: true,
   },
 });
-const splitIdentifier = function (identifier) {
-  if (identifier.indexOf(';') > -1) {
-    // multiple fields not implemented yet
-  }
-  const identifierKeyVal = identifier.split(':')
-  const key = identifierKeyVal[0]
-  const val = identifierKeyVal[1]
-  return { key, val }
-}
-const filterData = function (id, exclude, data) {
-  // id[0] contains the prop key and 1 the prop value
-  let obj = false
-  const tickets = {}
-  // TODO There should be a better way to do this
-  // TODO implement exclude
-  for (var key in data) {
-    if (data.hasOwnProperty(key)) {
-      //data entry is now in obj
-      obj = data[key]
-      let dataItemExcluded = false
-      if (exclude && exclude.length > 0) {
-        exclude.forEach(identifier => {
-          let id = splitIdentifier(identifier)
-          if (obj.hasOwnProperty(id.key)) {
-            // workaround for the boolean/string true/false values which always arrive here as string but might be boolean in data obj
-            let isBoolean = ((id.val === 'true' || id.val === true) || (id.val === 'false' || id.val === false));
-            if (isBoolean) {
-              let isTrueSet = (id.val === 'true');
-              let isFalseSet = (id.val === 'false');
-              if ((isTrueSet && (obj[id.key] === true || obj[id.key] === 'true')) || (isFalseSet && (obj[id.key] === false || obj[id.key] === 'false'))) {
-                dataItemExcluded = true
-              }
-            } else {
-              if (typeof (obj[id.key]) === 'object') {
-                if (obj[id.key].indexOf(id.val) > -1) {
-                  dataItemExcluded = true
-                }
-              }
-              if (typeof (obj[id.key]) === 'string') {
-                if (obj[id.key] == id.val) {
-                  dataItemExcluded = true
-                }
-              }
-            }
-          }
-        })
 
-      }
-      if (!dataItemExcluded && obj.hasOwnProperty(id.key)) {
-        // workaround for the boolean/string true/false values which always arrive here as string but might be boolean in data obj
-        let isBoolean = ((id.val === 'true' || id.val === true) || (id.val === 'false' || id.val === false));
-        if (isBoolean) {
-          let isTrueSet = (id.val === 'true');
-          let isFalseSet = (id.val === 'false');
-          if ((isTrueSet && (obj[id.key] === true || obj[id.key] === 'true')) || (isFalseSet && (obj[id.key] === false || obj[id.key] === 'false'))) {
-            tickets[key] = obj
-          }
-        } else {
-          if (typeof (obj[id.key]) === 'object') {
-            if (obj[id.key].indexOf(id.val) > -1) {
-              tickets[key] = obj
-            }
-          }
-          if (typeof (obj[id.key]) === 'string') {
-            if (obj[id.key] == id.val) {
-              tickets[key] = obj
-            }
-          }
-        }
-      }
-    }
-  }
-
-  return tickets
-}
 const makeTickets = function (data) {
   const filter = state.value.filter
-  if (filter && filter.identifier) {
-    tickets.value.all = filterData(splitIdentifier(filter.identifier), filter.excluded, data)
+  if (filter) {
+    //tickets.value.all = filterData(splitIdentifier(filter.identifier), filter.excluded, data)
     filter.generics.forEach(gen => {
       if (gen.title) {
         tickets.value.generics[gen.title] = {}
-        tickets.value.generics[gen.title].tickets = filterData(splitIdentifier(gen.identifier), gen.excluded, tickets.value.all)
+        tickets.value.generics[gen.title].tickets = filterData(splitIdentifier(gen.identifier), gen.excluded, data)
         tickets.value.generics[gen.title].title = gen.title
 
       }
@@ -134,7 +66,7 @@ const makeTickets = function (data) {
       const id = splitIdentifier(cus.identifier)
       if (data[id.val] && data[id.val].title) {
         tickets.value.custom[id.val] = {}
-        tickets.value.custom[id.val].tickets = filterData(id, cus.excluded, tickets.value.all)
+        tickets.value.custom[id.val].tickets = filterData(id, cus.excluded, data)
         tickets.value.custom[id.val].title = data[id.val].title
         tickets.value.custom[id.val].color = data[id.val].color
       }
@@ -201,18 +133,12 @@ onUnmounted(() => {
 </script>
 <style lang="css" scoped>
 .ticketContainer {
-  max-width: 20000px !important;
+  overflow-x: auto
 }
 
 .ticketTable {
   max-width: 20000px !important;
-  width: 100% !important;
   padding-bottom: 50px
-}
-
-.ticketEndlessRow td {
-  width: 300px !important;
-  max-width: 500px !important;
 }
 
 .ticketEndlessRow td>.v-card {
