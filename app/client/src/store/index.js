@@ -95,7 +95,9 @@ const applicationReducers = {
                                         }
                                     })*/
                                     // items[item._id] = data[item._id]
-                                    items[item._id] = item
+                                    if (!action.dummy) {
+                                        items[item._id] = item
+                                    }
                                     /*items[item._id]._updated = {
                                         item: JSON.stringify(item),
                                         updatedAt: new Date()

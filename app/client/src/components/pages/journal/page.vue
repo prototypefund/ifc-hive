@@ -32,6 +32,7 @@ onMounted(() => {
   });
   $store.dispatch({
     type: "data/add",
+    dummy: true,
     payload: {
       data: [
         {

@@ -20,6 +20,7 @@ const stateSubscriber$ = $store
 
 $store.dispatch({
   type: "data/add",
+  dummy: true,
   payload: {
     data: [
       {
