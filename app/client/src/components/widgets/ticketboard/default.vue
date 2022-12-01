@@ -1,30 +1,67 @@
 // TODO rework this mess
 <template>
-  <v-container v-if="(state && props.uuid && boardCount > 0)" fluid pa-0
-    data-test-container="widgets/ticketboard/default" :data-test-container-uuid="props.uuid">
+  <v-container
+    v-if="state && props.uuid && boardCount > 0"
+    fluid
+    pa-0
+    data-test-container="widgets/ticketboard/default"
+    :data-test-container-uuid="props.uuid"
+  >
     <div class="ticketContainer">
-      <v-table class="ticketTable" v-if="tickets" :style="{ width: boardCount * 300 + 'px' }">
+      <v-table
+        class="ticketTable"
+        v-if="tickets"
+        :style="{ width: boardCount * 300 + 'px' }"
+      >
         <tbody>
           <tr>
             <td width="300" v-if="tickets.generics.open">
-              <ticket-item :identifiers="boardIdentifiers" :sorting="state.filter.sorting.open" :uuid="props.uuid"
-                boardId="open" :column="tickets.generics.open" :data="data" />
+              <ticket-item
+                :identifiers="boardIdentifiers"
+                :sorting="state.filter.sorting.open"
+                :uuid="props.uuid"
+                boardId="open"
+                :column="tickets.generics.open"
+                :data="data"
+              />
             </td>
-            <draggable :list="tickets.sorting.boards" item-key="id" class="list-group" ghost-class="ghost"
-              @start="dragging = true" handle=".v-card>.v-card-item>.v-card-item__prepend"
-              :group="{ name: 'ticketBoardSort', pull: ['ticketBoardSort'], put: ['ticketBoardSort'] }"
-              @end="saveSorting">
+            <draggable
+              :list="tickets.sorting.boards"
+              item-key="id"
+              class="list-group"
+              ghost-class="ghost"
+              @start="dragging = true"
+              handle=".v-card>.v-card-item>.v-card-item__prepend"
+              :group="{
+                name: 'ticketBoardSort',
+                pull: ['ticketBoardSort'],
+                put: ['ticketBoardSort'],
+              }"
+              @end="saveSorting"
+            >
               <template #item="{ element }">
                 <td width="300">
-                  <ticket-item :identifiers="boardIdentifiers" :uuid="props.uuid" :boardId="element"
-                    :sorting="state.filter.sorting[element]" :column="tickets.custom[element]" :data="data" />
+                  <ticket-item
+                    :identifiers="boardIdentifiers"
+                    :uuid="props.uuid"
+                    :boardId="element"
+                    :sorting="state.filter.sorting[element]"
+                    :column="tickets.custom[element]"
+                    :data="data"
+                  />
                 </td>
               </template>
             </draggable>
 
             <td width="300" v-if="tickets.generics.closed">
-              <ticket-item :identifiers="boardIdentifiers" :uuid="props.uuid" boardId="closed"
-                :sorting="state.filter.sorting.closed" :column="tickets.generics.closed" :data="data" />
+              <ticket-item
+                :identifiers="boardIdentifiers"
+                :uuid="props.uuid"
+                boardId="closed"
+                :sorting="state.filter.sorting.closed"
+                :column="tickets.generics.closed"
+                :data="data"
+              />
             </td>
           </tr>
         </tbody>
@@ -35,10 +72,10 @@
 </template>
 <script setup>
 import { inject, ref, shallowRef, onMounted, onUnmounted } from "vue";
-import draggable from 'vuedraggable'
-import ticketItem from "./items/ticketCard.vue"
-import { splitIdentifier, filterData } from "./lib/helper.js"
-import { difference } from "ramda"
+import draggable from "vuedraggable";
+import ticketItem from "./items/ticketCard.vue";
+import { splitIdentifier, filterData } from "./lib/helper.js";
+import { difference } from "ramda";
 const $store = inject("$store");
 const state = ref({});
 const data = ref({});
@@ -50,10 +87,10 @@ const tickets = ref({
   generics: {},
   custom: {},
   sorting: {
-    boards: []
-  }
-})
-const subscriber$ = []
+    boards: [],
+  },
+});
+const subscriber$ = [];
 const props = defineProps({
   props: {
     type: Object,
@@ -67,93 +104,125 @@ const props = defineProps({
 });
 
 const makeTickets = function (data) {
-  console.log("makeTickets called")
-  const filter = state.value.filter
+  console.log("makeTickets called");
+  const filter = state.value.filter;
   if (filter) {
     if (filter.sorting) {
       // get the current sorting object if there is any. If so, clone it
-      tickets.value.sorting = JSON.parse(JSON.stringify(filter.sorting))
+      tickets.value.sorting = JSON.parse(JSON.stringify(filter.sorting));
     } else {
-      tickets.value.sorting.boards = []
+      tickets.value.sorting.boards = [];
     }
-    filter.generics.forEach(gen => {
+    filter.generics.forEach((gen) => {
       if (gen.title) {
         // create ticket object for generic open/closed, no column sorting here
-        tickets.value.generics[gen.title] = {}
-        tickets.value.generics[gen.title].tickets = filterData(splitIdentifier(gen.identifier), gen.excluded, data)
-        tickets.value.generics[gen.title].title = gen.title
-        tickets.value.generics[gen.title].id = gen.title
-        tickets.value.generics[gen.title].color = gen.color || 'grey'
+        tickets.value.generics[gen.title] = {};
+        tickets.value.generics[gen.title].tickets = filterData(
+          splitIdentifier(gen.identifier),
+          gen.excluded,
+          data
+        );
+        tickets.value.generics[gen.title].title = gen.title;
+        tickets.value.generics[gen.title].id = gen.title;
+        tickets.value.generics[gen.title].color = gen.color || "grey";
         if (tickets.value.sorting[gen.title]) {
           // if we have no sorting store, take the current order of the tickets as sorting
-          if (tickets.value.sorting[gen.title].length > tickets.value.generics[gen.title].tickets.length) {
+          if (
+            tickets.value.sorting[gen.title].length >
+            tickets.value.generics[gen.title].tickets.length
+          ) {
             // we have items in sorting which dont exist in ticket selection
-            console.warn('we have items in sorting which dont exist in ticket selection')
+            console.warn("we have items in sorting which dont exist in ticket selection");
+            const itemsToRemove = difference(
+              tickets.value.sorting[gen.title],
+              tickets.value.generics[gen.title].tickets
+            );
+            itemsToRemove.forEach((itemUUID) => {
+              tickets.value.sorting[gen.title].splice(
+                tickets.value.sorting[gen.title].indexOf(itemUUID),
+                1
+              );
+            });
           }
-          if (tickets.value.generics[gen.title].tickets.length > tickets.value.sorting[gen.title].length) {
+          if (
+            tickets.value.generics[gen.title].tickets.length >
+            tickets.value.sorting[gen.title].length
+          ) {
             // we have new items which are not in sorting
-            const itemsToAdd = difference(tickets.value.generics[gen.title].tickets, tickets.value.sorting[gen.title])
-            itemsToAdd.forEach(itemUUID => {
-              tickets.value.sorting[gen.title].unshift(itemUUID)
-            })
+            const itemsToAdd = difference(
+              tickets.value.generics[gen.title].tickets,
+              tickets.value.sorting[gen.title]
+            );
+            itemsToAdd.forEach((itemUUID) => {
+              tickets.value.sorting[gen.title].unshift(itemUUID);
+            });
           }
         } else {
           // if we have no sorting store, take the current order of the tickets as sorting
-          tickets.value.sorting[gen.title] = tickets.value.generics[gen.title].tickets
+          tickets.value.sorting[gen.title] = tickets.value.generics[gen.title].tickets;
         }
-
       }
-    })
-    filter.custom.forEach(cus => {
-      const id = splitIdentifier(cus.identifier)
+    });
+    filter.custom.forEach((cus) => {
+      const id = splitIdentifier(cus.identifier);
       if (data[id.val] && data[id.val].title) {
         // create ticket object for custom boards. Make them sortable
-        tickets.value.custom[id.val] = {}
-        tickets.value.custom[id.val].tickets = filterData(id, cus.excluded, data)
-        tickets.value.custom[id.val].title = data[id.val].title
-        tickets.value.custom[id.val].id = data[id.val]._id
-        tickets.value.custom[id.val].color = data[id.val].color
+        tickets.value.custom[id.val] = {};
+        tickets.value.custom[id.val].tickets = filterData(id, cus.excluded, data);
+        tickets.value.custom[id.val].title = data[id.val].title;
+        tickets.value.custom[id.val].id = data[id.val]._id;
+        tickets.value.custom[id.val].color = data[id.val].color;
         // create sort object for all custom tickets
         if (tickets.value.sorting[id.val]) {
-          if (tickets.value.sorting[id.val].length > tickets.value.custom[id.val].tickets.length) {
+          if (
+            tickets.value.sorting[id.val].length >
+            tickets.value.custom[id.val].tickets.length
+          ) {
             // we have items in sorting which dont exist in ticket selection
-            console.warn('we have items in sorting which dont exist in ticket selection')
+            console.warn("we have items in sorting which dont exist in ticket selection");
           }
-          if (tickets.value.custom[id.val].tickets.length > tickets.value.sorting[id.val].length) {
+          if (
+            tickets.value.custom[id.val].tickets.length >
+            tickets.value.sorting[id.val].length
+          ) {
             // we have new items which are not in sorting
-            const itemsToAdd = difference(tickets.value.custom[id.val].tickets, tickets.value.sorting[id.val])
-            itemsToAdd.forEach(itemUUID => {
-              tickets.value.sorting[id.val].unshift(itemUUID)
-            })
+            const itemsToAdd = difference(
+              tickets.value.custom[id.val].tickets,
+              tickets.value.sorting[id.val]
+            );
+            itemsToAdd.forEach((itemUUID) => {
+              tickets.value.sorting[id.val].unshift(itemUUID);
+            });
           }
         } else {
-          tickets.value.sorting[id.val] = tickets.value.custom[id.val].tickets
+          tickets.value.sorting[id.val] = tickets.value.custom[id.val].tickets;
         }
 
         // create sort object for all custom boardsdlner
         if (tickets.value.sorting.boards.indexOf(id.val) === -1) {
-          tickets.value.sorting.boards.push(id.val)
-          boardIdentifiers.value.push(id.val)
+          tickets.value.sorting.boards.push(id.val);
+          boardIdentifiers.value.push(id.val);
         }
-
       }
-    })
+    });
     $store.dispatch({
       type: "widgets/update",
       uuid: props.uuid,
       payload: {
         filter: {
-          sorting: JSON.parse(JSON.stringify(tickets.value.sorting))
-        }
+          sorting: JSON.parse(JSON.stringify(tickets.value.sorting)),
+        },
       },
     });
   }
-}
-subscriber$.push($store
-  .select((state) => state.widgets[props.uuid])
-  .subscribe((val) => {
-    state.value = val;
-  }))
+};
+subscriber$.push(
+  $store
+    .select((state) => state.widgets[props.uuid])
+    .subscribe((val) => {
+      state.value = val;
+    })
+);
 const saveSorting = function () {
   // TODO maybe move the sort store to currentPage store instead of widget?
   $store.dispatch({
@@ -161,57 +230,59 @@ const saveSorting = function () {
     uuid: props.uuid,
     payload: {
       filter: {
-        sorting: { boards: JSON.parse(JSON.stringify(tickets.value.sorting.boards)) }
-      }
+        sorting: { boards: JSON.parse(JSON.stringify(tickets.value.sorting.boards)) },
+      },
     },
   });
-  dragging.value = false
-}
+  dragging.value = false;
+};
 const handleGenericsExclude = function () {
   if (state.value.filter) {
-    const newState = JSON.parse(JSON.stringify(state.value))
-    const customIdentifiers = []
+    const newState = JSON.parse(JSON.stringify(state.value));
+    const customIdentifiers = [];
     if (newState.filter.custom && newState.filter.custom.length > 0) {
-      newState.filter.custom.forEach(ticketCol => {
-        customIdentifiers.push(ticketCol.identifier)
-      })
+      newState.filter.custom.forEach((ticketCol) => {
+        customIdentifiers.push(ticketCol.identifier);
+      });
     }
     if (newState.filter.generics && newState.filter.generics.length > 0) {
-      newState.filter.generics.forEach(genericTicketCol => {
+      newState.filter.generics.forEach((genericTicketCol) => {
         if (!genericTicketCol.excluded) {
-          genericTicketCol.excluded = []
+          genericTicketCol.excluded = [];
         }
-        customIdentifiers.forEach(identifier => {
+        customIdentifiers.forEach((identifier) => {
           if (genericTicketCol.excluded.indexOf(identifier) === -1) {
-            genericTicketCol.excluded.push(identifier)
+            genericTicketCol.excluded.push(identifier);
           }
-        })
-      })
+        });
+      });
     }
-    boardCount.value = newState.filter.generics.length + newState.filter.custom.length
+    boardCount.value = newState.filter.generics.length + newState.filter.custom.length;
     $store.dispatch({
       type: "widgets/update",
       uuid: props.uuid,
       payload: {
         filter: {
-          generics: newState.filter.generics
-        }
+          generics: newState.filter.generics,
+        },
       },
     });
   }
-}
+};
 
 onMounted(() => {
-  handleGenericsExclude()
-  subscriber$.push($store
-    .select((state) => state.data)
-    .subscribe((val) => {
-      data.value = val
-      makeTickets(val)
-    }))
+  handleGenericsExclude();
+  subscriber$.push(
+    $store
+      .select((state) => state.data)
+      .subscribe((val) => {
+        data.value = val;
+        makeTickets(val);
+      })
+  );
 });
 onUnmounted(() => {
-  $store.helper.unSubscribeAll(subscriber$)
+  $store.helper.unSubscribeAll(subscriber$);
 });
 </script>
 <style lang="css" scoped>
