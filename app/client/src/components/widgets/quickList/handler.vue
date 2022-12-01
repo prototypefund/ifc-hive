@@ -60,7 +60,8 @@ const handleQuickListItem = () => {
     if (entryIndex > -1) {
       if (props.tabType != state.value.entries[entryIndex].type) {
         // if display types vary we may create a second tab for the same uuid
-        debugger
+        // TODO IMPLEMENT THIS
+        console.error("not implemented yet. display types vary we have to create a second tab for the same uuid")
       } else {
         entryIndex = state.value.entryIndex
       }

@@ -7,6 +7,9 @@ export const splitIdentifier = (identifier) => {
     const val = identifierKeyVal[1]
     return { key, val }
 }
+export const ticketFetch = function () {
+
+}
 export const filterData = function (id, exclude, data) {
     // id[0] contains the prop key and 1 the prop value
     let obj = false

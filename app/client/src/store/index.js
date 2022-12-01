@@ -9,6 +9,7 @@ import getEnvVariable from '../lib/getEnvVariable'
 import { mergeDeepRight, clone } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
 import { applicationState, storePatterns } from './state'
+import helper from './helper.js'
 /*
  * Apply different extensions depending on the environment
  */
@@ -84,40 +85,41 @@ const applicationReducers = {
                         action.payload.data.forEach(item => {
                             if (item._id) {
                                 if (data[item._id]) {
+                                    // TODO either put a configurable merge dialogue or remove this section
                                     // apparently we received an update for an existing data, so let's send a notification
-                                    store.dispatch({
+                                    /*store.dispatch({
                                         type: 'notifications/add',
                                         payload: {
                                             type: 'itemUpdate',
                                             uuid: item._id
                                         }
-                                    })
-                                    items[item._id] = data[item._id]
-                                    items[item._id]._updated = {
+                                    })*/
+                                    // items[item._id] = data[item._id]
+                                    items[item._id] = item
+                                    /*items[item._id]._updated = {
                                         item: JSON.stringify(item),
                                         updatedAt: new Date()
-                                    }
+                                    }*/
                                 } else {
                                     // its new data
                                     items[item._id] = item
                                 }
                             }
                         })
-                    } else {
-                        // something went wrong so lets not do anything
-                        return state
+                        return {
+                            ...state, ...items
+                        }
                     }
-                    return {
-                        ...state, ...items
-                    }
+                    return state
+
                 case 'data/update':
-                    debugger
+                    console.error("data/update not implemented")
                     return state
                 case 'data/delete':
-                    debugger
+                    console.error("data/delete not implemented")
                     return state
                 case 'data/clear':
-                    debugger
+                    console.error("data/clear not implemented")
                     return state
                 default:
                     return state
@@ -367,7 +369,7 @@ const applicationReducers = {
                         // if we had the last current page already, just merge their states based on the latest version coming from currentPage
                         newPage[action.stateName] = mergeDeepRight(state[action.stateName], action.payload)
                     } else {
-                        debugger
+                        console.error("pages/update no state for query")
                     }
                     return mergeDeepRight(state, newPage)
                 default:
@@ -453,5 +455,6 @@ if (widgetsLookup === false) {
         widgetsLookup = val
     })
 }
-
+// add helper functions to store
+store.helper = helper
 export default store

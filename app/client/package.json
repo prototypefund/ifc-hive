@@ -75,7 +75,7 @@
     "vue-router": "^4.x",
     "vue3-apexcharts": "^1.x",
     "vue3-markdown-it": "^1.x",
-    "vuedraggable": "^2.x",
+    "vuedraggable": "^4.1.0",
     "vuetify": "^3.x",
     "webfontloader": "^1.x"
   },
