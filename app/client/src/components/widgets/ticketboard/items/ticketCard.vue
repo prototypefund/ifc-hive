@@ -19,7 +19,7 @@
                         <v-chip v-for="tag in data[element].tags"
                             :color="(data[tag] ? data[tag].color || 'grey' : 'grey')">{{ tag }}</v-chip>
                     </v-card-subtitle>
-                    <v-card-text hidden>
+                    <v-card-text>
                         <pre>{{ data[element] }}</pre>
                     </v-card-text>
                 </v-card>
