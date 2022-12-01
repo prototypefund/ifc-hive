@@ -85,7 +85,6 @@ const makeTickets = function (data) {
         if (!tickets.value.sorting[gen.title]) {
           // if we have no sorting store, take the current order of the tickets as sorting
           tickets.value.sorting[gen.title] = tickets.value.generics[gen.title].tickets
-          boardIdentifiers.value.push(gen.title)
         }
         tickets.value.sorting[gen.title] = tickets.value.sorting[gen.title] ? tickets.value.sorting[gen.title] : tickets.value.generics[gen.title].tickets
       }
@@ -196,5 +195,9 @@ onUnmounted(() => {
 
 .ticketTable {
   max-width: 20000px !important;
+}
+
+.ticketTable .v-table__wrapper {
+  overflow: hidden !important;
 }
 </style>

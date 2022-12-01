@@ -46,14 +46,20 @@ const sorting = computed({
             const itemsToUpdate = difference(val, props.sorting)
             data = []
             itemsToUpdate.forEach(dataUuid => {
-                props.identifiers.forEach(boardId => {
-                    if (props.data[dataUuid].tags) {
+                const isOpenClose = props.boardId === 'open' || props.boardId === 'closed'
+                const dataItem = props.data[dataUuid]
+                let closed = false
+                if (isOpenClose) {
+                    closed = props.boardId === 'closed'
+                }
+                if (dataItem.tags) {
+                    const dataIndex = data.push(JSON.parse(JSON.stringify(dataItem))) - 1
+                    props.identifiers.forEach(boardId => {
                         // our data item has tags, so everything went well here
                         const tagIndex = props.data[dataUuid].tags.indexOf(boardId)
                         if (tagIndex >= 0) {
                             // we found the tag which is the old ticket state, now lets clone it from pops and add it to the dataUpdate object,
-                            // remove it and add the new one from this board
-                            const dataIndex = data.push(JSON.parse(JSON.stringify(props.data[dataUuid]))) - 1
+                            // remove it and add the new one from this board                            
                             data[dataIndex].tags.splice(tagIndex, 1)
                             // make sure we close or open them. This is hardcoded for now
                             // todo maybe implement this configurable via the generics config 
@@ -62,12 +68,14 @@ const sorting = computed({
                             } else if (props.boardId === 'closed') {
                                 data[dataIndex].closed = true
                             }
-                            data[dataIndex].tags.push(props.boardId)
                         }
-                    } else {
-                        console.error("how can we have a ticket state change without a tag field?")
+                    })
+                    if (!isOpenClose) {
+                        data[dataIndex].tags.push(props.boardId)
                     }
-                })
+                } else {
+                    console.error("how can we have a ticket state change without a tag field?")
+                }
             })
         } else {
 
