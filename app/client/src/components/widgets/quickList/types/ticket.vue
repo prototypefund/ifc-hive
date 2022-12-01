@@ -4,7 +4,7 @@
       <div v-if="!item.alert">
         <h1 style="line-height: 1.4em">{{ item.title }}</h1>
       </div>
-
+      <v-chip v-for="tag in item.tags" :color="'grey'">{{ tag }}</v-chip>
       <div v-if="item.alert">
         <v-alert :color="item.alert.color">
           <h1>{{ item.alert.content }}</h1>
@@ -39,13 +39,13 @@ const props = defineProps({
   },
 });
 const item = ref({});
-const dateItemSubscriber$ = $store
+const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
     item.value = val;
   });
 onMounted(() => { });
 onUnmounted(() => {
-  dateItemSubscriber$.unsubscribe();
+  dataItemSubscriber$.unsubscribe();
 });
 </script>

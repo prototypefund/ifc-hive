@@ -30,13 +30,15 @@
         </tbody>
       </v-table>
     </div>
+    {{ tickets.sorting }}
   </v-container>
 </template>
 <script setup>
-import { inject, ref, shallowRef, onMounted, onUnmounted, computed } from "vue";
+import { inject, ref, shallowRef, onMounted, onUnmounted } from "vue";
 import draggable from 'vuedraggable'
-import ticketItem from ".//items/ticketCard.vue"
+import ticketItem from "./items/ticketCard.vue"
 import { splitIdentifier, filterData } from "./lib/helper.js"
+import { difference } from "ramda"
 const $store = inject("$store");
 const state = ref({});
 const data = ref({});
@@ -82,11 +84,24 @@ const makeTickets = function (data) {
         tickets.value.generics[gen.title].title = gen.title
         tickets.value.generics[gen.title].id = gen.title
         tickets.value.generics[gen.title].color = gen.color || 'grey'
-        if (!tickets.value.sorting[gen.title]) {
+        if (tickets.value.sorting[gen.title]) {
+          // if we have no sorting store, take the current order of the tickets as sorting
+          if (tickets.value.sorting[gen.title].length > tickets.value.generics[gen.title].tickets.length) {
+            // we have items in sorting which dont exist in ticket selection
+            console.warn('we have items in sorting which dont exist in ticket selection')
+          }
+          if (tickets.value.generics[gen.title].tickets.length > tickets.value.sorting[gen.title].length) {
+            // we have new items which are not in sorting
+            const itemsToAdd = difference(tickets.value.generics[gen.title].tickets, tickets.value.sorting[gen.title])
+            itemsToAdd.forEach(itemUUID => {
+              tickets.value.sorting[gen.title].unshift(itemUUID)
+            })
+          }
+        } else {
           // if we have no sorting store, take the current order of the tickets as sorting
           tickets.value.sorting[gen.title] = tickets.value.generics[gen.title].tickets
         }
-        tickets.value.sorting[gen.title] = tickets.value.sorting[gen.title] ? tickets.value.sorting[gen.title] : tickets.value.generics[gen.title].tickets
+
       }
     })
     filter.custom.forEach(cus => {
@@ -99,7 +114,22 @@ const makeTickets = function (data) {
         tickets.value.custom[id.val].id = data[id.val]._id
         tickets.value.custom[id.val].color = data[id.val].color
         // create sort object for all custom tickets
-        tickets.value.sorting[id.val] = tickets.value.sorting[id.val] ? tickets.value.sorting[id.val] : tickets.value.custom[id.val].tickets
+        if (tickets.value.sorting[id.val]) {
+          if (tickets.value.sorting[id.val].length > tickets.value.custom[id.val].tickets.length) {
+            // we have items in sorting which dont exist in ticket selection
+            console.warn('we have items in sorting which dont exist in ticket selection')
+          }
+          if (tickets.value.custom[id.val].tickets.length > tickets.value.sorting[id.val].length) {
+            // we have new items which are not in sorting
+            const itemsToAdd = difference(tickets.value.custom[id.val].tickets, tickets.value.sorting[id.val])
+            itemsToAdd.forEach(itemUUID => {
+              tickets.value.sorting[id.val].unshift(itemUUID)
+            })
+          }
+        } else {
+          tickets.value.sorting[id.val] = tickets.value.custom[id.val].tickets
+        }
+
         // create sort object for all custom boardsdlner
         if (tickets.value.sorting.boards.indexOf(id.val) === -1) {
           tickets.value.sorting.boards.push(id.val)
