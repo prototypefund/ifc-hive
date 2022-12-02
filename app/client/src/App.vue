@@ -1,20 +1,35 @@
 <template>
   <v-app v-if="(page && page.uuid) || isInTest">
     <!-- Global Toolbar -->
-    <v-app-bar density="compact" flat app color="grey-lighten-2" :class="{ appBarRel: isInTest }" ref="appAppbar">
+    <v-app-bar
+      density="compact"
+      flat
+      app
+      color="grey-lighten-2"
+      :class="{ appBarRel: isInTest }"
+      ref="appAppbar"
+    >
       <!-- Breadcrumb -->
       <v-app-bar-title>
-        <router-link :to="{ path: '/' }">
-          Journal
-        </router-link>
+        <router-link :to="{ path: '/' }"> Journal </router-link>
         <v-icon color="grey" xsmall>mdi-chevron-right</v-icon>
         {{ $t("pages." + page.uuid) }}
       </v-app-bar-title>
       <v-spacer />
       <Camera v-if="$mobile" />
       <v-spacer />
-      <v-btn v-if="!editMode" flat icon="mdi-view-dashboard-edit-outline" @click="changeEditMode" />
-      <v-btn v-if="editMode" flat icon="mdi-view-dashboard-edit" @click="changeEditMode" />
+      <v-btn
+        v-if="!editMode"
+        flat
+        icon="mdi-view-dashboard-edit-outline"
+        @click="changeEditMode"
+      />
+      <v-btn
+        v-if="editMode"
+        flat
+        icon="mdi-view-dashboard-edit"
+        @click="changeEditMode"
+      />
       <!-- notifications -->
       <Notifications />
     </v-app-bar>
@@ -24,24 +39,18 @@
     <ToolBar :class="{ appBarRel: isInTest }" ref="appToolbar" />
     <!-- Main content -->
     <v-main>
-
       <v-card flat v-if="isInTest">
         <slot />
       </v-card>
       <v-card flat v-else>
-        <Suspense>
-          <template #default>
-            <Transition>
-              <router-view />
-            </Transition>
-          </template>
-          <template #fallback>
-            <Transition>
-              <loading-skeleton />
-            </Transition>
-
-          </template>
-        </Suspense>
+        <router-view v-slot="{ Component }">
+          <transition name="fade">
+            <loading-skeleton v-if="loading" :height="viewPortHeight" />
+          </transition>
+          <transition name="fade">
+            <component :is="Component" :class="{ isLoading: loading }" />
+          </transition>
+        </router-view>
       </v-card>
     </v-main>
     <!-- quicklist Drawer -->
@@ -49,7 +58,7 @@
 </template>
 <script>
 // only needed for mobile and will be handled in mounted
-import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { defineCustomElements } from "@ionic/pwa-elements/loader";
 import Notifications from "@u/notifications/default.vue";
 import NavigationSideBar from "@u/navigation/sidebar.vue";
 import Camera from "@u/mobile/camera/icon.vue";
@@ -61,7 +70,7 @@ export default {
     NavigationSideBar,
     ToolBar,
     Camera,
-    loadingSkeleton
+    loadingSkeleton,
   },
   inject: ["$api", "$store", "$mobile"],
   props: {
@@ -73,8 +82,8 @@ export default {
   data: () => ({
     page: false,
     editMode: false,
-    appBarHeight: false,
-    toolBarHeight: false,
+    viewPortHeight: false,
+    loading: false,
     navItems: [
       {
         icon: "mdi-home",
@@ -115,52 +124,56 @@ export default {
       .subscribe((val) => {
         this.editMode = val;
       });
+    this.$store
+      .select((state) => state.ui.loading)
+      .subscribe((val) => {
+        this.loading = val;
+      });
   },
   mounted() {
     if (this.$mobile) {
       defineCustomElements(window);
       // TODO leave this here or move it to a hook file which comes from capacitor src?
       this.$mobile.Toast.show({
-        text: 'Capacitor ist ne geile Sau wenn das Grundframework ne geile Sau ist!',
-        duration: 'long'
+        text: "Capacitor ist ne geile Sau wenn das Grundframework ne geile Sau ist!",
+        duration: "long",
       }).then(async () => {
         this.$mobile.SplashScreen.hide();
-      })
+      });
     }
     // TODO find a way to have the quicklist handler know the uuid of the widget. As for now we need to set a uuid
     this.$store.dispatch({
       type: "toolbar/add",
       payload: {
         page: false,
-        title: 'quickList',
-        icon: 'mdi-text-box-search-outline',
-        iconActive: 'mdi-text-box-search',
-        uuid: 'quickList',
+        title: "quickList",
+        icon: "mdi-text-box-search-outline",
+        iconActive: "mdi-text-box-search",
+        uuid: "quickList",
         widget: {
-          name: 'quickList',
-        }
+          name: "quickList",
+        },
       },
     });
-    window.addEventListener('resize', this.setHeight, { passive: true })
+    window.addEventListener("resize", this.setHeight, { passive: true });
     // TODO find a better way instead of this ugly timeOutBullshit
-    setTimeout(() => this.setHeight(), 500)
+    setTimeout(() => this.setHeight(), 500);
   },
   methods: {
     setHeight: async function () {
       await this.$nextTick(function () {
-        const appBarHeight = this.$refs.appAppbar.height || 0
-        const toolBarHeight = this.$refs.appToolbar.height || 0
-        const topBarHeight = appBarHeight + toolBarHeight
-        const viewPortHeight = window.innerHeight - topBarHeight
+        const appBarHeight = this.$refs.appAppbar.height || 0;
+        const toolBarHeight = this.$refs.appToolbar.height || 0;
+        const topBarHeight = appBarHeight + toolBarHeight;
+        this.viewPortHeight = window.innerHeight - topBarHeight;
         this.$store.dispatch({
           type: "ui/update",
           payload: {
             topBarHeight,
-            viewPortHeight
+            viewPortHeight: this.viewPortHeight,
           },
         });
-      })
-
+      });
     },
     changeEditMode: function () {
       this.$store.dispatch({
@@ -185,6 +198,11 @@ export default {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.isLoading,
+.isLoading * {
+  visibility: hidden !important;
 }
 
 html,

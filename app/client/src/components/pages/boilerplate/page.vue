@@ -1,5 +1,4 @@
 <template>
-
   <v-container v-if="state" data-test-container="pages/boilerplate" fluid pa-0>
     <!--
       Place any desired template structure around the widget grid,
@@ -15,28 +14,14 @@ import Grid from "@u/grid/loader.vue";
 const $store = inject("$store");
 const state = ref({});
 
-
 const stateSubscriber$ = $store
   .select((state) => state.currentPage)
   .subscribe((val) => {
     state.value = val;
   });
 
-onMounted(() => {
-  $store.dispatch({
-    type: "currentPage/update",
-    payload: {
-      loading: false,
-    },
-  });
-});
+onMounted(() => {});
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
-  $store.dispatch({
-    type: "currentPage/update",
-    payload: {
-      loading: true,
-    },
-  });
 });
 </script>

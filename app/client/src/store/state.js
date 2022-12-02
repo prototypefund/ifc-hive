@@ -14,7 +14,9 @@ export const applicationState = {
         // indicates if the widget toolbar and other ui edit stuff is displayed
         editMode: false,
         viewPortHeight: false,
-        topBarHeight: false
+        topBarHeight: false,
+        // indicates if the page is in loading state
+        loading: true,
     },
     // will contain tools. Logic behind that is the same as with pages
     toolbar: {},
@@ -53,8 +55,6 @@ export const configPatterns = {
 }
 export const storePatterns = {
     page: {
-        // obvious
-        loading: true,
         // grid config for a page
         grid: configPatterns.grid,
         // the array containing the configs for the 1-n slots

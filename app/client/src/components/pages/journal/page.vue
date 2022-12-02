@@ -25,178 +25,167 @@ const props = defineProps({
 
 onMounted(() => {
   $store.dispatch({
-    type: "currentPage/update",
-    payload: {
-      loading: false,
-    },
-  });
-  $store.dispatch({
     type: "data/add",
     dummy: true,
     payload: {
       data: [
         {
-          id: '6',
-          subject: 'Vorraum nach Installation des Kassentresen',
-          content: 'This is some formatted content',
-          receivers: ['Daniel', "Christian"],
-          date: '2022-07-20T13:22:03Z',
-          category: { color: 'warning', title: 'Baudokumentation' },
+          id: "6",
+          subject: "Vorraum nach Installation des Kassentresen",
+          content: "This is some formatted content",
+          receivers: ["Daniel", "Christian"],
+          date: "2022-07-20T13:22:03Z",
+          category: { color: "warning", title: "Baudokumentation" },
           locked: 0,
-          _id: '068-68498vf',
-          tags: ['Plan', 'Zwischenstand', 'Vorraum', 'Besichtigung', 'Fehler'],
+          _id: "068-68498vf",
+          tags: ["Plan", "Zwischenstand", "Vorraum", "Besichtigung", "Fehler"],
           images: 3,
-          path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
+          path: [{ text: "Planung" }, { text: "Interne Planung" }],
         },
         {
-          id: '5',
-          subject: 'Planungsänderung Aufbau',
-          content: 'This is some formatted content',
-          receivers: ['Daniel', "Christian"],
-          date: '2022-07-20T13:22:03Z',
-          category: { color: 'warning', title: 'Planung' },
+          id: "5",
+          subject: "Planungsänderung Aufbau",
+          content: "This is some formatted content",
+          receivers: ["Daniel", "Christian"],
+          date: "2022-07-20T13:22:03Z",
+          category: { color: "warning", title: "Planung" },
           locked: 1,
-          _id: 'd6e-2d5e',
-          tags: ['Planung', 'Hamburg'],
+          _id: "d6e-2d5e",
+          tags: ["Planung", "Hamburg"],
           attachments: 2,
           images: 1,
-          path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
+          path: [{ text: "Planung" }, { text: "Interne Planung" }],
           request: [
             {
-              name: 'Till Pliestermann',
+              name: "Till Pliestermann",
               approved: null,
-              date: null
+              date: null,
             },
             {
-              name: 'Andreas Ärgerich',
+              name: "Andreas Ärgerich",
               approved: false,
-              date: null
+              date: null,
             },
-          ]
+          ],
         },
         {
-          id: '4',
-          subject: 'Und jetzt mal einer mit einem richtigen langen Titel. Das sollte auch noch verdaulich ausssehen.',
-          content: 'This is some formatted content',
-          receivers: ['Daniel', "Christian"],
-          date: '2022-07-20T13:22:03Z',
-          category: { color: 'success', title: 'Memo' },
+          id: "4",
+          subject:
+            "Und jetzt mal einer mit einem richtigen langen Titel. Das sollte auch noch verdaulich ausssehen.",
+          content: "This is some formatted content",
+          receivers: ["Daniel", "Christian"],
+          date: "2022-07-20T13:22:03Z",
+          category: { color: "success", title: "Memo" },
           locked: 2,
-          _id: '89e-85d8e',
-          path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
+          _id: "89e-85d8e",
+          path: [{ text: "Planung" }, { text: "Interne Planung" }],
           images: 10,
           request: [
             {
-              name: 'Paul Krüger',
+              name: "Paul Krüger",
               approved: true,
-              date: '2022-07-20T13:22:03Z',
+              date: "2022-07-20T13:22:03Z",
             },
             {
-              name: 'Till Pliestermann',
+              name: "Till Pliestermann",
               approved: true,
-              date: '2022-07-20T13:22:03Z',
+              date: "2022-07-20T13:22:03Z",
             },
             {
-              name: 'Max Mustermann',
+              name: "Max Mustermann",
               approved: true,
-              date: '2022-07-20T13:22:03Z',
+              date: "2022-07-20T13:22:03Z",
             },
-          ]
+          ],
         },
         {
-          id: '3',
-          subject: 'Meilenstein Planung geschlossen',
+          id: "3",
+          subject: "Meilenstein Planung geschlossen",
           content: null,
-          receivers: ['Daniel', "Christian"],
-          date: '2022-07-20T13:22:03Z',
-          category: { color: 'blue', title: 'Planung' },
+          receivers: ["Daniel", "Christian"],
+          date: "2022-07-20T13:22:03Z",
+          category: { color: "blue", title: "Planung" },
           locked: 3,
-          _id: '156ae-6542e8',
-          path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
+          _id: "156ae-6542e8",
+          path: [{ text: "Planung" }, { text: "Interne Planung" }],
           alert: {
             content: "Meilenstein »Planung« geschlossen",
-            color: 'success'
-          }
+            color: "success",
+          },
         },
         {
-          id: '2',
-          subject: 'Schließen von Meilenstein Planung',
-          content: 'This is some formatted content',
-          receivers: ['Daniel', "Christian"],
-          date: '2022-07-20T13:22:03Z',
-          category: { color: 'success', title: 'Planung' },
+          id: "2",
+          subject: "Schließen von Meilenstein Planung",
+          content: "This is some formatted content",
+          receivers: ["Daniel", "Christian"],
+          date: "2022-07-20T13:22:03Z",
+          category: { color: "success", title: "Planung" },
           locked: 3,
-          _id: '4ea-6542e8',
-          path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
+          _id: "4ea-6542e8",
+          path: [{ text: "Planung" }, { text: "Interne Planung" }],
           request: [
             {
-              name: 'Paul Krüger',
+              name: "Paul Krüger",
               approved: true,
-              date: '2022-07-20T13:22:03Z',
+              date: "2022-07-20T13:22:03Z",
             },
             {
-              name: 'Till Pliestermann',
+              name: "Till Pliestermann",
               approved: true,
-              date: '2022-07-20T13:22:03Z',
+              date: "2022-07-20T13:22:03Z",
             },
             {
-              name: 'Max Mustermann',
+              name: "Max Mustermann",
               approved: true,
-              date: '2022-07-20T13:22:03Z',
+              date: "2022-07-20T13:22:03Z",
             },
-          ]
+          ],
         },
         {
-          id: '1',
-          subject: 'Third',
-          content: 'This is some formatted content',
-          receivers: ['Daniel', "Christian"],
-          date: '2022-07-20T13:22:03Z',
-          category: { color: 'blue', title: 'Memo' },
+          id: "1",
+          subject: "Third",
+          content: "This is some formatted content",
+          receivers: ["Daniel", "Christian"],
+          date: "2022-07-20T13:22:03Z",
+          category: { color: "blue", title: "Memo" },
           locked: 3,
-          _id: '89e-6esfafe8',
-          path: [{ text: 'Planung' }, { text: 'Interne Planung' }],
-        }
-      ]
-    }
-  })
-  $store.dispatch({
-    type: "toolbar/add",
-    payload: {
-      title: 'newJournal',
-      page: 'app.journal',
-      icon: 'mdi-content-save-edit-outline',
-      iconActive: 'mdi-content-save-edit',
-      uuid: 'journal_add',
-      widget: {
-        name: 'journal',
-        type: 'add',
-      }
+          _id: "89e-6esfafe8",
+          path: [{ text: "Planung" }, { text: "Interne Planung" }],
+        },
+      ],
     },
   });
   $store.dispatch({
     type: "toolbar/add",
     payload: {
-      title: 'chartJournal',
-      page: 'app.journal',
-      icon: 'mdi-chart-donut',
-      iconActive: 'mdi-chart-donut-variant',
-      uuid: 'journal_chart',
+      title: "newJournal",
+      page: "app.journal",
+      icon: "mdi-content-save-edit-outline",
+      iconActive: "mdi-content-save-edit",
+      uuid: "journal_add",
       widget: {
-        name: 'journal',
-        type: 'chart',
-        face: 'example',
-      }
+        name: "journal",
+        type: "add",
+      },
+    },
+  });
+  $store.dispatch({
+    type: "toolbar/add",
+    payload: {
+      title: "chartJournal",
+      page: "app.journal",
+      icon: "mdi-chart-donut",
+      iconActive: "mdi-chart-donut-variant",
+      uuid: "journal_chart",
+      widget: {
+        name: "journal",
+        type: "chart",
+        face: "example",
+      },
     },
   });
 });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
-  $store.dispatch({
-    type: "currentPage/update",
-    payload: {
-      loading: true,
-    },
-  });
 });
 </script>

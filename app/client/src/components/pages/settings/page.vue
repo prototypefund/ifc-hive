@@ -33,32 +33,18 @@ $store.dispatch({
         tags: ["badezimmer"],
         title: "ralle Aller",
       },
-    ]
-  }
-})
-onMounted(() => {
-  $store.dispatch({
-    type: "currentPage/update",
-    payload: {
-      loading: false,
-    },
-  });
+    ],
+  },
 });
+onMounted(() => {});
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
-  $store.dispatch({
-    type: "currentPage/update",
-    payload: {
-      loading: true,
-    },
-  });
 });
 function counter() {
   $store.dispatch({
     type: "currentPage/update",
     payload: {
       count: state.value.count + 1 || 0,
-      loading: true,
     },
   });
 }

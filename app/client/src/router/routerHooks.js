@@ -9,8 +9,8 @@
  *
  * Keep track of the current route in the store
  */
-export function forEachHook (store) {
-  return (to, from)  => {
+export function forEachHook(store) {
+  return (to, from) => {
     if (to !== from) {
       // add default params to every route
       if (!to.params.locale) to.params.locale = 'de'
@@ -22,17 +22,40 @@ export function forEachHook (store) {
     }
   }
 }
+/*
+ * afterEachHook
+ * @param { object } store, mini-rx store instance
+ *
+ * removeLoading Animation
+ */
+export function afterEachHook(store) {
+  return (to, from) => {
+    // change the currentPage, might often be just a change in url params
+    if (to !== from) {
+      setTimeout(() => {
+        store.dispatch({
+          type: 'ui/update',
+          payload: { loading: false }
+        })
+      }, 700);
 
+    }
+  }
+}
 /*
  * beforeResolveHook
  * @param { object } store, mini-rx store instance
  *
  * Pass route params and query data to the current page state
  */
-export function beforeResolveHook (store) {
+export function beforeResolveHook(store) {
   return (to, from) => {
     // change the currentPage, might often be just a change in url params
     if (to !== from) {
+      store.dispatch({
+        type: 'ui/update',
+        payload: { loading: true }
+      })
       store.dispatch({
         type: 'currentPage/set',
         routeName: to.name,

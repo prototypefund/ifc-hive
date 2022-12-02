@@ -12,7 +12,7 @@ import Grid from "@u/grid/loader.vue";
 const $store = inject("$store");
 const $mobile = inject("$mobile");
 const state = ref({});
-console.dir($mobile)
+console.dir($mobile);
 const stateSubscriber$ = $store
   .select((state) => state.currentPage)
   .subscribe((val) => {
@@ -27,32 +27,20 @@ const props = defineProps({
 
 onMounted(() => {
   $store.dispatch({
-    type: "currentPage/update",
-    payload: {
-      loading: false,
-    },
-  });
-  $store.dispatch({
     type: "toolbar/add",
     payload: {
-      title: 'Test',
-      page: 'app.dashboard',
-      icon: 'mdi-apple-safari',
-      iconActive: 'mdi-apple-safari',
-      uuid: 'dashboardTest',
+      title: "Test",
+      page: "app.dashboard",
+      icon: "mdi-apple-safari",
+      iconActive: "mdi-apple-safari",
+      uuid: "dashboardTest",
       widget: {
-        name: 'placeholder',
-      }
+        name: "placeholder",
+      },
     },
   });
 });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
-  $store.dispatch({
-    type: "currentPage/update",
-    payload: {
-      loading: true,
-    },
-  });
 });
 </script>
