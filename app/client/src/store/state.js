@@ -13,8 +13,10 @@ export const applicationState = {
         currentTool: false,
         // indicates if the widget toolbar and other ui edit stuff is displayed
         editMode: false,
+        // some dimension values for convenience
         viewPortHeight: false,
         topBarHeight: false,
+        windowWidth: false,
         // indicates if the page is in loading state
         loading: true,
     },

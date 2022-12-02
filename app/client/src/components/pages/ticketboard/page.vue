@@ -41,6 +41,12 @@ $store.dispatch({
         tag: true,
       },
       {
+        _id: "dinierraum",
+        title: "kot",
+        color: "#0DBC79",
+        tag: true,
+      },
+      {
         _id: "tag-qa",
         title: "Quality Assurance",
         color: "yellow",
@@ -53,6 +59,11 @@ $store.dispatch({
         tag: true,
       },
       {
+        _id: "RalfSeinMudder",
+        title: "don dem seinMudder",
+        color: "pink",
+      },
+      {
         _id: "memo-10",
         closed: false,
         tags: ["badezimmer"],
@@ -62,14 +73,14 @@ $store.dispatch({
       {
         _id: "memo-1",
         closed: false,
-        tags: ["tag-todo", "badezimmer"],
-        title: "Fliesen im Badezimmer",
+        tags: ["tag-todo", "küche"],
+        title: "Fliesen in der Küche",
         ticket: true,
       },
       {
         _id: "memo-2",
-        closed: false,
-        tags: ["tag-todo", "badezimmer"],
+        closed: true,
+        tags: ["döner", "dinierraum"],
         title: "Fliesen im döner dinierraum",
         ticket: true,
       },
@@ -104,8 +115,8 @@ $store.dispatch({
       {
         _id: "memo-8",
         closed: true,
-        tags: ["tag-todo", "badezimmer"],
-        title: "closedr",
+        tags: ["tag-done", "RalfSeinMudder"],
+        title: "die is risch durch",
         ticket: true,
       },
       {

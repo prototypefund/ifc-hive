@@ -8,15 +8,16 @@
     :data-test-container-uuid="props.uuid"
   >
     <div class="ticketContainer">
-      <v-table
+      <table
         class="ticketTable"
         v-if="tickets"
-        :style="{ width: boardCount * 300 + 'px' }"
+        :style="{ width: boardCount * colWidth + 'px' }"
       >
-        <tbody>
-          <tr>
-            <td width="300" v-if="tickets.generics.open">
+        <tbody v-if="boardIdentifiers.length > 0">
+          <tr valign="top">
+            <td v-if="tickets.generics.open">
               <ticket-item
+                :width="colWidth"
                 :identifiers="boardIdentifiers"
                 :sorting="state.filter.sorting.open"
                 :uuid="props.uuid"
@@ -40,8 +41,9 @@
               @end="saveSorting"
             >
               <template #item="{ element }">
-                <td width="300">
+                <td>
                   <ticket-item
+                    :width="colWidth"
                     :identifiers="boardIdentifiers"
                     :uuid="props.uuid"
                     :boardId="element"
@@ -53,8 +55,9 @@
               </template>
             </draggable>
 
-            <td width="300" v-if="tickets.generics.closed">
+            <td v-if="tickets.generics.closed">
               <ticket-item
+                :width="colWidth"
                 :identifiers="boardIdentifiers"
                 :uuid="props.uuid"
                 boardId="closed"
@@ -65,13 +68,13 @@
             </td>
           </tr>
         </tbody>
-      </v-table>
+      </table>
     </div>
     {{ tickets.sorting }}
   </v-container>
 </template>
 <script setup>
-import { inject, ref, shallowRef, onMounted, onUnmounted } from "vue";
+import { inject, ref, shallowRef, onMounted, onUnmounted, computed } from "vue";
 import draggable from "vuedraggable";
 import ticketItem from "./items/ticketCard.vue";
 import { splitIdentifier, filterData } from "./lib/helper.js";
@@ -83,6 +86,8 @@ const data = ref({});
 const boardIdentifiers = ref([]);
 const boardCount = shallowRef(0);
 const dragging = shallowRef(false);
+const windowWidth = shallowRef(window.innerWidth);
+const colWidth = computed(() => (windowWidth.value > 700 ? 300 : 200));
 const tickets = ref({
   generics: {},
   custom: {},
@@ -201,7 +206,6 @@ const makeTickets = function (data) {
         // create sort object for all custom boardsdlner
         if (tickets.value.sorting.boards.indexOf(id.val) === -1) {
           tickets.value.sorting.boards.push(id.val);
-          boardIdentifiers.value.push(id.val);
         }
       }
     });
@@ -215,12 +219,21 @@ const makeTickets = function (data) {
       },
     });
   }
+  boardIdentifiers.value = tickets.value.sorting.boards;
 };
 subscriber$.push(
   $store
     .select((state) => state.widgets[props.uuid])
     .subscribe((val) => {
       state.value = val;
+    })
+);
+subscriber$.push(
+  $store
+    .select((state) => state.ui.windowWidth)
+    .subscribe((val) => {
+      console.log(val);
+      windowWidth.value = val;
     })
 );
 const saveSorting = function () {

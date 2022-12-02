@@ -44,12 +44,8 @@
       </v-card>
       <v-card flat v-else>
         <router-view v-slot="{ Component }">
-          <transition name="fade">
-            <loading-skeleton v-if="loading" :height="viewPortHeight" />
-          </transition>
-          <transition name="fade">
-            <component :is="Component" :class="{ isLoading: loading }" />
-          </transition>
+          <loading-skeleton v-if="loading" :height="viewPortHeight" />
+          <component :is="Component" :class="{ isLoading: loading }" />
         </router-view>
       </v-card>
     </v-main>
@@ -155,22 +151,24 @@ export default {
         },
       },
     });
-    window.addEventListener("resize", this.setHeight, { passive: true });
+    window.addEventListener("resize", this.setDimensions, { passive: true });
     // TODO find a better way instead of this ugly timeOutBullshit
-    setTimeout(() => this.setHeight(), 500);
+    setTimeout(() => this.setDimensions(), 500);
   },
   methods: {
-    setHeight: async function () {
+    setDimensions: async function () {
       await this.$nextTick(function () {
         const appBarHeight = this.$refs.appAppbar.height || 0;
         const toolBarHeight = this.$refs.appToolbar.height || 0;
         const topBarHeight = appBarHeight + toolBarHeight;
         this.viewPortHeight = window.innerHeight - topBarHeight;
+        const windowWidth = window.innerWidth;
         this.$store.dispatch({
           type: "ui/update",
           payload: {
             topBarHeight,
             viewPortHeight: this.viewPortHeight,
+            windowWidth,
           },
         });
       });

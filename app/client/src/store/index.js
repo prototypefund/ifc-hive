@@ -302,6 +302,12 @@ const applicationReducers = {
                 case 'init':
                     return applicationState.ui
                 case 'ui/update':
+                    if (action.payload.navigationOpen === true && state.currentTool !== false) {
+                        action.payload.currentTool = false
+                    }
+                    if (action.payload.currentTool !== true && state.navigationOpen !== false) {
+                        action.payload.navigationOpen = false
+                    }
                     return {
                         ...state, ...action.payload
                     }
