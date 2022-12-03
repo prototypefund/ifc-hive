@@ -11,13 +11,17 @@
     >
       <!-- Breadcrumb -->
       <v-app-bar-title>
-        <router-link :to="{ path: '/' }"> Journal </router-link>
+        <router-link :to="{ path: '/' }" id="breadcrumb-home"
+          ><v-icon icon="mdi-home" color="primary"></v-icon>
+        </router-link>
         <v-icon color="grey" xsmall>mdi-chevron-right</v-icon>
         {{ $t("pages." + page.uuid) }}
       </v-app-bar-title>
       <v-spacer />
       <Camera v-if="$mobile" />
       <v-spacer />
+
+      <v-switch flat hide-details v-model="theme" />
       <v-btn
         v-if="!editMode"
         flat
@@ -30,12 +34,14 @@
         icon="mdi-view-dashboard-edit"
         @click="changeEditMode"
       />
+
       <!-- notifications -->
       <Notifications />
     </v-app-bar>
 
     <!-- Navigation Drawer -->
     <NavigationSideBar v-if="!isInTest" :nav-items="navItems" />
+
     <ToolBar :class="{ appBarRel: isInTest }" ref="appToolbar" />
     <!-- Main content -->
     <v-main>
@@ -80,6 +86,7 @@ export default {
     editMode: false,
     viewPortHeight: false,
     loading: false,
+    currTheme: true,
     navItems: [
       {
         icon: "mdi-home",
@@ -125,6 +132,29 @@ export default {
       .subscribe((val) => {
         this.loading = val;
       });
+    this.$store
+      .select((state) => state.ui.theme)
+      .subscribe((val) => {
+        this.$vuetify.theme.name = val;
+        this.currTheme = val === "theme" ? true : false;
+      });
+  },
+  computed: {
+    theme: {
+      get() {
+        return this.currTheme;
+      },
+      set(newValue) {
+        console.log(newValue);
+
+        this.$store.dispatch({
+          type: "ui/update",
+          payload: {
+            theme: newValue === false ? "light" : "theme",
+          },
+        });
+      },
+    },
   },
   mounted() {
     if (this.$mobile) {
@@ -185,6 +215,10 @@ export default {
 };
 </script>
 <style>
+#breadcrumb-home {
+  text-decoration: none;
+}
+
 .appBarRel {
   position: absolute !important;
 }

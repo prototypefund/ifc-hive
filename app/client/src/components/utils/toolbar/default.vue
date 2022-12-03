@@ -52,13 +52,15 @@
   >
     <hr class="contentLine" />
     <v-slide-x-reverse-transition>
-      <component
-        :is="currentComponent"
-        :uuid="currentTool"
-        :props="state[currentTool].widget.props || {}"
-        class="toolComponentWrapper"
-      >
-      </component>
+      <v-card flat>
+        <component
+          :is="currentComponent"
+          :uuid="currentTool"
+          :props="state[currentTool].widget.props || {}"
+          class="toolComponentWrapper"
+        >
+        </component>
+      </v-card>
     </v-slide-x-reverse-transition>
   </v-container>
 </template>
@@ -181,17 +183,13 @@ export default {
   top: 96px;
   width: 80% !important;
   z-index: 900;
-  height: 100%;
-  background-color: #fff;
   border: 1px solid #e0e0e0;
   border-top: 0px;
 }
 
-.toolContent > .v-row {
+.toolContent > .v-card {
   height: 100%;
-  width: 100%;
-  padding: 0px;
-  margin: 0px;
+  padding-bottom: 20px;
 }
 
 .toolComponentWrapper {
