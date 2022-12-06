@@ -328,9 +328,11 @@ const applicationReducers = {
                     let currPage = {}
                     const uuid = action.routeName.replace('.', '-')
                     // check if that requested page has already been preconfigured (should always be the case)
-                    if (pagesLookup && pagesLookup[uuid].uuid) {
+                    if (pagesLookup && pagesLookup[uuid] && pagesLookup[uuid].uuid) {
                         // create a new currentPage object based on the url params merged ontop of the default page config
                         currPage = mergeDeepRight(pagesLookup[uuid], action.payload)
+                    } else {
+                        console.error("race condition? a currentpage without a uuid? dafuq? bruder? alter? junge alter bruder diggi alter bruder diggi junge bruder?")
                     }
                     if (state.routeName) {
                         // update our memorized preconfigured page with the new version which includes url params and user data

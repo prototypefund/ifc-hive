@@ -131,7 +131,7 @@ const makeTickets = function (data) {
         tickets.value.generics[gen.title].id = gen.title;
         tickets.value.generics[gen.title].color = gen.color || "grey";
         if (tickets.value.sorting[gen.title]) {
-          // if we have no sorting store, take the current order of the tickets as sorting
+          // if we have a sorting store, make sure its still u2date
           if (
             tickets.value.sorting[gen.title].length >
             tickets.value.generics[gen.title].tickets.length
@@ -203,7 +203,7 @@ const makeTickets = function (data) {
           tickets.value.sorting[id.val] = tickets.value.custom[id.val].tickets;
         }
 
-        // create sort object for all custom boardsdlner
+        // create sort object for all custom boards
         if (tickets.value.sorting.boards.indexOf(id.val) === -1) {
           tickets.value.sorting.boards.push(id.val);
         }
