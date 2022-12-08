@@ -15,7 +15,7 @@ export const widgetLoader = function (widgetName = 'debug', face = 'default') {
  * widgetConfLoader
  * @param { object } widget, the config for a widget
  *
- * get a config file for a given widget and preconfigure its state
+ * get a config file for a given widget and configure its state
  */
 export const widgetConfLoader = function (widget) {
     return import(`../components/widgets/${widget.name || 'debug'}/conf.js`).then(conf => {
@@ -34,7 +34,7 @@ export const widgetConfLoader = function (widget) {
  * widgetTypeConfLoader
  * @param { object } widget, the config for a widget
  *
- * get a config file for a given widget and preconfigure its state
+ * get a config file for a given widget and configure its state
  */
 export const widgetTypeConfLoader = function (widget) {
     return import(`../components/widgets/${widget.name || 'debug'}/${widget.type || 'default'}/conf.js`).then(conf => {

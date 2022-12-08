@@ -411,12 +411,6 @@ const applicationReducers = {
             switch (action.type) {
                 case 'init':
                     return applicationState.widgets
-                case 'widgets/preconfigure':
-                    configuredWidget = {}
-                    if (action.uuid == "chart_ticketsByTag") debugger
-                    // merge widget config with widget state when we initially configure widget 
-                    configuredWidget[action.uuid] = mergeDeepRight(action.payload.conf, state[action.uuid])
-                    return mergeDeepRight(state, configuredWidget)
                 case 'widgets/configure':
                     configuredWidget = {}
                     // merge given config onto widget state
