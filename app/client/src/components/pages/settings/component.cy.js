@@ -9,7 +9,7 @@ const prepareTest = () => {
   if (isComonentTest()) {
     cy.visitStorybook(source, 'Headless')
   } else {
-    cy.visit("/");
+    cy.visit(source.split("/")[1]);
   }
 }
 

@@ -98,9 +98,127 @@ If the page contains other views, such as a edit dialogue etc which you don't wa
 
 #### conf.js
 
+The conf.js file contains the configuration for the layout and widgets pressent on your page
+
+You can define what kind of grid you need with Grid Key.
+
+
+
+```javascript
+
+{
+    // grid defines the used grid
+    grid: {
+		type: "default",
+		items: "card",
+   		columns: 2
+	},
+	// title defines the title of the page
+	title: 'My Title',
+    // slots array defines the used widgets
+    slots: [
+        // first slot 
+      	{
+        column: 6,
+        widget: {
+          name: "myCategory",
+          props: {
+            title: "widget title"
+          }
+        }
+      },
+    ]
+}
+```
+
+
+
 #### component.cy.js
 
+The component.cy.js contains the test Code for your page, it is also used to trigger the test for all widgets present on your Page. Your Test code must provide a `prepareTest`function, it is used to navigate to the page you want to test.
+
+How you navigate to your test case depends on the test environment, there is the case component or integration test. In the case of the component test, the tests run against Storybook, in the case of the integration test, runs against the application directly.
+
+The [Boilerplate](./src/components/pages/boilerplate/component.cy.js) prepareTest function looks like this.
+
+```javascript
+const source = 'pages/boilerplate'
+const prepareTest = () => {
+  if (isComonentTest()) {
+    // visit Storybook see story.js
+    cy.visitStorybook(source, 'Headless')
+  } else {
+    // visit the path where the boilerplate is located
+    cy.visit("/boilerplate"); // eine route anlegen ?
+  }
+}
+```
+
+Your Test code for the Page is inside the 'describe' block.
+
+In the [Boilerplate](./components/pages/boilerplate/component.cy.js) Example the Test that `This is a Page Boilerplate` text is present on your page.
+
+```javascript
+ it("Boilerplate has Text ", () => {
+    cy.get('[data-test-container="pages/boilerplate"]')
+      .should('contain.text', 'This is a Page Boilerplate')
+  });
+```
+
+Once your Pages tests are done, the `testWidgets(source, prepareTest)` will trigger the Widget Test.
+
+The testWidgets function will then use the `data-test-container`passed by source to identify your page and run the widgets found on your page. 
+
+#TODO Umgang mit visit.json 
+
+**Notes: **
+
+* The **`source`** ( in our example `pages/boilerplate` ) has to match your Pages container id !
+* The **`source`** should match your Storybook title.
+
 #### story.js
+
+In the `story.js` the environment for the components for the storybook is created, which are to be used in the component tests. A title must be defined in the standard export block. The component will then appear in the storybook under this title. Please look up the example in the `pages/boilerplate/story.js`
+
+```javascript
+export default {
+  title: 'pages/boilerplate',
+  argTypes: {
+  },
+};
+```
+
+Afterwards, a template must be created with which Storybook should initialize the component.
+
+```javascript
+const HeadlessTemplate = (args) => ({
+    components: { comp },
+    setup() {
+        initStore()
+        prepareStore('BOILERPLATE', args)
+        return { args };
+    }, 
+    template: wrapComponent('comp', 'v-card'),
+});
+```
+
+In order for a component to appear, the Temperate must be initialized.
+
+```javascript
+export const Headless = HeadlessTemplate.bind({});
+Headless.args = conf;
+```
+
+To be able to address the component in a test, the title and the variable name are used.
+
+**Note: The title and the variable name are case sensitive.**
+
+```javascript
+// inside your component.cy.js
+cy.visitStorybook('pages/boilerplate', 'Headless') // cy.visitStorybook(title, variable name)
+```
+
+
 
 ### Store
 
@@ -142,7 +260,7 @@ At first note that, whatever main rapping element you choose, you must have a v-
 To be able to test a specific widget we also need to add a "data-test-container-uuid" which contains the widgets uuid which by default we obtain from the props 
 We also encourage you to use the Vue3 Compose API over the Options API
 
-The rest of the code within the boilerplate/default/FACE.vue must be kept in order to have a working base for you widget (the iLike and title vars and form elements are just for showcase purposes and may be removed). Note that the subscriber variables alway end on an $ which signalizes that the content of this variable is a redux observable and therefore needs to be unsubscribed whenever you leave the page to prevent memory leaks.
+The rest of the code within the boilerplate/default/FACE.vue must be kept in order to have a working base for your widget (the iLike and title vars and form elements are just for showcase purposes and may be removed). Note that the subscriber variables alway end on an $ which signalizes that the content of this variable is a redux observable and therefore needs to be unsubscribed whenever you leave the page to prevent memory leaks.
 
 ### Store
 Take me to [the Widget default config](#widgetConfig)
@@ -233,33 +351,74 @@ To add a widget as a tool use the following command in your source File
   });
 ```
 
-# Test Preperation
-If you want to run 2 non-headless sessions simultanusly make sure to select diffrent Browsers
+# Test preparation
+
+If you want to run 2 non-headless sessions simultaneously make sure to select different Browsers
+
 ```
 docker-compose up --build -d
 cd app/client
 ```
 
-## Integration Test non-headless for Development or Debuging
-Runs a Test against the RAW app via with Browser For Test Development/Debuging
-1) -> Test Preperation 
+## Integration Test non-headless for Development or Debugging
+
+Runs a Test against the RAW app via with Browser For Test Development/Debugging
+
+1. -> Test Preparation
+
 ```
 yarn test:integration
 ```
 
-## Integration Test Headless 
-Runs a Test against the RAW app via Comandline
-1) -> Test Preperation
+## Integration Test Headless
+
+Runs a Test against the RAW app with your favorite Terminal
+
+1. -> Test Preparation
+
 ```
 yarn test:integration:ci
 ```
 
-## Component Storybook Test non-headless for Development or Debuging
-Runs a Test against the Storybook RAW app via Comandline
+## Component Storybook Test non-headless for Development or Debugging
+
+Runs a Test against the Storybook RAW app with your favorite Terminal
+
 ```
 yarn test:component
 ```
+
 ## Component Storybook Test Headless
+
 ```
 yarn test:component:ci
 ```
+
+Work flow Create Dynamic Imported Widget tests for new page called lets call it`MYPAGE`.
+We start with the Cypress for integration.
+
+1. copy and rename the page boilerplates (`_boilerplate.vue` and `_boilerplate.component.cy.js `) 
+
+2. adapt the URL/endpoints in the prepareTest() function in `MYPAGE.component.cy.js`
+
+3. create an empty definition in your "API/Database" (now visit.json)
+
+4. restart the Cypress for integration
+   -> Test will fail, if there are widgets in the definition but not on the page. 
+
+5. add your widgets to the definition in your "API/Database"  (now visit.json) 
+
+6. restart the Cypress for integration
+   -> Test will fail if there is no test template for the widget.
+
+7. copy and rename the widget template `_boilerplate.component.template.cy.js`
+
+8. writing the test template
+
+9. redo Cypress E2E and fix your Errors until tests passes.
+
+10. restart the Cypress for Storybook
+        -> Test will fail, if `MYPAGE.stories.js` is missing, fix it.
+
+11. restart the Cypress with Integration
+

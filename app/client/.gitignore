@@ -27,3 +27,7 @@ cypress/videos/*
 *.njsproj
 *.sln
 *.sw?
+
+storybook-static/*
+!storybook-static/stories.json
+!storybook-static/project.json

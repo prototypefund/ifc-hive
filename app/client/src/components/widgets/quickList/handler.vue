@@ -1,5 +1,6 @@
 <template>
-  <a @click="handleQuickListItem" class="quickListHandler" data-test-container="widgets/quicklist/handler">
+  <a @click="handleQuickListItem" class="quickListHandler" v-if="state && props.uuid"
+    data-test-container="widgets/quicklist/handler" :data-test-container-uuid=props.uuid>
     <slot></slot>
   </a>
 </template>

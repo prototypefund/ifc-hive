@@ -1,10 +1,4 @@
 {
-    "pages/avatar": {
-        "page": "pages/avatar",
-        "widgets": {
-            "widgets/form/default": 1
-        }
-    },
     "pages/dashboard": {
         "page": "pages/dashboard",
         "widgets": {
@@ -20,16 +14,22 @@
     "pages/settings": {
         "page": "pages/settings",
         "widgets": {
-            "widgets/debug/default": 3
+            "widgets/debug/default": 1,
+            "widgets/form/default": 1
         }
     },
     "pages/testboard": {
         "page": "pages/testboard",
         "widgets": {
             "widgets/detail/user": 1,
-            "widgets/debug/default": 1,
-            "widgets/timeline/default": 1
+            "widgets/debug/default": 1
         }
     },
-    "widgets/debug/default": 1
+    "pages/boilerplate": {
+        "page": "pages/boilerplate",
+        "widgets": {
+            "widgets/form/default": 1,
+            "widgets/boilerplate/default": 1
+        }
+    }
 }

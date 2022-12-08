@@ -82,8 +82,9 @@ const getTitleFrom = (nameOrVarname) => {
 const getNameFrom = (nameOrVarname) => {
   var result = nameOrVarname
   result = result.replace(/([A-Z]+)/g, " $1");
-
-  result = result[0].toUpperCase() + result.substring(1)
+  if (result.length > 0) {
+    result = result[0].toUpperCase() + result.substring(1)
+  }
   result = result.replace(/([A-Z][a-z])/g, " $1");
   result = result.replace(/(_)/g, " ");
   result = result.replace(/(\/)/g, " ");
@@ -121,11 +122,5 @@ const getRelativeURL = (title, name) => {
   const qid = getQuerryId(title, name)
   return `iframe.html?id=${qid}&viewMode=story`;
 }
-
-/**
- * Dynamic Vite Imports
- * 
- * https://github.com/rollup/plugins/tree/master/packages/dynamic-import-vars#limitations
- */
 
 export { isComonentTest, getRelativeURL, getNameFrom, getQuerryId, listStoriesFromClass };

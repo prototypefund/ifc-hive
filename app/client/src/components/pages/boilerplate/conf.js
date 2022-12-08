@@ -18,6 +18,17 @@ export default {
                         filter: 'und ich bin ein anderer Filter!'
                     }
                 }
+
+            }
+        },
+        {
+            column: 12,
+            widget: {
+                name: "boilerplate",
+                props: {
+                    title: 'Boilerplate default config',
+                    iLike: 'trains'
+                }
             }
         },
     ],

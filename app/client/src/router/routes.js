@@ -6,6 +6,7 @@ const settingsComp = () => import('../components/pages/settings/page.vue')
 const journalComp = () => import('../components/pages/journal/page.vue')
 const testboardComp = () => import('../components/pages/testboard/page.vue')
 const ticketboardComp = () => import('../components/pages/ticketboard/page.vue')
+const boilerplateComp = () => import('../components/pages/boilerplate/page.vue')
 const loadConf = (page) => import(`../components/pages/${page}/conf.js`)
 const confCache = {}
 export default [
@@ -41,7 +42,7 @@ export default [
         beforeEnter: (to, from) => {
             if (!confCache.settings) {
                 loadConf('settings').then(conf => {
-                    confCache.settings = conf
+                    confCache.settings = conf.default
                     store.dispatch({
                         type: 'pages/add',
                         routeName: to.name,
@@ -59,7 +60,7 @@ export default [
         beforeEnter: (to, from) => {
             if (!confCache.journal) {
                 loadConf('journal').then(conf => {
-                    confCache.journal = conf
+                    confCache.journal = conf.default
                     store.dispatch({
                         type: 'pages/add',
                         routeName: to.name,
@@ -77,7 +78,7 @@ export default [
         beforeEnter: (to, from) => {
             if (!confCache.testboard) {
                 loadConf('testboard').then(conf => {
-                    confCache.testboard = conf
+                    confCache.testboard = conf.default
                     store.dispatch({
                         type: 'pages/add',
                         routeName: to.name,
@@ -95,7 +96,25 @@ export default [
         beforeEnter: (to, from) => {
             if (!confCache.testboard) {
                 loadConf('ticketboard').then(conf => {
-                    confCache.ticketboard = conf
+                    confCache.ticketboard = conf.default
+                    store.dispatch({
+                        type: 'pages/add',
+                        routeName: to.name,
+                        payload: conf.default
+                    });
+                })
+            }
+        }
+    },
+    {
+        path: '/boilerplate',
+        name: 'app.boilerplate',
+        component: boilerplateComp,
+        props: true,
+        beforeEnter: (to, from) => {
+            if (!confCache.boilerplate) {
+                loadConf('boilerplate').then(conf => {
+                    confCache.boilerplate = conf.default
                     store.dispatch({
                         type: 'pages/add',
                         routeName: to.name,

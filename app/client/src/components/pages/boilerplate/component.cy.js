@@ -7,7 +7,7 @@ const prepareTest = () => {
   if (isComonentTest()) {
     cy.visitStorybook(source, 'Headless')
   } else {
-    cy.visit("/");
+    cy.visit(source.split("/")[1]);
   }
 }
 
@@ -21,6 +21,12 @@ describe(`Visit ${source}`, () => {
     cy.get('[data-test-container="pages/boilerplate"]')
       .should('be.visible')
   });
+
+  it("Boilerplate has Text ", () => {
+    cy.get('[data-test-container="pages/boilerplate"]')
+      .should('contain.text', 'This is a Page Boilerplate')
+  });
+
   testWidgets(source, prepareTest)
 
 });

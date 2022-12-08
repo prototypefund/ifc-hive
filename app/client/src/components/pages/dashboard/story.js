@@ -1,6 +1,6 @@
 import comp from './page.vue'
 import App from '../../../App.vue'
-import conf from './conf.json'
+import conf from './conf.js'
 import { initStore, prepareStore, wrapComponent, wrapFullPage } from '../../../../.storybook/storeHelper.js'
 
 

@@ -26,13 +26,13 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 import { getRelativeURL, isComonentTest } from './sbHelper.js'
-
+import { getTestMap } from './testHelper.js'
 
 /**
  * Vistes a Storybook Page 
  * And waits for the [data-test-id] to Render
- * @param {Title of the Storybook} title 
- * @param {Name or Variable Name} name 
+ * @param {string} title Title of the Storybook
+ * @param {string} name Name or Variable Name
  */
 Cypress.Commands.add('visitStorybook', (title, name) => {
     const dstUrl = getRelativeURL(title, name);
@@ -71,7 +71,7 @@ Cypress.Commands.add('getContainer', (widgetcomponentest) => {
                     .invoke('attr', 'data-test-container')
                     .then(container => {
                         cy.wrap(x)
-                            .invoke('attr', 'data-test-uuid')
+                            .invoke('attr', 'data-test-container-uuid')
                             .then(uuid => {
                                 widgetcomponentest.value.push({ name: container, uuid })
                             })
@@ -89,15 +89,49 @@ Cypress.Commands.add('getWidgetsFromID', (taget) => {
     // Teste das die Anzal der Wigets stimmt
     // Teste das die Widgets einzeln Exsitiern
     const result = {}
-    return cy.get(`[data-test-container="${taget}"]`)
+    return cy.get('[data-test-container]').should('have.length.lt', 1000).then(
+        (_) => {
+            return cy.get(`[data-test-container="${taget}"]`).find('[data-test-container]').each(
+                (x) => {
+                    cy.log('FOUND', x)
+                    cy.wrap(x)
+                        .invoke('attr', 'data-test-container')
+                        .then(container => {
+                            cy.wrap(x).should('contain.attr', 'data-test-container-uuid').then(
+                                uuid => {
+                                    if (!result[container]) {
+                                        result[container] = []
+                                    }
+                                    result[container].push(uuid)
+                                }
+                            )
+                        })
+                }
+            ).then(
+                () => {
+                    return result;
+                }
+            )
+
+        }
+    )
+
+
+    /*
+        inconsisten. 
+        return cy.get(`[data-test-container="${taget}"]`)
         .within(() => {
+            // force Cypress to wait for 1000 Comonents.
+            // Doesn't remove this line or not all ID's are yeald all children.
+            cy.get('[data-test-container]').should('have.length.lt', 1000)
             cy.get('[data-test-container]')
                 .each(
-                    x => {
+                    (x) => {
+                        cy.log('FOUND', x)
                         cy.wrap(x)
                             .invoke('attr', 'data-test-container')
                             .then(container => {
-                                cy.wrap(x).should('contain.attr', 'data-test-uuid').then(
+                                cy.wrap(x).should('contain.attr', 'data-test-container-uuid').then(
                                     uuid => {
                                         if (!result[container]) {
                                             result[container] = []
@@ -114,6 +148,8 @@ Cypress.Commands.add('getWidgetsFromID', (taget) => {
                 return result;
             }
         )
+
+        */
 });
 
 
@@ -128,16 +164,14 @@ Cypress.Commands.add('testWidgetsArePresent', (source, bidirectional = true) => 
 
     cy.getWidgetsFromID(source).then((x) => {
         const widgetcomponentest = x
-        const env = JSON.parse(Cypress.env('visitTests'))
-        if (!(source in env)) {
-            const msg = `Def for ${source} is missing`
+        const testMap = getTestMap()
+        if (!(source in testMap)) {
+            const msg = `id ${source} not found in getTestMap() definition`
             cy.log(msg)
             console.log(msg)
             throw new TypeError(msg)
         }
-        const testdata = env[source]
-
-
+        const testdata = testMap[source]
         for (const widgetPath in testdata['widgets']) {
             const expected_length = testdata['widgets'][widgetPath]
             cy.log(`Probe widget '${widgetPath}' in Definition is on Page`)
@@ -152,7 +186,7 @@ Cypress.Commands.add('testWidgetsArePresent', (source, bidirectional = true) => 
         if (bidirectional) {
             for (const widgetPath in widgetcomponentest) {
                 const expected_length = widgetcomponentest[widgetPath].length
-                cy.log(`Probe widget '${widgetPath}' on Page is in Definition`)
+                cy.log(`Found widget '${widgetPath}' on Page check is in defintion Definition`)
                 cy.wrap(testdata['widgets'])
                     .should("contain.key", widgetPath)
                     .then(x => {
@@ -165,4 +199,27 @@ Cypress.Commands.add('testWidgetsArePresent', (source, bidirectional = true) => 
 
 
     })
+})
+
+
+Cypress.Commands.add('testWidgetsArePresent', (source, bidirectional = true) => {
+    const env = getTestMap()
+    if (!(source in env)) {
+        const msg = `id ${source} not found in getTestMap() definition`
+        cy.log(msg)
+        console.log(msg)
+        throw new TypeError(msg)
+    }
+    const testdata = env[source]
+    cy.get(`[data-test-container="${source}"]`)
+        .within(() => {
+            for (const widgetPath in testdata['widgets']) {
+                const expected_length = testdata['widgets'][widgetPath]
+                cy.log(`Probe widget '${widgetPath}' in Definition is on Page`)
+                cy.get(`[data-test-container="${widgetPath}"]`)
+                    .should('have.length', expected_length)
+            }
+
+        })
+
 })

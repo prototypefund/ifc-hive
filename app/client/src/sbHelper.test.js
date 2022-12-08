@@ -1,5 +1,5 @@
-import sbHelper, { getNameFrom, getQuerryId } from '../cypress/support/sbHelper';
-import { describe, expect, it, vi } from 'vitest';
+import { getNameFrom, getQuerryId } from '../cypress/support/sbHelper';
+import { describe, expect, it } from 'vitest';
 
 describe('getNameFrom', function () {
     it('should return names', (ctx) => {
@@ -10,6 +10,12 @@ describe('getNameFrom', function () {
         expect(getNameFrom('aB$a9')).toBe('A B A 9')
         expect(getNameFrom('B1z0_')).toBe('B 1 Z 0')
         expect(getNameFrom('BAa7_4490_$64$2z$a')).toBe('B Aa 7 4490 64 2 Z A')
+    });
+})
+
+describe('getQuerryId', function () {
+    it('should return ids', (ctx) => {
+        expect(getQuerryId('MyApp', 'HeadLess')).toBe('my-app--head-less')
     });
 })
 
