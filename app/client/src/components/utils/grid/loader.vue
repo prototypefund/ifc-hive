@@ -4,7 +4,12 @@
       <v-select :items="colCounts" v-model="colCount" label="Column Count"></v-select>
     </v-col>
     <v-col cols="4">
-      <v-select :items="gridTypes" v-model="gridType" label="Grid Type" data-test-id="loader_container-gridTypes">
+      <v-select
+        :items="gridTypes"
+        v-model="gridType"
+        label="Grid Type"
+        data-test-id="loader_container-gridTypes"
+      >
       </v-select>
     </v-col>
     <v-col cols="4">
@@ -13,13 +18,27 @@
   </v-row>
   <GridType data-test-id="loader_container">
     <v-row v-for="row in rows">
-      <v-col v-for="column in row" :class="getSlotClass(column) + ' ' + getColClass(column)" v-if="row">
+      <v-col
+        v-for="column in row"
+        :class="getSlotClass(column) + ' ' + getColClass(column)"
+        v-if="row"
+      >
         <GridItem>
           <template v-slot:header>
-            <WidgetToolBar v-if="editMode" type="widgets" :columnClass="column.column" :columnIndex="column.slot"
-              :uuid="column.widget.uuid" @changeColCount="changeColCount" />
+            <WidgetToolBar
+              v-if="editMode"
+              type="widgets"
+              :columnClass="column.column"
+              :columnIndex="column.slot"
+              :uuid="column.widget.uuid"
+              @changeColCount="changeColCount"
+            />
           </template>
-          <component :is="column.component" :uuid="column.widget.uuid" :props="column.widget.props || {}"></component>
+          <component
+            :is="column.component"
+            :uuid="column.widget.uuid"
+            :props="column.widget.props || {}"
+          ></component>
         </GridItem>
       </v-col>
     </v-row>
@@ -37,7 +56,7 @@ import {
 } from "vue";
 import { gridTypeLoader, gridItemLoader } from "@lib/gridLoader";
 import WidgetToolBar from "./widgetToolBar.vue";
-import widgetLoader from "@lib/widgetLoader";
+import { widgetLoader } from "@lib/widgetLoader";
 const $store = inject("$store");
 const gridColumnsCount = shallowRef();
 const gridSlots = ref();

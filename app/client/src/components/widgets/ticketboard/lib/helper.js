@@ -1,10 +1,24 @@
 export const splitIdentifier = (identifier) => {
+    let identifierKeyVal = false
+    let identifierKeyValPair = false
+    let key = false
+    let val = false
     if (identifier.indexOf(';') > -1) {
-        // multiple fields not implemented yet
+        key = []
+        val = []
+        identifierKeyValPair = identifier.split(';')
+        identifierKeyValPair.forEach(identifier => {
+            identifierKeyVal = identifier.split(':')
+            key.push(identifierKeyVal[0])
+            val.push(identifierKeyVal[1])
+        })
+        console.error('not so sure if anything is configured to reveive those two arrays as keyVal for an identifier ' + JSON.stringify({ key, val }))
+    } else {
+        identifierKeyVal = identifier.split(':')
+        key = identifierKeyVal[0]
+        val = identifierKeyVal[1]
     }
-    const identifierKeyVal = identifier.split(':')
-    const key = identifierKeyVal[0]
-    const val = identifierKeyVal[1]
+
     return { key, val }
 }
 export const ticketFetch = function () {

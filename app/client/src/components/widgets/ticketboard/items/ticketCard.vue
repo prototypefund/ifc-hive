@@ -3,7 +3,7 @@
     :color="column.color"
     v-if="column"
     class="ticketWrapperCard"
-    prepend-icon="mdi-drag"
+    :prepend-icon="boardId == 'open' && boardId == 'closed' ? 'false' : 'mdi-drag'"
     data-test-container="widgets/ticketboard/items/ticketCard"
     :data-test-container-uuid="props.uuid"
   >
@@ -97,15 +97,25 @@ const sorting = computed({
           if (!isOpenClose) {
             data[dataIndex].tags.push(props.boardId);
           }
+          if (data) {
+            $store.dispatch({
+              type: "data/add",
+              payload: {
+                data,
+              },
+            });
+          }
         } else {
           console.error("how can we have a ticket state change without a tag field?");
         }
       });
     } else {
       // we have to remove a tag, but for now we won't do it as the add will do it in the other board
-      // console.log('remove for ' + props.boardId)
     }
-
+    // if there is no data it means there is not ticket state swap. So we just sorted and just update our widget.
+    // If we have data we also change data in the store which then will trigger our components to rerender aswell as this widget update
+    // TODO This is one of the optimization questions we have to discuss
+    // to stop multiple cycles use  if (!data || data.length === 0) {
     $store.dispatch({
       type: "widgets/update",
       uuid: props.uuid,
@@ -115,14 +125,6 @@ const sorting = computed({
         },
       },
     });
-    if (data) {
-      $store.dispatch({
-        type: "data/add",
-        payload: {
-          data,
-        },
-      });
-    }
   },
 });
 const props = defineProps({

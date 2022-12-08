@@ -10,6 +10,7 @@ import { mergeDeepRight, clone } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
 import { applicationState, storePatterns, loadingHold } from './state'
 import helper from './helper.js'
+import { widgetConfLoader, widgetTypeConfLoader } from "@lib/widgetLoader";
 /*
  * Apply different extensions depending on the environment
  */
@@ -146,9 +147,7 @@ const applicationReducers = {
                             store.dispatch({
                                 type: 'widgets/add',
                                 payload: [{
-                                    uuid: widget.uuid,
-                                    name: widget.name,
-                                    ...widget.props
+                                    ...widget
                                 }]
                             })
                         }
@@ -414,13 +413,14 @@ const applicationReducers = {
                     return applicationState.widgets
                 case 'widgets/preconfigure':
                     configuredWidget = {}
+                    if (action.uuid == "chart_ticketsByTag") debugger
                     // merge widget config with widget state when we initially configure widget 
                     configuredWidget[action.uuid] = mergeDeepRight(action.payload.conf, state[action.uuid])
                     return mergeDeepRight(state, configuredWidget)
                 case 'widgets/configure':
                     configuredWidget = {}
                     // merge given config onto widget state
-                    configuredWidget[action.uuid] = mergeDeepRight(state[action.uuid], action.conf)
+                    configuredWidget[action.uuid] = mergeDeepRight(state[action.uuid], action.payload.conf)
                     return mergeDeepRight(state, configuredWidget)
                 case 'widgets/update':
                     configuredWidget = {}
@@ -432,26 +432,11 @@ const applicationReducers = {
                     if (action.payload.length > 0) {
                         action.payload.forEach(widget => {
                             // get the config file for the current widget
-                            // TODO find out why we can't use vite alias here
-                            import(`../components/widgets/${widget.name}/conf.js`).then(conf => {
-                                store.dispatch({
-                                    type: 'widgets/preconfigure',
-                                    uuid: widget.uuid,
-                                    payload: {
-                                        conf: conf.default
-
-                                    }
-                                })
-                            }).catch(err => {
-                                store.dispatch({
-                                    type: 'widgets/preconfigure',
-                                    uuid: widget.uuid,
-                                    payload: {
-                                        conf: {},
-
-                                    }
-                                })
-                            })
+                            if (widget.type) {
+                                widgetTypeConfLoader(widget)
+                            } else {
+                                widgetConfLoader(widget)
+                            }
                             // add page specific config to widget instance state
                             if (!newWidgets[widget.uuid]) {
                                 newWidgets[widget.uuid] = mergeDeepRight(storePatterns.widget, widget)
@@ -459,6 +444,7 @@ const applicationReducers = {
                         })
                         return mergeDeepRight(state, newWidgets)
                     }
+                    return state
                 default:
                     return state
             }

@@ -109,6 +109,7 @@ const props = defineProps({
 });
 
 const makeTickets = function (data) {
+  console.warn("makeTicketsCalled");
   const filter = state.value.filter;
   if (filter) {
     if (filter.sorting) {

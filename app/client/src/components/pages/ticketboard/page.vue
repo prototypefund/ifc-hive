@@ -59,11 +59,6 @@ $store.dispatch({
         tag: true,
       },
       {
-        _id: "badezimmer",
-        title: "Bad",
-        color: "pink",
-      },
-      {
         _id: "RalfSeinMudder",
         title: "seinMudder",
         color: "pink",
