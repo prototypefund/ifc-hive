@@ -109,7 +109,6 @@ const props = defineProps({
 });
 
 const makeTickets = function (data) {
-  console.log("makeTickets called");
   const filter = state.value.filter;
   if (filter) {
     if (filter.sorting) {
@@ -137,7 +136,6 @@ const makeTickets = function (data) {
             tickets.value.generics[gen.title].tickets.length
           ) {
             // we have items in sorting which dont exist in ticket selection
-            console.warn("we have items in sorting which dont exist in ticket selection");
             const itemsToRemove = difference(
               tickets.value.sorting[gen.title],
               tickets.value.generics[gen.title].tickets
@@ -184,7 +182,17 @@ const makeTickets = function (data) {
             tickets.value.custom[id.val].tickets.length
           ) {
             // we have items in sorting which dont exist in ticket selection
-            console.warn("we have items in sorting which dont exist in ticket selection");
+            const itemsToRemove = difference(
+              tickets.value.sorting[id.val],
+              tickets.value.custom[id.val].tickets
+            );
+
+            itemsToRemove.forEach((itemUUID) => {
+              const index = tickets.value.sorting[id.val].indexOf(itemUUID);
+              if (index > -1) {
+                tickets.value.sorting[id.val].splice(index, 1);
+              }
+            });
           }
           if (
             tickets.value.custom[id.val].tickets.length >
@@ -232,7 +240,6 @@ subscriber$.push(
   $store
     .select((state) => state.ui.windowWidth)
     .subscribe((val) => {
-      console.log(val);
       windowWidth.value = val;
     })
 );
@@ -309,6 +316,11 @@ onUnmounted(() => {
 
 .ticketTable {
   max-width: 20000px !important;
+}
+
+.ticketTable td {
+  height: 1px;
+  min-height: 1px;
 }
 
 .ticketTable .v-table__wrapper {

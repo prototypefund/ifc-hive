@@ -9,6 +9,7 @@
  *
  * Keep track of the current route in the store
  */
+import { loadingHold } from '../store/state'
 export function forEachHook(store) {
   return (to, from) => {
     if (to !== from) {
@@ -37,7 +38,7 @@ export function afterEachHook(store) {
           type: 'ui/update',
           payload: { loading: false }
         })
-      }, 700);
+      }, loadingHold);
 
     }
   }

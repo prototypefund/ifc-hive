@@ -145,8 +145,6 @@ export default {
         return this.currTheme;
       },
       set(newValue) {
-        console.log(newValue);
-
         this.$store.dispatch({
           type: "ui/update",
           payload: {

@@ -8,7 +8,7 @@ import {
 import getEnvVariable from '../lib/getEnvVariable'
 import { mergeDeepRight, clone } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
-import { applicationState, storePatterns } from './state'
+import { applicationState, storePatterns, loadingHold } from './state'
 import helper from './helper.js'
 /*
  * Apply different extensions depending on the environment
@@ -329,6 +329,8 @@ const applicationReducers = {
                     if (!action.routeName) return state
                     // create our json friendly uuid
                     let currPage = {}
+                    // get current scroll position to apply it to the memory of page
+                    let scrollY = window.scrollY
                     const uuid = action.routeName.replace('.', '-')
                     // check if that requested page has already been preconfigured (should always be the case)
                     if (pagesLookup && pagesLookup[uuid] && pagesLookup[uuid].uuid) {
@@ -342,9 +344,21 @@ const applicationReducers = {
                         store.dispatch({
                             type: 'pages/update',
                             stateName: state.uuid,
-                            payload: state
+                            payload: {
+                                ...state,
+                                scrollY
+                            }
                         })
                     }
+                    // apply last scroll position to currentPage
+                    setTimeout(() => {
+                        if (currPage.scrollY) {
+                            window.scrollTo(0, currPage.scrollY);
+                        } else {
+                            window.scrollTo(0, 0);
+                        }
+                    }, loadingHold + 300);
+
                     return currPage
                 // simply let us update the state of the current page
                 case 'currentPage/update':

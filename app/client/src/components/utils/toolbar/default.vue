@@ -11,7 +11,11 @@
       >{{ $t("widgets.tools.title") }}
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-tabs density="compact" v-model="currentTool" fixed-tabs>
+    <v-tabs
+      :density="!currentTool ? 'compact' : 'default'"
+      v-model="currentTool"
+      fixed-tabs
+    >
       <v-tab
         class="closeBtnWrapper active"
         :class="{ hidden: currentTool === false }"
@@ -181,7 +185,7 @@ export default {
   padding: 0 !important;
   right: 0;
   top: 96px;
-  width: 80% !important;
+  width: 60% !important;
   z-index: 900;
   border: 1px solid #e0e0e0;
   border-top: 0px;

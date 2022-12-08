@@ -1,3 +1,4 @@
+export const loadingHold = 700
 export const applicationState = {
     route: {},
     data: {},
