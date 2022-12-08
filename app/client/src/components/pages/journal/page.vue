@@ -1,5 +1,6 @@
 <template>
   <v-container data-test-container="pages/journal" fluid pa-0>
+    <h1>{{ $t("pages.app-journal") }}</h1>
     <Grid></Grid>
   </v-container>
 </template>

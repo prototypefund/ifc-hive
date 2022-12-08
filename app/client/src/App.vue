@@ -45,15 +45,15 @@
     <ToolBar :class="{ appBarRel: isInTest }" ref="appToolbar" />
     <!-- Main content -->
     <v-main>
-      <v-card flat v-if="isInTest">
+      <template v-if="isInTest">
         <slot />
-      </v-card>
-      <v-card flat v-else>
+      </template>
+      <template v-else>
         <router-view v-slot="{ Component }">
           <loading-skeleton v-if="loading" :height="viewPortHeight || 0" />
           <component :is="Component" :class="{ isLoading: loading }" />
         </router-view>
-      </v-card>
+      </template>
     </v-main>
     <!-- quicklist Drawer -->
   </v-app>
