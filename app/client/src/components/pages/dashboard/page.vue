@@ -10,9 +10,7 @@
 import { inject, ref, onMounted, onUnmounted } from "vue";
 import Grid from "@u/grid/loader.vue";
 const $store = inject("$store");
-const $mobile = inject("$mobile");
 const state = ref({});
-console.dir($mobile);
 const stateSubscriber$ = $store
   .select((state) => state.currentPage)
   .subscribe((val) => {
@@ -26,7 +24,7 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  $store.dispatch({
+  /*$store.dispatch({
     type: "toolbar/add",
     payload: {
       title: "Test",
@@ -38,7 +36,7 @@ onMounted(() => {
         name: "placeholder",
       },
     },
-  });
+  });*/
 });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();

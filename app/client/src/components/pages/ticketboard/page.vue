@@ -133,15 +133,24 @@ $store.dispatch({
 $store.dispatch({
   type: "toolbar/add",
   payload: {
-    title: "chartJournal",
+    title: "ticketsByTag",
     page: "app.ticketboard",
     icon: "mdi-chart-donut",
     iconActive: "mdi-chart-donut-variant",
-    uuid: "ticketboard_chart",
+    uuid: "chart_ticketsByTag",
     widget: {
-      name: "journal",
+      name: "ticketboard",
       type: "chart",
-      face: "example",
+      face: "ticketsByTag",
+      props: {
+        categories: [
+          "tags:tag-todo",
+          "tags:tag-doing",
+          "tags:tag-test",
+          "tags:tag-qa",
+          "tags:tag-done",
+        ],
+      },
     },
   },
 });

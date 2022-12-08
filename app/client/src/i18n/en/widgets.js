@@ -4,5 +4,6 @@ export default {
     },
     quickList: 'Quicklist',
     newJournal: 'new Entry',
-    chartJournal: 'Chart'
+    chartJournal: 'Chart',
+    ticketsByTag: 'Ticket State'
 }

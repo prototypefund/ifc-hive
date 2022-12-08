@@ -1,9 +1,15 @@
 //TODO wait until vuetify fixes the v-badge
 <template>
-  <v-menu v-model="toggled" :close-on-click="false" :close-on-content-click="false" location="bottom" v-if="state"
-    transition="scroll-y-transition" class="notificationDrawer">
+  <v-menu
+    v-model="toggled"
+    :close-on-click="false"
+    :close-on-content-click="false"
+    location="bottom"
+    v-if="state"
+    transition="scroll-y-transition"
+    class="notificationDrawer"
+  >
     <template v-slot:activator="{ props }">
-
       <!--v-btn v-bind="props" class="text-none" stacked>
       
       <v-badge :content="state.unreadCount" >
@@ -11,7 +17,12 @@
         <v-icon>mdi-bell-outline</v-icon>
       </v-badge>
       </!--v-btn-->
-      <v-btn v-bind="props" class="text-none" :color="state.unreadCount > 0 ? 'error' : 'black'" stacked>
+      <v-btn
+        v-bind="props"
+        class="text-none"
+        :color="state.unreadCount > 0 ? 'error' : 'black'"
+        stacked
+      >
         {{ state.unreadCount }}
         <v-icon>mdi-bell-outline</v-icon>
       </v-btn>
@@ -23,19 +34,38 @@
           <v-expansion-panel-title>Neu</v-expansion-panel-title>
           <v-expansion-panel-text>
             <v-list density="compact">
-              <v-list-item v-for="(entry, index) in state.items" :key="index" :class="{ hovered: hover == index + 1 }"
-                @mouseover="handleHover(index + 1)" @mouseleave="handleHover(false)">
-                <v-list-item-title class="fullListItem" :class="entry.state">{{ entry }}
+              <v-list-item
+                v-for="(entry, index) in state.items"
+                :key="index"
+                :class="{ hovered: hover == index + 1 }"
+                @mouseover="handleHover(index + 1)"
+                @mouseleave="handleHover(false)"
+              >
+                <v-list-item-title class="fullListItem" :class="entry.state"
+                  >{{ entry }}
                 </v-list-item-title>
                 <template v-slot:append>
-                  <v-list-item-avatar end>
-                    <v-btn v-if="entry.state === 'read'" variant="text" color="grey lighten-1"
-                      @click="markUnRead(index)" icon="mdi-circle-small"></v-btn>
-                    <v-btn v-if="entry.state === 'unread'" variant="text" color="grey lighten-1"
-                      @click="markRead(index)" icon="mdi-circle-medium"></v-btn>
-                    <v-btn v-if="entry.state === 'seen'" variant="text" color="grey lighten-1" @click="markRead(index)"
-                      icon="mdi-circle-medium"></v-btn>
-                  </v-list-item-avatar>
+                  <v-btn
+                    v-if="entry.state === 'read'"
+                    variant="text"
+                    color="grey lighten-1"
+                    @click="markUnRead(index)"
+                    icon="mdi-circle-small"
+                  ></v-btn>
+                  <v-btn
+                    v-if="entry.state === 'unread'"
+                    variant="text"
+                    color="grey lighten-1"
+                    @click="markRead(index)"
+                    icon="mdi-circle-medium"
+                  ></v-btn>
+                  <v-btn
+                    v-if="entry.state === 'seen'"
+                    variant="text"
+                    color="grey lighten-1"
+                    @click="markRead(index)"
+                    icon="mdi-circle-medium"
+                  ></v-btn>
                 </template>
               </v-list-item>
             </v-list>
@@ -94,7 +124,7 @@ const clearAll = () => {
   $store.dispatch({
     type: "notifications/clear",
   });
-  toggleNotifier(false)
+  toggleNotifier(false);
 };
 const markUnRead = (index) => {
   $store.dispatch({
@@ -112,7 +142,7 @@ const markRead = (index) => {
     },
   });
 };
-onMounted(() => { });
+onMounted(() => {});
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });

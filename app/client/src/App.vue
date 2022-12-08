@@ -50,7 +50,7 @@
       </v-card>
       <v-card flat v-else>
         <router-view v-slot="{ Component }">
-          <loading-skeleton v-if="loading" :height="viewPortHeight" />
+          <loading-skeleton v-if="loading" :height="viewPortHeight || 0" />
           <component :is="Component" :class="{ isLoading: loading }" />
         </router-view>
       </v-card>

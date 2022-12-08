@@ -1,29 +1,51 @@
 <template>
-    <div>
-        <apexchart width="500" type="bar" :options="data.options" :series="data.series"></apexchart>
-    </div>
+  <div>
+    <apexchart
+      height="80%"
+      :type="data.type"
+      :options="data.options"
+      :series="data.series"
+    ></apexchart>
+  </div>
 </template>
 <script setup>
 import { inject, ref, onMounted, onUnmounted } from "vue";
+const props = defineProps({
+  props: {
+    type: Object,
+  },
+  uuid: {
+    type: String,
+  },
+});
 const data = ref({
-    options: {
-        chart: {
-            id: 'vuechart-example'
-        },
-        xaxis: {
-            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
-        }
+  type: "polarArea",
+  options: {
+    stroke: {
+      colors: ["#fff"],
     },
-    series: [{
-        name: 'series-1',
-        data: [30, 40, 45, 50, 49, 60, 70, 91]
-    }]
+    fill: {
+      opacity: 0.8,
+    },
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200,
+          },
+          legend: {
+            position: "bottom",
+          },
+        },
+      },
+    ],
+  },
+  series: [14, 23, 21, 17, 15, 10, 12, 17, 21],
 });
 
 const $store = inject("$store");
 const state = ref({});
-onMounted(() => { });
-onUnmounted(() => {
-
-});
+onMounted(() => {});
+onUnmounted(() => {});
 </script>
