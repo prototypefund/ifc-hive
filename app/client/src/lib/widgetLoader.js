@@ -20,11 +20,9 @@ export const widgetLoader = function (widgetName = 'debug', face = 'default') {
 export const widgetConfLoader = function (widget) {
     return import(`../components/widgets/${widget.name || 'debug'}/conf.js`).then(conf => {
         store.dispatch({
-            type: 'widgets/configure',
+            type: 'widgets/update',
             uuid: widget.uuid,
-            payload: {
-                conf: conf.default
-            }
+            payload: conf[widget.face] || conf.default
         })
     }).catch(e => {
         return e
@@ -38,13 +36,10 @@ export const widgetConfLoader = function (widget) {
  */
 export const widgetTypeConfLoader = function (widget) {
     return import(`../components/widgets/${widget.name || 'debug'}/${widget.type || 'default'}/conf.js`).then(conf => {
-        console.dir(conf)
         store.dispatch({
-            type: 'widgets/configure',
+            type: 'widgets/update',
             uuid: widget.uuid,
-            payload: {
-                conf: conf.default
-            }
+            payload: conf[widget.face] || conf.default
         })
     }).catch(e => {
         return widgetConfLoader(widget)
