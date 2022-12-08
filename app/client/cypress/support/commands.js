@@ -26,7 +26,7 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 import { getRelativeURL, isComonentTest } from './sbHelper.js'
-import { getTestMap } from './testHelper.js'
+import { getTestMap, testWidgetsIsPresent, summarizeWidgets, getSlotWidgets } from './testHelper.js'
 
 /**
  * Vistes a Storybook Page 
@@ -201,7 +201,6 @@ Cypress.Commands.add('testWidgetsArePresent', (source, bidirectional = true) => 
     })
 })
 
-
 Cypress.Commands.add('testWidgetsArePresent', (source, bidirectional = true) => {
     const env = getTestMap()
     if (!(source in env)) {
@@ -221,5 +220,43 @@ Cypress.Commands.add('testWidgetsArePresent', (source, bidirectional = true) => 
             }
 
         })
-
 })
+
+
+Cypress.Commands.add('testWidgetsArePresent', (source, bidirectional = true) => {
+    const env = getTestMap()
+    getSlotWidgets().then((x) => {
+        for (const y of x) {
+            testWidgetsIsPresent(y.uuid, y.name, y.face)
+        }
+        const subset = summarizeWidgets(x)
+        var needUpdate = false
+
+        if (!(source in env)) {
+            env[source] = {}
+            const msg = `id ${source} not found in getTestMap() definition`
+            cy.log(msg)
+            console.log(msg)
+            needUpdate = true
+        }
+
+        if (!('widgets' in env[source])) {
+            env[source]['widgets'] = {}
+            const msg = `Widget ${source} not found in getTestMap() definition`
+            cy.log(msg)
+            console.log(msg)
+            needUpdate = true
+        }
+        const update = JSON.parse(JSON.stringify(env))
+
+        if (needUpdate || (!Cypress._.isEqual(update[source]['widgets'], subset))) {
+            cy.log('UPDATE FILE')
+            update[source]['widgets'] = subset
+            cy.writeFile('cypress/fixtures/visit.json', update)
+        }
+        cy.wrap(subset).should('deep.equal', env[source]['widgets'])
+    })
+})
+
+
+

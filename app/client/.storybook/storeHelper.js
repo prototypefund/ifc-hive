@@ -2,10 +2,14 @@ import { inject } from 'vue';
 
 const initStore = () => {
   const $store = inject("$store");
+
   $store.dispatch({
     type: `init`,
     payload: {}
   });
+  if (window.Cypress) {
+    window.__store = $store
+  }
 }
 
 const prepareStore = (name, args) => {

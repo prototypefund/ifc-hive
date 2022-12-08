@@ -46,15 +46,18 @@ config = defineConfig({
         'file:preprocessor',
         vitePreprocessor(path.resolve(__dirname, './vite.config.js')),
       )
-      const visit = fs.readFileSync('cypress/fixtures/visit.json', 'utf8')
-      config.env.visitTests = visit
+      try {
+        const visit = fs.readFileSync('cypress/fixtures/visit.json', 'utf8')
+        JSON.parse(visit)
+      } catch(e) {
+        fs.writeFileSync('cypress/fixtures/visit.json','{}')
+      }
 
       /*return findBrowser().then((browser) => {
       return {
         browsers: config.browsers.concat(browser),
       }
       })*/
-      config.env.usersList = ["widgets/form/default"]
       return config
     }
   },

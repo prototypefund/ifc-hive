@@ -67,12 +67,14 @@ const injectWidgets = (source, prepareTest) => {
     if (!(source in testMap)) {
         const msg = `Container id ${source} not found in getTestMap() definition `
         console.log(msg)
-        throw new TypeError(msg)
+        //throw new TypeError(msg)
+        return;
     }
     if (!("widgets" in getTestMap()[source])) {
         const msg = `"widgets" for container id ${source} not found in getTestMap()[\'${source}\'] definition `
         console.log(msg)
-        throw new TypeError(msg)
+        //throw new TypeError(msg)
+        return;
     }
 
     const widgets = getTestMap()[source]["widgets"]
@@ -103,5 +105,68 @@ const testWidgets = (source, prepareTest) => {
     injectWidgets(source, prepareTest)
 }
 
+const summarizeWidgets = (entries) => {
+    const subset = {}
+    for (const x of entries) {
+        const name = x.name
+        const face = x.face
+        const data_test_container = `widgets/${name}/${face}`
+        if (!(data_test_container in subset)) {
+            subset[data_test_container] = 0
+        }
+        subset[data_test_container] += 1
+    }
+    return subset;
+}
 
-export { testWidgets, injectWidgets, testWidgetsArePresent, getTestMap };
+const testWidgetsIsPresent = (uuid, name, face) => {
+    cy.log('Yielded from store', uuid, name, face)
+    const data_test_container = `widgets/${name}/${face}`
+    cy.get(`[data-test-container="${data_test_container}"][data-test-container-uuid="${uuid}"]`)
+}
+
+const resolveData = (x) => {
+    const result = []
+    for (const index in x) {
+        const uuid = x[index].uuid
+        const name = x[index].name
+        var face = x[index].face
+        if (!face) {
+            face = 'default'
+        }
+        result.push({ uuid, name, face })
+    }
+    return result
+}
+
+const getAllWidgets = () => {
+    return cy.window().then((win) => {
+        var widgets = {}
+        win.__store.select(state => state.widgets).subscribe((state) => {
+            for (const uuid in state) {
+                widgets[uuid] = state[uuid]
+            }
+        })
+        return resolveData(widgets)
+    })
+}
+
+
+const getSlotWidgets = () => {
+    return cy.window().then((win) => {
+        var slots = []
+        win.__store.select(state => state.currentPage.slots).subscribe((state) => {
+            for (const i in state) {
+                slots.push(state[i].widget)
+            }
+        })
+        return resolveData(slots)
+    })
+}
+
+
+
+export {
+    testWidgets, injectWidgets, testWidgetsArePresent, getTestMap,
+    testWidgetsIsPresent, summarizeWidgets, getSlotWidgets
+};

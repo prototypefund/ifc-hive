@@ -29,7 +29,8 @@
  * the listStoriesFromClass will return multiple Objects with the same id but diffrent varname's
  *  { title: "title", varname: "AbC", name: "Ab C", id: "title--ab-c" },
  *  { title: "title", varname: "Ab_C", name: "Ab C", id: "title--ab-c" }
- * 
+ * Maybe
+ * @see MIGRATION.md#string-literal-titles
  */
 
 /**
