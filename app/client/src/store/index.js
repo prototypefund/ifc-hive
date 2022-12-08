@@ -354,8 +354,6 @@ const applicationReducers = {
                     setTimeout(() => {
                         if (currPage.scrollY) {
                             window.scrollTo(0, currPage.scrollY);
-                        } else {
-                            window.scrollTo(0, 0);
                         }
                     }, loadingHold + 300);
 

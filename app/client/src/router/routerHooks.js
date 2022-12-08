@@ -62,6 +62,7 @@ export function beforeResolveHook(store) {
         routeName: to.name,
         payload: { ...to.params, query: to.query }
       })
+      window.scrollTo(0, 0);
     }
   }
 }
