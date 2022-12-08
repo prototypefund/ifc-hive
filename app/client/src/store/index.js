@@ -332,8 +332,9 @@ const applicationReducers = {
                     if (!action.routeName) return state
                     // create our json friendly uuid
                     let currPage = {}
+                    let scrollY = false
                     // get current scroll position to apply it to the memory of page
-                    let scrollY = window.scrollY
+
                     const uuid = action.routeName.replace('.', '-')
                     // check if that requested page has already been preconfigured (should always be the case)
                     if (pagesLookup && pagesLookup[uuid] && pagesLookup[uuid].uuid) {
@@ -341,6 +342,9 @@ const applicationReducers = {
                         currPage = mergeDeepRight(pagesLookup[uuid], action.payload)
                     } else {
                         console.error("race condition? a currentpage without a uuid? dafuq? bruder? alter? junge alter bruder diggi alter bruder diggi junge bruder?")
+                    }
+                    if (!currPage.scrollTop) {
+                        scrollY = window.scrollY
                     }
                     if (state.routeName) {
                         // update our memorized preconfigured page with the new version which includes url params and user data
@@ -356,9 +360,14 @@ const applicationReducers = {
                     // apply last scroll position to currentPage
                     setTimeout(() => {
                         if (currPage.scrollY) {
-                            window.scrollTo(0, currPage.scrollY);
+                            for (let i = 0; i < currPage.scrollY; i++) {
+                                setTimeout(() => {
+                                    window.scrollTo(0, i);
+                                }, 50)
+                            }
+
                         }
-                    }, loadingHold + 300);
+                    }, loadingHold * 2);
 
                     return currPage
                 // simply let us update the state of the current page

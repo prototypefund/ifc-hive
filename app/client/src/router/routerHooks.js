@@ -33,6 +33,7 @@ export function afterEachHook(store) {
   return (to, from) => {
     // change the currentPage, might often be just a change in url params
     if (to !== from) {
+      window.scrollTo(0, 0);
       setTimeout(() => {
         store.dispatch({
           type: 'ui/update',
@@ -62,7 +63,6 @@ export function beforeResolveHook(store) {
         routeName: to.name,
         payload: { ...to.params, query: to.query }
       })
-      window.scrollTo(0, 0);
     }
   }
 }

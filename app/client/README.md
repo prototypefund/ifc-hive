@@ -113,6 +113,8 @@ You can define what kind of grid you need with Grid Key.
 		items: "card",
    		columns: 2
 	},
+  // this will determine if we always scroll to the last page position or to the top whenever we enter this page
+  scrollTop: false,
 	// title defines the title of the page
 	title: 'My Title',
     // slots array defines the used widgets

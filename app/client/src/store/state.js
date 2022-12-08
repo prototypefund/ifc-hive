@@ -59,6 +59,8 @@ export const configPatterns = {
 }
 export const storePatterns = {
     page: {
+        // this will determine if we always scroll to the last page position or to the top whenever we enter this page
+        scrollTop: false,
         // grid config for a page
         grid: configPatterns.grid,
         // the array containing the configs for the 1-n slots
