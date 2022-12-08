@@ -301,6 +301,10 @@ const applicationReducers = {
             switch (action.type) {
                 case 'init':
                     return applicationState.ui
+                case 'currentPage/set':
+                    return {
+                        ...state, navigationOpen: false
+                    }
                 case 'ui/update':
                     if (action.payload.navigationOpen || action.payload.currentTool) {
                         if (action.payload.navigationOpen === true && state.currentTool !== false) {

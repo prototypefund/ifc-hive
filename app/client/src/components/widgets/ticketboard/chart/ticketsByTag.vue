@@ -1,7 +1,7 @@
 <template>
   <div v-if="props.uuid">
     <apexchart
-      width="80%"
+      height="80%"
       :type="data.type"
       :options="data.options"
       :series="data.series"
