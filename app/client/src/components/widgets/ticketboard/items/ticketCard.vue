@@ -35,11 +35,13 @@
           </template>
 
           <v-card-subtitle v-if="data[element].tags && data[element].tags.length > 0">
-            <v-chip
-              v-for="tag in data[element].tags"
-              :color="data[tag] ? data[tag].color || 'grey' : 'grey'"
-              >{{ data[tag] ? data[tag].title || tag : tag }}</v-chip
-            >
+            <v-row no-gutters>
+              <v-col cols="auto" v-for="tag in data[element].tags">
+                <v-chip :color="data[tag] ? data[tag].color || 'grey' : 'grey'">{{
+                  data[tag] ? data[tag].title || tag : tag
+                }}</v-chip>
+              </v-col>
+            </v-row>
           </v-card-subtitle>
           <v-card-text>
             <pre>{{ data[element] }}</pre>
