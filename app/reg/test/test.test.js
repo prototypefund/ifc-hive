@@ -18,7 +18,6 @@ t.skip('Crypto', async t => {
   })
 })
 
-
 let registry = null
 
 // documents
@@ -37,7 +36,6 @@ let e2 = null, p2 = null, s2 = null
 const headers = {'Accept-Version': '1', 'Content-Type': 'application/json'}
 
 // now create the test client, needs its own certificates
-
 const agent = new https.Agent({
   cert: fs.readFileSync('test/test.crt'),
   key: fs.readFileSync('test/test.key'),
@@ -216,9 +214,16 @@ t.only('Registry API', async t => {
     t.equal(rr3.data[5]._id, s2._id, 'Peer 1 Confirmed Mirror Signature Entry: ' + s2._id)
     t.equal(rr4.data[5]._id, s2._id, 'Peer 2 Confirmed Mirror Signature Entry: ' + s2._id)
     log = rr4.data.map(e =>  `\t${e._id}: ${e.confirmations.join(" ")}`)
-
   })
-  
+
+  t.skip('Extra', async t => {
+    const file3 = fs.readFileSync('test/test.jpg')
+    const h3 = ID.string(ID.hash(file3))
+    const r0 = await ht.put(registry+'/'+h3+'/'+h3, file3, { headers: { 'content-type': 'image/jpeg', 'content-location':'test.jpg'}})
+    t.equal(r0.status, 200, 'File Uploaded: ' + h3)
+    t.equal(r3.headers['etag'], h3,'File Hash Confirmed')
+  })
+
   t.test('Cleanup', async t => {
     setTimeout(async function() {
       const r0 = await ht.delete('/')

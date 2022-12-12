@@ -28,8 +28,9 @@ function hashAndStoreParser(req, body, done) {
   if (body === '' || !body) return done(undefined, undefined)
   try {
     const hash = crypto.createHash('sha256')
-    const path = join(dir, req.url)
-    const [did,chk] = req.url.split('?')[0].split('/').slice(2)
+    const url = req.url.substr(0,159)
+    const path = join(dir, url)
+    const [did,chk] = url.split('/').slice(2)
     fs.mkdirSync(dirname(path), {recursive: true})
     const f = fs.createWriteStream(path)
     var length = 0
@@ -51,7 +52,6 @@ function hashAndStoreParser(req, body, done) {
   } catch (e) { e.statusCode = 400; return done(e, undefined) }
 }
 
-
 export default function files(a, opt, done) {
 
   const m = opt.db.connection 
@@ -70,38 +70,37 @@ export default function files(a, opt, done) {
    */
 
     try {
-
+      await opt.matchLastTransaction(req)
       const Ledger = m.model('L_'+req.params.rid, _Ledger)
-      const ref2 = await Ledger.findOne().sort({T:-1}).exec()         // latest entry
+      const [ content_last, last ] = await opt.lastTransaction(req.params.rid, null, true)
       const metadata = {}
       const headers = {}
       const refs = []
-      
+
+      // can't use getBackreferences here, because updates work without findOne
       if(req.params.did === req.params.hash) { // new document
-        const ref0 = await Ledger.findOne().sort({T:1}).exec()    // register init entry
+        const ref0 = await Ledger.findOne({},'_id').sort({T:1}).lean()    // register init entry
         headers['content-type'] = metadata['mime'] = req.headers['content-type']
         headers['content-location'] = metadata['name'] = req.headers['content-location']
         refs[0] = ref0._id
         refs[1] = ref0._id
-        refs[2] = ref2._id
+        refs[2] = last
       }
       else { // update
-        const ref0 = await Ledger.find({ D: req.body.did}).sort({T:1}).exec()    // document commit history
+        const ref0 = await Ledger.find({ D: req.body.did },'_id').sort({T:1}).lean()    // document commit history
         refs[0] = ref0[0]._id
         refs[1] = ref0.slice(-1)[0]._id
-        refs[2] = ref2._id
+        refs[2] = last
       }
 
-      res.header('etag', req.params.hash)
-      res.header('content-id', req.params.did)
       const peers = req.headers['confirm']?.split(' ')
       const n = await opt.chain(Ledger, req.body.did, req.body.id, refs, metadata, req.query || Date.now())
-
       const tid = ID.string(n._id)
+      res.headers({'content-id': req.params.did, 'etag': req.params.hash, ...await opt.lastTransaction(req.params.rid, tid, n._id)})
       res.code(200).send('"'+tid+'"')
       opt.confirm({ url: req.url + '?'+ n.T.valueOf(), method: 'PUT', data: req.body.data,
-                    headers: { 'content-length': req.body.length, ...headers }}, tid, !!!req.query)
-    } catch (e) { res.code( typeof e === 'number' ? e : 500).send(e) }
+                    headers: { 'content-length': req.body.length, ...headers, ...content_last}}, tid, !!!req.query)
+    } catch (e) { console.log(e); res.code( typeof e === 'string' ? 409 : 500).send(e) }
   })
 
   a.head('/:rid/:did', async function(req, res) {
@@ -131,13 +130,12 @@ export default function files(a, opt, done) {
     try {
       const Ledger = m.model('L_'+req.params.rid, _Ledger)
       const r = await Ledger.find().sort({T:1}).exec()
-      res.header('content-id', req.params.did)
-      res.header('etag', req.params.hash)
+      res.headers({'content-id': req.params.did, 'etag':req.params.hash, ...await opt.lastTransaction(req.params.rid)})
       const entries = await Ledger.find({ D: ID.buffer(req.params.did)}, 'V D name mime' ).sort({T:1}).exec()
       res.header('content-location', entries[0].name)
       const path = join(dir, req.url, ID.string(entries.slice(-1)[0].V))
       const f = fs.createReadStream(path)
-      return res.code(200).type(entries[0].mime).send(f)
+      return res.code(entries ? 200 : 404).type(entries[0].mime).send(f)
     } catch (e) { res.code(500).send(e) }
   })
   
@@ -149,7 +147,8 @@ export default function files(a, opt, done) {
     try {
       const Ledger = m.model('L_'+req.params.rid, _Ledger)
       const entries = await Ledger.find({ D: ID.buffer(req.params.did)}, 'T D V ref key signature name mime' ).exec()
-      res.code(200).send( entries )
+      res.headers({'content-id': req.params.did, ...await opt.lastTransaction(req.params.rid)})
+      res.code(entries ? 200 : 404).send( entries )
     } catch (e) { res.code(500).send(e) }
   })
 
@@ -164,8 +163,8 @@ export default function files(a, opt, done) {
        res.header('etag', req.params.hash)
        const Ledger = m.model('L_'+req.params.rid, _Ledger)
        const entry = await Ledger.findOne({ V: ID.buffer(req.params.did)}, 'name mime' ).exec()
-       res.header('content-location', entry.name)
-       res.code(200).type(entry.mime).send()
+       res.headers({'content-id': req.params.did, 'etag':req.params.hash,'content-location': entry.name, ...await opt.lastTransaction(req.params.rid)})
+       res.code(entry ? 200 : 404).type(entry.mime).send()
      } catch (e) { res.code(500).send(e) }
   })
 
@@ -176,13 +175,11 @@ export default function files(a, opt, done) {
     try {
       const path = join(dir, req.url)
       if(!fs.existsSync(path)) return res.code(404).send(`Not found.`)
-      res.header('content-id', req.params.did)
-      res.header('etag', req.params.hash)
       const Ledger = m.model('L_'+req.params.rid, _Ledger)
       const entry = await Ledger.findOne({ V: ID.buffer(req.params.did)}, 'name mime' ).exec()
-      res.header('content-location', entry.name)
+      res.headers({'content-id': req.params.did, 'etag':req.params.hash,'content-location': entry.name, ...await opt.lastTransaction(req.params.rid)})
       const f = fs.createReadStream(path)
-      return res.code(200).type(entry.mime).send(f)
+      return res.code(entry ? 200 : 404).type(entry.mime).send(f)
     } catch (e) { res.code(500).send(e) }
   })
 
@@ -194,7 +191,8 @@ export default function files(a, opt, done) {
     try {
       const Ledger = m.model('L_'+req.params.rid, _Ledger)
       const entries = await Ledger.find({ V: ID.buffer(req.params.hash)}, 'T D V ref key signature name mime' ).exec()
-      res.code(200).send( entries )
+      res.headers({'content-id': req.params.did, ...await opt.lastTransaction(req.params.rid)})
+      res.code(entries ? 200 : 404).send( entries )
     } catch (e) { res.code(500).send(e) }
   })
 

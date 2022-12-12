@@ -26,6 +26,7 @@ import { nanoid } from 'nanoid'
  */
 const certs_dir = process.env.REG_CERTIFICATE_DIRECTORY || ''
 const instance = process.env.REG_HOST.split('-')[2]
+const port = process.env.REG_PORT || 3000
 const ckey = fs.readFileSync( join(certs_dir, instance + '.key' ))
 const cert = fs.readFileSync( join(certs_dir, instance + '.crt' ))
 const ca = fs.readFileSync( join(certs_dir, 'ca.crt' ))
@@ -103,12 +104,8 @@ server.register(fastifySwagger, swaggerConfig)
 /* simple health check on /health */
 server.register(healthcheck)
 
-// pass mongo connection string along where registry plugin can find and use it to connect
-server.decorate('db', 'mongodb://mongo:27017/ifc-hive' + (ca_key ? '' : '_' + instance))
-
 // pass working directory to plugins, the actual files that are registered are stored there
 server.decorate('dir', join(process.env.REG_FILES_DIRECTORY || process.env.PWD , instance))
-
 
 /*
  * ACCEPT-VERSION HANDLING
@@ -139,25 +136,22 @@ server.addHook('onRequest', (request, reply, done) => {
   // we want the accept-versio header everywhere except when requesting the documentation routes
   // @TODO take care of request.req depreciated
   if (!request.headers['accept-version'] && !/(docs|health)/.test(request.raw.url)) {
-    // send error if we are missing the Accept-Version header
-    reply
-      .status(412)
-      .send({
-        statusCode: 412,
-        error: 'Missing Header',
-        message: 'You must specify an Accept-Version header'
-      })
+    reply.status(412).send({ statusCode: 412, error: 'Missing Header',
+                             message: 'You must specify an Accept-Version header' })
   }
   done()
 })
 
-server.register(registry)
+/* 
+ * the mongodb connection string should be made configurable with env variables
+ * the registry uses same mongodb as the application server, if there is an application server on the machine
+ * it just uses different collections
+ */
 
-/* Set port */
-const PORT = 3000
+server.register(registry, { mongo: 'mongodb://mongo:27017/ifc-hive' + (ca_key ? '' : '_' + instance), port: port } )
 
 /* since we are running inside a docker container we need to bin to '0.0.0.0' instead of the default 'localhost' */
-server.listen(PORT, '0.0.0.0', (err, address) => {
+server.listen(port, '0.0.0.0', (err, address) => {
   server.log.info('APP RUNNING')
   if (err) {
     server.log.error(err)
