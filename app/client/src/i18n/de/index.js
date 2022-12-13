@@ -6,7 +6,15 @@ export default {
   cancel: 'Abbrechen',
   clear: 'Leeren',
   save: 'Speichern',
+  yes: 'Ja',
+  no: 'Nein',
   navigation: 'Navigation',
+  themeDark: 'dunkles Thema',
+  themeLight: 'helles Thema',
+  ui: {
+    uiSettings: 'Oberflächen Einstellungen',
+    editMode: 'Widget Bearbeitungsmodus',
+  },
   timeline: {
     title: 'Projektjournal Überschrift'
   },

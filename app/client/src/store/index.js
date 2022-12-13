@@ -342,6 +342,10 @@ const applicationReducers = {
                         currPage = mergeDeepRight(pagesLookup[uuid], action.payload)
                     } else {
                         console.error("race condition? a currentpage without a uuid? dafuq? bruder? alter? junge alter bruder diggi alter bruder diggi junge bruder?")
+                        console.dir(pagesLookup)
+                        debugger
+                        console.dir(action)
+                        currPage = action.payload
                     }
                     if (!currPage.scrollTop) {
                         scrollY = window.scrollY
@@ -365,7 +369,6 @@ const applicationReducers = {
                                     window.scrollTo(0, i);
                                 }, 50)
                             }
-
                         }
                     }, loadingHold * 2);
 

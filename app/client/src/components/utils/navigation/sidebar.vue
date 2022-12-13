@@ -55,12 +55,12 @@
   </v-navigation-drawer>
 </template>
 <script>
-import ConnectionBar from "@u/mobile/connection/iconbar.vue";
 import { useRouter } from "vue-router";
+import { defineAsyncComponent } from "vue";
 export default {
   inject: ["$api", "$store", "$mobile"],
   components: {
-    ConnectionBar,
+    ConnectionBar: defineAsyncComponent(() => import("../mobile/connection/iconbar.vue")),
   },
   data: () => ({
     navigationDrawer: true,

@@ -1,21 +1,87 @@
 <template>
   <v-container v-if="state" data-test-container="pages/settings">
     <h1>{{ $t("pages." + state.uuid) }} - {{ state.title }}</h1>
-    <p>url params > {{ props.urlParams }} &lt;</p>
+    <v-row>
+      <v-col cols="6">
+        <v-card>
+          <v-card-title>{{ $t("ui.uiSettings") }}</v-card-title>
+          <v-card-text>
+            <v-row no-gutters>
+              <v-col cols="8">
+                {{ $t("ui.editMode") }}: {{ editMode ? $t("yes") : $t("no") }}
+              </v-col>
+              <v-col cols="4">
+                <v-switch density="compact" flat v-model="editMode" hide-details />
+              </v-col>
+            </v-row>
+            <v-row no-gutters>
+              <v-col cols="8">
+                <span v-if="theme">{{ $t("themeDark") }}</span>
+                <span v-else>{{ $t("themeLight") }}</span>
+              </v-col>
+              <v-col cols="4">
+                <v-switch flat density="compact" hide-details v-model="theme" />
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <v-col cols="6">
+        <v-card> {{ uiState }}</v-card>
+      </v-col>
+    </v-row>
     <Grid :contents="state.slots" :grid="state.grid"></Grid>
   </v-container>
 </template>
 
 <script setup>
-import { inject, shallowRef, onMounted, onUnmounted } from "vue";
+import { useTheme } from "vuetify";
+import { inject, shallowRef, onMounted, onUnmounted, computed } from "vue";
 import Grid from "@u/grid/loader.vue";
 const $store = inject("$store");
 const state = shallowRef({});
+const uiState = shallowRef({});
+const $vuetifyTheme = useTheme();
 const stateSubscriber$ = $store
   .select((state) => state.currentPage)
   .subscribe((val) => {
     state.value = val;
   });
+const uiStateSubscriber$ = $store
+  .select((state) => state.ui)
+  .subscribe((val) => {
+    uiState.value = val;
+  });
+
+const editMode = computed({
+  get() {
+    return uiState.value.editMode;
+  },
+  set(val) {
+    $store.dispatch({
+      type: "ui/update",
+      payload: {
+        editMode: val,
+      },
+    });
+  },
+});
+const theme = computed({
+  get() {
+    return uiState.value.theme === "light" ? false : true;
+  },
+  set(newValue) {
+    const theme = newValue === false ? "light" : "theme";
+    $store.dispatch({
+      type: "ui/update",
+      payload: {
+        theme,
+      },
+    });
+    $vuetifyTheme.global.name.value = theme;
+  },
+});
 const props = defineProps({
   urlParams: {
     type: String,
@@ -39,6 +105,7 @@ $store.dispatch({
 onMounted(() => {});
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
+  uiStateSubscriber$.unsubscribe();
 });
 function counter() {
   $store.dispatch({

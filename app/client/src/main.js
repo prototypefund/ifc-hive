@@ -41,6 +41,7 @@ try {
   // Make axios availabe in all components
   app.config.globalProperties.$api = axios
   app.provide('$api', axios)
+
   // make store availble in all components
   app.provide('$store', store)
   // make capacitor availble in all components 

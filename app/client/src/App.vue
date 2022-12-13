@@ -21,20 +21,6 @@
       <Camera v-if="$mobile" />
       <v-spacer />
 
-      <v-switch flat hide-details v-model="theme" />
-      <v-btn
-        v-if="!editMode"
-        flat
-        icon="mdi-view-dashboard-edit-outline"
-        @click="changeEditMode"
-      />
-      <v-btn
-        v-if="editMode"
-        flat
-        icon="mdi-view-dashboard-edit"
-        @click="changeEditMode"
-      />
-
       <!-- notifications -->
       <Notifications />
     </v-app-bar>
@@ -45,6 +31,13 @@
     <ToolBar :class="{ appBarRel: isInTest }" ref="appToolbar" />
     <!-- Main content -->
     <v-main>
+      <v-btn
+        class="backToTop"
+        v-if="hasScrolled"
+        @click="scrollTop"
+        icon="mdi-chevron-up"
+        color="primary"
+      />
       <template v-if="isInTest">
         <slot />
       </template>
@@ -55,15 +48,16 @@
         </router-view>
       </template>
     </v-main>
+    <mobile-startup v-if="$mobile" />
     <!-- quicklist Drawer -->
   </v-app>
 </template>
 <script>
 // only needed for mobile and will be handled in mounted
-import { defineCustomElements } from "@ionic/pwa-elements/loader";
+
+import { defineAsyncComponent } from "vue";
 import Notifications from "@u/notifications/default.vue";
 import NavigationSideBar from "@u/navigation/sidebar.vue";
-import Camera from "@u/mobile/camera/icon.vue";
 import ToolBar from "@u/toolbar/default.vue";
 import loadingSkeleton from "@t/loadingSkeleton.vue";
 export default {
@@ -71,8 +65,13 @@ export default {
     Notifications,
     NavigationSideBar,
     ToolBar,
-    Camera,
     loadingSkeleton,
+    Camera: defineAsyncComponent(() =>
+      import("./components/utils/mobile/camera/icon.vue")
+    ),
+    mobileStartup: defineAsyncComponent(() =>
+      import("./components/utils/mobile/startup.vue")
+    ),
   },
   inject: ["$api", "$store", "$mobile"],
   props: {
@@ -86,7 +85,7 @@ export default {
     editMode: false,
     viewPortHeight: false,
     loading: false,
-    currTheme: true,
+    hasScrolled: false,
     navItems: [
       {
         icon: "mdi-home",
@@ -122,49 +121,14 @@ export default {
       .subscribe((val) => {
         this.page = val;
       });
-    this.$store
-      .select((state) => state.ui.editMode)
-      .subscribe((val) => {
-        this.editMode = val;
-      });
+
     this.$store
       .select((state) => state.ui.loading)
       .subscribe((val) => {
         this.loading = val;
       });
-    this.$store
-      .select((state) => state.ui.theme)
-      .subscribe((val) => {
-        this.$vuetify.theme.name = val;
-        this.currTheme = val === "theme" ? true : false;
-      });
-  },
-  computed: {
-    theme: {
-      get() {
-        return this.currTheme;
-      },
-      set(newValue) {
-        this.$store.dispatch({
-          type: "ui/update",
-          payload: {
-            theme: newValue === false ? "light" : "theme",
-          },
-        });
-      },
-    },
   },
   mounted() {
-    if (this.$mobile) {
-      defineCustomElements(window);
-      // TODO leave this here or move it to a hook file which comes from capacitor src?
-      this.$mobile.Toast.show({
-        text: "Capacitor ist ne geile Sau wenn das Grundframework ne geile Sau ist!",
-        duration: "long",
-      }).then(async () => {
-        this.$mobile.SplashScreen.hide();
-      });
-    }
     // TODO find a way to have the quicklist handler know the uuid of the widget. As for now we need to set a uuid
     this.$store.dispatch({
       type: "toolbar/add",
@@ -180,10 +144,22 @@ export default {
       },
     });
     window.addEventListener("resize", this.setDimensions, { passive: true });
+    window.addEventListener("scroll", this.setScroll, { passive: true });
     // TODO find a better way instead of this ugly timeOutBullshit
     setTimeout(() => this.setDimensions(), 500);
   },
   methods: {
+    setScroll: async function () {
+      if (window.scrollY > 0) {
+        this.hasScrolled = true;
+      } else {
+        this.hasScrolled = false;
+      }
+    },
+    scrollTop: async function () {
+      window.scrollTo(0, 0);
+      this.setScroll();
+    },
     setDimensions: async function () {
       await this.$nextTick(function () {
         const appBarHeight = this.$refs.appAppbar.height || 0;
@@ -201,20 +177,19 @@ export default {
         });
       });
     },
-    changeEditMode: function () {
-      this.$store.dispatch({
-        type: "ui/update",
-        payload: {
-          editMode: !this.editMode,
-        },
-      });
-    },
   },
 };
 </script>
 <style>
 #breadcrumb-home {
   text-decoration: none;
+}
+
+.backToTop {
+  position: fixed !important;
+  z-index: 100;
+  right: 30px;
+  bottom: 30px;
 }
 
 .appBarRel {
