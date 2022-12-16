@@ -1,15 +1,21 @@
 <template>
   <v-toolbar v-if="widgetState" dense>
-    <v-btn flat icon="mdi-drag" />
+    // TODO reenable once the drag and drop for widgets is fully implemented
+    <!--v-btn flat icon="mdi-drag" /-->
     <v-toolbar-title>{{
-        widgetState.title || widgetState.name || props.type
+      widgetState.title || widgetState.name || props.type
     }}</v-toolbar-title>
     <v-spacer></v-spacer>
 
     <div class="d-flex flex-column">
       <br /><br />
       <v-scale-transition>
-        <v-select density="compact" :items="colCounts" v-model="colCount" label="Breite"></v-select>
+        <v-select
+          density="compact"
+          :items="colCounts"
+          v-model="colCount"
+          label="Breite"
+        ></v-select>
       </v-scale-transition>
     </div>
   </v-toolbar>
@@ -50,8 +56,7 @@ const colCount = computed({
   },
 });
 
-onMounted(() => {
-});
+onMounted(() => {});
 onUnmounted(() => {
   widgetStateSubscriber$.unsubscribe();
 });

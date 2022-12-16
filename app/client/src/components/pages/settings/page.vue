@@ -16,11 +16,11 @@
             </v-row>
             <v-row no-gutters>
               <v-col cols="8">
-                <span v-if="theme">{{ $t("themeDark") }}</span>
+                <span v-if="dark">{{ $t("themeDark") }}</span>
                 <span v-else>{{ $t("themeLight") }}</span>
               </v-col>
               <v-col cols="4">
-                <v-switch flat density="compact" hide-details v-model="theme" />
+                <v-switch flat density="compact" hide-details v-model="dark" />
               </v-col>
             </v-row>
           </v-card-text>
@@ -67,12 +67,12 @@ const editMode = computed({
     });
   },
 });
-const theme = computed({
+const dark = computed({
   get() {
     return uiState.value.theme === "light" ? false : true;
   },
   set(newValue) {
-    const theme = newValue === false ? "light" : "theme";
+    const theme = newValue === false ? "light" : "dark";
     $store.dispatch({
       type: "ui/update",
       payload: {

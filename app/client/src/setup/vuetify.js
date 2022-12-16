@@ -6,17 +6,33 @@ import '@mdi/font/css/materialdesignicons.css'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import { locale } from './i18n.js'
 
-const theme = {
-  dark: true,
-  colors: {
+const custom = {
+  primary: '#FEBE33',
+  light: {
+
+  },
+  dark: {
     background: '#1F1E24',
     surface: '#333238',
-    primary: '#FEBE33',
+  }
+}
+const dark = {
+  dark: true,
+  colors: {
+    background: custom.dark.background,
+    surface: custom.dark.surface,
+    primary: custom.primary,
     secondary: '#4C89A5',
     error: '#B00020',
     info: '#2196F3',
     success: '#4CAF50',
     warning: '#FB8C00',
+  }
+}
+const light = {
+  dark: false,
+  colors: {
+    primary: custom.primary,
   }
 }
 
@@ -25,9 +41,10 @@ export const vuetify = createVuetify({
   components,
   directives,
   theme: {
-    defaultTheme: 'theme',
+    defaultTheme: 'dark',
     themes: {
-      theme,
+      dark,
+      light
     }
   },
   display: {
