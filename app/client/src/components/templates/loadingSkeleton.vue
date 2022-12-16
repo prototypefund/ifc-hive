@@ -1,5 +1,4 @@
 <template>
-  <v-progress-linear indeterminate color="primary"></v-progress-linear>
   <v-row align="center" justify="center" :style="{ height: height + 'px' }">
     <v-col cols="12" class="fill-height progressCenter">
       <div>

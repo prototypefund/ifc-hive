@@ -13,6 +13,10 @@ import { loadingHold } from '../store/state'
 export function forEachHook(store) {
   return (to, from) => {
     if (to !== from) {
+      store.dispatch({
+        type: 'ui/update',
+        payload: { loading: true }
+      })
       // add default params to every route
       if (!to.params.locale) to.params.locale = 'de'
       // set the new route to the store
@@ -54,10 +58,6 @@ export function beforeResolveHook(store) {
   return (to, from) => {
     // change the currentPage, might often be just a change in url params
     if (to !== from) {
-      store.dispatch({
-        type: 'ui/update',
-        payload: { loading: true }
-      })
       store.dispatch({
         type: 'currentPage/set',
         routeName: to.name,

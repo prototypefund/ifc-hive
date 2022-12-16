@@ -15,7 +15,10 @@
           ><v-icon icon="mdi-home" color="primary"></v-icon>
         </router-link>
         <v-icon color="grey" xsmall>mdi-chevron-right</v-icon>
-        {{ $t("pages." + page.uuid) }}
+        <span v-if="!loading">{{ $t("pages." + page.uuid) }}</span>
+        <span v-if="loading"
+          ><v-progress-circular indeterminate :size="20" :width="2" color="primary"
+        /></span>
       </v-app-bar-title>
       <v-spacer />
       <Camera v-if="$mobile" />
@@ -28,7 +31,8 @@
     <!-- Navigation Drawer -->
     <NavigationSideBar v-if="!isInTest" :nav-items="navItems" />
 
-    <ToolBar :class="{ appBarRel: isInTest }" ref="appToolbar" />
+    <ToolBar v-if="!loading" class="{ appBarRel: isInTest }" ref="appToolbar" />
+    <loading-skeleton-bar v-else :class="{ appBarRel: isInTest }" ref="appToolbar" />
     <!-- Main content -->
     <v-main>
       <v-btn
@@ -60,12 +64,14 @@ import Notifications from "@u/notifications/default.vue";
 import NavigationSideBar from "@u/navigation/sidebar.vue";
 import ToolBar from "@u/toolbar/default.vue";
 import loadingSkeleton from "@t/loadingSkeleton.vue";
+import loadingSkeletonBar from "@t/loadingSkeletonBar.vue";
 export default {
   components: {
     Notifications,
     NavigationSideBar,
     ToolBar,
     loadingSkeleton,
+    loadingSkeletonBar,
     Camera: defineAsyncComponent(() =>
       import("./components/utils/mobile/camera/icon.vue")
     ),
@@ -90,9 +96,7 @@ export default {
       {
         icon: "mdi-home",
         route: "app.dashboard",
-        params: {
-          urlParams: "navigation nach dashboard von nav",
-        },
+        params: {},
       },
       {
         icon: "mdi-file-document-multiple",
@@ -102,16 +106,12 @@ export default {
       {
         icon: "mdi-human-male-board-poll",
         route: "app.ticketboard",
-        params: {
-          urlParams: "navigation nach ticketboard von nav",
-        },
+        params: {},
       },
       {
         icon: "mdi-cog",
         route: "app.settings",
-        params: {
-          urlParams: "navigation nach settings von nav",
-        },
+        params: {},
       },
     ],
   }),

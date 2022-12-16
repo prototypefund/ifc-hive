@@ -8,7 +8,7 @@ export default {
       defineCustomElements(window);
       // TODO leave this here or move it to a hook file which comes from capacitor src?
       this.$mobile.Toast.show({
-        text: "Capacitor ist ne geile Sau wenn das Grundframework ne geile Sau ist!",
+        text: "Default Appsettings loaded",
         duration: "long",
       }).then(async () => {
         this.$mobile.SplashScreen.hide();
