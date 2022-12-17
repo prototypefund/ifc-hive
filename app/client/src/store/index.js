@@ -343,7 +343,6 @@ const applicationReducers = {
                     } else {
                         console.error("race condition? a currentpage without a uuid? dafuq? bruder? alter? junge alter bruder diggi alter bruder diggi junge bruder?")
                         console.dir(pagesLookup)
-                        debugger
                         console.dir(action)
                         currPage = action.payload
                     }

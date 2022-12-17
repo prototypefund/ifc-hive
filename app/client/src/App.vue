@@ -31,8 +31,7 @@
     <!-- Navigation Drawer -->
     <NavigationSideBar v-if="!isInTest" :nav-items="navItems" />
 
-    <ToolBar v-if="!loading" class="{ appBarRel: isInTest }" ref="appToolbar" />
-    <loading-skeleton-bar v-else :class="{ appBarRel: isInTest }" ref="appToolbar" />
+    <ToolBar class="{ appBarRel: isInTest }" ref="appToolbar" />
     <!-- Main content -->
     <v-main>
       <v-btn
@@ -47,7 +46,6 @@
       </template>
       <template v-else>
         <router-view v-slot="{ Component }">
-          <loading-skeleton v-if="loading" :height="viewPortHeight || 0" />
           <component :is="Component" :class="{ isLoading: loading }" />
         </router-view>
       </template>
@@ -64,14 +62,11 @@ import Notifications from "@u/notifications/default.vue";
 import NavigationSideBar from "@u/navigation/sidebar.vue";
 import ToolBar from "@u/toolbar/default.vue";
 import loadingSkeleton from "@t/loadingSkeleton.vue";
-import loadingSkeletonBar from "@t/loadingSkeletonBar.vue";
 export default {
   components: {
     Notifications,
     NavigationSideBar,
     ToolBar,
-    loadingSkeleton,
-    loadingSkeletonBar,
     Camera: defineAsyncComponent(() =>
       import("./components/utils/mobile/camera/icon.vue")
     ),
@@ -158,7 +153,7 @@ export default {
     },
     scrollTop: async function () {
       window.scrollTo(0, 0);
-      this.setScroll();
+      this.hasScrolled = false;
     },
     setDimensions: async function () {
       await this.$nextTick(function () {

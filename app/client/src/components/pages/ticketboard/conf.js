@@ -31,7 +31,8 @@ export default {
                             {
                                 identifier: 'tags:tag-qa',
                                 excluded: [],
-                            }, {
+                            },
+                            {
                                 identifier: 'tags:tag-done',
                                 excluded: [],
                             }

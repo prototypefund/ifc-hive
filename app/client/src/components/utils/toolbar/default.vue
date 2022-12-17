@@ -11,7 +11,14 @@
       >{{ $t("widgets.tools.title") }}
     </v-toolbar-title>
     <v-spacer></v-spacer>
+    <v-progress-linear
+      v-if="loading"
+      class="loader"
+      indeterminate
+      color="primary"
+    ></v-progress-linear>
     <v-tabs
+      v-else
       :density="!currentTool ? 'compact' : 'default'"
       v-model="currentTool"
       fixed-tabs
@@ -77,6 +84,7 @@ export default {
     state: {},
     route: {},
     viewPortHeight: 0,
+    loading: true,
     currTool: false,
     stateSubscriber$: false,
     routeSubscriber$: false,
@@ -123,12 +131,18 @@ export default {
       .subscribe((val) => {
         this.viewPortHeight = val;
       });
+    this.loadingSuibscriber$ = this.$store
+      .select((state) => state.ui.loading)
+      .subscribe((val) => {
+        this.loading = val;
+      });
   },
   destroyed() {
     this.stateSubscriber$.unsubscribe();
     this.routeSubscriber$.unsubscribe();
     this.currentToolSubscriber$.unsubscribe();
     this.viewPortSuibscriber$.unsubscribe();
+    this.loadingSuibscriber$.unsubscribe();
   },
   methods: {
     activateTool(name) {
@@ -200,5 +214,11 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
+}
+
+.loader {
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }
 </style>
