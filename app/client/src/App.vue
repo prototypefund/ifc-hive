@@ -15,10 +15,14 @@
           ><v-icon icon="mdi-home" color="primary"></v-icon>
         </router-link>
         <v-icon color="grey" xsmall>mdi-chevron-right</v-icon>
-        <span v-if="!loading">{{ $t("pages." + page.uuid) }}</span>
-        <span v-if="loading"
-          ><v-progress-circular indeterminate :size="20" :width="2" color="primary"
-        /></span>
+        <v-fade-transition>
+          <span v-if="!loading">{{ $t("pages." + page.uuid) }}</span>
+        </v-fade-transition>
+        <v-fade-transition>
+          <span v-if="loading"
+            ><v-progress-circular indeterminate :size="20" :width="2" color="primary"
+          /></span>
+        </v-fade-transition>
       </v-app-bar-title>
       <v-spacer />
       <Camera v-if="$mobile" />
