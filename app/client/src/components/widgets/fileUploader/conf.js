@@ -1,14 +1,14 @@
 export default {
   optionsDashboard: {
+    // https://uppy.io/docs/dashboard/
     theme: 'dark',
-    note: 'Description of what to upload.',
     width: '100%',
-    height: 600,
     showLinkToFileUploadResult: true,
     showProgressDetails: true,
     proudlyDisplayPoweredByUppy: false
   },
   optionsUppy: {
+    // https://uppy.io/docs/uppy/
     debug: false,
     restrictions: {
       maxFileSize: 1000000,
@@ -16,6 +16,7 @@ export default {
     }
   },
   optionsXhrUpload: {
+    // https://uppy.io/docs/xhr-upload/
     endpoint: '/api/UploadFile',
     formData: true,
     headers: { 'accept': 'application/json' },
