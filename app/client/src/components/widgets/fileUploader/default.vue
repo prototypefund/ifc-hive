@@ -1,9 +1,6 @@
 <template>
-  <v-card
-    v-if="state && props.uuid"
-    data-test-container="widgets/fileUpload/default"
-    :data-test-container-uuid="props.uuid"
-  >
+  <v-card v-if="state && props.uuid" data-test-container="widgets/fileUpload/default"
+    :data-test-container-uuid="props.uuid">
     <upload-dashboard :uppy="uppy" :props="state.optionsDashboard"></upload-dashboard>
     <pre>{{ state }}</pre>
   </v-card>
@@ -14,7 +11,7 @@ import { inject, ref, onMounted, onUnmounted, computed, defineComponent } from "
 import "@uppy/core/dist/style.css";
 import "@uppy/dashboard/dist/style.css";
 // uppy js
-import Uppy, { debugLogger } from "@uppy/core";
+import Uppy from "@uppy/core";
 import XHRUpload from "@uppy/xhr-upload";
 import { Dashboard } from "@uppy/vue";
 
@@ -39,6 +36,11 @@ const props = defineProps({
   },
 });
 const uppy = computed(function () {
+  // TODO implement all possible config values visit: https://uppy.io/docs/uppy/
+  // add the uuid of our widget to the uppy options so that the uppy instance has the same name
+  //state.value.optionsUppy.id = props.uuid;
+  console.warn("add meta info for image uploads per widget instance");
+  //state.value.optionsUppy.meta = {};
   const uppy = new Uppy(state.value.optionsUppy);
   uppy.use(XHRUpload, state.value.optionsXhrUpload);
   uppy.on("file-added", (file) => {
@@ -47,7 +49,7 @@ const uppy = computed(function () {
   return uppy;
 });
 
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
   uppy.value.close({ reason: "unmount" });
