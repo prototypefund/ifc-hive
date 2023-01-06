@@ -39,7 +39,7 @@ const props = defineProps({
   },
 });
 const uppy = computed(function () {
-  var uppy = new Uppy(state.value.optionsUppy);
+  const uppy = new Uppy(state.value.optionsUppy);
   uppy.use(XHRUpload, state.value.optionsXhrUpload);
   uppy.on("file-added", (file) => {
     uppy.setFileMeta(file.id, state.value.fileMeta);

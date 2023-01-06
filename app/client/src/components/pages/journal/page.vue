@@ -177,7 +177,7 @@ onMounted(() => {
       page: "app.journal",
       icon: "mdi-upload-network-outline",
       iconActive: "mdi-upload-network",
-      uuid: "fileUploader",
+      uuid: "fileUploader_journal",
       widget: {
         name: "fileUploader",
       },
