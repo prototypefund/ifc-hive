@@ -1,4 +1,5 @@
 import store from '../store/index.js'
+import { mergeDeepRight } from 'ramda'
 /*
  * widgetLoader
  * @param { string } widgetName, the name of the widget folder to load a file from
@@ -19,10 +20,11 @@ export const widgetLoader = function (widgetName = 'debug', face = 'default') {
  */
 export const widgetConfLoader = function (widget) {
     return import(`../components/widgets/${widget.name || 'debug'}/conf.js`).then(conf => {
+        const widgetConf = conf[widget.face] || conf.default
         store.dispatch({
-            type: 'widgets/configure',
+            type: 'widgets/update',
             uuid: widget.uuid,
-            payload: conf[widget.face] || conf.default
+            payload: mergeDeepRight(widgetConf, widget)
         })
     }).catch(e => {
         return e
@@ -36,10 +38,11 @@ export const widgetConfLoader = function (widget) {
  */
 export const widgetTypeConfLoader = function (widget) {
     return import(`../components/widgets/${widget.name || 'debug'}/${widget.type || 'default'}/conf.js`).then(conf => {
+        const widgetConf = conf[widget.face] || conf.default
         store.dispatch({
-            type: 'widgets/configure',
+            type: 'widgets/update',
             uuid: widget.uuid,
-            payload: conf[widget.face] || conf.default
+            payload: mergeDeepRight(widgetConf, widget)
         })
     }).catch(e => {
         return widgetConfLoader(widget)

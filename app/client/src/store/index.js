@@ -422,11 +422,6 @@ const applicationReducers = {
             switch (action.type) {
                 case 'init':
                     return applicationState.widgets
-                case 'widgets/configure':
-                    configuredWidget = {}
-                    // merge given config onto widget state
-                    configuredWidget[action.uuid] = mergeDeepRight(action.payload, state[action.uuid])
-                    return mergeDeepRight(state, configuredWidget)
                 case 'widgets/update':
                     configuredWidget = {}
                     // merge given payload onto widget state

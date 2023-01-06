@@ -1,5 +1,4 @@
 export default {
-  title: 'fileUploader',
   optionsDashboard: {
     theme: 'dark',
     note: 'Description of what to upload.',
