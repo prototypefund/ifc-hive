@@ -5,5 +5,6 @@ export default {
     quickList: 'Quicklist',
     newJournal: 'new Entry',
     chartJournal: 'Chart',
-    ticketsByTag: 'Ticket State'
+    ticketsByTag: 'Ticket State',
+    fileUploader: 'Upload files',
 }

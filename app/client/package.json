@@ -75,7 +75,15 @@
     "vue3-markdown-it": "1.x",
     "vuedraggable": "4.1.0",
     "vuetify": "3.x",
-    "webfontloader": "1.x"
+    "webfontloader": "1.x",
+    "uppy": "^3.2.2",
+    "@uppy/core": "^3.x",
+    "@uppy/dashboard": "^3.x",
+    "@uppy/thumbnail-generator": "^3.x",
+    "@uppy/utils": "^5.x",
+    "@uppy/vue": "^1.x",
+    "@uppy/webcam": "^3.x",
+    "@uppy/xhr-upload": "^3.x"
   },
   "imports": {
     "#src/*": "./src/*.js"
