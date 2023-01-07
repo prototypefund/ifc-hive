@@ -163,7 +163,7 @@ export default {
     },
     checkVisibility(tool) {
       // if we have no page set to this tool or page set matches current route name we are good to go!
-      if (!tool.page || tool.page === this.route.name) {
+      if (!tool.page || tool.page.indexOf(this.route.name) > -1) {
         return true;
       }
       if (this.currentTool === tool.widget.uuid) {

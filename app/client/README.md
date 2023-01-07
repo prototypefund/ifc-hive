@@ -336,8 +336,8 @@ To add a widget as a tool use the following command in your source File
     payload: {
 // the title to use in the toolbar next to the icon. Should be an i18n key
       title: 'newJournal',
-// a whitlist field. If set the tool will just be visible on a page with the configured routeName, if false or not set the tool will be visible everywhere
-      page: 'app.journal',
+// a whitlist field. If set the tool will just be visible on a page with the configured routeName, if false or not set the tool will be visible everywhere. You can also add as many route names as you like, seperated by whatever
+      page: 'app.journal;app.ticketBoard',
 // a mdi icon you want for the inactive state      
       icon: 'mdi-content-save-edit-outline',
 // a mdi icon you want for the active state
