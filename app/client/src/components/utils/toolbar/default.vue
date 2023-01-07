@@ -62,6 +62,7 @@
   <v-container
     v-if="currentTool && currentComponent"
     fluid
+    :class="{ hidden: loading }"
     class="toolContent primary"
     :style="{ height: viewPortHeight + 'px' }"
   >
@@ -224,5 +225,13 @@ export default {
   position: absolute;
   left: 0;
   bottom: 0;
+}
+
+.hidden {
+  visibility: hidden !important;
+}
+
+.hidden * {
+  visibility: hidden !important;
 }
 </style>
