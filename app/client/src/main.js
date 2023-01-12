@@ -42,6 +42,9 @@ try {
   app.config.globalProperties.$api = axios
   app.provide('$api', axios)
 
+  // TODO find out if this is a brainfart or not. I need $t in the components functions but I don't have this in compose API. Is there another way to get $t in compose api components script part?
+  app.provide('$t', i18n.global.t)
+
   // make store availble in all components
   app.provide('$store', store)
   // make capacitor availble in all components 

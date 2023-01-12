@@ -11,6 +11,10 @@ export default {
   navigation: 'Navigation',
   themeDark: 'dunkles Thema',
   themeLight: 'helles Thema',
+  generics: {
+    open: 'Offen',
+    closed: 'Geschlossen'
+  },
   ui: {
     uiSettings: 'Oberflächen Einstellungen',
     editMode: 'Widget Bearbeitungsmodus',

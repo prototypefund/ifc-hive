@@ -10,9 +10,11 @@ export const i18n = createI18n({
   messages, // set locale messages
 })
 
-export const locale = createVueI18nAdapter({
-  i18n,
-  useI18n,
-})
+export const locale = {
+  adapter: createVueI18nAdapter({
+    i18n,
+    useI18n,
+  })
+}
 
 export default i18n

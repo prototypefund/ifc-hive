@@ -11,6 +11,10 @@ export default {
   navigation: 'Navigation',
   themeDark: 'dark theme',
   themeLight: 'light theme',
+  generics: {
+    open: 'Open',
+    closed: 'Closed'
+  },
   ui: {
     uiSettings: 'UI Settings',
     editMode: 'Widget Edit Mode',

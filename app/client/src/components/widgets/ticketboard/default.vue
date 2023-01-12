@@ -80,6 +80,7 @@ import ticketItem from "./items/ticketCard.vue";
 import { splitIdentifier, filterData } from "./lib/helper.js";
 import { difference } from "ramda";
 const $store = inject("$store");
+const $t = inject("$t");
 const state = ref({});
 const data = ref({});
 // a list of all the tag names used as boards to make sure we can detect the board changes properly in the ticketCards
@@ -127,7 +128,7 @@ const makeTickets = function (data) {
           gen.excluded,
           data
         );
-        tickets.value.generics[gen.title].title = gen.title;
+        tickets.value.generics[gen.title].title = $t(`generics.${gen.title}`);
         tickets.value.generics[gen.title].id = gen.title;
         tickets.value.generics[gen.title].color = gen.color || "grey";
         if (tickets.value.sorting[gen.title]) {
