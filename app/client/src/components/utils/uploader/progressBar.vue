@@ -3,7 +3,7 @@
     <v-col v-for="bar in bars">
       <upload-status
         :uppy="bar.instance"
-        :prop="bar.config.optionsProgressBar || {}"
+        :props="bar.config.optionsProgressBar || {}"
       ></upload-status>
     </v-col>
   </v-row>
