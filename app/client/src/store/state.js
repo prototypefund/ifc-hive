@@ -18,6 +18,7 @@ export const applicationState = {
         // some dimension values for convenience
         viewPortHeight: false,
         topBarHeight: false,
+        viewPortWidth: false,
         windowWidth: false,
         // indicates if the page is in loading state
         loading: true,

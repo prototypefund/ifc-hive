@@ -64,7 +64,10 @@
     fluid
     :class="{ hidden: loading }"
     class="toolContent primary"
-    :style="{ height: viewPortHeight + 'px' }"
+    :style="{
+      height: viewPortHeight + 'px',
+      width: viewPortWidth < 800 ? viewPortWidth + 'px' : '60%',
+    }"
   >
     <hr class="contentLine" />
     <v-slide-x-reverse-transition>
@@ -89,6 +92,7 @@ export default {
     state: {},
     route: {},
     viewPortHeight: 0,
+    viewPortWidth: 0,
     loading: true,
     currTool: false,
     stateSubscriber$: false,
@@ -131,10 +135,15 @@ export default {
           this.activateTool(val);
         }
       });
-    this.viewPortSuibscriber$ = this.$store
+    this.viewPortHeightSubscriber$ = this.$store
       .select((state) => state.ui.viewPortHeight)
       .subscribe((val) => {
         this.viewPortHeight = val;
+      });
+    this.viewPortWidthSubscriber$ = this.$store
+      .select((state) => state.ui.viewPortWidth)
+      .subscribe((val) => {
+        this.viewPortWidth = val;
       });
     this.loadingSuibscriber$ = this.$store
       .select((state) => state.ui.loading)
@@ -146,7 +155,8 @@ export default {
     this.stateSubscriber$.unsubscribe();
     this.routeSubscriber$.unsubscribe();
     this.currentToolSubscriber$.unsubscribe();
-    this.viewPortSuibscriber$.unsubscribe();
+    this.viewPortHeightSubscriber$.unsubscribe();
+    this.viewPortWidthSubscriber$.unsubscribe();
     this.loadingSuibscriber$.unsubscribe();
   },
   methods: {
@@ -204,7 +214,6 @@ export default {
   padding: 0 !important;
   right: 0;
   top: 96px;
-  width: 60% !important;
   z-index: 900;
   border: 1px solid #e0e0e0;
   border-top: 0px;

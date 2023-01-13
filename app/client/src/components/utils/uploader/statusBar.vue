@@ -31,7 +31,6 @@ const handleProgressBars = function () {
       };
     }
   });
-  console.dir(bars.value);
 };
 
 const stateSubscriber$ = $store

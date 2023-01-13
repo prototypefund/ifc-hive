@@ -27,7 +27,7 @@
       <v-spacer />
       <Camera v-if="$mobile" />
       <v-spacer />
-      <status-bar></status-bar>
+      <status-bar />
 
       <!-- notifications -->
       <Notifications />
@@ -35,7 +35,6 @@
 
     <!-- Navigation Drawer -->
     <NavigationSideBar v-if="!isInTest" :nav-items="navItems" />
-
     <ToolBar class="{ appBarRel: isInTest }" ref="appToolbar" />
     <!-- Main content -->
     <v-main>
@@ -91,6 +90,7 @@ export default {
     page: false,
     editMode: false,
     viewPortHeight: false,
+    viewPortWidth: false,
     loading: false,
     hasScrolled: false,
     navItems: [
@@ -147,7 +147,7 @@ export default {
     window.addEventListener("resize", this.setDimensions, { passive: true });
     window.addEventListener("scroll", this.setScroll, { passive: true });
     // TODO find a better way instead of this ugly timeOutBullshit
-    setTimeout(() => this.setDimensions(), 500);
+    setTimeout(() => this.setDimensions(), 800);
   },
   methods: {
     setScroll: async function () {
@@ -165,14 +165,18 @@ export default {
       await this.$nextTick(function () {
         const appBarHeight = this.$refs.appAppbar.height || 0;
         const toolBarHeight = this.$refs.appToolbar.height || 0;
+        //TODO find out why we can't get the width of the navBar via ref here
+        const HackyShit = document.getElementById("navSideBar").offsetWidth;
         const topBarHeight = appBarHeight + toolBarHeight;
         this.viewPortHeight = window.innerHeight - topBarHeight;
         const windowWidth = window.innerWidth;
+        this.viewPortWidth = windowWidth - HackyShit;
         this.$store.dispatch({
           type: "ui/update",
           payload: {
             topBarHeight,
             viewPortHeight: this.viewPortHeight,
+            viewPortWidth: this.viewPortWidth,
             windowWidth,
           },
         });
