@@ -36,7 +36,7 @@
     <NavigationSideBar v-if="!isInTest" :nav-items="navItems" />
     <ToolBar class="{ appBarRel: isInTest }" ref="appToolbar" />
     <!-- Main content -->
-    <v-main>
+    <v-main id="appMain">
       <v-btn
         class="backToTop"
         v-if="hasScrolled"
@@ -164,23 +164,28 @@ export default {
     },
     setDimensions: async function () {
       await this.$nextTick(function () {
-        const appBarHeight = this.$refs.appAppbar.height || 0;
-        const toolBarHeight = this.$refs.appToolbar.height || 0;
-        //TODO find out why we can't get the width of the navBar via ref here
-        const HackyShit = document.getElementById("navSideBar").offsetWidth;
-        const topBarHeight = appBarHeight + toolBarHeight;
-        this.viewPortHeight = window.innerHeight - topBarHeight;
-        const windowWidth = window.innerWidth;
-        this.viewPortWidth = windowWidth - HackyShit;
-        this.$store.dispatch({
-          type: "ui/update",
-          payload: {
-            topBarHeight,
-            viewPortHeight: this.viewPortHeight,
-            viewPortWidth: this.viewPortWidth,
-            windowWidth,
-          },
-        });
+        if (this.$refs.appAppbar && this.$refs.appToolbar) {
+          const appBarHeight = this.$refs.appAppbar.height || 0;
+          const toolBarHeight = this.$refs.appToolbar.height || 0;
+          //TODO find out why we can't get the width of the navBar via ref here
+          const HackyShit =
+            document.getElementById("appMain").offsetWidth -
+            document.getElementById("navSideBar").offsetWidth;
+          const topBarHeight = appBarHeight + toolBarHeight;
+          this.viewPortHeight = window.innerHeight - topBarHeight;
+          const windowWidth = window.innerWidth;
+          console.log(HackyShit);
+          this.viewPortWidth = HackyShit;
+          this.$store.dispatch({
+            type: "ui/update",
+            payload: {
+              topBarHeight,
+              viewPortHeight: this.viewPortHeight,
+              viewPortWidth: this.viewPortWidth,
+              windowWidth,
+            },
+          });
+        }
       });
     },
   },
