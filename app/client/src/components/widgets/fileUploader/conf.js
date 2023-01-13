@@ -13,10 +13,11 @@ export default {
     fixed: false,
     hideAfterFinish: false,
   },
-  optionsStatusbar: {
+  optionsStatusBar: {
     // https://uppy.io/docs/status-bar/
     hideUploadButton: true,
     hideAfterFinish: false,
+    showProgressDetails: true,
   },
   optionsUppy: {
     // https://uppy.io/docs/uppy/

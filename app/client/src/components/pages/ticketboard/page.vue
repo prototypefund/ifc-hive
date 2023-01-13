@@ -139,7 +139,6 @@ $store.dispatch({
     uuid: "fileUploader_ticketboard",
     widget: {
       name: "fileUploader",
-      optionsProgressBar: false,
     },
   },
 });

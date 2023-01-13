@@ -28,7 +28,6 @@
       <Camera v-if="$mobile" />
       <v-spacer />
       <status-bar />
-
       <!-- notifications -->
       <Notifications />
     </v-app-bar>
@@ -66,12 +65,14 @@ import Notifications from "@u/notifications/default.vue";
 import NavigationSideBar from "@u/navigation/sidebar.vue";
 import ToolBar from "@u/toolbar/default.vue";
 import StatusBar from "@u/uploader/statusBar.vue";
+import ProgressBar from "@u/uploader/progressBar.vue";
 export default {
   components: {
     Notifications,
     NavigationSideBar,
     ToolBar,
     StatusBar,
+    ProgressBar,
     Camera: defineAsyncComponent(() =>
       import("./components/utils/mobile/camera/icon.vue")
     ),
