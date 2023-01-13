@@ -174,7 +174,7 @@ onMounted(() => {
     type: "toolbar/add",
     payload: {
       title: "fileUploader",
-      page: "app.journal;app.ticketboard",
+      page: "app.journal",
       icon: "mdi-upload-network-outline",
       iconActive: "mdi-upload-network",
       uuid: "fileUploader_journal",

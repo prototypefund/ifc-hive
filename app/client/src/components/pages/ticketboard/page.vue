@@ -129,7 +129,20 @@ $store.dispatch({
     ],
   },
 });
-
+$store.dispatch({
+  type: "toolbar/add",
+  payload: {
+    title: "fileUploader",
+    page: "app.ticketboard",
+    icon: "mdi-upload-network-outline",
+    iconActive: "mdi-upload-network",
+    uuid: "fileUploader_ticketboard",
+    widget: {
+      name: "fileUploader",
+      optionsProgressBar: false,
+    },
+  },
+});
 $store.dispatch({
   type: "toolbar/add",
   payload: {
