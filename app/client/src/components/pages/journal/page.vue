@@ -173,19 +173,6 @@ onMounted(() => {
   $store.dispatch({
     type: "toolbar/add",
     payload: {
-      title: "fileUploader",
-      page: "app.journal",
-      icon: "mdi-upload-network-outline",
-      iconActive: "mdi-upload-network",
-      uuid: "fileUploader_journal",
-      widget: {
-        name: "fileUploader",
-      },
-    },
-  });
-  $store.dispatch({
-    type: "toolbar/add",
-    payload: {
       title: "chartJournal",
       page: "app.journal",
       icon: "mdi-chart-donut",

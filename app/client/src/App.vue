@@ -28,6 +28,7 @@
       <Camera v-if="$mobile" />
       <v-spacer />
       <status-bar />
+      <v-spacer />
       <!-- notifications -->
       <Notifications />
     </v-app-bar>
@@ -49,7 +50,13 @@
       </template>
       <template v-else>
         <router-view v-slot="{ Component }">
-          <component :is="Component" :class="{ isLoading: loading }" />
+          <component
+            :is="Component"
+            :class="{ isLoading: loading }"
+            id="appComponent"
+            :style="{ height: viewPortHeight + 'px' }"
+            @scroll.passive="setScroll($event)"
+          />
         </router-view>
       </template>
     </v-main>
@@ -66,6 +73,7 @@ import NavigationSideBar from "@u/navigation/sidebar.vue";
 import ToolBar from "@u/toolbar/default.vue";
 import StatusBar from "@u/uploader/statusBar.vue";
 import ProgressBar from "@u/uploader/progressBar.vue";
+import { globalTools } from "./setup/application";
 export default {
   components: {
     Notifications,
@@ -121,6 +129,7 @@ export default {
     this.$store
       .select((state) => state.currentPage)
       .subscribe((val) => {
+        this.scrollTop();
         this.page = val;
       });
 
@@ -131,35 +140,21 @@ export default {
       });
   },
   mounted() {
-    // TODO find a way to have the quicklist handler know the uuid of the widget. As for now we need to set a uuid
-    this.$store.dispatch({
-      type: "toolbar/add",
-      payload: {
-        page: false,
-        title: "quickList",
-        icon: "mdi-text-box-search-outline",
-        iconActive: "mdi-text-box-search",
-        uuid: "quickList",
-        widget: {
-          name: "quickList",
-        },
-      },
-    });
+    globalTools(this.$store);
     window.addEventListener("resize", this.setDimensions, { passive: true });
-    window.addEventListener("scroll", this.setScroll, { passive: true });
     // TODO find a better way instead of this ugly timeOutBullshit
     setTimeout(() => this.setDimensions(), 800);
   },
   methods: {
-    setScroll: async function () {
-      if (window.scrollY > 0) {
+    setScroll: async function (e) {
+      if (e.currentTarget.scrollTop > 0) {
         this.hasScrolled = true;
       } else {
         this.hasScrolled = false;
       }
     },
     scrollTop: async function () {
-      window.scrollTo(0, 0);
+      document.getElementById("appComponent").scrollTo(0, 0);
       this.hasScrolled = false;
     },
     setDimensions: async function () {
@@ -191,23 +186,9 @@ export default {
 };
 </script>
 <style>
-#breadcrumb-home {
-  text-decoration: none;
-}
-
-.backToTop {
-  position: fixed !important;
-  z-index: 100;
-  right: 30px;
-  bottom: 30px;
-}
-
-.appBarRel {
-  position: absolute !important;
-}
-
-.appBarRel.quickListWrapper {
-  position: absolute !important;
+body,
+html {
+  overflow: hidden !important;
 }
 
 #app {
@@ -215,13 +196,35 @@ export default {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.isLoading,
-.isLoading * {
-  visibility: hidden !important;
+#app #appComponent {
+  overflow: auto;
 }
 
-html,
-body {
-  overflow: auto !important;
+#app .backToTop {
+  position: fixed !important;
+  z-index: 100;
+  right: 30px;
+  bottom: 30px;
+}
+
+#app #breadcrumb-home {
+  text-decoration: none;
+}
+
+#app .appBarRel {
+  position: absolute !important;
+}
+
+#app .appBarRel.quickListWrapper {
+  position: absolute !important;
+}
+
+#app .v-toolbar__content > .v-btn:last-child {
+  margin-inline-end: 0;
+}
+
+#app .isLoading,
+#app .isLoading * {
+  visibility: hidden !important;
 }
 </style>

@@ -7,7 +7,7 @@
     data-test-container="widgets/ticketboard/default"
     :data-test-container-uuid="props.uuid"
   >
-    <div class="ticketContainer">
+    <div class="ticketContainer" :style="{ height: viewPortHeight - 100 + 'px' }">
       <table
         class="ticketTable"
         v-if="tickets"
@@ -88,6 +88,8 @@ const boardIdentifiers = ref([]);
 const boardCount = shallowRef(0);
 const dragging = shallowRef(false);
 const windowWidth = shallowRef(window.innerWidth);
+const viewPortHeight = shallowRef(0);
+
 const colWidth = computed(() => (windowWidth.value > 700 ? 300 : 200));
 const tickets = ref({
   generics: {},
@@ -245,6 +247,13 @@ subscriber$.push(
       windowWidth.value = val;
     })
 );
+subscriber$.push(
+  $store
+    .select((state) => state.ui.viewPortHeight)
+    .subscribe((val) => {
+      viewPortHeight.value = val;
+    })
+);
 const saveSorting = function () {
   // TODO maybe move the sort store to currentPage store instead of widget?
   $store.dispatch({
@@ -309,7 +318,7 @@ onUnmounted(() => {
 </script>
 <style lang="css" scoped>
 .ticketContainer {
-  overflow-x: auto;
+  overflow: auto;
 }
 
 .list-group td {

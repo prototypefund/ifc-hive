@@ -1,7 +1,7 @@
 <template>
   <v-container v-if="state" data-test-container="pages/ticketboard/page" fluid pa-0 ma-0>
-    <h1>{{ $t("pages.app-ticketboard") }}</h1>
     <Grid v-if="state.slots" />
+    <pre>{{ state }}</pre>
   </v-container>
 </template>
 
@@ -127,19 +127,6 @@ $store.dispatch({
         ticket: true,
       },
     ],
-  },
-});
-$store.dispatch({
-  type: "toolbar/add",
-  payload: {
-    title: "fileUploader",
-    page: "app.ticketboard",
-    icon: "mdi-upload-network-outline",
-    iconActive: "mdi-upload-network",
-    uuid: "fileUploader_ticketboard",
-    widget: {
-      name: "fileUploader",
-    },
   },
 });
 $store.dispatch({

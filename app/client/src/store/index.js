@@ -362,7 +362,7 @@ const applicationReducers = {
                         currPage = action.payload
                     }
                     if (!currPage.scrollTop) {
-                        scrollY = window.scrollY
+                        scrollY = document.getElementById("appComponent") ? document.getElementById("appComponent").scrollTop : 0
                     }
                     if (state.routeName) {
                         // update our memorized preconfigured page with the new version which includes url params and user data
@@ -380,7 +380,7 @@ const applicationReducers = {
                         if (currPage.scrollY) {
                             for (let i = 0; i < currPage.scrollY; i++) {
                                 setTimeout(() => {
-                                    window.scrollTo(0, i);
+                                    document.getElementById("appComponent").scrollTo(0, i);
                                 }, 50)
                             }
                         }
