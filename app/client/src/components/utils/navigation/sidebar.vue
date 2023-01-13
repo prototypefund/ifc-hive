@@ -4,6 +4,7 @@
     v-model="navigationDrawer"
     data-test-container="utils/navigation/sidebar"
     :rail="navigationRail"
+    id="navSideBar"
     permanent
   >
     <!-- Title -->
