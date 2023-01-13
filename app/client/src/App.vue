@@ -26,8 +26,8 @@
       </v-app-bar-title>
       <v-spacer />
       <Camera v-if="$mobile" />
-      <status-bar></status-bar>
       <v-spacer />
+      <status-bar></status-bar>
 
       <!-- notifications -->
       <Notifications />
