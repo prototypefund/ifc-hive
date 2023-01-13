@@ -2,6 +2,7 @@ export const loadingHold = 700
 export const applicationState = {
     route: {},
     data: {},
+    uploader: {},
     user: {
         name: false,
         email: false,

@@ -7,6 +7,17 @@ export default {
     showProgressDetails: true,
     proudlyDisplayPoweredByUppy: false
   },
+  optionsProgressBar: {
+    // https://uppy.io/docs/progress-bar/
+    target: ".UploadForm",
+    fixed: false,
+    hideAfterFinish: false,
+  },
+  optionsStatusbar: {
+    // https://uppy.io/docs/status-bar/
+    hideUploadButton: true,
+    hideAfterFinish: false,
+  },
   optionsUppy: {
     // https://uppy.io/docs/uppy/
     debug: false,

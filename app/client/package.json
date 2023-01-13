@@ -79,6 +79,8 @@
     "uppy": "^3.2.2",
     "@uppy/core": "^3.x",
     "@uppy/dashboard": "^3.x",
+    "@uppy/progress-bar": "^3.x",
+    "@uppy/status-bar": "^3.x",
     "@uppy/thumbnail-generator": "^3.x",
     "@uppy/utils": "^5.x",
     "@uppy/vue": "^1.x",

@@ -166,6 +166,21 @@ const applicationReducers = {
             }
         }
     },
+    uploader: (state, action) => {
+        if (state) {
+            switch (action.type) {
+                case 'init':
+                    return applicationState.uploader
+                case 'uploader/add':
+                    return mergeDeepRight(state, action.payload)
+                case 'uploader/remove':
+                    debugger
+                    return JSON.parse(JSON.stringify(action.payload))
+                default:
+                    return state
+            }
+        }
+    },
     route: (state, action) => {
         if (state) {
             switch (action.type) {

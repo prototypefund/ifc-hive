@@ -1,29 +1,30 @@
 <template>
-  <v-card v-if="state && props.uuid" data-test-container="widgets/fileUpload/default"
-    :data-test-container-uuid="props.uuid">
-    <upload-dashboard :uppy="uppy" :props="state.optionsDashboard"></upload-dashboard>
+  <v-card
+    v-if="state && props.uuid"
+    data-test-container="widgets/fileUpload/default"
+    :data-test-container-uuid="props.uuid"
+  >
+    <upload-dashboard v-if="uppy" :uppy="uppy" :props="state.optionsDashboard" />
     <pre>{{ state }}</pre>
   </v-card>
 </template>
 <script setup>
-import { inject, ref, onMounted, onUnmounted, computed, defineComponent } from "vue";
+import { inject, ref, shallowRef, onMounted, onUnmounted, defineComponent } from "vue";
 // uppy css
 import "@uppy/core/dist/style.css";
 import "@uppy/dashboard/dist/style.css";
-// uppy js
-import Uppy from "@uppy/core";
-import XHRUpload from "@uppy/xhr-upload";
+import { uppyBakery } from "@lib/uppyHelper";
 import { Dashboard } from "@uppy/vue";
-
 const $store = inject("$store");
 const state = ref({});
-
+const uppy = shallowRef(false);
 const uploadDashboard = defineComponent(Dashboard);
 const stateSubscriber$ = $store
   .select((state) => state.widgets[props.uuid])
   .subscribe((val) => {
     state.value = val;
   });
+
 const props = defineProps({
   props: {
     type: Object,
@@ -35,23 +36,56 @@ const props = defineProps({
     required: true,
   },
 });
-const uppy = computed(function () {
-  // TODO implement all possible config values visit: https://uppy.io/docs/uppy/
-  // add the uuid of our widget to the uppy options so that the uppy instance has the same name
-  //state.value.optionsUppy.id = props.uuid;
-  console.warn("add meta info for image uploads per widget instance");
-  //state.value.optionsUppy.meta = {};
-  const uppy = new Uppy(state.value.optionsUppy);
-  uppy.use(XHRUpload, state.value.optionsXhrUpload);
-  uppy.on("file-added", (file) => {
-    uppy.setFileMeta(file.id, state.value.fileMeta);
+const handleUppy = () => {
+  if (!uppy.value) {
+    $store.dispatch({
+      type: "widgets/update",
+      uuid: props.uuid,
+      payload: {
+        optionsProgressBar: {
+          id: "progressBar_" + props.uuid,
+        },
+        optionsDashboard: {
+          id: "dashboard_" + props.uuid,
+        },
+      },
+    });
+    // create an uppy instance and remember it in the uppyBakery Store so we can restore uppy instances from everywhere
+    uppy.value = uppyBakery(props.uuid, state.value);
+    const payload = {};
+    // put all the needed configs in our global uploader state object. We will use this to configure the status bar in app.vue and do other shit with it
+    payload[props.uuid] = {
+      id: props.uuid,
+      optionsDashboard: {
+        id: "dashboard_" + props.uuid,
+        ...state.value.optionsDashboard,
+      },
+      optionsProgressBar: {
+        id: "progressBar_" + props.uuid,
+        ...state.value.optionsProgressBar,
+      },
+      optionsStatusBar: {
+        id: "statusBar_" + props.uuid,
+        ...state.value.optionsStatusBar,
+      },
+      fileMeta: {
+        ...state.value.fileMeta,
+      },
+    };
+    $store.dispatch({
+      type: "uploader/add",
+      payload: payload,
+    });
+  }
+};
+const uploaderSubscriber$ = $store
+  .select((state) => state.uploader)
+  .subscribe((val) => {
+    handleUppy(val);
   });
-  return uppy;
-});
-
-onMounted(() => { });
+onMounted(() => {});
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
-  uppy.value.close({ reason: "unmount" });
+  uploaderSubscriber$.unsubscribe();
 });
 </script>
