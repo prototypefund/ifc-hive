@@ -172,9 +172,8 @@ export default {
             document.getElementById("appMain").offsetWidth -
             document.getElementById("navSideBar").offsetWidth;
           const topBarHeight = appBarHeight + toolBarHeight;
-          this.viewPortHeight = window.innerHeight - topBarHeight;
           const windowWidth = window.innerWidth;
-          console.log(HackyShit);
+          this.viewPortHeight = window.innerHeight - topBarHeight;
           this.viewPortWidth = HackyShit;
           this.$store.dispatch({
             type: "ui/update",
