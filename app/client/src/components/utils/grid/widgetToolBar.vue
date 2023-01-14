@@ -1,6 +1,6 @@
 <template>
   <v-toolbar v-if="widgetState" dense>
-    // TODO reenable once the drag and drop for widgets is fully implemented
+    <!-- // TODO reenable once the drag and drop for widgets is fully implemented -->
     <!--v-btn flat icon="mdi-drag" /-->
     <v-toolbar-title>{{
       widgetState.title || widgetState.name || props.type

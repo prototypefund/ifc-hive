@@ -4,7 +4,7 @@
     data-test-container="widgets/journal/default"
     :data-test-container-uuid="props.uuid"
   >
-    <v-col cols="12" md="6" lg="4" color="green">
+    <v-col cols="12" color="green">
       <div>
         <v-timeline side="end" class="mt-5">
           <template v-for="(entry, index) in data" :key="index">
@@ -44,7 +44,7 @@
                 </v-chip>
               </div>
 
-              <div style="width: 600px; margin-bottom: 80px">
+              <div style="margin-bottom: 80px">
                 <v-alert v-if="entry.alert" :color="entry.alert.color" class="mb-2">
                   <h3 class="text-subtitle-1">{{ entry.alert.content }}</h3>
                   {{ $filters.dateFormat(entry.date) }}
