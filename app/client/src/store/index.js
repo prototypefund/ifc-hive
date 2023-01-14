@@ -6,7 +6,7 @@ import {
     ImmutableStateExtension
 } from 'mini-rx-store';
 import getEnvVariable from '../lib/getEnvVariable'
-import { mergeDeepRight, clone } from 'ramda'
+import { mergeDeepRight, mergeDeepLeft, clone } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
 import { applicationState, storePatterns, loadingHold } from './state'
 import helper from './helper.js'
@@ -30,6 +30,7 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
 
 let pagesLookup = false
 let widgetsLookup = false
+let uiLookup = false
 
 // TODO find out how actual effects work without ts support. This works the "same" way for now
 const metaReducer = [(reducer) => {
@@ -47,6 +48,7 @@ const metaReducer = [(reducer) => {
                         if (!widget.uuid) {
                             widget.uuid = uuidv4()
                         }
+
                         if (!state.widgets[widget.uuid]) {
                             // make a generic widget state map
                             widgets.push({
@@ -354,14 +356,27 @@ const applicationReducers = {
                     // check if that requested page has already been preconfigured (should always be the case)
                     if (pagesLookup && pagesLookup[uuid] && pagesLookup[uuid].uuid) {
                         // create a new currentPage object based on the url params merged ontop of the default page config
-                        currPage = mergeDeepRight(pagesLookup[uuid], action.payload)
+                        currPage = JSON.parse(JSON.stringify(mergeDeepRight(pagesLookup[uuid], action.payload)))
+                        if (uiLookup.mobile) {
+                            // TODO find a way to decouple this
+                            if (currPage.slots) {
+                                currPage.grid.columns_bak = currPage.grid.columns
+                                currPage.grid.columns = 1
+                                currPage.slots.forEach(slot => {
+                                    slot.column_bak = slot.column
+                                    slot.column = 12
+                                })
+                            }
+                        }
                     } else {
                         console.error("race condition? a currentpage without a uuid? dafuq? bruder? alter? junge alter bruder diggi alter bruder diggi junge bruder?")
                         console.dir(pagesLookup)
                         console.dir(action)
                         currPage = action.payload
                     }
+
                     if (!currPage.scrollTop) {
+                        // TODO find a way to decouple this
                         scrollY = document.getElementById("appComponent") ? document.getElementById("appComponent").scrollTop : 0
                     }
                     if (state.routeName) {
@@ -376,6 +391,7 @@ const applicationReducers = {
                         })
                     }
                     // apply last scroll position to currentPage
+                    // TODO find a way to decouple this
                     setTimeout(() => {
                         if (currPage.scrollY) {
                             for (let i = 0; i < currPage.scrollY; i++) {
@@ -483,6 +499,11 @@ if (pagesLookup === false) {
 if (widgetsLookup === false) {
     store.select(state => state.widgets).subscribe(val => {
         widgetsLookup = val
+    })
+}
+if (uiLookup === false) {
+    store.select(state => state.ui).subscribe(val => {
+        uiLookup = val
     })
 }
 // add helper functions to store
