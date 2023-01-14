@@ -25,10 +25,7 @@
         </v-fade-transition>
       </v-app-bar-title>
       <v-spacer />
-      <Camera v-if="$mobile" />
-      <v-spacer />
       <status-bar />
-      <v-spacer />
       <!-- notifications -->
       <Notifications />
     </v-app-bar>
@@ -81,9 +78,6 @@ export default {
     ToolBar,
     StatusBar,
     ProgressBar,
-    Camera: defineAsyncComponent(() =>
-      import("./components/utils/mobile/camera/icon.vue")
-    ),
     mobileStartup: defineAsyncComponent(() =>
       import("./components/utils/mobile/startup.vue")
     ),
@@ -144,6 +138,14 @@ export default {
     window.addEventListener("resize", this.setDimensions, { passive: true });
     // TODO find a better way instead of this ugly timeOutBullshit
     setTimeout(() => this.setDimensions(), 800);
+    if (this.$mobile !== false) {
+      this.$store.dispatch({
+        type: "ui/update",
+        payload: {
+          mobile: true,
+        },
+      });
+    }
   },
   methods: {
     setScroll: async function (e) {
@@ -197,7 +199,8 @@ html {
 }
 
 #app #appComponent {
-  overflow-y: auto;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 
 #app .backToTop {

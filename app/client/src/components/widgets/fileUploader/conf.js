@@ -16,7 +16,7 @@ export default {
   optionsStatusBar: {
     // https://uppy.io/docs/status-bar/
     hideUploadButton: true,
-    hideAfterFinish: false,
+    hideAfterFinish: true,
     showProgressDetails: true,
   },
   optionsUppy: {

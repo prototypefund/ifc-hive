@@ -17,9 +17,6 @@ const $store = inject("$store");
 const state = ref({});
 const bars = ref(false);
 const uploadStatus = defineComponent(StatusBar);
-const doneButtonHandler = () => {
-  debugger;
-};
 const handleStatusBars = function () {
   const uploaderInstances = Object.keys(state.value);
   uploaderInstances.forEach((key) => {
@@ -29,7 +26,7 @@ const handleStatusBars = function () {
     if (!bars.value[key]) {
       bars.value[key] = {
         id: key,
-        config: { ...state.value[key], doneButtonHandler },
+        config: state.value[key],
         instance: uppyBakery(key, state.value[key]),
       };
     }

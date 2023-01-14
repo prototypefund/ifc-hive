@@ -12,7 +12,6 @@
 import { inject, ref, defineComponent, onMounted, onUnmounted } from "vue";
 import { uppyBakery } from "@lib/uppyHelper";
 import { ProgressBar } from "@uppy/vue";
-import "@uppy/progress-bar/dist/style.css";
 const $store = inject("$store");
 const state = ref({});
 const bars = ref(false);

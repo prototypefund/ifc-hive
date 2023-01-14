@@ -32,7 +32,6 @@
         />
       </template>
     </v-list-item>
-
     <v-divider />
     <ConnectionBar v-if="$mobile && !navigationRail" />
     <v-divider />

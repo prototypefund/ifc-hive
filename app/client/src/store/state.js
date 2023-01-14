@@ -22,7 +22,8 @@ export const applicationState = {
         windowWidth: false,
         // indicates if the page is in loading state
         loading: true,
-        theme: 'dark'
+        theme: 'dark',
+        mobile: false
     },
     // will contain tools. Logic behind that is the same as with pages
     toolbar: {},

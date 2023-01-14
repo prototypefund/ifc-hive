@@ -1,6 +1,6 @@
 <template>
   <span>
-    <v-btn v-if="$mobile" flat icon="mdi-camera" @click="takePicture" />
+    <v-btn flat xsmall icon="mdi-camera" @click="takePicture" />
     <v-dialog v-if="takenImage && takenImage.src" v-model="preview">
       <v-card>
         <v-img :src="takenImage.src" cover width="100%"></v-img>

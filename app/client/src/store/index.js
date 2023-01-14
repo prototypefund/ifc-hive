@@ -320,7 +320,7 @@ const applicationReducers = {
                         ...state, navigationOpen: false
                     }
                 case 'ui/update':
-                    if (action.payload.navigationOpen || action.payload.currentTool) {
+                    if (state.mobile && (action.payload.navigationOpen || action.payload.currentTool)) {
                         if (action.payload.navigationOpen === true && state.currentTool !== false) {
                             action.payload.currentTool = false
                         }
