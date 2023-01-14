@@ -4,8 +4,8 @@
     flat
     color="grey-lighten-2"
     class="toolBar"
+    id="appToolbar"
     data-test-container="utils/toolbar/default"
-    v-if="state"
   >
     <v-toolbar-title class="d-none d-sm-none d-md-flex d-lg-flex d-xl-flex"
       >{{ $t("widgets.tools.title") }}
@@ -221,7 +221,7 @@ export default {
 
 .toolContent > .v-card {
   height: 100%;
-  padding-bottom: 20px;
+  padding-bottom: 5px;
 }
 
 .toolComponentWrapper {

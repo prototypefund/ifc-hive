@@ -7,7 +7,7 @@
       app
       color="grey-lighten-2"
       :class="{ appBarRel: isInTest }"
-      ref="appAppbar"
+      id="appAppbar"
     >
       <!-- Breadcrumb -->
       <v-app-bar-title>
@@ -35,7 +35,7 @@
 
     <!-- Navigation Drawer -->
     <NavigationSideBar v-if="!isInTest" :nav-items="navItems" />
-    <ToolBar class="{ appBarRel: isInTest }" ref="appToolbar" />
+    <ToolBar :class="{ appBarRel: isInTest }" />
     <!-- Main content -->
     <v-main id="appMain">
       <v-btn
@@ -154,32 +154,32 @@ export default {
       }
     },
     scrollTop: async function () {
-      document.getElementById("appComponent").scrollTo(0, 0);
-      this.hasScrolled = false;
+      if (document.getElementById("appComponent")) {
+        document.getElementById("appComponent").scrollTo(0, 0);
+        this.hasScrolled = false;
+      }
     },
     setDimensions: async function () {
       await this.$nextTick(function () {
-        if (this.$refs.appAppbar && this.$refs.appToolbar) {
-          const appBarHeight = this.$refs.appAppbar.height || 0;
-          const toolBarHeight = this.$refs.appToolbar.height || 0;
-          //TODO find out why we can't get the width of the navBar via ref here
-          const HackyShit =
-            document.getElementById("appMain").offsetWidth -
-            document.getElementById("navSideBar").offsetWidth;
-          const topBarHeight = appBarHeight + toolBarHeight;
-          const windowWidth = window.innerWidth;
-          this.viewPortHeight = window.innerHeight - topBarHeight;
-          this.viewPortWidth = HackyShit;
-          this.$store.dispatch({
-            type: "ui/update",
-            payload: {
-              topBarHeight,
-              viewPortHeight: this.viewPortHeight,
-              viewPortWidth: this.viewPortWidth,
-              windowWidth,
-            },
-          });
-        }
+        //TODO find out why we can't properly use the $refs for size read here.
+        const appBarHeight = document.getElementById("appAppbar").offsetHeight;
+        const toolBarHeight = document.getElementById("appToolbar").offsetHeight;
+        const HackyShit =
+          document.getElementById("appMain").offsetWidth -
+          document.getElementById("navSideBar").offsetWidth;
+        const topBarHeight = appBarHeight + toolBarHeight;
+        const windowWidth = window.innerWidth;
+        this.viewPortHeight = window.innerHeight - topBarHeight;
+        this.viewPortWidth = HackyShit;
+        this.$store.dispatch({
+          type: "ui/update",
+          payload: {
+            topBarHeight,
+            viewPortHeight: this.viewPortHeight,
+            viewPortWidth: this.viewPortWidth,
+            windowWidth,
+          },
+        });
       });
     },
   },
@@ -197,7 +197,7 @@ html {
 }
 
 #app #appComponent {
-  overflow: auto;
+  overflow-y: auto;
 }
 
 #app .backToTop {
