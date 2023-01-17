@@ -1,5 +1,8 @@
 import { inject } from 'vue';
 
+/**
+ * Used by Storybook book 
+ */
 const initStore = () => {
   const $store = inject("$store");
 
@@ -7,14 +10,34 @@ const initStore = () => {
     type: `init`,
     payload: {}
   });
-  if (window.Cypress) {
-    window.__store = $store
+
+  if (window.Cypress && (!window.__widgets || !window.__currentPage || !window.__store)) {
+    window.__store = false
+    window.__widgets = false
+    window.__currentPage = false
+
+    $store.select(state => state.currentPage).subscribe((state) => {
+      window.__currentPage = state
+    })
+    $store.select(state => state.widgets).subscribe((state) => {
+      window.__widgets = state
+    })
+
+    $store.select(state => state).subscribe((state) => {
+      window.__store = state
+    })
   }
+
+  if (window.Cypress && window.Cypress.__store == undefined) {
+    window.Cypress.__store = false
+    $store.select(state => state).subscribe((state) => {
+      window.Cypress.__store = JSON.parse(JSON.stringify(state))
+    })
+  }
+
 }
 
 const prepareStore = (name, args) => {
-  args.value = Math.floor(Math.random() * 100);
-  args[`random_noise_0${Math.floor(Math.random() * 100)}`] = args.value;
   const $store = inject("$store");
   const routeName = `app.${name}`
   $store.dispatch({

@@ -26,7 +26,9 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 import { getRelativeURL, isComonentTest } from './sbHelper.js'
-import { getTestMap, testWidgetsIsPresent, summarizeWidgets, getSlotWidgets } from './testHelper.js'
+import { getTestMap, testWidgetsIsPresent, summarizeWidgets, } from './testHelper.js'
+
+import { getSlotWidgetsWrapped } from './storeHelper.js'
 
 /**
  * Vistes a Storybook Page 
@@ -36,6 +38,7 @@ import { getTestMap, testWidgetsIsPresent, summarizeWidgets, getSlotWidgets } fr
  */
 Cypress.Commands.add('visitStorybook', (title, name) => {
     const dstUrl = getRelativeURL(title, name);
+    console.log('URL', dstUrl)
     if (isComonentTest()) {
         cy.visit(dstUrl)
         /** Every  */
@@ -196,8 +199,6 @@ Cypress.Commands.add('testWidgetsArePresent', (source, bidirectional = true) => 
                     })
             }
         }
-
-
     })
 })
 
@@ -224,37 +225,37 @@ Cypress.Commands.add('testWidgetsArePresent', (source, bidirectional = true) => 
 
 
 Cypress.Commands.add('testWidgetsArePresent', (source, bidirectional = true) => {
-    const env = getTestMap()
-    getSlotWidgets().then((x) => {
+    const testMap = getTestMap()
+    getSlotWidgetsWrapped().then((x) => {
         for (const y of x) {
             testWidgetsIsPresent(y.uuid, y.name, y.face)
         }
         const subset = summarizeWidgets(x)
         var needUpdate = false
 
-        if (!(source in env)) {
-            env[source] = {}
+        if (!(source in testMap)) {
+            testMap[source] = {}
             const msg = `id ${source} not found in getTestMap() definition`
             cy.log(msg)
             console.log(msg)
             needUpdate = true
         }
 
-        if (!('widgets' in env[source])) {
-            env[source]['widgets'] = {}
+        if (!('widgets' in testMap[source])) {
+            testMap[source]['widgets'] = {}
             const msg = `Widget ${source} not found in getTestMap() definition`
             cy.log(msg)
             console.log(msg)
             needUpdate = true
         }
-        const update = JSON.parse(JSON.stringify(env))
+        const update = JSON.parse(JSON.stringify(testMap))
 
         if (needUpdate || (!Cypress._.isEqual(update[source]['widgets'], subset))) {
             cy.log('UPDATE FILE')
             update[source]['widgets'] = subset
             cy.writeFile('cypress/fixtures/visit.json', update)
         }
-        cy.wrap(subset).should('deep.equal', env[source]['widgets'])
+        cy.wrap(subset).should('deep.equal', testMap[source]['widgets'])
     })
 })
 

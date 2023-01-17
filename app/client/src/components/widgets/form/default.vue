@@ -19,6 +19,8 @@
 import { inject, ref, onMounted, computed, onUnmounted } from "vue";
 const $store = inject("$store");
 const state = ref({});
+// TODO: unused 
+const valid = ref({});
 const stateSubscriber$ = $store
   .select((state) => state.widgets[props.uuid])
   .subscribe((val) => {

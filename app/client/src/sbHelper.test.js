@@ -1,5 +1,17 @@
-import { getNameFrom, getQuerryId } from '../cypress/support/sbHelper';
+import { getNameFrom, getQuerryId, getRelativeURL } from '../cypress/support/sbHelper';
 import { describe, expect, it } from 'vitest';
+
+
+describe('getNameFrom', function () {
+    it('throws undefined input', () => {
+        expect(() => {
+            getRelativeURL();
+        }).toThrow();
+    });
+})
+
+
+
 
 describe('getNameFrom', function () {
     it('should return names', (ctx) => {

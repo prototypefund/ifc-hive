@@ -1,4 +1,6 @@
+cy = cy
 import visitjson from '../fixtures/visit.json'
+import { getSlotWidgetsWrapped, getSlotWidgets } from './storeHelper.js'
 
 /*
   Dynamic Vite Imports
@@ -23,7 +25,6 @@ const getTestMap = () => {
 }
 
 /**
- * 
  * @param {string} data_test_container 
  * @param {number} widgetIndex 
  * @param {function} prepareTest Callback what is executed before each test runs
@@ -36,7 +37,6 @@ const injectWidget = (data_test_container, widgetIndex, prepareTest) => {
     import(`../../src/components/widgets/${to_import[0]}/${to_import[1]}.component.cy.js`)
         .then(mod => {
             const testName = `Will Import Test from ${data_test_container} for widget in SlotIndex ${widgetIndex}`
-
             describe(testName, () => {
                 const within = (callback) => {
                     cy.get(`[data-test-container="${data_test_container}"]`).eq(widgetIndex)
@@ -101,6 +101,61 @@ const testWidgetsArePresent = (source) => {
  * @see visit.json
  */
 const testWidgets = (source, prepareTest) => {
+
+    it('Test Store is Pressent Without Window', () => {
+        expect(Cypress.__store, 'Cypress.__store != undefined').to.not.be.undefined
+    })
+
+    it('Test Store is Pressent with Window', () => {
+        cy.window().then((win) => {
+            expect(win.__store, 'win.__store != undefined').to.not.be.undefined
+            expect(win.__store, 'win.__store != false').to.not.be.false
+            expect(win.__widgets, 'win.__widgets != undefined').to.not.be.undefined
+            expect(win.__currentPage, 'win.__currentPage != undefined').to.not.be.undefined
+        })
+    })
+
+
+    it('Test #data-test-container = #slots + 1', () => {
+        cy.get('[data-test-container]').should('have.length', getSlotWidgets().length + 1)
+        getSlotWidgetsWrapped().then(
+            (slots) => {
+                cy.get('[data-test-container]').should('have.length', slots.length + 1)
+            }
+        )
+    })
+
+    it.only('Test Every Widget data-test-container="widget/*" has a data-test-container-uuid', () => {
+        var found_widgets = 0;
+        cy.get('[data-test-container]').should('have.length', getSlotWidgets().length + 1).each(
+            (container) => {
+                cy.wrap(container)
+                    .invoke('attr', 'data-test-container')
+                    .then(container_value => {
+                        if (container_value.startsWith('widgets/')) {
+                            cy.wrap(container)
+                                .invoke('attr', 'data-test-container-uuid').then(
+                                    (container_uuid) => {
+                                        cy.log(`Found ${found_widgets} data-test-container=${container_value} data-test-container-uuid=${container_uuid}`)
+                                        ++found_widgets;
+                                    }
+                                )
+                        }
+                    })
+            }).then(() => {
+                cy.wrap(found_widgets).should('eq', getSlotWidgets().length, 'each widget needs a data-test-container-uuid');
+            });
+    })
+}
+
+/**
+ * auto Injects tests for Wigets at runtime
+ * Downsite this Implimentation needs to know what Widgets 
+ * are Pressent before the Tests are run.
+ * @param {*} source 
+ * @param {*} prepareTest 
+ */
+const testWidgetsLegacy = (source, prepareTest) => {
     testWidgetsArePresent(source)
     injectWidgets(source, prepareTest)
 }
@@ -125,48 +180,15 @@ const testWidgetsIsPresent = (uuid, name, face) => {
     cy.get(`[data-test-container="${data_test_container}"][data-test-container-uuid="${uuid}"]`)
 }
 
-const resolveData = (x) => {
-    const result = []
-    for (const index in x) {
-        const uuid = x[index].uuid
-        const name = x[index].name
-        var face = x[index].face
-        if (!face) {
-            face = 'default'
-        }
-        result.push({ uuid, name, face })
-    }
-    return result
-}
-
-const getAllWidgets = () => {
-    return cy.window().then((win) => {
-        var widgets = {}
-        win.__store.select(state => state.widgets).subscribe((state) => {
-            for (const uuid in state) {
-                widgets[uuid] = state[uuid]
-            }
-        })
-        return resolveData(widgets)
-    })
-}
 
 
-const getSlotWidgets = () => {
-    return cy.window().then((win) => {
-        var slots = []
-        win.__store.select(state => state.currentPage.slots).subscribe((state) => {
-            for (const i in state) {
-                slots.push(state[i].widget)
-            }
-        })
-        return resolveData(slots)
-    })
-}
 
 
 
 export {
     testWidgets, injectWidgets, testWidgetsArePresent, getTestMap,
-    testWidgetsIsPresent, summarizeWidgets, getSlotWidgets
+    testWidgetsIsPresent, summarizeWidgets
+
 };
+
+

@@ -1,5 +1,5 @@
 // ts import { defineConfig } from "cypress";
-defineConfig = require('cypress').defineConfig
+const defineConfig = require('cypress').defineConfig
 
 // yarn start-server-and-test preview http://127.0.0.1:4173/ 'cypress run --browser brave' 
 const execa = require("execa");
@@ -7,8 +7,9 @@ const execa = require("execa");
 const fs = require('fs')
 const path = require('path')
 
-vitePreprocessor = require('cypress-vite')
+const vitePreprocessor = require('cypress-vite')
 
+// const { startDevServer } = require('@cypress/vite-dev-server')
 
 const findBrowser = () => {
   // the path is hard-coded for simplicity
@@ -46,11 +47,21 @@ config = defineConfig({
         'file:preprocessor',
         vitePreprocessor(path.resolve(__dirname, './vite.config.js')),
       )
+      /*
+      on('dev-server:start', (options) => {
+        return startDevServer({
+          options,
+          viteConfig: {
+            configFile: path.resolve(__dirname, './vite.config.js'),
+          },
+        })
+      })*/
+
       try {
         const visit = fs.readFileSync('cypress/fixtures/visit.json', 'utf8')
         JSON.parse(visit)
-      } catch(e) {
-        fs.writeFileSync('cypress/fixtures/visit.json','{}')
+      } catch (e) {
+        fs.writeFileSync('cypress/fixtures/visit.json', '{}')
       }
 
       /*return findBrowser().then((browser) => {

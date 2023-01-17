@@ -1,21 +1,26 @@
-import { isComonentTest } from '../../../../cypress/support/sbHelper.js'
-import { testWidgets } from '../../../../cypress/support/testHelper.js'
 
-const source = 'pages/boilerplate'
+import { PageTest } from '../../../../cypress/support/pageTest.js';
 
-const prepareTest = () => {
-  if (isComonentTest()) {
-    cy.visitStorybook(source, 'Headless')
-  } else {
-    cy.visit(source.split("/")[1]);
-  }
-}
+const myPageTest = new PageTest()
 
-describe(`Visit ${source}`, () => {
+/**
+ * All 3 Are the same.
+ * const myPageTest1 = new PageTest('pages/boilerplate', 'Headless', 'boilerplate')
+ * const myPageTest2 = new PageTest('pages/boilerplate', 'Headless')
+ * Uses 'pages/boilerplate' to get Route '/boilerplate'
+ * 
+ * const myPageTest2 = new PageTest('pages/boilerplate')
+ * Uses 'Headless' as Default for Strorybook Name 
+ * 
+ * const myPageTest1 = new PageTest() 
+ * Detects Page By Filename of this test
+ * 
+ */
 
-  beforeEach(() => {
-    prepareTest()
-  })
+describe(myPageTest.getDescription(), () => {
+
+  beforeEach(() => { myPageTest.prepareTest(); })
+  myPageTest.testWidgets();
 
   it("has rendered Boilerplate Dom", () => {
     cy.get('[data-test-container="pages/boilerplate"]')
@@ -26,7 +31,5 @@ describe(`Visit ${source}`, () => {
     cy.get('[data-test-container="pages/boilerplate"]')
       .should('contain.text', 'This is a Page Boilerplate')
   });
-
-  testWidgets(source, prepareTest)
 
 });
