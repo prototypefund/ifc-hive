@@ -92,10 +92,24 @@ const applicationReducers = {
                         }
                     }
                     return state
-
                 case 'data/update':
-                    console.error("data/update not implemented")
-                    return state
+                    data = { _source: {} }
+                    if (action.docUUID) {
+                        if (state[action.docUUID]) {
+                            data = JSON.parse(JSON.stringify(state))
+                            data[action.docUUID]._source = mergeDeepRight(data[action.docUUID]._source, action.payload)
+                        } else {
+                            console.error("we add something super fresh")
+                            debugger
+                        }
+
+                    }
+                    if (!action.docUUID) {
+                        console.error("no docUUID given")
+                    }
+                    return {
+                        ...state, ...data
+                    }
                 case 'data/delete':
                     console.error("data/delete not implemented")
                     return state

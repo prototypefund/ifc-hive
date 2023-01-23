@@ -1,19 +1,18 @@
 <template>
   <user
-    v-if="item && item._id"
     :props="props.props"
+    edit
     :uuid="props.uuid"
-    :item="item"
+    :docUUID="props.docUUID || false"
     data-test-container="widgets/quicklist/types/user"
     :data-test-container-uuid="props.uuid"
   />
 </template>
 
 <script setup>
-import { inject, ref, onMounted, onUnmounted, defineComponent } from "vue";
+import { defineComponent } from "vue";
 import userTpl from "@t/dataTypes/user.vue";
-const user = defineComponent(userTpl);
-const $store = inject("$store");
+
 const props = defineProps({
   uuid: {
     type: String,
@@ -21,21 +20,11 @@ const props = defineProps({
   },
   docUUID: {
     type: String,
-    required: true,
   },
   props: {
     type: Object,
     default: {},
   },
 });
-const item = ref({});
-const dataItemSubscriber$ = $store
-  .select((state) => state.data[props.docUUID])
-  .subscribe((val) => {
-    item.value = val;
-  });
-onMounted(() => {});
-onUnmounted(() => {
-  dataItemSubscriber$.unsubscribe();
-});
+const user = defineComponent(userTpl);
 </script>

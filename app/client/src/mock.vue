@@ -64,6 +64,7 @@ export default {
         nickname: "imbacile",
         email: "imbacile@pacifico.org",
         organisation: "org-dummy", // Type organization
+        tags: ["tag-todo"],
         active: true,
       },
       {

@@ -76,7 +76,7 @@
                 <v-chip size="small" label text-color="white">
                   <v-icon start icon="mdi-calendar-plus"></v-icon>
                   {{ $d(data[element]._source.created, "short") }}
-                  <v-tooltip activator="parent" location="bottom">
+                  <v-tooltip activator="parent" location="end">
                     {{ $t("generics.created") }}
                   </v-tooltip>
                 </v-chip>
@@ -85,7 +85,7 @@
                 <v-chip size="small" label text-color="white">
                   <v-icon start icon="mdi-calendar-edit"></v-icon>
                   {{ $d(data[element]._source.modified, "short") }}
-                  <v-tooltip activator="parent" location="bottom">
+                  <v-tooltip activator="parent" location="end">
                     {{ $t("generics.modified") }}
                   </v-tooltip>
                 </v-chip>
@@ -94,7 +94,7 @@
                 <v-chip size="small" label text-color="white">
                   <v-icon start icon="mdi-calendar-alert"></v-icon>
                   {{ $d(data[element]._source.due, "short") }}
-                  <v-tooltip activator="parent" location="bottom">
+                  <v-tooltip activator="parent" location="end">
                     {{ $t("generics.dueDate") }}
                   </v-tooltip>
                 </v-chip>
