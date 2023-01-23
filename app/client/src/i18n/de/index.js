@@ -48,7 +48,7 @@ export default {
     project: 'Projekt',
     tags: 'Tags',
     assigned: 'Zugewiesen',
-
+    color: 'Farbe'
 
   },
   ui: {
