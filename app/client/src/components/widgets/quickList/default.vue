@@ -4,15 +4,23 @@
     class="quickListWrapper"
     v-if="state"
     data-test-container="widgets/quicklist/default"
+    :data-test-container-uuid="props.uuid"
   >
-    <v-tabs v-model="entryIndex" fixed-tabs v-if="state.entries.length > 0">
+    <v-tabs
+      v-model="entryIndex"
+      fixed-tabs
+      v-if="state.entries.length > 0"
+      density="compact"
+    >
       <v-tab
         v-for="(item, index) in state.entries"
         :key="item"
         @click.middle="closeTab(index)"
         class="quickListTab"
       >
-        {{ item.type }} - {{ item.uuid }}
+        <div class="tabTitle text-h6 text-truncate">
+          {{ item.type }} - {{ item.title }}
+        </div>
         <v-icon class="tabHandler" @click="closeTab(index)">mdi-close-octagon</v-icon>
       </v-tab>
     </v-tabs>
@@ -21,26 +29,13 @@
         <no-results-yet />
       </v-window>
       <v-window-item v-else v-for="(item, index) in state.entries" :key="item">
-        <Detail
-          v-if="item.type === 'detail'"
-          :props="item.props"
-          uuid="quickList"
-          :docUUID="item.uuid"
-        />
-        <Ticket
-          v-if="item.type === 'ticket'"
-          :props="item.props"
-          uuid="quickList"
-          :docUUID="item.uuid"
-        />
+        <component :props="item.props" uuid="quickList" :docUUID="item.uuid" />
       </v-window-item>
     </v-window>
   </v-card>
 </template>
 <script setup>
-import { inject, ref, onMounted, onUnmounted, computed } from "vue";
-import Detail from "./types/detail.vue";
-import Ticket from "./types/ticket.vue";
+import { inject, ref, onMounted, onUnmounted, computed, defineAsyncComponent } from "vue";
 import noResultsYet from "@t/noResultsYet.vue";
 const $store = inject("$store");
 const state = ref({});
@@ -50,7 +45,16 @@ const stateSubscriber$ = $store
   .subscribe((val) => {
     state.value = val;
   });
-
+const component = computed(() => {
+  const currState = state.value;
+  let path = "";
+  if (currState.entries && currState.entries[currState.entryIndex].template) {
+    path = "../" + currState.entries[currState.entryIndex].template + ".vue";
+  } else {
+    path = `./types/${currState.entries[currState.entryIndex].type}.vue`;
+  }
+  return defineAsyncComponent(() => import(path));
+});
 const entryIndex = computed({
   // getter
   get() {
@@ -127,6 +131,11 @@ onUnmounted(() => {
   display: block !important;
 }
 
+.tabTitle {
+  max-width: 250px;
+  padding: 0 20px;
+}
+
 .v-tabs {
   background-color: #9e9e9e;
 }
@@ -134,7 +143,8 @@ onUnmounted(() => {
 .tabHandler {
   display: none !important;
   position: absolute !important;
-  top: 10px !important;
+  color: black;
+  top: 0px !important;
   cursor: pointer;
   right: 0px;
 }

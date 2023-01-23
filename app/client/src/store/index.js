@@ -84,35 +84,11 @@ const applicationReducers = {
                 case 'data/add':
                     if (action.payload.data) {
                         data = JSON.parse(JSON.stringify(state))
-                        items = {}
                         action.payload.data.forEach(item => {
-                            if (item._id) {
-                                if (data[item._id]) {
-                                    // TODO either put a configurable merge dialogue or remove this section
-                                    // apparently we received an update for an existing data, so let's send a notification
-                                    /*store.dispatch({
-                                        type: 'notifications/add',
-                                        payload: {
-                                            type: 'itemUpdate',
-                                            uuid: item._id
-                                        }
-                                    })*/
-                                    // items[item._id] = data[item._id]
-                                    if (!action.dummy) {
-                                        items[item._id] = item
-                                    }
-                                    /*items[item._id]._updated = {
-                                        item: JSON.stringify(item),
-                                        updatedAt: new Date()
-                                    }*/
-                                } else {
-                                    // its new data
-                                    items[item._id] = item
-                                }
-                            }
+                            data[item._id] = item
                         })
                         return {
-                            ...state, ...items
+                            ...state, ...data
                         }
                     }
                     return state
@@ -201,6 +177,18 @@ const applicationReducers = {
                 case 'init':
                     return applicationState.user
                 case 'user/update':
+                    return action.payload
+                default:
+                    return state
+            }
+        }
+    },
+    organization: (state, action) => {
+        if (state) {
+            switch (action.type) {
+                case 'init':
+                    return applicationState.organization
+                case 'organization/update':
                     return action.payload
                 default:
                     return state

@@ -10,7 +10,7 @@ export default {
             class: "nice",
             column: 12,
             widget: {
-                name: "timeline",
+                name: "debug",
                 props: {
                     title: "anderer Titel",
                 }

@@ -34,6 +34,7 @@
     <NavigationSideBar v-if="!isInTest" :nav-items="navItems" />
     <ToolBar :class="{ appBarRel: isInTest }" />
     <!-- Main content -->
+    <mock />
     <v-main id="appMain">
       <v-btn
         class="backToTop"
@@ -71,6 +72,7 @@ import ToolBar from "@u/toolbar/default.vue";
 import StatusBar from "@u/uploader/statusBar.vue";
 import ProgressBar from "@u/uploader/progressBar.vue";
 import { globalTools } from "./setup/application";
+import mock from "./mock.vue";
 export default {
   components: {
     Notifications,
@@ -78,6 +80,7 @@ export default {
     ToolBar,
     StatusBar,
     ProgressBar,
+    mock,
     mobileStartup: defineAsyncComponent(() =>
       import("./components/utils/mobile/startup.vue")
     ),
@@ -229,5 +232,9 @@ html {
 #app .isLoading,
 #app .isLoading * {
   visibility: hidden !important;
+}
+
+#app .mdi-drag {
+  cursor: pointer;
 }
 </style>

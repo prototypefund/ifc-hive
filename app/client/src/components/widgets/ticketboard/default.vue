@@ -1,4 +1,3 @@
-// TODO rework this mess
 <template>
   <v-container
     v-if="state && props.uuid && boardCount > 0"
@@ -7,7 +6,7 @@
     data-test-container="widgets/ticketboard/default"
     :data-test-container-uuid="props.uuid"
   >
-    <div class="ticketContainer" :style="{ height: viewPortHeight - 100 + 'px' }">
+    <div class="ticketContainer">
       <table
         class="ticketTable"
         v-if="tickets"
@@ -88,7 +87,6 @@ const boardIdentifiers = ref([]);
 const boardCount = shallowRef(0);
 const dragging = shallowRef(false);
 const windowWidth = shallowRef(window.innerWidth);
-const viewPortHeight = shallowRef(0);
 
 const colWidth = computed(() => (windowWidth.value > 700 ? 300 : 200));
 const tickets = ref({
@@ -112,7 +110,6 @@ const props = defineProps({
 });
 
 const makeTickets = function (data) {
-  console.warn("makeTicketsCalled");
   const filter = state.value.filter;
   if (filter) {
     if (filter.sorting) {
@@ -172,13 +169,13 @@ const makeTickets = function (data) {
     });
     filter.custom.forEach((cus) => {
       const id = splitIdentifier(cus.identifier);
-      if (data[id.val] && data[id.val].title) {
+      if (data[id.val] && data[id.val]._source.title) {
         // create ticket object for custom boards. Make them sortable
         tickets.value.custom[id.val] = {};
         tickets.value.custom[id.val].tickets = filterData(id, cus.excluded, data);
-        tickets.value.custom[id.val].title = data[id.val].title;
-        tickets.value.custom[id.val].id = data[id.val]._id;
-        tickets.value.custom[id.val].color = data[id.val].color;
+        tickets.value.custom[id.val].title = data[id.val]._source.title;
+        tickets.value.custom[id.val].id = data[id.val]._source._id;
+        tickets.value.custom[id.val].color = data[id.val]._source.color;
         // create sort object for all custom tickets
         if (tickets.value.sorting[id.val]) {
           if (
@@ -245,13 +242,6 @@ subscriber$.push(
     .select((state) => state.ui.windowWidth)
     .subscribe((val) => {
       windowWidth.value = val;
-    })
-);
-subscriber$.push(
-  $store
-    .select((state) => state.ui.viewPortHeight)
-    .subscribe((val) => {
-      viewPortHeight.value = val;
     })
 );
 const saveSorting = function () {

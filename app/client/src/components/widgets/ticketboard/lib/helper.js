@@ -33,7 +33,8 @@ export const filterData = function (id, exclude, data) {
     for (var key in data) {
         if (data.hasOwnProperty(key)) {
             //data entry is now in obj
-            obj = data[key]
+            if (!data[key]._source) console.error("we have a data item without _source. Check your data Packages")
+            obj = data[key]._source || {}
             let dataItemExcluded = false
             if (exclude && exclude.length > 0) {
                 exclude.forEach(identifier => {

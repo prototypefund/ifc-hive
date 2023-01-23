@@ -4,9 +4,19 @@ export const applicationState = {
     data: {},
     uploader: {},
     user: {
-        name: false,
+        firstname: false,
+        lastname: false,
+        nickname: false,
         email: false,
-        permissions: []
+        organisation: false,
+        active: false,
+    },
+    organization: {
+        name: false,
+        shortname: false,
+        active: false,
+        description: false,
+        url: false,
     },
     ui: {
         // indicates the left navigation bar state

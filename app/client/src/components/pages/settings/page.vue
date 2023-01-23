@@ -88,20 +88,6 @@ const props = defineProps({
     default: "default param",
   },
 });
-$store.dispatch({
-  type: "data/add",
-  dummy: true,
-  payload: {
-    data: [
-      {
-        _id: "rajle-1",
-        closed: false,
-        tags: ["badezimmer"],
-        title: "ralle Aller",
-      },
-    ],
-  },
-});
 onMounted(() => {});
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();

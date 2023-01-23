@@ -13,7 +13,17 @@ export default {
   themeLight: 'helles Thema',
   generics: {
     open: 'Offen',
-    closed: 'Geschlossen'
+    closed: 'Geschlossen',
+    assignee: 'Verantwortlich',
+    author: 'Autor',
+    editor: 'Bearbeiter',
+    owner: 'Eigentümer',
+    detail: 'Detail',
+    overview: 'Übersicht',
+    created: 'Erstellt',
+    modified: 'Bearbeitet',
+    due: 'Fällig',
+    dueDate: 'Fälligkeitsdatum'
   },
   ui: {
     uiSettings: 'Oberflächen Einstellungen',

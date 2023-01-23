@@ -13,7 +13,17 @@ export default {
   themeLight: 'light theme',
   generics: {
     open: 'Open',
-    closed: 'Closed'
+    closed: 'Closed',
+    assignee: 'Assignee',
+    author: 'Author',
+    editor: 'Editor',
+    owner: 'Owner',
+    detail: 'Detail',
+    overview: 'Overview',
+    created: 'Created',
+    modified: 'Modified',
+    due: 'Due',
+    dueDate: 'Due date'
   },
   ui: {
     uiSettings: 'UI Settings',
@@ -21,5 +31,5 @@ export default {
   },
   timeline: {
     title: 'Project Timeline Tile'
-  }
+  },
 }

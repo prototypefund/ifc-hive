@@ -1,20 +1,19 @@
 <template>
-  <v-card
-    flat
+  <tag
     v-if="item && item._id"
-    data-test-container="widgets/quicklist/types/detail"
+    :props="props.props"
+    :uuid="props.uuid"
+    :item="item"
+    data-test-container="widgets/quicklist/types/tag"
     :data-test-container-uuid="props.uuid"
-  >
-    <v-card-text>
-      <pre>{{ item }}</pre>
-    </v-card-text>
-  </v-card>
+  />
 </template>
 
 <script setup>
-import { inject, ref, onMounted, onUnmounted } from "vue";
+import { inject, ref, onMounted, onUnmounted, defineComponent } from "vue";
+import tagTpl from "@t/dataTypes/tag.vue";
+const tag = defineComponent(tagTpl);
 const $store = inject("$store");
-
 const props = defineProps({
   uuid: {
     type: String,
@@ -30,13 +29,13 @@ const props = defineProps({
   },
 });
 const item = ref({});
-const dateItemSubscriber$ = $store
+const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
     item.value = val;
   });
 onMounted(() => {});
 onUnmounted(() => {
-  dateItemSubscriber$.unsubscribe();
+  dataItemSubscriber$.unsubscribe();
 });
 </script>

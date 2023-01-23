@@ -4,7 +4,6 @@ import { store } from '../store/index.js'
 const dashboardComp = () => import('../components/pages/dashboard/page.vue')
 const settingsComp = () => import('../components/pages/settings/page.vue')
 const journalComp = () => import('../components/pages/journal/page.vue')
-const testboardComp = () => import('../components/pages/testboard/page.vue')
 const ticketboardComp = () => import('../components/pages/ticketboard/page.vue')
 const boilerplateComp = () => import('../components/pages/boilerplate/page.vue')
 const loadConf = (page) => import(`../components/pages/${page}/conf.js`)
@@ -71,24 +70,6 @@ export default [
         }
     },
     {
-        path: '/testboard',
-        name: 'app.testboard',
-        component: testboardComp,
-        props: true,
-        beforeEnter: (to, from) => {
-            if (!confCache.testboard) {
-                loadConf('testboard').then(conf => {
-                    confCache.testboard = conf.default
-                    store.dispatch({
-                        type: 'pages/add',
-                        routeName: to.name,
-                        payload: conf.default
-                    });
-                })
-            }
-        }
-    },
-    {
         path: '/ticketboard',
         name: 'app.ticketboard',
         component: ticketboardComp,
@@ -97,24 +78,6 @@ export default [
             if (!confCache.testboard) {
                 loadConf('ticketboard').then(conf => {
                     confCache.ticketboard = conf.default
-                    store.dispatch({
-                        type: 'pages/add',
-                        routeName: to.name,
-                        payload: conf.default
-                    });
-                })
-            }
-        }
-    },
-    {
-        path: '/boilerplate',
-        name: 'app.boilerplate',
-        component: boilerplateComp,
-        props: true,
-        beforeEnter: (to, from) => {
-            if (!confCache.boilerplate) {
-                loadConf('boilerplate').then(conf => {
-                    confCache.boilerplate = conf.default
                     store.dispatch({
                         type: 'pages/add',
                         routeName: to.name,

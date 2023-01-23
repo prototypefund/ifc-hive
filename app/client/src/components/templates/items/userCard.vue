@@ -1,0 +1,67 @@
+<template>
+  <v-card
+    class="mx-auto"
+    max-width="434"
+    rounded="0"
+    v-if="user"
+    data-test-container="template/items/userCard"
+    :data-test-container-uuid="'userCard_' + props.uuid"
+  >
+    <v-img
+      height="100%"
+      cover
+      src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg"
+    >
+      <v-avatar color="grey" size="150" rounded="0">
+        <v-img cover src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
+      </v-avatar>
+      <v-list-item class="text-white">
+        <QuickListHandler
+          uuid="quickList"
+          :dataUUID="user._id"
+          :dataTitle="user._title"
+          tab-type="user"
+          action="add"
+        >
+          <v-list-item-title
+            >{{ user._source.firstname }} {{ user._source.lastname }} aka
+            {{ user._source.nickname }}</v-list-item-title
+          >
+        </QuickListHandler>
+
+        <v-list-item-subtitle>{{ user._source.email }}</v-list-item-subtitle>
+      </v-list-item>
+    </v-img>
+  </v-card>
+</template>
+
+<script setup>
+import { inject, ref, onMounted, onUnmounted } from "vue";
+import QuickListHandler from "@w/quickList/handler.vue";
+const $store = inject("$store");
+
+const props = defineProps({
+  uuid: {
+    type: String,
+    required: true,
+  },
+  docUUID: {
+    type: String,
+    required: true,
+  },
+  props: {
+    type: Object,
+    default: {},
+  },
+});
+const user = ref({});
+const dataItemSubscriber$ = $store
+  .select((state) => state.data[props.docUUID])
+  .subscribe((val) => {
+    user.value = val;
+  });
+onMounted(() => {});
+onUnmounted(() => {
+  dataItemSubscriber$.unsubscribe();
+});
+</script>

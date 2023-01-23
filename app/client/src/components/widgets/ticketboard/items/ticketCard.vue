@@ -5,11 +5,23 @@
     class="ticketWrapperCard"
     :prepend-icon="boardId == 'open' && boardId == 'closed' ? 'false' : 'mdi-drag'"
     data-test-container="widgets/ticketboard/items/ticketCard"
-    :data-test-container-uuid="props.uuid"
+    :data-test-container-uuid="'ticketCard_' + props.uuid"
   >
-    <template v-slot:title>
+    <template v-slot:title v-if="boardId !== 'open' && boardId !== 'closed'">
+      <QuickListHandler
+        uuid="quickList"
+        :dataUUID="props.boardId"
+        :dataTitle="props.boardId"
+        tab-type="tag"
+        action="add"
+      >
+        {{ column.title }}
+      </QuickListHandler>
+    </template>
+    <template v-slot:title v-else>
       {{ column.title }}
     </template>
+
     <draggable
       v-model="sorting"
       item-key="id"
@@ -17,35 +29,142 @@
       ghost-class="ghost"
       @start="dragging = true"
       @end="dragging = false"
-      handle=".v-card>.v-card-item>.v-card-item__prepend"
+      handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend"
       :group="{ name: 'ticketSort', pull: ['ticketSort'], put: ['ticketSort'] }"
     >
       <template #item="{ element }">
-        <v-card prepend-icon="mdi-drag">
+        <v-card
+          prepend-icon="mdi-drag"
+          class="ticketItem"
+          :elevation="isHovering === data[element]._id ? 12 : 2"
+          :class="{ 'on-hover': isHovering === data[element]._id }"
+          @mouseover="isHovering = data[element]._id"
+          @mouseout="isHovering = false"
+        >
           <template v-slot:title>
             <QuickListHandler
               uuid="quickList"
               :dataUUID="data[element]._id"
-              tab-type="ticket"
+              :dataTitle="data[element]._source.title || data[element]._title"
+              :tab-type="data[element]._type"
               action="add"
             >
-              {{ data[element]._id }}
-              <v-card-title>{{ data[element].title }}</v-card-title>
+              <v-card-title>{{
+                data[element]._source.title || data[element]._title
+              }}</v-card-title>
             </QuickListHandler>
           </template>
 
-          <v-card-subtitle v-if="data[element].tags && data[element].tags.length > 0">
-            <v-row no-gutters>
-              <v-col cols="auto" v-for="tag in data[element].tags">
-                <v-chip :color="data[tag] ? data[tag].color || 'grey' : 'grey'">{{
-                  data[tag] ? data[tag].title || tag : tag
-                }}</v-chip>
+          <v-card-subtitle>
+            <v-row
+              v-if="data[element]._source.tags && data[element]._source.tags.length > 0"
+            >
+              <v-col cols="auto" v-for="tag in data[element]._source.tags">
+                <v-chip
+                  size="small"
+                  :color="data[tag] ? data[tag]._source.color || 'grey' : 'grey'"
+                  >{{ data[tag] ? data[tag]._source.title || tag : tag }}</v-chip
+                >
               </v-col>
             </v-row>
           </v-card-subtitle>
-          <v-card-text>
-            <pre>{{ data[element] }}</pre>
-          </v-card-text>
+
+          <v-card-text> short description</v-card-text>
+          <v-card-subtitle>
+            <v-row>
+              <v-col cols="auto" v-if="data[element]._source.created">
+                <v-chip size="small" label text-color="white">
+                  <v-icon start icon="mdi-calendar-plus"></v-icon>
+                  {{ $d(data[element]._source.created, "short") }}
+                  <v-tooltip activator="parent" location="bottom">
+                    {{ $t("generics.created") }}
+                  </v-tooltip>
+                </v-chip>
+              </v-col>
+              <v-col cols="auto" v-if="data[element]._source.modified">
+                <v-chip size="small" label text-color="white">
+                  <v-icon start icon="mdi-calendar-edit"></v-icon>
+                  {{ $d(data[element]._source.modified, "short") }}
+                  <v-tooltip activator="parent" location="bottom">
+                    {{ $t("generics.modified") }}
+                  </v-tooltip>
+                </v-chip>
+              </v-col>
+              <v-col cols="auto" v-if="data[element]._source.due">
+                <v-chip size="small" label text-color="white">
+                  <v-icon start icon="mdi-calendar-alert"></v-icon>
+                  {{ $d(data[element]._source.due, "short") }}
+                  <v-tooltip activator="parent" location="bottom">
+                    {{ $t("generics.dueDate") }}
+                  </v-tooltip>
+                </v-chip>
+              </v-col>
+            </v-row>
+          </v-card-subtitle>
+
+          <v-card-actions>
+            <v-btn-group>
+              <v-btn
+                size="x-small"
+                :append-icon="
+                  show !== `${data[element]._id}_overview`
+                    ? 'mdi-chevron-left'
+                    : 'mdi-chevron-down'
+                "
+                @click="handleShow(`${data[element]._id}_overview`)"
+                >{{ $t("generics.overview") }}</v-btn
+              >
+              <v-btn
+                size="x-small"
+                v-if="data[element]._source.owner"
+                :append-icon="
+                  show !== `${data[element]._id}_author`
+                    ? 'mdi-chevron-left'
+                    : 'mdi-chevron-down'
+                "
+                @click="handleShow(`${data[element]._id}_author`)"
+                >{{ $t("generics.author") }}
+                <v-tooltip activator="parent" location="top">
+                  <ticket-member-mouse-over
+                    :uuid="props.uuid"
+                    :docUUID="data[element]._source.owner"
+                  /> </v-tooltip
+              ></v-btn>
+              <v-btn
+                size="x-small"
+                v-if="data[element]._source.assigned"
+                :append-icon="
+                  show !== `${data[element]._id}_assignee`
+                    ? 'mdi-chevron-left'
+                    : 'mdi-chevron-down'
+                "
+                @click="handleShow(`${data[element]._id}_assignee`)"
+                >{{ $t("generics.assignee") }}
+                <v-tooltip activator="parent" location="top"
+                  ><ticket-member-mouse-over
+                    :uuid="props.uuid"
+                    :docUUID="data[element]._source.assigned"
+                  /> </v-tooltip
+              ></v-btn>
+            </v-btn-group>
+          </v-card-actions>
+          <v-expand-transition>
+            <ticket-member
+              class="transition-fast-in-fast-out v-card--show"
+              v-if="show == `${data[element]._id}_assignee`"
+              :uuid="props.uuid"
+              :docUUID="data[element]._source.assigned"
+            />
+            <ticket-member
+              class="transition-fast-in-fast-out v-card--show"
+              v-if="show == `${data[element]._id}_author`"
+              :uuid="props.uuid"
+              :docUUID="data[element]._source.owner"
+            />
+            <v-card v-if="show == `${data[element]._id}_overview`">
+              <pre>{{ data[element] }}</pre>
+            </v-card>
+          </v-expand-transition>
         </v-card>
       </template>
     </draggable>
@@ -53,12 +172,19 @@
 </template>
 <script setup>
 import QuickListHandler from "@w/quickList/handler.vue";
-import { shallowRef, computed, inject } from "vue";
+import { shallowRef, computed, inject, defineAsyncComponent } from "vue";
 import draggable from "vuedraggable";
 import { difference } from "ramda";
 const dragging = shallowRef(false);
-
+const show = shallowRef(false);
 const $store = inject("$store");
+const isHovering = shallowRef(false);
+const ticketMember = computed(() => {
+  return defineAsyncComponent(() => import("@t/items/userCard.vue"));
+});
+const ticketMemberMouseOver = computed(() => {
+  return defineAsyncComponent(() => import("@t/items/userListItem.vue"));
+});
 const sorting = computed({
   get() {
     return props.sorting;
@@ -76,26 +202,26 @@ const sorting = computed({
         if (isOpenClose) {
           closed = props.boardId === "closed";
         }
-        if (dataItem.tags) {
+        if (dataItem._source.tags) {
           const dataIndex = data.push(JSON.parse(JSON.stringify(dataItem))) - 1;
           props.identifiers.forEach((boardId) => {
             // our data item has tags, so everything went well here
-            const tagIndex = props.data[dataUuid].tags.indexOf(boardId);
+            const tagIndex = dataItem._source.tags.indexOf(boardId);
             if (tagIndex >= 0) {
               // we found the tag which is the old ticket state, now lets clone it from pops and add it to the dataUpdate object,
               // remove it and add the new one from this board
-              data[dataIndex].tags.splice(tagIndex, 1);
+              data[dataIndex]._source.tags.splice(tagIndex, 1);
               // make sure we close or open them. This is hardcoded for now
               // todo maybe implement this configurable via the generics config
               if (props.boardId === "open") {
-                data[dataIndex].closed = false;
+                data[dataIndex]._source.closed = false;
               } else if (props.boardId === "closed") {
-                data[dataIndex].closed = true;
+                data[dataIndex]._source.closed = true;
               }
             }
           });
           if (!isOpenClose) {
-            data[dataIndex].tags.push(props.boardId);
+            data[dataIndex]._source.tags.push(props.boardId);
           }
           if (data) {
             $store.dispatch({
@@ -127,6 +253,13 @@ const sorting = computed({
     });
   },
 });
+const handleShow = function (type) {
+  if (show.value === type) {
+    show.value = false;
+  } else {
+    show.value = type;
+  }
+};
 const props = defineProps({
   column: {
     type: Object,
@@ -159,7 +292,7 @@ const props = defineProps({
   },
 });
 </script>
-<style lang="css">
+<style lang="css" scoped>
 .ticketWrapperCard {
   height: 100%;
 }
@@ -168,11 +301,11 @@ const props = defineProps({
   min-height: 100%;
 }
 
-.ticketWrapperCard .v-card {
-  margin: 10px;
+.ticketItem:not(.on-hover) {
+  opacity: 0.8;
 }
 
-.ticketWrapperCard .v-card-item__prepend {
-  cursor: pointer;
+.ticketWrapperCard .v-card {
+  margin: 10px;
 }
 </style>

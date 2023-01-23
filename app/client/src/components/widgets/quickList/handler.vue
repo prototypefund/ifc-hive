@@ -32,6 +32,16 @@ const props = defineProps({
     default: "list",
     required: true,
   },
+  dataTitle: {
+    // tabtype like list, detail, edit, and stuff I don't know yet
+    type: String,
+    required: true,
+  },
+  template: {
+    // the location under components/widgets from where to get a file to be shown for the item in quicklist
+    type: String,
+    required: false,
+  },
   action: {
     // add, delete, clear
     type: String,
@@ -87,6 +97,8 @@ const handleQuickListItem = () => {
       entries.unshift({
         uuid: props.dataUUID,
         type: props.tabType,
+        template: props.template || false,
+        title: props.dataTitle,
         props: props.props,
       });
       // as we unshift new entries, the currently selected tab always needs to be 0
