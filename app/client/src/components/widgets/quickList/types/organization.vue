@@ -1,21 +1,27 @@
 <template>
   <organization
-    v-if="item && item._id"
     :props="props.props"
+    edit
     :uuid="props.uuid"
-    :item="item"
+    :widgetUUID="props.widgetUUID"
+    :docUUID="props.docUUID || false"
     data-test-container="widgets/quicklist/types/organization"
     :data-test-container-uuid="props.uuid"
   />
 </template>
 
 <script setup>
-import { inject, ref, onMounted, onUnmounted, defineComponent } from "vue";
+import { defineComponent } from "vue";
 import organizationTpl from "@t/dataTypes/organization.vue";
-const organization = defineComponent(organizationTpl);
-const $store = inject("$store");
+
 const props = defineProps({
   uuid: {
+    type: String,
+    default(rawProps) {
+      return rawProps.widgetUUID + "_types_organization_" + rawProps.docUUID;
+    },
+  },
+  widgetUUID: {
     type: String,
     required: true,
   },
@@ -28,14 +34,5 @@ const props = defineProps({
     default: {},
   },
 });
-const item = ref({});
-const dataItemSubscriber$ = $store
-  .select((state) => state.data[props.docUUID])
-  .subscribe((val) => {
-    item.value = val;
-  });
-onMounted(() => {});
-onUnmounted(() => {
-  dataItemSubscriber$.unsubscribe();
-});
+const organization = defineComponent(organizationTpl);
 </script>

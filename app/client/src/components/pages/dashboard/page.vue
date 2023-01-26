@@ -23,21 +23,7 @@ const props = defineProps({
   },
 });
 
-onMounted(() => {
-  /*$store.dispatch({
-    type: "toolbar/add",
-    payload: {
-      title: "Test",
-      page: "app.dashboard",
-      icon: "mdi-apple-safari",
-      iconActive: "mdi-apple-safari",
-      uuid: "dashboardTest",
-      widget: {
-        name: "placeholder",
-      },
-    },
-  });*/
-});
+onMounted(() => {});
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });

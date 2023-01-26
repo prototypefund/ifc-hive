@@ -283,7 +283,7 @@ export default {
           title: data.title,
           type: data.type,
           color: data.color,
-          tags: data.tags || false,
+          tags: data.tags || [],
           locked: 0,
         },
       };
@@ -293,7 +293,7 @@ export default {
         _id: "user-" + data.nickname,
         _type: "user",
         _path: false,
-        _title: `${data.nickname} ${data.email} ${data.organization}`, // Nickname (email)  Organization
+        _title: `${data.firstname} ${data.lastname} @${data.email}`, // Nickname (email)  Organization
         _source: {
           firstname: data.firstname,
           lastname: data.lastname,
@@ -301,7 +301,7 @@ export default {
           email: data.email,
           organisation: data.organization, // Type organization
           active: data.active,
-          tags: data.tags || false,
+          tags: data.tags || [],
         },
       };
     },
@@ -326,7 +326,7 @@ export default {
           project: data.project,
           body: data.body, // block
           closed: data.closed, // default false
-          tags: data.tags, // Type Tag
+          tags: data.tags || [], // Type Tag
           created: created,
           modified: modified,
           due: due,

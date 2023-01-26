@@ -29,7 +29,7 @@
         <no-results-yet />
       </v-window>
       <v-window-item v-else v-for="(item, index) in state.entries" :key="item">
-        <component :props="item.props" uuid="quickList" :docUUID="item.uuid" />
+        <component :props="item.props" widgetUUID="quickList" :docUUID="item.uuid" />
       </v-window-item>
     </v-window>
   </v-card>
@@ -77,7 +77,7 @@ const props = defineProps({
     type: String,
     default: "default param",
   },
-  dataUUID: {
+  docUUID: {
     type: String,
     default: "default param",
   },

@@ -19,7 +19,7 @@
                 :width="colWidth"
                 :identifiers="boardIdentifiers"
                 :sorting="state.filter.sorting.open"
-                :uuid="props.uuid"
+                :widgetUUID="props.uuid"
                 boardId="open"
                 :column="tickets.generics.open"
                 :data="data"
@@ -44,7 +44,7 @@
                   <ticket-item
                     :width="colWidth"
                     :identifiers="boardIdentifiers"
-                    :uuid="props.uuid"
+                    :widgetUUID="props.uuid"
                     :boardId="element"
                     :sorting="state.filter.sorting[element]"
                     :column="tickets.custom[element]"
@@ -58,7 +58,7 @@
               <ticket-item
                 :width="colWidth"
                 :identifiers="boardIdentifiers"
-                :uuid="props.uuid"
+                :widgetUUID="props.uuid"
                 boardId="closed"
                 :sorting="state.filter.sorting.closed"
                 :column="tickets.generics.closed"
@@ -69,7 +69,6 @@
         </tbody>
       </table>
     </div>
-    {{ tickets.sorting }}
   </v-container>
 </template>
 <script setup>
@@ -96,7 +95,6 @@ const tickets = ref({
     boards: [],
   },
 });
-const subscriber$ = [];
 const props = defineProps({
   props: {
     type: Object,
@@ -230,20 +228,17 @@ const makeTickets = function (data) {
   }
   boardIdentifiers.value = tickets.value.sorting.boards;
 };
-subscriber$.push(
-  $store
-    .select((state) => state.widgets[props.uuid])
-    .subscribe((val) => {
-      state.value = val;
-    })
-);
-subscriber$.push(
-  $store
-    .select((state) => state.ui.windowWidth)
-    .subscribe((val) => {
-      windowWidth.value = val;
-    })
-);
+const stateSubscriber$ = $store
+  .select((state) => state.widgets[props.uuid])
+  .subscribe((val) => {
+    state.value = val;
+  });
+const windowWidth$ = $store
+  .select((state) => state.ui.windowWidth)
+  .subscribe((val) => {
+    windowWidth.value = val;
+  });
+
 const saveSorting = function () {
   // TODO maybe move the sort store to currentPage store instead of widget?
   $store.dispatch({
@@ -290,20 +285,22 @@ const handleGenericsExclude = function () {
     });
   }
 };
+let dataSubscriber$ = false;
 
 onMounted(() => {
   handleGenericsExclude();
-  subscriber$.push(
-    $store
-      .select((state) => state.data)
-      .subscribe((val) => {
-        data.value = val;
-        makeTickets(val);
-      })
-  );
+
+  dataSubscriber$ = $store
+    .select((state) => state.data)
+    .subscribe((val) => {
+      data.value = val;
+      makeTickets(val);
+    });
 });
 onUnmounted(() => {
-  $store.helper.unSubscribeAll(subscriber$);
+  stateSubscriber$.unsubscribe();
+  windowWidth$.unsubscribe();
+  dataSubscriber$.unsubscribe();
 });
 </script>
 <style lang="css" scoped>

@@ -10,7 +10,7 @@
     <template v-slot:title v-if="boardId !== 'open' && boardId !== 'closed'">
       <QuickListHandler
         uuid="quickList"
-        :dataUUID="props.boardId"
+        :docUUID="props.boardId"
         :dataTitle="props.boardId"
         tab-type="tag"
         action="add"
@@ -44,7 +44,7 @@
           <template v-slot:title>
             <QuickListHandler
               uuid="quickList"
-              :dataUUID="data[element]._id"
+              :docUUID="data[element]._id"
               :dataTitle="data[element]._source.title || data[element]._title"
               :tab-type="data[element]._type"
               action="add"
@@ -126,7 +126,7 @@
                 >{{ $t("generics.author") }}
                 <v-tooltip activator="parent" location="top">
                   <ticket-member-mouse-over
-                    :uuid="props.uuid"
+                    :widgetUUID="props.widgetUUID"
                     :docUUID="data[element]._source.owner"
                   /> </v-tooltip
               ></v-btn>
@@ -142,7 +142,7 @@
                 >{{ $t("generics.assignee") }}
                 <v-tooltip activator="parent" location="top"
                   ><ticket-member-mouse-over
-                    :uuid="props.uuid"
+                    :widgetUUID="props.widgetUUID"
                     :docUUID="data[element]._source.assigned"
                   /> </v-tooltip
               ></v-btn>
@@ -152,13 +152,13 @@
             <ticket-member
               class="transition-fast-in-fast-out v-card--show"
               v-if="show == `${data[element]._id}_assignee`"
-              :uuid="props.uuid"
+              :widgetUUID="props.widgetUUID"
               :docUUID="data[element]._source.assigned"
             />
             <ticket-member
               class="transition-fast-in-fast-out v-card--show"
               v-if="show == `${data[element]._id}_author`"
-              :uuid="props.uuid"
+              :widgetUUID="props.widgetUUID"
               :docUUID="data[element]._source.owner"
             />
             <v-card v-if="show == `${data[element]._id}_overview`">
@@ -180,10 +180,10 @@ const show = shallowRef(false);
 const $store = inject("$store");
 const isHovering = shallowRef(false);
 const ticketMember = computed(() => {
-  return defineAsyncComponent(() => import("@t/items/userCard.vue"));
+  return defineAsyncComponent(() => import("@t/cards/user.vue"));
 });
 const ticketMemberMouseOver = computed(() => {
-  return defineAsyncComponent(() => import("@t/items/userListItem.vue"));
+  return defineAsyncComponent(() => import("@t/listItems/user.vue"));
 });
 const sorting = computed({
   get() {
@@ -244,7 +244,7 @@ const sorting = computed({
     // to stop multiple cycles use  if (!data || data.length === 0) {
     $store.dispatch({
       type: "widgets/update",
-      uuid: props.uuid,
+      uuid: props.widgetUUID,
       payload: {
         filter: {
           sorting: { [props.boardId]: val },
@@ -272,6 +272,12 @@ const props = defineProps({
     default: () => ({}),
   },
   uuid: {
+    type: String,
+    default(rawProps) {
+      return rawProps.widgetUUID + "_" + rawProps.boardId;
+    },
+  },
+  widgetUUID: {
     type: String,
     required: true,
   },
@@ -302,7 +308,7 @@ const props = defineProps({
 }
 
 .ticketItem:not(.on-hover) {
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .ticketWrapperCard .v-card {

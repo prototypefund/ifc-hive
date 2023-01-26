@@ -5,11 +5,13 @@ import {
     UndoExtension,
     ImmutableStateExtension
 } from 'mini-rx-store';
+import {
+    ref,
+} from "vue";
 import getEnvVariable from '../lib/getEnvVariable'
-import { mergeDeepRight, mergeDeepLeft, clone } from 'ramda'
+import { mergeDeepRight, clone, filter } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
 import { applicationState, storePatterns, loadingHold } from './state'
-import helper from './helper.js'
 import { widgetConfLoader, widgetTypeConfLoader } from "@lib/widgetLoader";
 /*
  * Apply different extensions depending on the environment
@@ -31,7 +33,8 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
 let pagesLookup = false
 let widgetsLookup = false
 let uiLookup = false
-
+// TODO remove dataLookup once the api is ready
+let dataLookup = false
 // TODO find out how actual effects work without ts support. This works the "same" way for now
 const metaReducer = [(reducer) => {
     return (state, action) => {
@@ -73,8 +76,76 @@ const metaReducer = [(reducer) => {
         return reducer(state, action)
     }
 }]
-
+const basicStoreFilters = (query) => {
+    const data = JSON.parse(JSON.stringify(dataLookup))
+    if (query === "ALL_MEMOS") {
+        return filter((item) => {
+            return item._type === 'memo'
+        }, data)
+    }
+    if (query === "ALL_TAGS") {
+        return filter((item) => {
+            return item._type === 'tag'
+        }, data)
+    }
+    if (query === "ALL_USER") {
+        return filter((item) => {
+            return item._type === 'user'
+        }, data)
+    }
+    if (query === "ALL_PROJECTS") {
+        return filter((item) => {
+            return item._type === 'project'
+        }, data)
+    }
+    if (query === "ALL_ORGANIZATIONS") {
+        return filter((item) => {
+            return item._type === 'organization'
+        }, data)
+    }
+    return data
+}
 const applicationReducers = {
+    queries: (state, action) => {
+        let queries, items
+        if (state) {
+            switch (action.type) {
+                case 'init':
+                    return applicationState.queries
+                case 'queries/execute':
+                    queries = JSON.parse(JSON.stringify(state))
+                    if (action.actionId) {
+                        state[action.actionId]
+                    } else {
+                        Object.values(queries).forEach(query => {
+                            items = basicStoreFilters(query.query)
+                            query.uuids = Object.keys(items)
+                            query.data = items
+                        })
+                    }
+                    return queries
+                case 'queries/add':
+                    if (action.payload.actionId) {
+                        queries = {}
+                        queries[action.payload.actionId] = {
+                            query: action.payload.query
+                        }
+                        items = basicStoreFilters(action.payload.query)
+                        queries[action.payload.actionId].uuids = Object.keys(items)
+                        queries[action.payload.actionId].data = items
+                    }
+                    return { ...state, ...queries }
+                case 'queries/remove':
+                    queries = JSON.parse(JSON.stringify(state))
+                    if (action.actionId) {
+                        delete queries[action.actionId]
+                    }
+                    return queries || {}
+                default:
+                    return state
+            }
+        }
+    },
     data: (state, action) => {
         let data, items
         if (state) {
@@ -85,11 +156,19 @@ const applicationReducers = {
                     if (action.payload.data) {
                         data = JSON.parse(JSON.stringify(state))
                         action.payload.data.forEach(item => {
-                            data[item._id] = item
+                            if (item._type === 'delete') {
+                                delete data[item._id]
+                            } else {
+                                data[item._id] = item
+                            }
                         })
-                        return {
-                            ...state, ...data
+                        if (Object.keys(state).length !== Object.keys(data).length) {
+                            store.dispatch({
+                                type: 'queries/execute',
+                                actionId: false
+                            })
                         }
+                        return data
                     }
                     return state
                 case 'data/update':
@@ -508,6 +587,45 @@ if (uiLookup === false) {
         uiLookup = val
     })
 }
-// add helper functions to store
-store.helper = helper
+
+// TODO remove dataLookup once the api is ready
+if (dataLookup === false) {
+    store.select(state => state.data).subscribe(val => {
+        dataLookup = val
+    })
+}
+store.$data = {
+    update: (actionId, docUUID, doc) => {
+
+    },
+    get: (actionId, query) => {
+        // create a deep ref object which will contain the query data as well as the items
+        const queryObj = ref({})
+        store.dispatch({
+            type: "queries/add",
+            payload: {
+                actionId,
+                query
+            },
+        })
+        const subscriber$ = store.select((state) => state.queries[actionId])
+            .subscribe((val) => {
+                // this will fire whenever we have changes to our query
+                if (queryObj.value !== val) {
+                    queryObj.value = val;
+                }
+
+            })
+        // add a unsubscribe function to our object so that we can trigger it easily on dismount
+        queryObj.unsubscribe = () => {
+            subscriber$.unsubscribe()
+            store.dispatch({
+                type: "queries/remove",
+                actionId
+            })
+        }
+        return queryObj
+    }
+}
+window.debug = store
 export default store

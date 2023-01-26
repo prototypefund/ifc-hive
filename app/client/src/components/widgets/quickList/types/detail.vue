@@ -18,6 +18,12 @@ const $store = inject("$store");
 const props = defineProps({
   uuid: {
     type: String,
+    default(rawProps) {
+      return rawProps.widgetUUID + "_types_detail_" + rawProps.docUUID;
+    },
+  },
+  widgetUUID: {
+    type: String,
     required: true,
   },
   docUUID: {

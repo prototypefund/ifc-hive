@@ -48,17 +48,14 @@ const props = defineProps({
     default: "add",
     required: true,
   },
-  dataUUID: {
+  docUUID: {
     // the uuid of the actual api data item
     type: String,
     default: false,
     required: true,
   },
   uuid: {
-    // the uuid of the widget
-    // TODO find out how to not always set this fix to "quickList"
     type: String,
-    default: false,
     required: true,
   },
   props: {
@@ -68,9 +65,9 @@ const props = defineProps({
   },
 });
 const handleQuickListItem = () => {
-  if (props.uuid && props.dataUUID) {
-    // make sure that we only have on tab per display type and dataUUID
-    let entryIndex = findIndex(propEq("uuid", props.dataUUID))(state.value.entries);
+  if (props.uuid && props.docUUID) {
+    // make sure that we only have on tab per display type and docUUID
+    let entryIndex = findIndex(propEq("uuid", props.docUUID))(state.value.entries);
     // open the quicklist bar
     if (currentTool.value !== "quickList") {
       $store.dispatch({
@@ -95,7 +92,7 @@ const handleQuickListItem = () => {
     } else {
       // create an object describing the view type and the uuid (of the data element) as well as possible query or display parameters
       entries.unshift({
-        uuid: props.dataUUID,
+        uuid: props.docUUID,
         type: props.tabType,
         template: props.template || false,
         title: props.dataTitle,

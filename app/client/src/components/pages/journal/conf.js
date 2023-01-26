@@ -9,7 +9,6 @@ export default {
       class: "journalspaß12",
       column: 12,
       widget: {
-        uuid: "journal1",
         name: "journal"
       }
     }

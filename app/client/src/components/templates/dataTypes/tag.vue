@@ -18,6 +18,18 @@
         variant="underlined"
         :label="$t('generics.type')"
       />
+      <tag-chips
+        v-if="!edit"
+        :widgetUUID="props.widgetUUID"
+        :docUUID="item._id"
+        :tags="tags"
+      />
+      <tag-autocompletion
+        v-if="edit"
+        :widgetUUID="props.widgetUUID"
+        :docUUID="item._id"
+      />
+
       <v-text-field
         v-model="color"
         :label="$t('generics.color')"
@@ -31,17 +43,36 @@
         hide-details
         :label="locked ? $t('generics.locked') : $t('generics.open')"
       ></v-switch>
+      <v-btn @click="debugDump = !debugDump">
+        <v-icon :icon="!debugDump ? 'mdi-chevron-right' : 'mdi-chevron-down'" />
+        showDump
+      </v-btn>
+    </v-card-text>
+    <v-card-text v-if="debugDump">
       <pre>{{ item }}</pre>
     </v-card-text>
   </v-card>
 </template>
 
 <script setup>
-import { inject, ref, shallowRef, computed, onMounted, onUnmounted } from "vue";
+import {
+  inject,
+  ref,
+  shallowRef,
+  defineAsyncComponent,
+  computed,
+  onMounted,
+  onUnmounted,
+} from "vue";
 import { v4 as uuidv4 } from "uuid";
 const $store = inject("$store");
 const tagTypes = ["status", "milestone", "default"];
 const showPicker = shallowRef(false);
+const tagAutocompletion = defineAsyncComponent(() =>
+  import("@t/autocompletion/tags.vue")
+);
+const tagChips = defineAsyncComponent(() => import("@t/chips/tags.vue"));
+const debugDump = shallowRef(false);
 const itemUpdater = (newItem) => {
   $store.dispatch({
     type: "data/update",
@@ -55,6 +86,14 @@ const locked = computed({
   },
   set(newValue) {
     itemUpdater({ locked: newValue });
+  },
+});
+const tags = computed({
+  get() {
+    return item.value._source.tags || "";
+  },
+  set(newValue) {
+    itemUpdater({ tags: newValue });
   },
 });
 const color = computed({
@@ -94,7 +133,12 @@ const props = defineProps({
     default: false,
   },
   uuid: {
-    // the uuid of the calling widgets, in case you need it
+    type: String,
+    default(rawProps) {
+      return rawProps.widgetUUID + "_dataTypes_tag_" + rawProps.docUUID;
+    },
+  },
+  widgetUUID: {
     type: String,
     required: true,
   },
@@ -114,13 +158,16 @@ const props = defineProps({
   },
   docUUID: {
     type: String,
+    required: true,
   },
 });
 const item = ref(false);
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
-    item.value = val;
+    if (item.value !== val) {
+      item.value = val;
+    }
   });
 onMounted(() => {});
 onUnmounted(() => {

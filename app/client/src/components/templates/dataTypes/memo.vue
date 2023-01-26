@@ -1,39 +1,154 @@
 <template>
   <v-card
     flat
-    v-if="item && item._id"
+    v-if="item"
     data-test-container="templates/dataTypes/memo"
     :data-test-container-uuid="props.uuid"
   >
-    <v-card-title>{{ item._source.title }}</v-card-title>
-    <v-card-subtitle v-if="item._source.tags && item._source.tags.length > 0">
-      <v-row no-gutters>
-        <v-col cols="auto" v-for="tag in item._source.tags">
-          <v-chip color="grey">{{ tag }}</v-chip>
-        </v-col>
-      </v-row>
-    </v-card-subtitle>
+    <v-card-title>{{ item._title }}</v-card-title>
     <v-card-text>
+      <v-text-field
+        v-model="title"
+        :label="$t('generics.title')"
+        variant="underlined"
+      ></v-text-field>
+      <tag-chips
+        v-if="!edit"
+        :widgetUUID="props.widgetUUID"
+        :docUUID="item._id"
+        :tags="tags"
+      />
+      <tag-autocompletion
+        v-if="edit"
+        :widgetUUID="props.widgetUUID"
+        :docUUID="item._id"
+      />
+      <v-text-field
+        v-model="due"
+        :label="$t('generics.dueDate')"
+        variant="underlined"
+      ></v-text-field>
+      <user-chips
+        v-if="!edit"
+        :widgetUUID="props.widgetUUID"
+        :docUUID="item._id"
+        :selectedUser="[item._source.assigned]"
+      />
+      <user-autocompletion
+        v-if="edit"
+        :widgetUUID="props.widgetUUID"
+        :docUUID="item._id"
+        selectedUserRole="assigned"
+      />
+      <v-switch
+        v-model="closed"
+        hide-details
+        :label="closed ? $t('generics.closed') : $t('generics.open')"
+      ></v-switch>
+
+      <v-btn @click="debugDump = !debugDump">
+        <v-icon :icon="!debugDump ? 'mdi-chevron-right' : 'mdi-chevron-down'" />
+        showDump
+      </v-btn>
+    </v-card-text>
+    <v-card-text v-if="debugDump">
       <pre>{{ item }}</pre>
     </v-card-text>
   </v-card>
 </template>
 
 <script setup>
-defineProps({
+import {
+  inject,
+  ref,
+  shallowRef,
+  computed,
+  onMounted,
+  onUnmounted,
+  defineAsyncComponent,
+} from "vue";
+import { v4 as uuidv4 } from "uuid";
+const $store = inject("$store");
+const debugDump = shallowRef(false);
+const tagAutocompletion = defineAsyncComponent(() =>
+  import("@t/autocompletion/tags.vue")
+);
+const tagChips = defineAsyncComponent(() => import("@t/chips/tags.vue"));
+const userChips = defineAsyncComponent(() => import("@t/chips/user.vue"));
+const userAutocompletion = defineAsyncComponent(() =>
+  import("@t/autocompletion/user.vue")
+);
+const itemUpdater = (newItem) => {
+  $store.dispatch({
+    type: "data/update",
+    docUUID: item.value._id || uuidv4(),
+    payload: newItem,
+  });
+};
+const closed = computed({
+  get() {
+    return item.value._source.closed || false;
+  },
+  set(newValue) {
+    itemUpdater({ closed: newValue });
+  },
+});
+const body = computed({
+  get() {
+    return item.value._source.body || "";
+  },
+  set(newValue) {
+    itemUpdater({ body: newValue });
+  },
+});
+const tags = computed({
+  get() {
+    return item.value._source.tags || "";
+  },
+  set(newValue) {
+    itemUpdater({ tags: newValue });
+  },
+});
+const assigned = computed({
+  get() {
+    return item.value._source.assigned || "";
+  },
+  set(newValue) {
+    itemUpdater({ assigned: newValue });
+  },
+});
+const title = computed({
+  get() {
+    return item.value._source.title || "";
+  },
+  set(newValue) {
+    itemUpdater({ title: newValue });
+  },
+});
+
+const props = defineProps({
   props: {
     type: Object,
     required: false,
     default: {},
   },
+  edit: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
   uuid: {
-    // the uuid of the calling widgets, in case you need it
+    type: String,
+    default(rawProps) {
+      return rawProps.widgetUUID + "_dataTypes_memo_" + rawProps.docUUID;
+    },
+  },
+  widgetUUID: {
     type: String,
     required: true,
   },
-  item: {
+  itemDefinition: {
     type: Object,
-    required: true,
     default: {
       _id: false, // UUID
       _path: false,
@@ -62,5 +177,21 @@ defineProps({
       },
     },
   },
+  docUUID: {
+    type: String,
+    required: true,
+  },
+});
+const item = ref(false);
+const dataItemSubscriber$ = $store
+  .select((state) => state.data[props.docUUID])
+  .subscribe((val) => {
+    if (item.value !== val) {
+      item.value = val;
+    }
+  });
+onMounted(() => {});
+onUnmounted(() => {
+  dataItemSubscriber$.unsubscribe();
 });
 </script>

@@ -3,6 +3,7 @@ export const applicationState = {
     route: {},
     data: {},
     uploader: {},
+    queries: {},
     user: {
         firstname: false,
         lastname: false,

@@ -1,10 +1,6 @@
 <template>
-  <v-card
-    flat
-    v-if="item && item._id"
-    data-test-container="templates/dataTypes/organization"
-    :data-test-container-uuid="props.uuid"
-  >
+  <v-card flat v-if="item && item._id" data-test-container="templates/dataTypes/organization"
+    :data-test-container-uuid="props.uuid">
     <v-card-title>{{ item._source.title }}</v-card-title>
     <v-card-text>
       <pre>{{ item }}</pre>
@@ -20,9 +16,18 @@ defineProps({
     default: {},
   },
   uuid: {
-    // the uuid of the calling widgets, in case you need it
+    type: String,
+    default(rawProps) {
+      return rawProps.widgetUUID + "_dataTypes_organization_" + rawProps.docUUID;
+    },
+  },
+  widgetUUID: {
     type: String,
     required: true,
+  },
+  docUUID: {
+    type: String,
+    required: true
   },
   item: {
     type: Object,

@@ -16,6 +16,13 @@ const props = defineProps({
   },
   uuid: {
     type: String,
+    default(rawProps) {
+      return rawProps.widgetUUID + "_chart";
+    },
+  },
+  widgetUUID: {
+    type: String,
+    required: true,
   },
 });
 const data = ref({
