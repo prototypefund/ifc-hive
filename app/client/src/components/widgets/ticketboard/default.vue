@@ -240,7 +240,6 @@ const windowWidth$ = $store
   });
 
 const saveSorting = function () {
-  // TODO maybe move the sort store to currentPage store instead of widget?
   $store.dispatch({
     type: "widgets/update",
     uuid: props.uuid,

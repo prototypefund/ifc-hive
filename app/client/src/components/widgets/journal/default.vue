@@ -37,7 +37,7 @@ const addData = () => {
           _title: "testTag mit Name",
           _source: {
             title: "testTag mit Name",
-            color: "red",
+            color: "#90A4AE",
           },
         },
         {
