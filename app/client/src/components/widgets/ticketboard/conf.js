@@ -1,7 +1,6 @@
 export default {
   title: 'Boilerplate default config',
   filter: {
-    sorting: false,
     generics: [
       {
         identifier: 'closed:false',

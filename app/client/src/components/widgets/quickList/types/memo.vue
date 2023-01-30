@@ -11,8 +11,7 @@
 </template>
 
 <script setup>
-import { defineComponent } from "vue";
-import memoTpl from "@t/dataTypes/memo.vue";
+import memo from "@t/dataTypes/memo.vue";
 
 const props = defineProps({
   uuid: {
@@ -34,5 +33,4 @@ const props = defineProps({
     default: {},
   },
 });
-const memo = defineComponent(memoTpl);
 </script>

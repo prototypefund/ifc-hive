@@ -11,8 +11,7 @@
 </template>
 
 <script setup>
-import { defineComponent } from "vue";
-import userTpl from "@t/dataTypes/user.vue";
+import user from "@t/dataTypes/user.vue";
 
 const props = defineProps({
   uuid: {
@@ -34,5 +33,4 @@ const props = defineProps({
     default: {},
   },
 });
-const user = defineComponent(userTpl);
 </script>

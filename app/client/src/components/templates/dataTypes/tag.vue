@@ -73,12 +73,21 @@ const tagAutocompletion = defineAsyncComponent(() =>
 );
 const tagChips = defineAsyncComponent(() => import("@t/chips/tags.vue"));
 const debugDump = shallowRef(false);
+const debounceTimer = shallowRef(false);
+const debounce = (func) => {
+  clearTimeout(debounceTimer.value);
+  debounceTimer.value = setTimeout(() => {
+    if (func) func();
+  }, 500);
+};
 const itemUpdater = (newItem) => {
-  $store.dispatch({
-    type: "data/update",
-    docUUID: item.value._id || uuidv4(),
-    payload: newItem,
-  });
+  debounce(() =>
+    $store.dispatch({
+      type: "data/update",
+      docUUID: item.value._id || uuidv4(),
+      payload: newItem,
+    })
+  );
 };
 const locked = computed({
   get() {
@@ -165,8 +174,8 @@ const item = ref(false);
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
-    if (item.value !== val) {
-      item.value = val;
+    if (item.value != val) {
+      item.value = JSON.parse(JSON.stringify(val));
     }
   });
 onMounted(() => {});

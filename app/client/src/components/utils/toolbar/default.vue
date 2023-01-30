@@ -32,7 +32,7 @@
           :value="false"
         >
           <v-btn
-            variant="icon"
+            variant="plain"
             icon="mdi-chevron-right"
             @click.stop="currentTool = false"
           />

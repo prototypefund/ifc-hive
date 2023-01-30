@@ -11,8 +11,7 @@
 </template>
 
 <script setup>
-import { defineComponent } from "vue";
-import tagTpl from "@t/dataTypes/tag.vue";
+import tag from "@t/dataTypes/tag.vue";
 
 const props = defineProps({
   uuid: {
@@ -34,5 +33,4 @@ const props = defineProps({
     default: {},
   },
 });
-const tag = defineComponent(tagTpl);
 </script>

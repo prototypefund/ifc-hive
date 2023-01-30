@@ -1,7 +1,20 @@
 <template>
-  <div data-test-container="templates/autocompletion/tags" :data-test-container-uuid="props.uuid">
-    <v-autocomplete v-model="selectedTags" :items="Object.values(tags.data)" chips item-title="_title" item-value="_id"
-      hide-seleted closable-chips color="blue-grey-lighten-2" :label="$t('generics.tags')" multiple />
+  <div
+    data-test-container="templates/autocompletion/tags"
+    :data-test-container-uuid="props.uuid"
+  >
+    <v-autocomplete
+      v-model="selectedTags"
+      :items="Object.values(tags.data)"
+      chips
+      item-title="_title"
+      item-value="_id"
+      hide-seleted
+      closable-chips
+      color="blue-grey-lighten-2"
+      :label="$t('generics.tags')"
+      multiple
+    />
   </div>
 </template>
 
@@ -58,7 +71,7 @@ const selectedTags = computed({
     });
   },
 });
-onMounted(() => { });
+onMounted(() => {});
 onUnmounted(() => {
   tags.unsubscribe();
   dataItemSubscriber$.unsubscribe();

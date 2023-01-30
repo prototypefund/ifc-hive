@@ -11,8 +11,7 @@
 </template>
 
 <script setup>
-import { defineComponent } from "vue";
-import organizationTpl from "@t/dataTypes/organization.vue";
+import organization from "@t/dataTypes/organization.vue";
 
 const props = defineProps({
   uuid: {
@@ -34,5 +33,4 @@ const props = defineProps({
     default: {},
   },
 });
-const organization = defineComponent(organizationTpl);
 </script>

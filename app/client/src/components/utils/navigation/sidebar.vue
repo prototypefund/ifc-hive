@@ -19,14 +19,14 @@
         <v-btn
           v-if="!navigationRail"
           density="comfortable"
-          variant="icon"
+          variant="plain"
           icon="mdi-chevron-left"
           @click.stop="handleNavigation(true)"
         />
         <v-btn
           v-if="navigationRail"
           density="comfortable"
-          variant="icon"
+          variant="plain"
           icon="mdi-chevron-right"
           @click.stop="handleNavigation(false)"
         />

@@ -147,6 +147,7 @@ const makeBoards = (initialSort) => {
           filter,
         },
       });
+    } else {
     }
   }
 };

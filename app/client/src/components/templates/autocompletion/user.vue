@@ -1,7 +1,20 @@
 <template>
-  <div data-test-container="templates/autocompletion/user" :data-test-container-uuid="props.uuid">
-    <v-autocomplete v-model="selectedUser" :items="Object.values(user.data)" chips item-title="_title" item-value="_id"
-      hide-seleted closable-chips color="blue-grey-lighten-2" :label="$t('generics.' + selectedUserRole)" />
+  <div
+    data-test-container="templates/autocompletion/user"
+    :data-test-container-uuid="props.uuid"
+  >
+    <v-autocomplete
+      class="user_autocomplete"
+      v-model="selectedUser"
+      :items="Object.values(user.data)"
+      chips
+      item-title="_title"
+      item-value="_id"
+      hide-seleted
+      closable-chips
+      color="blue-grey-lighten-2"
+      :label="$t('generics.' + selectedUserRole)"
+    />
   </div>
 </template>
 
@@ -65,9 +78,14 @@ const selectedUser = computed({
     });
   },
 });
-onMounted(() => { });
+onMounted(() => {});
 onUnmounted(() => {
   user.unsubscribe();
   dataItemSubscriber$.unsubscribe();
 });
 </script>
+<style lang="css">
+.user_autocomplete input {
+  text-indent: -9999px !important;
+}
+</style>

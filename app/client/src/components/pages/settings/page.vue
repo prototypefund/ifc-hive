@@ -23,6 +23,12 @@
                 <v-switch flat density="compact" hide-details v-model="dark" />
               </v-col>
             </v-row>
+            <v-row no-gutters>
+              <v-col cols="8"> Daten dazu machne </v-col>
+              <v-col cols="4">
+                <v-btn @click="addData">addData</v-btn>
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-card>
       </v-col>
@@ -88,6 +94,45 @@ const props = defineProps({
     default: "default param",
   },
 });
+const addData = () => {
+  $store.dispatch({
+    type: "data/add",
+    uuid: props.uuid,
+    payload: {
+      data: [
+        {
+          _id: "test",
+          _type: "tag",
+          _title: "testTag mit Name",
+          _source: {
+            title: "testTag mit Name",
+            color: "#90A4AE",
+          },
+        },
+        {
+          _id: "rolf",
+          _type: "memo",
+          _project: false,
+          _title: "testMemo",
+          _source: {
+            title: "testMemo",
+            path: false, // materialized path
+            project: false,
+            body: false, // block
+            closed: false, // default false
+            tags: [], // Type Tag
+            created: false,
+            modified: false,
+            due: false,
+            owner: false, // User object
+            assigned: false, // User object
+            approvals: false,
+          },
+        },
+      ],
+    },
+  });
+};
 onMounted(() => {});
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();

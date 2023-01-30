@@ -11,8 +11,7 @@
 </template>
 
 <script setup>
-import { defineComponent } from "vue";
-import projectTpl from "@t/dataTypes/project.vue";
+import project from "@t/dataTypes/project.vue";
 
 const props = defineProps({
   uuid: {
@@ -34,5 +33,4 @@ const props = defineProps({
     default: {},
   },
 });
-const project = defineComponent(projectTpl);
 </script>

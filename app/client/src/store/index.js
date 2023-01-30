@@ -9,10 +9,12 @@ import {
     ref,
 } from "vue";
 import getEnvVariable from '../lib/getEnvVariable'
-import { mergeDeepRight, clone, filter } from 'ramda'
+import { mergeDeepRight, clone } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
 import { applicationState, storePatterns, loadingHold } from './state'
+import { basicStoreFilters } from './dataHelper.js'
 import { widgetConfLoader, widgetTypeConfLoader } from "@lib/widgetLoader";
+
 /*
  * Apply different extensions depending on the environment
  */
@@ -76,35 +78,7 @@ const metaReducer = [(reducer) => {
         return reducer(state, action)
     }
 }]
-const basicStoreFilters = (query) => {
-    const data = JSON.parse(JSON.stringify(dataLookup))
-    if (query === "ALL_MEMOS") {
-        return filter((item) => {
-            return item._type === 'memo'
-        }, data)
-    }
-    if (query === "ALL_TAGS") {
-        return filter((item) => {
-            return item._type === 'tag'
-        }, data)
-    }
-    if (query === "ALL_USER") {
-        return filter((item) => {
-            return item._type === 'user'
-        }, data)
-    }
-    if (query === "ALL_PROJECTS") {
-        return filter((item) => {
-            return item._type === 'project'
-        }, data)
-    }
-    if (query === "ALL_ORGANIZATIONS") {
-        return filter((item) => {
-            return item._type === 'organization'
-        }, data)
-    }
-    return data
-}
+
 const applicationReducers = {
     queries: (state, action) => {
         let queries, items
@@ -118,7 +92,7 @@ const applicationReducers = {
                         state[action.actionId]
                     } else {
                         Object.values(queries).forEach(query => {
-                            items = basicStoreFilters(query.query)
+                            items = basicStoreFilters(query.query, query.params || false, dataLookup)
                             query.uuids = Object.keys(items)
                             query.data = items
                         })
@@ -128,9 +102,10 @@ const applicationReducers = {
                     if (action.payload.actionId) {
                         queries = {}
                         queries[action.payload.actionId] = {
-                            query: action.payload.query
+                            query: action.payload.query,
+                            params: action.payload.params || false
                         }
-                        items = basicStoreFilters(action.payload.query)
+                        items = basicStoreFilters(action.payload.query, action.payload.params || false, dataLookup)
                         queries[action.payload.actionId].uuids = Object.keys(items)
                         queries[action.payload.actionId].data = items
                     }
@@ -595,17 +570,20 @@ if (dataLookup === false) {
     })
 }
 store.$data = {
+    queryObjects: {},
     update: (actionId, docUUID, doc) => {
 
     },
-    get: (actionId, query) => {
+    get: (actionId, query, params = {}) => {
+        if (store.$data[actionId]) return store.$data[actionId]
         // create a deep ref object which will contain the query data as well as the items
         const queryObj = ref({})
         store.dispatch({
             type: "queries/add",
             payload: {
                 actionId,
-                query
+                query,
+                params
             },
         })
         const subscriber$ = store.select((state) => state.queries[actionId])
@@ -624,6 +602,7 @@ store.$data = {
                 actionId
             })
         }
+        store.$data[actionId] = queryObj
         return queryObj
     }
 }

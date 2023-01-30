@@ -78,12 +78,22 @@ const userChips = defineAsyncComponent(() => import("@t/chips/user.vue"));
 const userAutocompletion = defineAsyncComponent(() =>
   import("@t/autocompletion/user.vue")
 );
+const item = ref(false);
+const debounceTimer = shallowRef(false);
+const debounce = (func) => {
+  clearTimeout(debounceTimer.value);
+  debounceTimer.value = setTimeout(() => {
+    if (func) func();
+  }, 500);
+};
 const itemUpdater = (newItem) => {
-  $store.dispatch({
-    type: "data/update",
-    docUUID: item.value._id || uuidv4(),
-    payload: newItem,
-  });
+  debounce(() =>
+    $store.dispatch({
+      type: "data/update",
+      docUUID: item.value._id || uuidv4(),
+      payload: newItem,
+    })
+  );
 };
 const closed = computed({
   get() {
@@ -125,7 +135,14 @@ const title = computed({
     itemUpdater({ title: newValue });
   },
 });
-
+const due = computed({
+  get() {
+    return item.value._source.due || "";
+  },
+  set(newValue) {
+    itemUpdater({ due: newValue });
+  },
+});
 const props = defineProps({
   props: {
     type: Object,
@@ -182,14 +199,15 @@ const props = defineProps({
     required: true,
   },
 });
-const item = ref(false);
+
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
-    if (item.value !== val) {
-      item.value = val;
+    if (item.value != val) {
+      item.value = JSON.parse(JSON.stringify(val));
     }
   });
+
 onMounted(() => {});
 onUnmounted(() => {
   dataItemSubscriber$.unsubscribe();
