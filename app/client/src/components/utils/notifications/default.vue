@@ -10,21 +10,16 @@
     class="notificationDrawer"
   >
     <template v-slot:activator="{ props }">
-      <!--v-btn v-bind="props" class="text-none" stacked>
-      
-      <v-badge :content="state.unreadCount" >
-        {{ state.unreadCount }}
-        <v-icon>mdi-bell-outline</v-icon>
-      </v-badge>
-      </!--v-btn-->
-      <v-btn
-        v-bind="props"
-        class="text-none"
-        :color="state.unreadCount > 0 ? 'error' : 'black'"
-        stacked
-      >
-        {{ state.unreadCount }}
-        <v-icon>mdi-bell-outline</v-icon>
+      <v-btn v-bind="props" class="text-none" stacked>
+        <template v-if="state.unreadCount > 0">
+          <v-badge
+            :content="state.unreadCount"
+            :color="state.unreadCount > 0 ? 'error' : 'black'"
+          >
+            <v-icon>mdi-bell-outline</v-icon>
+          </v-badge>
+        </template>
+        <template v-else><v-icon>mdi-bell-outline</v-icon></template>
       </v-btn>
     </template>
 

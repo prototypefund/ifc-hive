@@ -1,24 +1,14 @@
 <template>
-  <v-card
-    variant="outlined"
-    v-if="memo"
-    data-test-container="templates/cards/memo"
-    :data-test-container-uuid="props.uuid"
-  >
+  <v-card variant="outlined" v-if="memo" data-test-container="templates/cards/memo"
+    :data-test-container-uuid="props.uuid">
     <v-card-title>
-      <QuickListHandler
-        uuid="quickList"
-        :docUUID="memo._id"
-        :dataTitle="memo._source.title"
-        :tab-type="memo._type"
-        action="add"
-      >
+      <QuickListHandler uuid="quickList" :docUUID="memo._id" :dataTitle="memo._source.title" :tab-type="memo._type"
+        action="add">
         {{ memo._source.title }}
       </QuickListHandler>
     </v-card-title>
     <v-card-subtitle>
-      <v-chip label color="primary" size="small" class="mr-4"
-        ># {{ shortenId(memo._id) }}
+      <v-chip label color="primary" size="small" class="mr-4"># {{ shortenId(memo._id) }}
         <v-tooltip activator="parent" location="bottom">
           {{ memo._id }}
         </v-tooltip>
@@ -47,22 +37,14 @@
       </v-row>
     </v-card-subtitle>
     <v-card-subtitle>
-      <tag-chips
-        v-if="memo._source.tags && memo._source.tags.length > 0"
-        :widgetUUID="props.widgetUUID"
-        :docUUID="memo._id"
-        :tags="memo._source.tags"
-      />
+      <tag-chips v-if="memo._source.tags && memo._source.tags.length > 0" :widgetUUID="props.widgetUUID"
+        :docUUID="memo._id" :tags="memo._source.tags" />
     </v-card-subtitle>
     <v-card-text>
       <pre>{{ memo._source.body }}</pre>
     </v-card-text>
     <v-card-actions>
-      <v-btn
-        size="x-small"
-        :append-icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-        @click="show = !show"
-      >
+      <v-btn size="x-small" :append-icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'" @click="show = !show">
         DEBUG
       </v-btn>
     </v-card-actions>
@@ -81,19 +63,16 @@
         <v-col cols="3">
           {{ $t("generics.author") }}
         </v-col>
-        <v-col cols="auto">
+        <v-col cols="9">
           <user-list-item :widgetUUID="props.widgetUUID" :docUUID="memo._source.owner" />
         </v-col>
       </v-row>
       <v-row v-if="memo._source.assigned">
-        <v-col cols="2">
+        <v-col cols="3">
           {{ $t("generics.assignee") }}
         </v-col>
-        <v-col cols="auto">
-          <user-list-item
-            :widgetUUID="props.widgetUUID"
-            :docUUID="memo._source.assigned"
-          />
+        <v-col cols="9">
+          <user-list-item :widgetUUID="props.widgetUUID" :docUUID="memo._source.assigned" />
         </v-col>
       </v-row>
     </v-card-subtitle>
@@ -150,7 +129,7 @@ const dataItemSubscriber$ = $store
   .subscribe((val) => {
     memo.value = val;
   });
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   dataItemSubscriber$.unsubscribe();
 });

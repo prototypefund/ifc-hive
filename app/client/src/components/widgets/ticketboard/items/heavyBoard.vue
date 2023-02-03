@@ -44,7 +44,7 @@ import { inject, ref, computed, onMounted, onUnmounted, shallowRef } from "vue";
 import { difference } from "ramda";
 import QuickListHandler from "@w/quickList/handler.vue";
 import draggable from "vuedraggable";
-import ticketItem from "./ticket.vue";
+import ticketItem from "./heavyTicket.vue";
 const $store = inject("$store");
 const dragging = shallowRef(false);
 const boardItem = ref({});

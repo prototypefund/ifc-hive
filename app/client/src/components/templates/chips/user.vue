@@ -7,8 +7,12 @@
       <v-chip
         size="small"
         :color="user.data[usr] ? user.data[usr]._source.color || 'grey' : 'grey'"
-        >{{ user.data[usr] ? user.data[usr]._title || usr : usr }}</v-chip
       >
+        <v-avatar start>
+          <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
+        </v-avatar>
+        {{ user.data[usr] ? user.data[usr]._title || usr : usr }}
+      </v-chip>
     </v-col>
   </v-row>
 </template>

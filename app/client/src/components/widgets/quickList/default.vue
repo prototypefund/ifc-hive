@@ -47,13 +47,13 @@ const stateSubscriber$ = $store
   });
 const component = computed(() => {
   const currState = state.value;
-  let path = "";
+  let component = "";
   if (currState.entries && currState.entries[currState.entryIndex].template) {
-    path = "../" + currState.entries[currState.entryIndex].template + ".vue";
+    component = import(`../${currState.entries[currState.entryIndex].template}.vue`);
   } else {
-    path = `./types/${currState.entries[currState.entryIndex].type}.vue`;
+    component = import(`./types/${currState.entries[currState.entryIndex].type}.vue`);
   }
-  return defineAsyncComponent(() => import(path));
+  return defineAsyncComponent(() => component);
 });
 const entryIndex = computed({
   // getter

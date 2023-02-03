@@ -129,6 +129,14 @@ const applicationReducers = {
                     return applicationState.data
                 case 'data/add':
                     if (action.payload.data) {
+                        store.dispatch({
+                            type: 'notifications/add',
+                            payload: {
+                                items: {
+                                    hallo: "döner"
+                                }
+                            }
+                        })
                         data = JSON.parse(JSON.stringify(state))
                         action.payload.data.forEach(item => {
                             if (item._type === 'delete') {

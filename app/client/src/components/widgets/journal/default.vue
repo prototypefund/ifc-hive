@@ -1,11 +1,8 @@
 <template>
-  <v-container
-    v-if="state && props.uuid"
-    data-test-container="widgets/journal/default"
-    :data-test-container-uuid="props.uuid"
-  >
-    <v-timeline align="start">
-      <v-timeline-item v-for="uuid in data.uuids" :key="uuid">
+  <v-container v-if="state && props.uuid" data-test-container="widgets/journal/default"
+    :data-test-container-uuid="props.uuid">
+    <v-timeline align="start" :density="viewPortWidth < 1110 ? 'compact' : 'default'">
+      <v-timeline-item v-for="uuid in data.uuids" :key="uuid" max-width="600px">
         <memo-card-item :widgetUUID="props.uuid" :docUUID="uuid" />
       </v-timeline-item>
     </v-timeline>
@@ -13,18 +10,22 @@
 </template>
 
 <script setup>
-import { inject, ref, onMounted, onUnmounted } from "vue";
+import { inject, ref, onMounted, shallowRef, onUnmounted } from "vue";
 import memoCardItem from "@t/cards/memo.vue";
 
 const $store = inject("$store");
 const state = ref({});
-
+const viewPortWidth = shallowRef(false);
 const stateSubscriber$ = $store
   .select((state) => state.widgets[props.uuid])
   .subscribe((val) => {
     state.value = val;
   });
-
+const viewPortWidthSubscriber$ = $store
+  .select((state) => state.ui.viewPortWidth)
+  .subscribe((val) => {
+    viewPortWidth.value = val;
+  });
 const props = defineProps({
   props: {
     type: Object,
@@ -43,9 +44,10 @@ const props = defineProps({
 });
 const data = ref($store.$data.get(props.actionId, "ALL_MEMOS"));
 
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
+  viewPortWidthSubscriber$.unsubscribe();
   data.unsubscribe();
 });
 </script>

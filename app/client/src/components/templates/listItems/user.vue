@@ -1,21 +1,9 @@
 <template>
-  <v-list-item
-    data-test-container="template/listItems/user"
-    :data-test-container-uuid="props.uuid"
-    class="ticketMemberMouseOver"
-    prepend-avatar="https://cdn.vuetifyjs.com/images/john.png"
-  >
+  <v-list-item data-test-container="template/listItems/user" :data-test-container-uuid="props.uuid"
+    class="ticketMemberMouseOver" prepend-avatar="https://cdn.vuetifyjs.com/images/john.png">
     <v-list-item-title>
-      <QuickListHandler
-        uuid="quickList"
-        :docUUID="user._id"
-        :dataTitle="user._title"
-        :tab-type="user._type"
-        action="add"
-      >
-        {{ user._source.firstname }} {{ user._source.lastname }} aka
-        {{ user._source.nickname }}
-      </QuickListHandler>
+      {{ user._source.firstname }} {{ user._source.lastname }} aka
+      {{ user._source.nickname }}
     </v-list-item-title>
     <v-list-item-subtitle>
       {{ user._source.email }}
@@ -25,7 +13,6 @@
 
 <script setup>
 import { inject, ref, onMounted, onUnmounted } from "vue";
-import QuickListHandler from "@w/quickList/handler.vue";
 const $store = inject("$store");
 
 const props = defineProps({
@@ -54,9 +41,11 @@ const dataItemSubscriber$ = $store
   .subscribe((val) => {
     user.value = val;
   });
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   dataItemSubscriber$.unsubscribe();
 });
 </script>
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+
+</style>

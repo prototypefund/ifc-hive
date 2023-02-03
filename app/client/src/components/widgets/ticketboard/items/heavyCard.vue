@@ -1,20 +1,10 @@
 <template>
-  <v-card
-    :color="column.color"
-    v-if="column"
-    class="ticketWrapperCard"
+  <v-card :color="column.color" v-if="column" class="ticketWrapperCard"
     :prepend-icon="boardId == 'open' && boardId == 'closed' ? 'false' : 'mdi-drag'"
-    data-test-container="widgets/ticketboard/items/ticketCard"
-    :data-test-container-uuid="'ticketCard_' + props.uuid"
-  >
+    data-test-container="widgets/ticketboard/items/ticketCard" :data-test-container-uuid="'ticketCard_' + props.uuid">
     <template v-slot:title v-if="boardId !== 'open' && boardId !== 'closed'">
-      <QuickListHandler
-        uuid="quickList"
-        :docUUID="props.boardId"
-        :dataTitle="props.boardId"
-        tab-type="tag"
-        action="add"
-      >
+      <QuickListHandler uuid="quickList" :docUUID="props.boardId" :dataTitle="props.boardId" tab-type="tag"
+        action="add">
         {{ column.title }}
       </QuickListHandler>
     </template>
@@ -22,33 +12,17 @@
       {{ column.title }}
     </template>
 
-    <draggable
-      v-model="sorting"
-      item-key="id"
-      class="list-group"
-      ghost-class="ghost"
-      @start="dragging = true"
-      @end="dragging = false"
-      handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend"
-      :group="{ name: 'ticketSort', pull: ['ticketSort'], put: ['ticketSort'] }"
-    >
+    <draggable v-model="sorting" item-key="id" class="list-group" ghost-class="ghost" @start="dragging = true"
+      @end="dragging = false" handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend"
+      :group="{ name: 'ticketSort', pull: ['ticketSort'], put: ['ticketSort'] }">
       <template #item="{ element }">
-        <v-card
-          prepend-icon="mdi-drag"
-          class="ticketItem"
-          :elevation="isHovering === data[element]._id ? 12 : 2"
-          :class="{ 'on-hover': isHovering === data[element]._id }"
-          @mouseover="isHovering = data[element]._id"
-          @mouseout="isHovering = false"
-        >
+        <v-card prepend-icon="mdi-drag" class="ticketItem" :elevation="isHovering === data[element]._id ? 12 : 2"
+          :class="{ 'on-hover': isHovering === data[element]._id }" @mouseover="isHovering = data[element]._id"
+          @mouseout="isHovering = false">
           <template v-slot:title>
-            <QuickListHandler
-              uuid="quickList"
-              :docUUID="data[element]._id"
-              :dataTitle="data[element]._source.title || data[element]._title"
-              :tab-type="data[element]._type"
-              action="add"
-            >
+            <QuickListHandler uuid="quickList" :docUUID="data[element]._id"
+              :dataTitle="data[element]._source.title || data[element]._title" :tab-type="data[element]._type"
+              action="add">
               <v-card-title>{{
                 data[element]._source.title || data[element]._title
               }}</v-card-title>
@@ -56,15 +30,10 @@
           </template>
 
           <v-card-subtitle>
-            <v-row
-              v-if="data[element]._source.tags && data[element]._source.tags.length > 0"
-            >
+            <v-row v-if="data[element]._source.tags && data[element]._source.tags.length > 0">
               <v-col cols="auto" v-for="tag in data[element]._source.tags">
-                <v-chip
-                  size="small"
-                  :color="data[tag] ? data[tag]._source.color || 'grey' : 'grey'"
-                  >{{ data[tag] ? data[tag]._source.title || tag : tag }}</v-chip
-                >
+                <v-chip size="small"
+                  :color="data[tag] ? data[tag]._source.color || 'grey' : 'grey'">{{ data[tag]? data[tag]._source.title || tag : tag }}</v-chip>
               </v-col>
             </v-row>
           </v-card-subtitle>
@@ -104,63 +73,43 @@
 
           <v-card-actions>
             <v-btn-group>
-              <v-btn
-                size="x-small"
-                :append-icon="
-                  show !== `${data[element]._id}_overview`
-                    ? 'mdi-chevron-left'
-                    : 'mdi-chevron-down'
-                "
-                @click="handleShow(`${data[element]._id}_overview`)"
-                >{{ $t("generics.overview") }}</v-btn
-              >
-              <v-btn
-                size="x-small"
-                v-if="data[element]._source.owner"
-                :append-icon="
-                  show !== `${data[element]._id}_author`
-                    ? 'mdi-chevron-left'
-                    : 'mdi-chevron-down'
-                "
-                @click="handleShow(`${data[element]._id}_author`)"
-                >{{ $t("generics.author") }}
+              <v-btn size="x-small" :append-icon="
+                show !== `${data[element]._id}_overview`
+                  ? 'mdi-chevron-left'
+                  : 'mdi-chevron-down'
+              " @click="handleShow(`${data[element]._id}_overview`)"><span
+                  class="expandBtn d-inline-block text-truncate">{{
+                    $t("generics.overview")
+                  }}</span></v-btn>
+              <v-btn size="x-small" v-if="data[element]._source.owner" :append-icon="
+                show !== `${data[element]._id}_author`
+                  ? 'mdi-chevron-left'
+                  : 'mdi-chevron-down'
+              " @click="handleShow(`${data[element]._id}_author`)"><span
+                  class="expandBtn d-inline-block text-truncate">{{
+                    $t("generics.author")
+                  }}</span>
                 <v-tooltip activator="parent" location="top">
-                  <ticket-member-mouse-over
-                    :widgetUUID="props.widgetUUID"
-                    :docUUID="data[element]._source.owner"
-                  /> </v-tooltip
-              ></v-btn>
-              <v-btn
-                size="x-small"
-                v-if="data[element]._source.assigned"
-                :append-icon="
-                  show !== `${data[element]._id}_assignee`
-                    ? 'mdi-chevron-left'
-                    : 'mdi-chevron-down'
-                "
-                @click="handleShow(`${data[element]._id}_assignee`)"
-                >{{ $t("generics.assignee") }}
-                <v-tooltip activator="parent" location="top"
-                  ><ticket-member-mouse-over
-                    :widgetUUID="props.widgetUUID"
-                    :docUUID="data[element]._source.assigned"
-                  /> </v-tooltip
-              ></v-btn>
+                  <ticket-member-mouse-over :widgetUUID="props.widgetUUID" :docUUID="data[element]._source.owner" />
+                </v-tooltip></v-btn>
+              <v-btn size="x-small" v-if="data[element]._source.assigned" :append-icon="
+                show !== `${data[element]._id}_assignee`
+                  ? 'mdi-chevron-left'
+                  : 'mdi-chevron-down'
+              " @click="handleShow(`${data[element]._id}_assignee`)"><span
+                  class="expandBtn d-inline-block text-truncate">{{
+                    $t("generics.assignee")
+                  }}</span>
+                <v-tooltip activator="parent" location="top"><ticket-member-mouse-over :widgetUUID="props.widgetUUID"
+                    :docUUID="data[element]._source.assigned" /> </v-tooltip></v-btn>
             </v-btn-group>
           </v-card-actions>
           <v-expand-transition>
-            <ticket-member
-              class="transition-fast-in-fast-out v-card--show"
-              v-if="show == `${data[element]._id}_assignee`"
-              :widgetUUID="props.widgetUUID"
-              :docUUID="data[element]._source.assigned"
-            />
-            <ticket-member
-              class="transition-fast-in-fast-out v-card--show"
-              v-if="show == `${data[element]._id}_author`"
-              :widgetUUID="props.widgetUUID"
-              :docUUID="data[element]._source.owner"
-            />
+            <ticket-member class="transition-fast-in-fast-out v-card--show"
+              v-if="show == `${data[element]._id}_assignee`" :widgetUUID="props.widgetUUID"
+              :docUUID="data[element]._source.assigned" />
+            <ticket-member class="transition-fast-in-fast-out v-card--show" v-if="show == `${data[element]._id}_author`"
+              :widgetUUID="props.widgetUUID" :docUUID="data[element]._source.owner" />
             <v-card v-if="show == `${data[element]._id}_overview`">
               <pre>{{ data[element] }}</pre>
             </v-card>
@@ -313,5 +262,9 @@ const props = defineProps({
 
 .ticketWrapperCard .v-card {
   margin: 10px;
+}
+
+.expandBtn {
+  max-width: 65px;
 }
 </style>
