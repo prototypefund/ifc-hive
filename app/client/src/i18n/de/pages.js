@@ -1,10 +1,11 @@
 export default {
     'app-dashboard': 'Dashboard',
-    'app-test-dashboard': 'TEST DE Dashboard',
+    'app-myTasks': 'Meine Aufgaben',
     'app-settings': 'Einstellungen',
-    'app-daniel': 'Daniel ihm seine App',
+    'app-timeline': 'Zeitverlauf',
+    'app-blockchainApproval': 'Freigaben',
+    'app-documents': 'Dokumente',
+    'app-accountSettings': 'Konto Einstellungen',
     'app-journal': 'Journal',
-    'app-projects': 'Projekte',
-    'app-testboard': 'TestBoard',
     'app-ticketboard': 'Ticket Board',
 }

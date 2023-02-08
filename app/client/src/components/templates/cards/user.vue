@@ -2,8 +2,10 @@
   <v-card class="mx-auto" max-width="434" rounded="0" v-if="user" data-test-container="template/cards/user"
     :data-test-container-uuid="'userCard_' + props.uuid">
     <v-img height="100%" cover src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg">
-      <v-avatar color="grey" size="150" rounded="0">
-        <v-img cover src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
+      <v-avatar start color="indigo" size="150">
+        <v-img v-if="user._source.avatar" :src="user._source.avatar.file" />
+        <span justify="space-around" v-else>{{ user._source.firstname.substring(0, 1) }}
+          {{ user._source.lastname.substring(0, 1) }}</span>
       </v-avatar>
       <v-list-item class="text-white">
         <QuickListHandler uuid="quickList" :docUUID="user._id" :dataTitle="user._title" tab-type="user" action="add">

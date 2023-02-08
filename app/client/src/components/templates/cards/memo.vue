@@ -40,9 +40,7 @@
       <tag-chips v-if="memo._source.tags && memo._source.tags.length > 0" :widgetUUID="props.widgetUUID"
         :docUUID="memo._id" :tags="memo._source.tags" />
     </v-card-subtitle>
-    <v-card-text>
-      <pre>{{ memo._source.body }}</pre>
-    </v-card-text>
+    <v-card-text> </v-card-text>
     <v-card-actions>
       <v-btn size="x-small" :append-icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'" @click="show = !show">
         DEBUG

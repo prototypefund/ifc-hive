@@ -48,7 +48,8 @@ export default {
     project: 'Projekt',
     tags: 'Tags',
     assigned: 'Zugewiesen',
-    color: 'Farbe'
+    color: 'Farbe',
+    tagType: 'Tag Typ'
 
   },
   ui: {

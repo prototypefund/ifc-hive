@@ -1,11 +1,6 @@
 <template>
-  <a
-    @click="handleQuickListItem"
-    class="quickListHandler"
-    v-if="state && props.uuid"
-    data-test-container="widgets/quicklist/handler"
-    :data-test-container-uuid="props.uuid"
-  >
+  <a @click="handleQuickListItem" class="quickListHandler" v-if="state && props.uuid"
+    data-test-container="widgets/quicklist/handler" :data-test-container-uuid="props.uuid">
     <slot></slot>
   </a>
 </template>
@@ -43,7 +38,7 @@ const props = defineProps({
     required: false,
   },
   action: {
-    // add, delete, clear
+    // add, delete, clear for elements in quicklist
     type: String,
     default: "add",
     required: true,

@@ -48,7 +48,8 @@ export default {
     project: 'Project',
     tags: 'Tags',
     assigned: 'Assigned',
-    color: 'Color'
+    color: 'Color',
+    tagType: 'Tag Type'
   },
   ui: {
     uiSettings: 'UI Settings',

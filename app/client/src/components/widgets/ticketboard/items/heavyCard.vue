@@ -174,7 +174,7 @@ const sorting = computed({
           }
           if (data) {
             $store.dispatch({
-              type: "data/add",
+              type: "data/push",
               payload: {
                 data,
               },

@@ -1,35 +1,16 @@
 <template>
   <!-- Navigation Drawer -->
-  <v-navigation-drawer
-    v-model="navigationDrawer"
-    data-test-container="utils/navigation/sidebar"
-    :rail="navigationRail"
-    id="navSideBar"
-    permanent
-  >
+  <v-navigation-drawer v-model="navigationDrawer" data-test-container="utils/navigation/sidebar" :rail="navigationRail"
+    id="navSideBar" permanent>
     <!-- Title -->
 
-    <v-list-item
-      density="comfortable"
-      :title="$t('navigation')"
-      :value="$t('navigation')"
-    >
+    <v-list-item density="comfortable" :title="$t('navigation')" :value="$t('navigation')">
       <!-- Close icon -->
       <template v-slot:append>
-        <v-btn
-          v-if="!navigationRail"
-          density="comfortable"
-          variant="plain"
-          icon="mdi-chevron-left"
-          @click.stop="handleNavigation(true)"
-        />
-        <v-btn
-          v-if="navigationRail"
-          density="comfortable"
-          variant="plain"
-          icon="mdi-chevron-right"
-          @click.stop="handleNavigation(false)"
-        />
+        <v-btn v-if="!navigationRail" density="comfortable" variant="plain" icon="mdi-chevron-left"
+          @click.stop="handleNavigation(true)" />
+        <v-btn v-if="navigationRail" density="comfortable" variant="plain" icon="mdi-chevron-right"
+          @click.stop="handleNavigation(false)" />
       </template>
     </v-list-item>
     <v-divider />
@@ -37,21 +18,29 @@
     <v-divider />
     <!-- Navigation List -->
     <v-list density="compact" nav>
-      <v-list-item
-        :disabled="currentRoute === item.route"
-        active-color="primary"
-        v-for="item in navItems"
-        link
-        :key="item.title"
-        :prepend-icon="item.icon"
-        :title="$t('pages.' + item.route.replace('.', '-'))"
-        :value="item.title"
-        class="nav-link"
-        :data-test-id="'sidebar_nav-' + item.route.replace('.', '-')"
-        @click="navigate(item)"
-      >
+      <v-list-item :disabled="currentRoute === item.route || !item.route" active-color="primary"
+        v-for="item in navItems" link :key="item.route" :value="item.route || ''" class="nav-link"
+        :data-test-id="item.route ? 'sidebar_nav-' + item.route.replace('.', '-') : ''" @click="navigate(item)">
+        <template v-if="item.icon" v-slot:prepend>
+          <v-icon :icon="item.icon" />
+        </template>
+        <v-list-item-title v-if="item.route">{{
+  $t("pages." + item.route.replace(".", "-"))
+        }}</v-list-item-title>
       </v-list-item>
     </v-list>
+    <div class="footer">
+      <v-list-item :disabled="currentRoute === item.route || !item.route" active-color="primary"
+        v-for="item in footerItems" link :key="item.route" :value="item.route || ''" class="nav-link"
+        :data-test-id="item.route ? 'sidebar_nav-' + item.route.replace('.', '-') : ''" @click="navigate(item)">
+        <template v-if="item.icon" v-slot:prepend>
+          <v-icon :icon="item.icon" />
+        </template>
+        <v-list-item-title v-if="item.route">{{
+  $t("pages." + item.route.replace(".", "-"))
+        }}</v-list-item-title>
+      </v-list-item>
+    </div>
   </v-navigation-drawer>
 </template>
 <script>
@@ -74,6 +63,10 @@ export default {
   },
   props: {
     navItems: {
+      default: () => [],
+      type: Array,
+    },
+    footerItems: {
       default: () => [],
       type: Array,
     },
@@ -108,4 +101,18 @@ export default {
   },
 };
 </script>
-<style></style>
+<style scoped>
+.footer {
+  position: absolute;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.footer * {
+  font-size: 1em;
+}
+
+.navLinkBar {
+  height: 100%;
+}
+</style>

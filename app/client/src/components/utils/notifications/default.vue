@@ -1,21 +1,11 @@
 //TODO wait until vuetify fixes the v-badge
 <template>
-  <v-menu
-    v-model="toggled"
-    :close-on-click="false"
-    :close-on-content-click="false"
-    location="bottom"
-    v-if="state"
-    transition="scroll-y-transition"
-    class="notificationDrawer"
-  >
+  <v-menu v-model="toggled" :close-on-click="false" :close-on-content-click="false" location="bottom" v-if="state"
+    transition="scroll-y-transition" class="notificationDrawer">
     <template v-slot:activator="{ props }">
       <v-btn v-bind="props" class="text-none" stacked>
         <template v-if="state.unreadCount > 0">
-          <v-badge
-            :content="state.unreadCount"
-            :color="state.unreadCount > 0 ? 'error' : 'black'"
-          >
+          <v-badge :content="state.unreadCount" :color="state.unreadCount > 0 ? 'error' : 'black'">
             <v-icon>mdi-bell-outline</v-icon>
           </v-badge>
         </template>
@@ -29,38 +19,23 @@
           <v-expansion-panel-title>Neu</v-expansion-panel-title>
           <v-expansion-panel-text>
             <v-list density="compact">
-              <v-list-item
-                v-for="(entry, index) in state.items"
-                :key="index"
-                :class="{ hovered: hover == index + 1 }"
-                @mouseover="handleHover(index + 1)"
-                @mouseleave="handleHover(false)"
-              >
-                <v-list-item-title class="fullListItem" :class="entry.state"
-                  >{{ entry }}
-                </v-list-item-title>
+              <v-list-item v-for="(entry, index) in state.items" :key="index" :class="{ hovered: hover == index + 1 }"
+                @mouseover="handleHover(index + 1)" @mouseleave="handleHover(false)">
+                <template v-slot:prepend>
+                  <v-icon v-if="entry.event === 'updateItem'" icon="mdi-file-edit"></v-icon>
+                  <v-icon v-if="entry.event === 'newItem'" icon="mdi-folder-plus"></v-icon>
+                  <v-icon v-if="entry.event === 'push'" icon="mdi-folder-information"></v-icon>
+                </template>
+                <v-list-item-title class="fullListItem" :class="entry.state">{{
+                  entry.message
+                }}</v-list-item-title>
                 <template v-slot:append>
-                  <v-btn
-                    v-if="entry.state === 'read'"
-                    variant="text"
-                    color="grey lighten-1"
-                    @click="markUnRead(index)"
-                    icon="mdi-circle-small"
-                  ></v-btn>
-                  <v-btn
-                    v-if="entry.state === 'unread'"
-                    variant="text"
-                    color="grey lighten-1"
-                    @click="markRead(index)"
-                    icon="mdi-circle-medium"
-                  ></v-btn>
-                  <v-btn
-                    v-if="entry.state === 'seen'"
-                    variant="text"
-                    color="grey lighten-1"
-                    @click="markRead(index)"
-                    icon="mdi-circle-medium"
-                  ></v-btn>
+                  <v-btn v-if="entry.state === 'read'" variant="text" color="grey lighten-1" @click="markUnRead(index)"
+                    icon="mdi-circle-small"></v-btn>
+                  <v-btn v-if="entry.state === 'unread'" variant="text" color="grey lighten-1" @click="markRead(index)"
+                    icon="mdi-circle-medium"></v-btn>
+                  <v-btn v-if="entry.state === 'seen'" variant="text" color="grey lighten-1" @click="markRead(index)"
+                    icon="mdi-circle-medium"></v-btn>
                 </template>
               </v-list-item>
             </v-list>
@@ -137,21 +112,27 @@ const markRead = (index) => {
     },
   });
 };
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });
 </script>
 <style lang="css">
 .fullListItem.unread {
-  color: red;
+  text-decoration: underline;
 }
 
 .fullListItem.seen {
-  background-color: grey;
+  font-style: italic;
 }
 
 .fullListItem {
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and IE 11 */
+  user-select: none;
+  /* Standard syntax */
   width: 100%;
 }
 

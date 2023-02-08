@@ -1,50 +1,50 @@
 <template>
-  <v-card
-    flat
-    v-if="item"
-    data-test-container="templates/dataTypes/memo"
-    :data-test-container-uuid="props.uuid"
-  >
+  <v-card flat v-if="item" data-test-container="templates/dataTypes/memo" :data-test-container-uuid="props.uuid">
     <v-card-title>{{ item._title }}</v-card-title>
     <v-card-text>
-      <v-text-field
-        v-model="title"
-        :label="$t('generics.title')"
-        variant="underlined"
-      ></v-text-field>
-      <tag-chips
-        v-if="!edit"
-        :widgetUUID="props.widgetUUID"
-        :docUUID="item._id"
-        :tags="tags"
-      />
-      <tag-autocompletion
-        v-if="edit"
-        :widgetUUID="props.widgetUUID"
-        :docUUID="item._id"
-      />
-      <v-text-field
-        v-model="due"
-        :label="$t('generics.dueDate')"
-        variant="underlined"
-      ></v-text-field>
-      <user-chips
-        v-if="!edit"
-        :widgetUUID="props.widgetUUID"
-        :docUUID="item._id"
-        :selectedUser="[item._source.assigned]"
-      />
-      <user-autocompletion
-        v-if="edit"
-        :widgetUUID="props.widgetUUID"
-        :docUUID="item._id"
-        selectedUserRole="assigned"
-      />
-      <v-switch
-        v-model="closed"
-        hide-details
-        :label="closed ? $t('generics.closed') : $t('generics.open')"
-      ></v-switch>
+      <div v-if="mode === 'edit'">
+        <v-row>
+          <v-col cols="12">
+            <v-text-field v-model="title" :label="$t('generics.title')" variant="underlined"></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <tag-autocompletion v-if="item._disId" :widgetUUID="props.widgetUUID" :mode="mode" :docUUID="item._id" />
+          </v-col>
+          <v-col cols="12">
+            <v-text-field v-model="due" :label="$t('generics.dueDate')" variant="underlined"></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <user-autocompletion v-if="item._disId" :widgetUUID="props.widgetUUID" :mode="mode" :docUUID="item._id"
+              selectedUserRole="assigned" />
+          </v-col>
+          <v-col cols="12">
+            <v-switch v-model="closed" hide-details
+              :label="closed ? $t('generics.closed') : $t('generics.open')"></v-switch>
+          </v-col>
+        </v-row>
+      </div>
+      <div v-else>
+        <v-row>
+          <v-col cols="12">
+            <v-label>{{ $t("generics.title") }}</v-label>
+            <p>{{ title }}</p>
+          </v-col>
+          <v-col cols="12"><v-label>{{ $t("generics.tags") }}</v-label>
+            <tag-chips :widgetUUID="props.widgetUUID" :docUUID="item._id" :tags="tags" />
+          </v-col>
+          <v-col cols="12">
+            <v-label>{{ $t("generics.dueDate") }}</v-label>
+            <p>{{ due }}</p>
+          </v-col>
+          <v-col cols="12">
+            <v-label>{{ $t("generics.assigned") }}</v-label>
+            <user-chips :widgetUUID="props.widgetUUID" :docUUID="item._id"
+              :selectedUser="[item._source.assigned]" /></v-col>
+          <v-col cols="12">
+            <v-switch v-model="closed" hide-details :label="closed ? $t('generics.closed') : $t('generics.open')"
+              disabled /></v-col>
+        </v-row>
+      </div>
 
       <v-btn @click="debugDump = !debugDump">
         <v-icon :icon="!debugDump ? 'mdi-chevron-right' : 'mdi-chevron-down'" />
@@ -67,7 +67,6 @@ import {
   onUnmounted,
   defineAsyncComponent,
 } from "vue";
-import { v4 as uuidv4 } from "uuid";
 const $store = inject("$store");
 const debugDump = shallowRef(false);
 const tagAutocompletion = defineAsyncComponent(() =>
@@ -89,9 +88,10 @@ const debounce = (func) => {
 const itemUpdater = (newItem) => {
   debounce(() =>
     $store.dispatch({
-      type: "data/update",
-      docUUID: item.value._id || uuidv4(),
+      type: !item.value._disId ? "data/add" : "data/update",
+      docUUID: props.docUUID,
       payload: newItem,
+      objectDefinition: !item.value._disId ? item.value : false,
     })
   );
 };
@@ -149,10 +149,10 @@ const props = defineProps({
     required: false,
     default: {},
   },
-  edit: {
-    type: Boolean,
-    required: false,
-    default: false,
+  mode: {
+    type: String,
+    required: true,
+    default: "view",
   },
   uuid: {
     type: String,
@@ -167,29 +167,29 @@ const props = defineProps({
   itemDefinition: {
     type: Object,
     default: {
-      _id: false, // UUID
-      _path: false,
-      _project: false,
+      _id: "", // UUID
+      _path: "",
+      _project: "",
       _type: "memo",
-      _title: false,
-      _created: false,
-      _modified: false,
+      _title: "",
+      _created: "",
+      _modified: "",
       _source: {
-        title: false,
-        path: false, // materialized path
-        project: false,
+        title: "",
+        path: "", // materialized path
+        project: "",
         body: {}, // block
         closed: false, // default false
         tags: [], // Type Tag
-        created: false,
-        modified: false,
-        due: false,
-        owner: false, // User object
-        assigned: false, // User object
+        created: "",
+        modified: "",
+        due: "",
+        owner: "", // User object
+        assigned: "", // User object
         approvals: {
-          user: false, // uuid user
-          answer: false, // default null, true, false
-          date: false, // timestamp of approval or rejection
+          user: "", // uuid user
+          answer: "", // default null, true, false
+          date: "", // timestamp of approval or rejection
         },
       },
     },
@@ -199,16 +199,19 @@ const props = defineProps({
     required: true,
   },
 });
-
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
-    if (item.value != val) {
+    if (typeof val === "undefined") {
+      const plainMemo = JSON.parse(JSON.stringify(props.itemDefinition));
+      plainMemo._id = props.docUUID;
+      item.value = plainMemo;
+    } else if (item.value != val) {
       item.value = JSON.parse(JSON.stringify(val));
     }
   });
 
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   dataItemSubscriber$.unsubscribe();
 });

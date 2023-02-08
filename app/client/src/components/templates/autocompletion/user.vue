@@ -1,20 +1,8 @@
 <template>
-  <div
-    data-test-container="templates/autocompletion/user"
-    :data-test-container-uuid="props.uuid"
-  >
-    <v-autocomplete
-      class="user_autocomplete"
-      v-model="selectedUser"
-      :items="Object.values(user.data)"
-      chips
-      item-title="_title"
-      item-value="_id"
-      hide-seleted
-      closable-chips
-      color="blue-grey-lighten-2"
-      :label="$t('generics.' + selectedUserRole)"
-    />
+  <div data-test-container="templates/autocompletion/user" :data-test-container-uuid="props.uuid">
+    <v-autocomplete class="user_autocomplete" v-model="selectedUser" :items="Object.values(user.data)" chips
+      item-title="_title" item-value="_id" hide-seleted closable-chips color="blue-grey-lighten-2"
+      :label="$t('generics.' + selectedUserRole)" />
   </div>
 </template>
 
@@ -61,24 +49,24 @@ const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
     if (item.value !== val) {
-      item.value = val;
+      item.value = val || {};
     }
   });
 const selectedUser = computed({
   get() {
-    return item.value._source[props.selectedUserRole] || "";
+    return item.value._source ? item.value._source[props.selectedUserRole] || "" : "";
   },
   set(newValue) {
     const updateObj = {};
     updateObj[props.selectedUserRole] = newValue;
     $store.dispatch({
       type: "data/update",
-      docUUID: item.value._id || false,
+      docUUID: props.docUUID || false,
       payload: updateObj,
     });
   },
 });
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   user.unsubscribe();
   dataItemSubscriber$.unsubscribe();

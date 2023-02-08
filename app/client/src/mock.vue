@@ -57,6 +57,12 @@ export default {
         organisation: "org-dummy", // Type organization
         active: true,
         tags: ["tag-todo"],
+        avatar: {
+          file: "/user/sebastian.png",
+          mimetype: "image/PNG",
+          size: 1231233,
+          originalName: "sebastian.png",
+        },
       },
       {
         firstname: "Jan",
@@ -74,6 +80,12 @@ export default {
         email: "jurand@pacifico.org",
         organisation: "org-dummy", // Type organization
         active: true,
+        avatar: {
+          file: "/user/daniel.png",
+          mimetype: "image/PNG",
+          size: 1231233,
+          originalName: "daniel.png",
+        },
       },
       {
         firstname: "Christian",
@@ -82,6 +94,12 @@ export default {
         email: "karpfen@pacifico.org",
         organisation: "org-dummy", // Type organization
         active: true,
+        avatar: {
+          file: "user/christian.png",
+          mimetype: "image/PNG",
+          size: 1231233,
+          originalName: "christian.png",
+        },
       },
       {
         firstname: "Till",
@@ -90,6 +108,12 @@ export default {
         email: "derMitDemPliesterMann@pacifico.org",
         organisation: "org-dummy", // Type organization
         active: true,
+        avatar: {
+          file: "/user/till.png",
+          mimetype: "image/PNG",
+          size: 1231233,
+          originalName: "till.png",
+        },
       },
     ],
     memo: [
@@ -97,7 +121,99 @@ export default {
         title: "Test Memo 1",
         path: false, // materialized path
         project: 2,
-        body: {}, // block
+        body: {
+          time: 1675761665085,
+          blocks: [
+            {
+              id: "mhTl6ghSkV",
+              type: "paragraph",
+              data: {
+                text: "I'm a simple paragraph, I can contain bold",
+              },
+            },
+            {
+              id: "l98dyx3yjb",
+              type: "header",
+              data: {
+                text: "Key features",
+                level: 3,
+              },
+            },
+            {
+              id: "234987234",
+              type: "list",
+              data: {
+                type: "unordered",
+                items: [
+                  "First unordered list item",
+                  "second unordered list item",
+                  "third unordered list item",
+                ],
+              },
+            },
+            {
+              id: "665348756",
+              type: "attaches",
+              data: {
+                url: "path/to/attachment.pdf",
+                size: 12345,
+                name: "my-attachment.pdf",
+                extension: "pdf",
+              },
+              title: "My Attachment",
+            },
+            {
+              id: "775634589",
+              type: "image",
+              data: {
+                file: { url: "/path/to/image.png" },
+                withBorder: false,
+                withBackground: false,
+                streched: true,
+                caption: "Some info for my image",
+              },
+            },
+            {
+              type: "checklist",
+              data: {
+                items: [
+                  {
+                    text: "This is a block-styled editor",
+                    checked: true,
+                  },
+                  {
+                    text: "Clean output data",
+                    checked: false,
+                  },
+                  {
+                    text: "Simple and powerful API",
+                    checked: true,
+                  },
+                ],
+              },
+            },
+            {
+              type: "delimiter",
+              data: {},
+            },
+            {
+              type: "quote",
+              data: {
+                text: "The unexamined life is not worth living.",
+                caption: "Socrates",
+                alignment: "left",
+              },
+            },
+            {
+              type: "alert",
+              data: {
+                type: "danger",
+                text:
+                  "<strong>Holy smokes!</strong><br>Something seriously <em>bad</em> happened.",
+              },
+            },
+          ],
+        },
         closed: false, // default false
         tags: ["test", "tag-dingens"], // Type Tag
         owner: "user-jurand",
@@ -235,25 +351,25 @@ export default {
   }),
   created() {
     this.$store.dispatch({
-      type: "data/add",
+      type: "data/push",
       payload: {
         data: this.makeDataList(this.tags, "tag"),
       },
     });
     this.$store.dispatch({
-      type: "data/add",
+      type: "data/push",
       payload: {
         data: this.makeDataList(this.user, "user"),
       },
     });
     this.$store.dispatch({
-      type: "data/add",
+      type: "data/push",
       payload: {
         data: this.makeDataList(this.memo, "memo"),
       },
     });
   },
-  destroyed() {},
+  destroyed() { },
   methods: {
     getRandomArbitrary: function (min, max) {
       return Math.random() * (max - min) + min;
@@ -277,6 +393,7 @@ export default {
       return {
         _id: "tag-" + data.title,
         _type: "tag",
+        _disId: "faaaaaaaake",
         _project: false,
         _title: data.title,
         _source: {
@@ -293,6 +410,7 @@ export default {
         _id: "user-" + data.nickname,
         _type: "user",
         _path: false,
+        _disId: "faaaaaaaake",
         _title: `${data.firstname} ${data.lastname} @${data.email}`, // Nickname (email)  Organization
         _source: {
           firstname: data.firstname,
@@ -302,6 +420,7 @@ export default {
           organisation: data.organization, // Type organization
           active: data.active,
           tags: data.tags || [],
+          avatar: data.avatar || {},
         },
       };
     },
@@ -319,12 +438,13 @@ export default {
         _type: "memo",
         _title: data.title,
         _created: created,
+        _disId: "faaaaaaaake",
         _modified: modified,
         _source: {
           title: data.title,
           path: data.path, // materialized path
           project: data.project,
-          body: data.body, // block
+          body: data.body || {}, // block
           closed: data.closed, // default false
           tags: data.tags || [], // Type Tag
           created: created,
@@ -339,4 +459,6 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+
+</style>

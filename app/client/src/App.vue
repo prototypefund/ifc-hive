@@ -1,29 +1,21 @@
 <template>
   <v-app v-if="(page && page.uuid) || isInTest">
     <!-- Global Toolbar -->
-    <v-app-bar
-      density="compact"
-      flat
-      app
-      color="grey-lighten-2"
-      :class="{ appBarRel: isInTest }"
-      id="appAppbar"
-    >
+    <v-app-bar density="compact" flat app color="grey-lighten-2" :class="{ appBarRel: isInTest }" id="appAppbar">
       <!-- Breadcrumb -->
       <v-app-bar-title>
-        <router-link :to="{ path: '/' }" id="breadcrumb-home"
-          ><v-icon icon="mdi-home" color="primary"></v-icon>
+        <router-link :to="{ path: '/' }" id="breadcrumb-home"><v-icon icon="mdi-home" color="primary"></v-icon>
         </router-link>
         <v-icon color="grey" xsmall>mdi-chevron-right</v-icon>
         <v-fade-transition>
           <span v-if="!loading">{{ $t("pages." + page.uuid) }}</span>
         </v-fade-transition>
         <v-fade-transition>
-          <span v-if="loading"
-            ><v-progress-circular indeterminate :size="20" :width="2" color="primary"
-          /></span>
+          <span v-if="loading"><v-progress-circular indeterminate :size="20" :width="2" color="primary" /></span>
         </v-fade-transition>
       </v-app-bar-title>
+      <v-text-field :loading="searching" density="compact" variant="solo" label="Search" append-inner-icon="mdi-magnify"
+        single-line hide-details @click:append-inner="onClick"></v-text-field>
       <v-spacer />
       <status-bar />
       <!-- notifications -->
@@ -31,30 +23,19 @@
     </v-app-bar>
 
     <!-- Navigation Drawer -->
-    <NavigationSideBar v-if="!isInTest" :nav-items="navItems" />
+    <NavigationSideBar v-if="!isInTest" :nav-items="navItems" :footer-items="footerItems" />
     <ToolBar :class="{ appBarRel: isInTest }" />
     <!-- Main content -->
     <mock />
     <v-main id="appMain">
-      <v-btn
-        class="backToTop"
-        v-if="hasScrolled"
-        @click="scrollTop"
-        icon="mdi-chevron-up"
-        color="primary"
-      />
+      <v-btn class="backToTop" v-if="hasScrolled" @click="scrollTop" icon="mdi-chevron-up" color="primary" />
       <template v-if="isInTest">
         <slot />
       </template>
       <template v-else>
         <router-view v-slot="{ Component }">
-          <component
-            :is="Component"
-            :class="{ isLoading: loading }"
-            id="appComponent"
-            :style="{ height: viewPortHeight + 'px' }"
-            @scroll.passive="setScroll($event)"
-          />
+          <component :is="Component" :class="{ isLoading: loading }" id="appComponent"
+            :style="{ height: viewPortHeight + 'px' }" @scroll.passive="setScroll($event)" />
         </router-view>
       </template>
     </v-main>
@@ -98,13 +79,32 @@ export default {
     viewPortHeight: false,
     viewPortWidth: false,
     loading: false,
+    searching: false,
     hasScrolled: false,
+    footerItems: [
+      {
+        icon: "mdi-account-cog",
+        route: "app.accountSettings",
+        params: {},
+      },
+      {
+        icon: "mdi-cog",
+        route: "app.settings",
+        params: {},
+      },
+    ],
     navItems: [
       {
         icon: "mdi-home",
         route: "app.dashboard",
         params: {},
       },
+      {
+        icon: "mdi-file-document-check",
+        route: "app.myTasks",
+        params: {},
+      },
+      { type: "divider" },
       {
         icon: "mdi-file-document-multiple",
         route: "app.journal",
@@ -116,8 +116,19 @@ export default {
         params: {},
       },
       {
-        icon: "mdi-cog",
-        route: "app.settings",
+        icon: "mdi-chart-gantt",
+        route: "app.timeline",
+        params: {},
+      },
+      { type: "divider" },
+      {
+        icon: "mdi-security",
+        route: "app.blockchainApproval",
+        params: {},
+      },
+      {
+        icon: "mdi-folder-text",
+        route: "app.documents",
         params: {},
       },
     ],
@@ -225,7 +236,7 @@ html {
   position: absolute !important;
 }
 
-#app .v-toolbar__content > .v-btn:last-child {
+#app .v-toolbar__content>.v-btn:last-child {
   margin-inline-end: 0;
 }
 

@@ -1,23 +1,8 @@
 <template>
-  <v-card
-    flat
-    class="quickListWrapper"
-    v-if="state"
-    data-test-container="widgets/quicklist/default"
-    :data-test-container-uuid="props.uuid"
-  >
-    <v-tabs
-      v-model="entryIndex"
-      fixed-tabs
-      v-if="state.entries.length > 0"
-      density="compact"
-    >
-      <v-tab
-        v-for="(item, index) in state.entries"
-        :key="item"
-        @click.middle="closeTab(index)"
-        class="quickListTab"
-      >
+  <v-card flat class="quickListWrapper" v-if="state" data-test-container="widgets/quicklist/default"
+    :data-test-container-uuid="props.uuid">
+    <v-tabs v-model="entryIndex" fixed-tabs v-if="state.entries.length > 0" density="compact">
+      <v-tab v-for="(item, index) in state.entries" :key="item" @click.middle="closeTab(index)" class="quickListTab">
         <div class="tabTitle text-h6 text-truncate">
           {{ item.type }} - {{ item.title }}
         </div>
@@ -29,7 +14,7 @@
         <no-results-yet />
       </v-window>
       <v-window-item v-else v-for="(item, index) in state.entries" :key="item">
-        <component :props="item.props" widgetUUID="quickList" :docUUID="item.uuid" />
+        <component :props="{ ...item.props, mode: 'edit' }" widgetUUID="quickList" :docUUID="item.uuid" />
       </v-window-item>
     </v-window>
   </v-card>
@@ -121,7 +106,7 @@ function closeTab(index) {
   // TODO add confirm dialogue here, apparently overlay does not work atm in vuetify rc
   this.closeTabConfirmed(index);
 }
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });

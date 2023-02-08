@@ -64,6 +64,7 @@
     "esm": "3.x",
     "happy-dom": "7.x",
     "mini-rx-store": "3.x",
+    "nanoid": "^4.0.1",
     "ramda": "0.x",
     "roboto-fontface": "0.x",
     "rxjs": "7.x",

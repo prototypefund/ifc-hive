@@ -21,13 +21,18 @@ defineProps({
       return rawProps.widgetUUID + "_dataTypes_organization_" + rawProps.docUUID;
     },
   },
+  mode: {
+    type: String,
+    required: true,
+    default: "view",
+  },
   widgetUUID: {
     type: String,
     required: true,
   },
   docUUID: {
     type: String,
-    required: true
+    required: true,
   },
   item: {
     type: Object,

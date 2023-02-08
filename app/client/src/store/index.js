@@ -127,14 +127,13 @@ const applicationReducers = {
             switch (action.type) {
                 case 'init':
                     return applicationState.data
-                case 'data/add':
+                case 'data/push':
                     if (action.payload.data) {
                         store.dispatch({
                             type: 'notifications/add',
                             payload: {
-                                items: {
-                                    hallo: "döner"
-                                }
+                                event: 'push',
+                                message: `we've received ${action.payload.data.length} new Items for you!`
                             }
                         })
                         data = JSON.parse(JSON.stringify(state))
@@ -142,7 +141,7 @@ const applicationReducers = {
                             if (item._type === 'delete') {
                                 delete data[item._id]
                             } else {
-                                data[item._id] = item
+                                data[item._id] = JSON.parse(JSON.stringify(item))
                             }
                         })
                         if (Object.keys(state).length !== Object.keys(data).length) {
@@ -154,15 +153,60 @@ const applicationReducers = {
                         return data
                     }
                     return state
+                case 'data/add':
+                    if (action.docUUID && action.objectDefinition) {
+                        store.dispatch({
+                            type: 'notifications/add',
+                            payload: {
+                                event: 'newItem',
+                                message: `a new Item with Id ${action.docUUID} of type ${action.objectDefinition._type} was created`
+                            }
+                        })
+                        //TODO change this to api usage once it's available
+                        if (state[action.docUUID]) {
+                            console.error("we have a data/add but we have the item already in the dataStore, this should not happen!")
+                            // if we have the given doUUID in store already, we already created it so lets redirect this call to the update function
+                            store.dispatch({
+                                type: "data/update",
+                                docUUID: action.docUUID,
+                                payload: action.payload,
+                            })
+                            return state
+                        }
+                        const newItem = JSON.parse(JSON.stringify(action.objectDefinition))
+                        newItem._source = mergeDeepRight(newItem._source, action.payload)
+                        newItem._title = "Ich komme bald so richtig vom backend und mache sinn"
+                        newItem._disId = "0123"
+                        newItem._created = new Date()
+                        newItem._modified = newItem._created
+                        newItem._source.modified = newItem._created
+                        newItem._source.created = newItem._created
+                        store.dispatch({
+                            type: "data/push",
+                            payload: {
+                                data: [newItem]
+                            },
+                        })
+                        return state
+                    }
+                    return state
                 case 'data/update':
+                    //TODO change this to api usage once it's available
                     data = { _source: {} }
                     if (action.docUUID) {
                         if (state[action.docUUID]) {
+                            store.dispatch({
+                                type: 'notifications/add',
+                                payload: {
+                                    event: 'updateItem',
+                                    message: `a Item with Id ${action.docUUID} of type ${state[action.docUUID]._type} was edited!`
+                                }
+                            })
                             data = JSON.parse(JSON.stringify(state))
                             data[action.docUUID]._source = mergeDeepRight(data[action.docUUID]._source, action.payload)
                         } else {
-                            console.error("we add something super fresh")
-                            debugger
+                            console.error("We try to update something we don't have in the dataStore")
+
                         }
 
                     }
@@ -265,6 +309,18 @@ const applicationReducers = {
                 case 'init':
                     return applicationState.organization
                 case 'organization/update':
+                    return action.payload
+                default:
+                    return state
+            }
+        }
+    },
+    project: (state, action) => {
+        if (state) {
+            switch (action.type) {
+                case 'init':
+                    return applicationState.project
+                case 'project/update':
                     return action.payload
                 default:
                     return state

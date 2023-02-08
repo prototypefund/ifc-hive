@@ -1,20 +1,11 @@
 <template>
-  <v-chip
-    v-if="user"
-    size="small"
-    :color="user ? user._source.color || 'grey' : 'grey'"
-    data-test-container="templates/chip/user"
-    :data-test-container-uuid="props.uuid"
-  >
-    <QuickListHandler
-      uuid="quickList"
-      :docUUID="user._id"
-      :dataTitle="user._title"
-      :tab-type="user._type"
-      action="add"
-    >
-      <v-avatar start>
-        <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
+  <v-chip v-if="user" size="small" :color="user ? user._source.color || 'grey' : 'grey'"
+    data-test-container="templates/chip/user" :data-test-container-uuid="props.uuid">
+    <QuickListHandler uuid="quickList" :docUUID="user._id" :dataTitle="user._title" :tab-type="user._type" action="add">
+      <v-avatar start color="indigo">
+        <v-img v-if="user._source.avatar" :src="user._source.avatar.file" />
+        <span justify="space-around" v-else>{{ user._source.firstname.substring(0, 1) }}
+          {{ user._source.lastname.substring(0, 1) }}</span>
       </v-avatar>
       {{ user._title }}
     </QuickListHandler>
@@ -52,9 +43,11 @@ const dataItemSubscriber$ = $store
   .subscribe((val) => {
     user.value = val;
   });
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   dataItemSubscriber$.unsubscribe();
 });
 </script>
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+
+</style>

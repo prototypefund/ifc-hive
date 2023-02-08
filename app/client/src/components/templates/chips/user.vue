@@ -1,15 +1,11 @@
 <template>
-  <v-row
-    data-test-container="templates/chips/user"
-    :data-test-container-uuid="props.uuid"
-  >
+  <v-row data-test-container="templates/chips/user" :data-test-container-uuid="props.uuid">
     <v-col cols="auto" v-for="usr in props.selectedUser">
-      <v-chip
-        size="small"
-        :color="user.data[usr] ? user.data[usr]._source.color || 'grey' : 'grey'"
-      >
-        <v-avatar start>
-          <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
+      <v-chip size="small" :color="user.data[usr] ? user.data[usr]._source.color || 'grey' : 'grey'">
+        <v-avatar start color="indigo">
+          <v-img v-if="user.data[usr]._source.avatar" :src="user.data[usr]._source.avatar.file" />
+          <span justify="space-around" v-else>{{ user.data[usr]._source.firstname.substring(0, 1) }}
+            {{ user.data[usr]._source.lastname.substring(0, 1) }}</span>
         </v-avatar>
         {{ user.data[usr] ? user.data[usr]._title || usr : usr }}
       </v-chip>
@@ -53,7 +49,7 @@ const props = defineProps({
   },
 });
 const user = ref($store.$data.get(props.actionId, "ALL_USER"));
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   user.unsubscribe();
 });

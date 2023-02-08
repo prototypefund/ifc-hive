@@ -8,7 +8,7 @@
           <v-card-text>
             <v-row no-gutters>
               <v-col cols="8">
-                {{ $t("ui.editMode") }}: {{ editMode ? $t("yes") : $t("no") }}
+                {{ $t("ui.editMode") }}: {{ editMode? $t("yes"): $t("no") }}
               </v-col>
               <v-col cols="4">
                 <v-switch density="compact" flat v-model="editMode" hide-details />
@@ -96,7 +96,7 @@ const props = defineProps({
 });
 const addData = () => {
   $store.dispatch({
-    type: "data/add",
+    type: "data/push",
     uuid: props.uuid,
     payload: {
       data: [
@@ -133,7 +133,7 @@ const addData = () => {
     },
   });
 };
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
   uiStateSubscriber$.unsubscribe();

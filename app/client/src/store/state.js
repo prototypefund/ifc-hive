@@ -19,6 +19,13 @@ export const applicationState = {
         description: false,
         url: false,
     },
+    project: {
+        id: false,
+        title: false,
+        description: false,
+        keywords: false,
+        path: false,
+    },
     ui: {
         // indicates the left navigation bar state
         navigationOpen: false,
