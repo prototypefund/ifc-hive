@@ -1,10 +1,7 @@
 <template>
   <v-row no-gutters v-if="bars">
     <v-col v-for="bar in bars">
-      <upload-status
-        :uppy="bar.instance"
-        :props="bar.config.optionsStatusBar || {}"
-      ></upload-status>
+      <upload-status :uppy="bar.instance" :props="bar.config.optionsStatusBar || {}"></upload-status>
     </v-col>
   </v-row>
 </template>
@@ -40,10 +37,12 @@ const stateSubscriber$ = $store
     handleStatusBars();
   });
 
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });
 </script>
 
-<style lang="css"></style>
+<style lang="css">
+
+</style>

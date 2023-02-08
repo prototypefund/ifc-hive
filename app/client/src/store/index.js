@@ -639,7 +639,6 @@ store.$data = {
 
     },
     get: (actionId, query, params = {}) => {
-        if (store.$data[actionId]) return store.$data[actionId]
         // create a deep ref object which will contain the query data as well as the items
         const queryObj = ref({})
         store.dispatch({
@@ -666,7 +665,6 @@ store.$data = {
                 actionId
             })
         }
-        store.$data[actionId] = queryObj
         return queryObj
     }
 }

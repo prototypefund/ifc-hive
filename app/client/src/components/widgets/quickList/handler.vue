@@ -75,26 +75,16 @@ const handleQuickListItem = () => {
 
     const entries = JSON.parse(JSON.stringify(state.value.entries));
     if (entryIndex > -1) {
-      if (props.tabType != state.value.entries[entryIndex].type) {
-        // if display types vary we may create a second tab for the same uuid
-        // TODO IMPLEMENT THIS
-        console.error(
-          "not implemented yet. display types vary we have to create a second tab for the same uuid"
-        );
-      } else {
-        entries.unshift(entries.splice(entryIndex, 1)[0]);
-      }
-    } else {
-      // create an object describing the view type and the uuid (of the data element) as well as possible query or display parameters
-      entries.unshift({
-        uuid: props.docUUID,
-        type: props.tabType,
-        template: props.template || false,
-        title: props.dataTitle,
-        props: props.props,
-      });
-      // as we unshift new entries, the currently selected tab always needs to be 0
+      // as we can have several modes in the quicklist items and different display Types per item, we will simply remove any quicklist entry of the current UUID and create a new one with the proper props from now
+      entries.splice(entryIndex, 1);
     }
+    entries.unshift({
+      uuid: props.docUUID,
+      type: props.tabType,
+      template: props.template || false,
+      title: props.dataTitle,
+      props: props.props,
+    });
     entryIndex = 0;
     $store.dispatch({
       type: "widgets/update",

@@ -20,7 +20,7 @@
           :class="{ 'on-hover': isHovering === data[element]._id }" @mouseover="isHovering = data[element]._id"
           @mouseout="isHovering = false">
           <template v-slot:title>
-            <QuickListHandler uuid="quickList" :docUUID="data[element]._id"
+            <QuickListHandler uuid="quickList" :docUUID="data[element]._id" :props="{ mode: 'edit' }"
               :dataTitle="data[element]._source.title || data[element]._title" :tab-type="data[element]._type"
               action="add">
               <v-card-title>{{

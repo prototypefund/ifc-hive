@@ -17,7 +17,10 @@
       <v-text-field :loading="searching" density="compact" variant="solo" label="Search" append-inner-icon="mdi-magnify"
         single-line hide-details @click:append-inner="onClick"></v-text-field>
       <v-spacer />
-      <status-bar />
+      <p style="width: 15%">
+        <status-bar />
+      </p>
+
       <!-- notifications -->
       <Notifications />
     </v-app-bar>

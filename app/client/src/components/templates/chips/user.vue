@@ -1,7 +1,7 @@
 <template>
   <v-row data-test-container="templates/chips/user" :data-test-container-uuid="props.uuid">
     <v-col cols="auto" v-for="usr in props.selectedUser">
-      <v-chip size="small" :color="user.data[usr] ? user.data[usr]._source.color || 'grey' : 'grey'">
+      <v-chip v-if="usr" size="small" :color="user.data[usr] ? user.data[usr]._source.color || 'grey' : 'grey'">
         <v-avatar start color="indigo">
           <v-img v-if="user.data[usr]._source.avatar" :src="user.data[usr]._source.avatar.file" />
           <span justify="space-around" v-else>{{ user.data[usr]._source.firstname.substring(0, 1) }}
