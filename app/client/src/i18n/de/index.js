@@ -59,4 +59,5 @@ export default {
   timeline: {
     title: 'Projektjournal Überschrift'
   },
+  "$vuetify.badge": "badge"
 }

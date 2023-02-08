@@ -1,7 +1,7 @@
 <template>
   <v-app v-if="(page && page.uuid) || isInTest">
     <!-- Global Toolbar -->
-    <v-app-bar density="compact" flat app color="grey-lighten-2" :class="{ appBarRel: isInTest }" id="appAppbar">
+    <v-app-bar density="compact" flat app color="grey-lighten-2" id="appAppbar">
       <!-- Breadcrumb -->
       <v-app-bar-title>
         <router-link :to="{ path: '/' }" id="breadcrumb-home"><v-icon icon="mdi-home" color="primary"></v-icon>
@@ -15,7 +15,7 @@
         </v-fade-transition>
       </v-app-bar-title>
       <v-text-field :loading="searching" density="compact" variant="solo" label="Search" append-inner-icon="mdi-magnify"
-        single-line hide-details @click:append-inner="onClick"></v-text-field>
+        single-line hide-details></v-text-field>
       <v-spacer />
       <p style="width: 15%">
         <status-bar />
@@ -26,8 +26,8 @@
     </v-app-bar>
 
     <!-- Navigation Drawer -->
-    <NavigationSideBar v-if="!isInTest" :nav-items="navItems" :footer-items="footerItems" />
-    <ToolBar :class="{ appBarRel: isInTest }" />
+    <NavigationSideBar :nav-items="navItems" :footer-items="footerItems" />
+    <ToolBar />
     <!-- Main content -->
     <mock />
     <v-main id="appMain">
@@ -126,7 +126,7 @@ export default {
       { type: "divider" },
       {
         icon: "mdi-security",
-        route: "app.blockchainApproval",
+        route: "app.blockchain",
         params: {},
       },
       {

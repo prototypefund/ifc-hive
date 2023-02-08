@@ -72,6 +72,12 @@ export default {
         organisation: "org-dummy", // Type organization
         tags: ["tag-todo"],
         active: true,
+        avatar: {
+          file: "/user/jan.png",
+          mimetype: "image/PNG",
+          size: 1231233,
+          originalName: "jan.png",
+        },
       },
       {
         firstname: "Daniel",
@@ -428,8 +434,8 @@ export default {
       let created = new Date();
       const modified = new Date();
       const due = new Date();
-      created.setDate(created.getDate() - this.getRandomArbitrary(10, 40));
-      modified.setDate(created.getDate() + this.getRandomArbitrary(0, 20));
+      created.setDate(created.getDate() - this.getRandomArbitrary(20, 40));
+      modified.setDate(created.getDate() - this.getRandomArbitrary(10, 20));
       due.setDate(modified.getDate() + this.getRandomArbitrary(2, 4));
       return {
         _id: "memo-" + uuidv4(), // UUID

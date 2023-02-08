@@ -3,7 +3,7 @@ export default {
     'app-myTasks': 'Meine Aufgaben',
     'app-settings': 'Einstellungen',
     'app-timeline': 'Zeitverlauf',
-    'app-blockchainApproval': 'Freigaben',
+    'app-blockchain': 'Freigaben',
     'app-documents': 'Dokumente',
     'app-accountSettings': 'Konto Einstellungen',
     'app-journal': 'Journal',

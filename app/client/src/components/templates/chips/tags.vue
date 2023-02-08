@@ -1,15 +1,10 @@
 <template>
-  <v-row
-    data-test-container="templates/chips/tags"
-    :data-test-container-uuid="props.uuid"
-  >
+  <v-row data-test-container="templates/chips/tags" :data-test-container-uuid="props.uuid">
     <v-col cols="auto" v-for="tag in props.tags">
-      <v-chip
-        size="small"
-        :color="tags.data[tag] ? tags.data[tag]._source.color || 'grey' : 'grey'"
-        >{{ tags.data[tag] ? tags.data[tag]._source.title || tag : tag }}</v-chip
-      >
+      <v-chip size="small"
+        :color="tags.data[tag] ? tags.data[tag]._source.color || 'grey' : 'grey'">{{ tags.data[tag] ? tags.data[tag]._source.title || tag : tag }}</v-chip>
     </v-col>
+    <v-col cols="auto" />
   </v-row>
 </template>
 
@@ -49,7 +44,7 @@ const props = defineProps({
   },
 });
 const tags = ref($store.$data.get(props.actionId, "ALL_TAGS"));
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   tags.unsubscribe();
 });

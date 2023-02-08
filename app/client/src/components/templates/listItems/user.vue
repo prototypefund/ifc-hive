@@ -3,7 +3,7 @@
     class="ticketMemberMouseOver">
     <template v-slot:prepend>
       <v-avatar start color="indigo">
-        <v-img v-if="user._source.avatar" :src="user._source.avatar.file" />
+        <v-img v-if="user._source.avatar && user._source.avatar.file" :src="user._source.avatar.file" />
         <span justify="space-around" v-else>{{ user._source.firstname.substring(0, 1) }}
           {{ user._source.lastname.substring(0, 1) }}</span>
       </v-avatar>

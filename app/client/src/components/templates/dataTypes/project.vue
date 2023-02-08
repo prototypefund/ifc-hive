@@ -23,7 +23,6 @@ defineProps({
   },
   mode: {
     type: String,
-    required: true,
     default: "view",
   },
   widgetUUID: {

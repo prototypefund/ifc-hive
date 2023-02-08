@@ -57,13 +57,13 @@ export default [
     },
     {
         path: '/blockchain',
-        name: 'app.blockchainApproval',
+        name: 'app.blockchain',
         component: blockchainComp,
         props: true,
         beforeEnter: (to, from) => {
-            if (!confCache.blockchainApproval) {
+            if (!confCache.blockchain) {
                 loadConf('blockchain').then(conf => {
-                    confCache.blockchainApproval = conf.default
+                    confCache.blockchain = conf.default
                     store.dispatch({
                         type: 'pages/add',
                         routeName: to.name,

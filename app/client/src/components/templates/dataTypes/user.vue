@@ -148,7 +148,6 @@ const props = defineProps({
   },
   mode: {
     type: String,
-    required: true,
     default: "view",
   },
   uuid: {

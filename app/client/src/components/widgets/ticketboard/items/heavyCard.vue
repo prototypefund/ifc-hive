@@ -3,13 +3,25 @@
     :prepend-icon="boardId == 'open' && boardId == 'closed' ? 'false' : 'mdi-drag'"
     data-test-container="widgets/ticketboard/items/ticketCard" :data-test-container-uuid="'ticketCard_' + props.uuid">
     <template v-slot:title v-if="boardId !== 'open' && boardId !== 'closed'">
-      <QuickListHandler uuid="quickList" :docUUID="props.boardId" :dataTitle="props.boardId" tab-type="tag"
-        action="add">
-        {{ column.title }}
-      </QuickListHandler>
+      <v-list-item>
+        <template v-slot:append>
+          <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New Ticket"
+            :props="{ mode: 'edit', tags: [props.boardId] }" tab-type="memo" action="add">
+            <v-btn size="x-small" icon="mdi-plus" color="primary"></v-btn>
+          </QuickListHandler>
+        </template>
+        <v-list-item-title>
+          <QuickListHandler uuid="quickList" :docUUID="props.boardId" :dataTitle="props.boardId"
+            :props="{ mode: 'edit' }" tab-type="tag" action="add">
+            {{ column.title }}
+          </QuickListHandler>
+        </v-list-item-title>
+      </v-list-item>
     </template>
     <template v-slot:title v-else>
-      {{ column.title }}
+      <v-list-item>
+        <v-list-item-title>{{ column.title }}</v-list-item-title>
+      </v-list-item>
     </template>
 
     <draggable v-model="sorting" item-key="id" class="list-group" ghost-class="ghost" @start="dragging = true"
@@ -124,6 +136,7 @@ import QuickListHandler from "@w/quickList/handler.vue";
 import { shallowRef, computed, inject, defineAsyncComponent } from "vue";
 import draggable from "vuedraggable";
 import { difference } from "ramda";
+import { v4 as uuidv4 } from "uuid";
 const dragging = shallowRef(false);
 const show = shallowRef(false);
 const $store = inject("$store");

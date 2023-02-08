@@ -81,7 +81,7 @@ const metaReducer = [(reducer) => {
 
 const applicationReducers = {
     queries: (state, action) => {
-        let queries, items
+        let queries, items, query
         if (state) {
             switch (action.type) {
                 case 'init':
@@ -89,12 +89,16 @@ const applicationReducers = {
                 case 'queries/execute':
                     queries = JSON.parse(JSON.stringify(state))
                     if (action.actionId) {
-                        state[action.actionId]
+                        query = JSON.parse(JSON.stringify(queries[action.actionId]))
+                        query.data = basicStoreFilters(query.query, query.params || false, dataLookup)
+                        query.uuids = Object.keys(query.data)
+                        queries[action.actionId] = query
+                        return queries
                     } else {
                         Object.values(queries).forEach(query => {
-                            items = basicStoreFilters(query.query, query.params || false, dataLookup)
-                            query.uuids = Object.keys(items)
-                            query.data = items
+                            query.data = basicStoreFilters(query.query, query.params || false, dataLookup)
+                            query.uuids = Object.keys(query.data)
+
                         })
                     }
                     return queries
@@ -105,9 +109,8 @@ const applicationReducers = {
                             query: action.payload.query,
                             params: action.payload.params || false
                         }
-                        items = basicStoreFilters(action.payload.query, action.payload.params || false, dataLookup)
-                        queries[action.payload.actionId].uuids = Object.keys(items)
-                        queries[action.payload.actionId].data = items
+                        queries[action.payload.actionId].data = basicStoreFilters(action.payload.query, action.payload.params || false, dataLookup)
+                        queries[action.payload.actionId].uuids = Object.keys(queries[action.payload.actionId].data)
                     }
                     return { ...state, ...queries }
                 case 'queries/remove':

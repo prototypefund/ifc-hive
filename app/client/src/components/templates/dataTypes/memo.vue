@@ -113,7 +113,7 @@ const body = computed({
 });
 const tags = computed({
   get() {
-    return item.value._source.tags || "";
+    return item.value._source.tags || props.tags;
   },
   set(newValue) {
     itemUpdater({ tags: newValue });
@@ -151,8 +151,11 @@ const props = defineProps({
   },
   mode: {
     type: String,
-    required: true,
     default: "view",
+  },
+  tags: {
+    type: Array,
+    default: [],
   },
   uuid: {
     type: String,
@@ -166,32 +169,34 @@ const props = defineProps({
   },
   itemDefinition: {
     type: Object,
-    default: {
-      _id: "", // UUID
-      _path: "",
-      _project: "",
-      _type: "memo",
-      _title: "",
-      _created: "",
-      _modified: "",
-      _source: {
-        title: "",
-        path: "", // materialized path
-        project: "",
-        body: {}, // block
-        closed: false, // default false
-        tags: [], // Type Tag
-        created: "",
-        modified: "",
-        due: "",
-        owner: "", // User object
-        assigned: "", // User object
-        approvals: {
-          user: "", // uuid user
-          answer: "", // default null, true, false
-          date: "", // timestamp of approval or rejection
+    default(rawProps) {
+      return {
+        _id: "", // UUID
+        _path: "",
+        _project: "",
+        _type: "memo",
+        _title: "",
+        _created: "",
+        _modified: "",
+        _source: {
+          title: "",
+          path: "", // materialized path
+          project: "",
+          body: {}, // block
+          closed: false, // default false
+          tags: rawProps.tags || [], // Type Tag
+          created: "",
+          modified: "",
+          due: "",
+          owner: "", // User object
+          assigned: "", // User object
+          approvals: {
+            user: "", // uuid user
+            answer: "", // default null, true, false
+            date: "", // timestamp of approval or rejection
+          },
         },
-      },
+      };
     },
   },
   docUUID: {
