@@ -52,7 +52,7 @@ try {
 
   // add global properties to app
   app.config.globalProperties.$filters = filters
-
+  app.provide('$filters', filters)
   // mount the app
   app.mount('#app')
 } catch (err) {

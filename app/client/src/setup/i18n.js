@@ -5,12 +5,11 @@ import datetimeFormats from '../i18n/dateTimeFormats'
 export const i18n = createI18n({
   legacy: false, // you must set `false`, to use Composition API
   globalInjection: true,
-  locale: 'de', // set locale
+  locale: (navigator.language || navigator.userLanguage).split('-')[0], // set locale
   fallbackLocale: 'en', // set fallback locale
   messages, // set locale messages
   datetimeFormats
 })
-
 export const locale = {
   adapter: createVueI18nAdapter({
     i18n,

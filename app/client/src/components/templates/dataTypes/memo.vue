@@ -8,11 +8,15 @@
             <v-text-field v-model="title" :label="$t('generics.title')" variant="underlined"></v-text-field>
           </v-col>
           <v-col cols="12">
-            <tag-autocompletion v-if="item._disId" :widgetUUID="props.widgetUUID" :mode="mode" :docUUID="item._id" />
+            <tag-combobox v-if="item._disId" :widgetUUID="props.widgetUUID" :mode="mode" :docUUID="item._id" />
           </v-col>
           <v-col cols="12">
-            <v-text-field v-model="due" :label="$t('generics.dueDate')" variant="underlined"></v-text-field>
+            <v-text-field v-model="due" :label="$t('generics.dueDate')" variant="underlined"
+              v-if="vuetifyHasDatePicker == true"></v-text-field>
+            <v-label>{{ $t("generics.dueDate") }}</v-label>
+            <p>{{ $filters.dateFormat(due) }}</p>
           </v-col>
+
           <v-col cols="12">
             <user-autocompletion v-if="item._disId" :widgetUUID="props.widgetUUID" :mode="mode" :docUUID="item._id"
               selectedUserRole="assigned" />
@@ -34,7 +38,7 @@
           </v-col>
           <v-col cols="12">
             <v-label>{{ $t("generics.dueDate") }}</v-label>
-            <p>{{ due }}</p>
+            <p>{{ $filters.dateFormat(due) }}</p>
           </v-col>
           <v-col cols="12">
             <v-label>{{ $t("generics.assigned") }}</v-label>
@@ -69,9 +73,7 @@ import {
 } from "vue";
 const $store = inject("$store");
 const debugDump = shallowRef(false);
-const tagAutocompletion = defineAsyncComponent(() =>
-  import("@t/autocompletion/tags.vue")
-);
+const tagCombobox = defineAsyncComponent(() => import("@t/combobox/tags.vue"));
 const tagChips = defineAsyncComponent(() => import("@t/chips/tags.vue"));
 const userChips = defineAsyncComponent(() => import("@t/chips/user.vue"));
 const userAutocompletion = defineAsyncComponent(() =>
@@ -140,7 +142,7 @@ const due = computed({
     return item.value._source.due || "";
   },
   set(newValue) {
-    itemUpdater({ due: newValue });
+    itemUpdater({ due: new Date(newValue) });
   },
 });
 const props = defineProps({

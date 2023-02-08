@@ -8,9 +8,9 @@
       </QuickListHandler>
     </v-card-title>
     <v-card-subtitle>
-      <v-chip label color="primary" size="small" class="mr-4"># {{ shortenId(memo._id) }}
+      <v-chip label color="primary" size="small" class="mr-4"># {{ shortenId(memo._disId) }}
         <v-tooltip activator="parent" location="bottom">
-          {{ memo._id }}
+          {{ memo._disId }}
         </v-tooltip>
       </v-chip>
     </v-card-subtitle>

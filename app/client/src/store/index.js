@@ -9,7 +9,7 @@ import {
     ref,
 } from "vue";
 import getEnvVariable from '../lib/getEnvVariable'
-import { mergeDeepRight, clone } from 'ramda'
+import { mergeDeepRight, clone, sortWith, descend, prop } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
 import { applicationState, storePatterns, loadingHold } from './state'
 import { basicStoreFilters } from './dataHelper.js'
@@ -82,6 +82,7 @@ const metaReducer = [(reducer) => {
 const applicationReducers = {
     queries: (state, action) => {
         let queries, items, query
+        const sortModified = sortWith([descend(prop('_modified'))]);
         if (state) {
             switch (action.type) {
                 case 'init':
@@ -125,7 +126,29 @@ const applicationReducers = {
         }
     },
     data: (state, action) => {
-        let data, items
+        let data, items, item
+        const makeTitle = (item) => {
+            let title = item._id
+            if (item._type === 'memo' || item._type === 'tag') {
+                title = item._source.title
+            }
+            if (item._type === 'user') {
+                title = ''
+                if (item._source.firstname) {
+                    title = item._source.firstname
+                }
+                if (item._source.lastname) {
+                    title = `${title} ${item._source.lastname || ''}`.trim()
+                }
+                if (item._source.nickname) {
+                    title = `${title} ${item._source.nickname || ''}`.trim()
+                }
+                if (item._source.email) {
+                    title = `${title} ${item._source.email || ''}`.trim()
+                }
+            }
+            return title
+        }
         if (state) {
             switch (action.type) {
                 case 'init':
@@ -178,9 +201,9 @@ const applicationReducers = {
                         }
                         const newItem = JSON.parse(JSON.stringify(action.objectDefinition))
                         newItem._source = mergeDeepRight(newItem._source, action.payload)
-                        newItem._title = "Ich komme bald so richtig vom backend und mache sinn"
-                        newItem._disId = "0123"
-                        newItem._created = new Date()
+                        newItem._title = makeTitle(newItem)
+                        newItem._disId = uuidv4(6)
+                        newItem._created = new Date().valueOf()
                         newItem._modified = newItem._created
                         newItem._source.modified = newItem._created
                         newItem._source.created = newItem._created
@@ -206,7 +229,10 @@ const applicationReducers = {
                                 }
                             })
                             data = JSON.parse(JSON.stringify(state))
-                            data[action.docUUID]._source = mergeDeepRight(data[action.docUUID]._source, action.payload)
+                            item = data[action.docUUID]
+                            item._source = mergeDeepRight(item._source, action.payload)
+                            item._title = makeTitle(item)
+
                         } else {
                             console.error("We try to update something we don't have in the dataStore")
 
