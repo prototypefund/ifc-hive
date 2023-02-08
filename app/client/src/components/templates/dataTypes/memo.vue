@@ -14,7 +14,7 @@
             <v-text-field v-model="due" :label="$t('generics.dueDate')" variant="underlined"
               v-if="vuetifyHasDatePicker == true"></v-text-field>
             <v-label>{{ $t("generics.dueDate") }}</v-label>
-            <p>{{ $filters.dateFormat(due) }}</p>
+            <p v-if="due">{{ $filters.dateFormat(due) }}</p>
           </v-col>
 
           <v-col cols="12">
