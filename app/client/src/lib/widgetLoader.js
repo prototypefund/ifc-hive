@@ -22,7 +22,6 @@ export const widgetConfLoader = function (widget) {
     return import(`../components/widgets/${widget.name || 'debug'}/conf.js`).then(conf => {
         const widgetConf = conf[widget.face] || conf.default
         const mergedConf = mergeDeepRight(widgetConf, widget)
-        if (widget.props) debugger
         store.dispatch({
             type: 'widgets/update',
             uuid: widget.uuid,
@@ -42,7 +41,6 @@ export const widgetTypeConfLoader = function (widget) {
     return import(`../components/widgets/${widget.name || 'debug'}/${widget.type || 'default'}/conf.js`).then(conf => {
         const widgetConf = conf[widget.face] || conf.default
         const mergedConf = mergeDeepRight(widgetConf, widget)
-        if (widget.props) debugger
         store.dispatch({
             type: 'widgets/update',
             uuid: widget.uuid,

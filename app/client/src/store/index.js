@@ -301,7 +301,6 @@ const applicationReducers = {
                 case 'uploader/add':
                     return mergeDeepRight(state, action.payload)
                 case 'uploader/remove':
-                    debugger
                     return JSON.parse(JSON.stringify(action.payload))
                 default:
                     return state

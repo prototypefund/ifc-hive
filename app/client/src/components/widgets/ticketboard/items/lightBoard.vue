@@ -1,38 +1,19 @@
 <template>
-  <v-card
-    :color="boardItem._source.color"
-    v-if="boardItem"
-    :style="{ width: props.width + 'px', height: '100%' }"
-    class="ticketWrapperCard"
-    :prepend-icon="props.generic ? 'false' : 'mdi-drag'"
-    data-test-container="widgets/ticketboard/items/board"
-    :data-test-container-uuid="props.uuid"
-  >
+  <v-card :color="boardItem._source.color" v-if="boardItem" :style="{ width: props.width + 'px', height: '100%' }"
+    class="ticketWrapperCard" :prepend-icon="props.generic ? 'false' : 'mdi-drag'"
+    data-test-container="widgets/ticketboard/items/board" :data-test-container-uuid="props.uuid">
     <template v-slot:title v-if="props.boardId !== 'open' && props.boardId !== 'closed'">
-      <QuickListHandler
-        uuid="quickList"
-        :docUUID="props.boardId.split('_')[1]"
-        :dataTitle="props.boardId.split('_')[1]"
-        tab-type="tag"
-        action="add"
-      >
+      <QuickListHandler uuid="quickList" :docUUID="props.boardId.split('_')[1]" :dataTitle="props.boardId.split('_')[1]"
+        tab-type="tag" action="add">
         {{ boardItem._title }}
       </QuickListHandler>
     </template>
     <template v-slot:title v-else>
       {{ boardItem._title }}
     </template>
-    <draggable
-      v-if="documents.uuids.length > 0"
-      v-model="tickets"
-      item-key="_id"
-      class="list-group"
-      ghost-class="ghost"
-      @start="dragging = true"
-      @end="dragging = false"
-      handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend"
-      :group="{ name: 'ticketSort', pull: ['ticketSort'], put: ['ticketSort'] }"
-    >
+    <draggable v-if="documents.uuids.length > 0" v-model="tickets" item-key="_id" class="list-group" ghost-class="ghost"
+      @start="dragging = true" @end="dragging = false" handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend"
+      :group="{ name: 'ticketSort', pull: ['ticketSort'], put: ['ticketSort'] }">
       <template #item="{ element }">
         <ticket-item :widgetUUID="props.widgetUUID" :docUUID="element._id" :props="{}" />
       </template>
@@ -102,7 +83,7 @@ if (!props.generic) {
       boardItem.value = val;
     });
 } else {
-  boardItemSubscriber$.unsubscribe = () => {};
+  boardItemSubscriber$.unsubscribe = () => { };
   // we are generic so we don't have a document which is represented by this board, so let's fake one instead
   boardItem.value = {
     _title: props.identifier.split(":")[0],
@@ -131,7 +112,6 @@ const tickets = computed({
     };
     // reflatten our newVal object to make a proper comparison
     newVal.forEach((val) => newTickets.push(val._id));
-    debugger;
     if (documents.value.uuids.length < newTickets.length) {
       const ticketsToEdit = difference(newTickets, documents.value.uuids);
       ticketsToEdit.forEach((ticket) => {
@@ -148,7 +128,7 @@ const tickets = computed({
     }
   },
 });
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   documents.unsubscribe();
   boardItemSubscriber$.unsubscribe();
