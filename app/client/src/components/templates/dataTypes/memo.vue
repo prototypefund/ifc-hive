@@ -38,7 +38,7 @@
           </v-col>
           <v-col cols="12">
             <v-label>{{ $t("generics.dueDate") }}</v-label>
-            <p>{{ $filters.dateFormat(due) }}</p>
+            <p v-if="due">{{ $filters.dateFormat(due) }}</p>
           </v-col>
           <v-col cols="12">
             <v-label>{{ $t("generics.assigned") }}</v-label>
