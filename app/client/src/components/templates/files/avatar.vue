@@ -4,13 +4,19 @@
             <v-img v-if="item" :src="item.file" />
             <span justify="space-around" v-else></span>
         </v-avatar>
-        <component v-if="uploader.component && mode === 'edit'" :is="uploader.component" :uuid="uploader.uuid">
-        </component>
+        <component v-if="uploader.component && props.mode === 'edit'" :is="uploader.component" :uuid="uploader.uuid" />
     </div>
 </template>
 
 <script setup>
-import { inject, ref, onMounted, defineAsyncComponent, onUnmounted } from "vue";
+import {
+    inject,
+    ref,
+    shallowRef,
+    onMounted,
+    defineAsyncComponent,
+    onUnmounted,
+} from "vue";
 import { widgetLoader } from "@lib/widgetLoader";
 const $store = inject("$store");
 
@@ -50,7 +56,7 @@ const dataItemSubscriber$ = $store
         item.value = val || {};
     });
 
-const uploader = ref(false);
+const uploader = shallowRef(false);
 onMounted(() => {
     // if we are in edit mode, we want to have a uppy upload widget in our avatar widget
     if (props.mode === "edit") {
@@ -58,23 +64,18 @@ onMounted(() => {
         uploader.value = {
             uuid: props.uuid + "_fileUploader",
             name: "fileUploader",
-            face: "default",
+            face: "overlay",
             props: {
-                showProgressDetails: false,
-                height: 40,
+                optionsDashboard: {
+                    showProgressDetails: false,
+                    height: 80,
+                },
             },
         };
         // create the store state for our uppy widget
         $store.dispatch({
             type: "widgets/add",
-            payload: [
-                {
-                    uuid: uploader.value.uuid,
-                    name: uploader.value.name,
-                    face: uploader.value.face,
-                    props: uploader.value.props,
-                },
-            ],
+            payload: [uploader.value],
         });
 
         uploader.value.component = defineAsyncComponent(() => {

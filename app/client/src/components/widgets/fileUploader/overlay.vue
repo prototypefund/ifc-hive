@@ -2,7 +2,6 @@
   <v-card v-if="state && props.uuid" data-test-container="widgets/fileUpload/overlay"
     :data-test-container-uuid="props.uuid">
     <upload-dashboard v-if="uppy" :uppy="uppy" :props="state.optionsDashboard" />
-    <pre>{{ state }}</pre>
   </v-card>
 </template>
 <script setup>
