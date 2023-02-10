@@ -1,4 +1,4 @@
-export default function (props) {
+export default function (props = {}) {
   return {
     _id: props._id || "", // UUID
     _path: props._path || "",

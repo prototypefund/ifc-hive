@@ -1,15 +1,15 @@
-export default function (props) {
+export default function (props = {}) {
   return {
-    _id: '',
+    _id: props._id || '',
     _type: "org",
-    _path: '',
-    _title: '', // Nickname (email)  Organization
+    _path: props._path || '',
+    _title: props._title || '', // Nickname (email)  Organization
     _source: {
-      name: '',
-      shortname: '',
-      active: '',
-      description: '',
-      url: '',
+      name: props.name || '',
+      shortname: props.shortname || '',
+      active: props.active || false,
+      description: props.description || '',
+      url: props.url || '',
     },
   }
 }

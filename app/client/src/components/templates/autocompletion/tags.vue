@@ -1,7 +1,8 @@
 <template>
   <div data-test-container="templates/autocompletion/tags" :data-test-container-uuid="props.uuid">
-    <v-autocomplete v-model="selectedTags" :items="Object.values(tags.data)" chips item-title="_title" item-value="_id"
-      hide-seleted closable-chips color="blue-grey-lighten-2" :label="$t('generics.tags')" multiple />
+    <v-autocomplete :disabled="disabled" v-model="selectedTags" :items="Object.values(tags.data)" chips
+      item-title="_title" item-value="_id" hide-seleted closable-chips color="blue-grey-lighten-2"
+      :label="$t('generics.tags')" multiple />
   </div>
 </template>
 
@@ -15,6 +16,10 @@ const props = defineProps({
     default(rawProps) {
       return rawProps.widgetUUID + "_autocompletion_tags_" + rawProps.docUUID;
     },
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   },
   widgetUUID: {
     type: String,

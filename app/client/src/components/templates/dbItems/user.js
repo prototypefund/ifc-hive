@@ -1,16 +1,23 @@
-export default function (props) {
+export default function (props = {}) {
   return {
-    _id: "",
+    _id: props._id || "",
     _type: "user",
-    _path: "",
-    _title: "", // Nickname (email)  Organization
+    _path: props._path || "",
+    _title: props._title || "", // Nickname (email)  Organization
     _source: {
-      firstname: "",
-      lastname: "",
-      nickname: "",
-      email: "",
-      organisation: "", // Type organization
-      active: "",
+      firstname: props.firstname || "",
+      lastname: props.lastname || "",
+      nickname: props.nickname || "",
+      email: props.email || "",
+      organisation: props.organisation || "", // Type organization
+      active: props.active || false,
+      tags: props.tags || [],
+      avatar: props.avatar || {
+        file: "",
+        mimetype: "",
+        size: 0,
+        originalName: "",
+      },
     },
   }
 }

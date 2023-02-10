@@ -8,7 +8,8 @@
           {{ user._source.lastname.substring(0, 1) }}</span>
       </v-avatar>
       <v-list-item class="text-white">
-        <QuickListHandler uuid="quickList" :docUUID="user._id" :dataTitle="user._title" tab-type="user" action="add">
+        <QuickListHandler uuid="quickList" :docUUID="user._id" :dataTitle="user._title" tab-type="user"
+          :props="{ mode: 'edit' }" action="add">
           <v-list-item-title>{{ user._source.firstname }} {{ user._source.lastname }} aka
             {{ user._source.nickname }}</v-list-item-title>
         </QuickListHandler>

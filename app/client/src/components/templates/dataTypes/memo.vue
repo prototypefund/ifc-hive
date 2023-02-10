@@ -160,6 +160,10 @@ const props = defineProps({
     type: Array,
     default: [],
   },
+  path: {
+    type: String,
+    default: "",
+  },
   uuid: {
     type: String,
     default(rawProps) {
@@ -173,7 +177,7 @@ const props = defineProps({
   itemDefinition: {
     type: Object,
     default(rawProps) {
-      return objectTemplate({ tags: rawProps.tags });
+      return objectTemplate({ tags: rawProps.tags, path: rawProps.path });
     },
   },
   docUUID: {

@@ -1,8 +1,8 @@
 <template>
   <div data-test-container="templates/autocompletion/user" :data-test-container-uuid="props.uuid">
-    <v-autocomplete class="user_autocomplete" v-model="selectedUser" :items="Object.values(user.data)" chips
-      item-title="_title" item-value="_id" hide-seleted closable-chips color="blue-grey-lighten-2"
-      :label="$t('generics.' + selectedUserRole)" />
+    <v-autocomplete :disabled="disabled" class="user_autocomplete" v-model="selectedUser"
+      :items="Object.values(user.data)" chips item-title="_title" item-value="_id" hide-seleted closable-chips
+      color="blue-grey-lighten-2" :label="$t('generics.' + selectedUserRole)" />
   </div>
 </template>
 
@@ -29,6 +29,10 @@ const props = defineProps({
   docUUID: {
     type: String,
     required: true,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   },
   actionId: {
     type: String,

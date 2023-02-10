@@ -1,17 +1,15 @@
-export default function (props) {
+export default function (props = {}) {
   return {
-    _id: '', // UUID
+    _id: props._id || '', // UUID
     _type: "project", // Meta type
-    _path: '',
-    _title: '',
+    _path: props._id || '',
+    _title: props._id || '',
     _source: {
-      id: '',
-      title: '',
-      owner: '', // uuid user
-      description: '',
-      keywords: '',
-      parent: '', // type project
-      path: '', // materialized path #id1#id2#id3 etc.
+      title: props.title || '',
+      owner: props.owner || '', // uuid user
+      description: props.description || '',
+      keywords: props.keywords || '',
+      parent: props.parent || '', // type project
     },
   }
 }

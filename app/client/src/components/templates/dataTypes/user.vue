@@ -4,18 +4,26 @@
     <v-card-text>
       <div v-if="mode === 'edit'">
         <v-row>
-          <v-col cols="12">
-            <v-text-field v-model="firstname" :label="$t('generics.firstname')" variant="underlined"></v-text-field>
+          <v-col cols="9">
+            <v-row>
+              <v-col cols="12">
+                <v-text-field v-model="firstname" :label="$t('generics.firstname')" variant="underlined"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="lastname" :label="$t('generics.lastname')" variant="underlined"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="nickname" :label="$t('generics.nickname')" variant="underlined"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="email" :label="$t('generics.email')" variant="underlined"></v-text-field>
+              </v-col>
+            </v-row>
           </v-col>
-          <v-col cols="12">
-            <v-text-field v-model="lastname" :label="$t('generics.lastname')" variant="underlined"></v-text-field>
-          </v-col>
-          <v-col cols="12">
-            <v-text-field v-model="nickname" :label="$t('generics.nickname')" variant="underlined"></v-text-field>
-          </v-col>
-          <v-col cols="12">
-            <v-text-field v-model="email" :label="$t('generics.email')" variant="underlined"></v-text-field>
-          </v-col>
+          <v-col cols="3">
+            <files-avatar v-if="item._disId" :mode="mode" :widgetUUID="props.widgetUUID" :docUUID="item._id" /></v-col>
+        </v-row>
+        <v-row>
           <v-col cols="12">
             <tag-autocompletion v-if="item._disId" :mode="mode" :widgetUUID="props.widgetUUID" :docUUID="item._id" />
           </v-col>
@@ -27,23 +35,33 @@
       </div>
       <div v-else>
         <v-row>
+          <v-col cols="9">
+            <v-row>
+              <v-col cols="12">
+                <v-label>{{ $t("generics.firstname") }}</v-label>
+                <p>{{ firstname }}</p>
+              </v-col>
+              <v-col cols="12"><v-label>{{ $t("generics.lastname") }}</v-label>
+                <p>{{ lastname }}</p>
+              </v-col>
+              <v-col cols="12"><v-label>{{ $t("generics.nickname") }}</v-label>
+                <p>{{ nickname }}</p>
+              </v-col>
+              <v-col cols="12"><v-label>{{ $t("generics.email") }}</v-label>
+                <p>{{ email }}</p>
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col cols="3"><files-avatar v-if="item._disId" :mode="mode" :widgetUUID="props.widgetUUID"
+              :docUUID="item._id" /></v-col>
+        </v-row>
+        <v-row>
           <v-col cols="12">
-            <v-label>{{ $t("generics.firstname") }}</v-label>
-            <p>{{ firstname }}</p>
-          </v-col>
-          <v-col cols="12"><v-label>{{ $t("generics.lastname") }}</v-label>
-            <p>{{ lastname }}</p>
-          </v-col>
-          <v-col cols="12"><v-label>{{ $t("generics.nickname") }}</v-label>
-            <p>{{ nickname }}</p>
-          </v-col>
-          <v-col cols="12"><v-label>{{ $t("generics.email") }}</v-label>
-            <p>{{ email }}</p>
+            <v-label>{{ $t("generics.tags") }}</v-label>
+            <tag-chips :widgetUUID="props.widgetUUID" :docUUID="item._id" :tags="tags" />
           </v-col>
           <v-col cols="12">
-            <tag-chips :widgetUUID="props.widgetUUID" :docUUID="item._id" :tags="tags" /></v-col>
-          <v-col cols="12">
-            <v-switch v-model="closed" hide-details :label="closed ? $t('generics.closed') : $t('generics.open')"
+            <v-switch v-model="active" hide-details :label="active ? $t('generics.active') : $t('generics.inactive')"
               disabled /></v-col>
         </v-row>
       </div>
@@ -75,6 +93,7 @@ const debugDump = shallowRef(false);
 const tagAutocompletion = defineAsyncComponent(() =>
   import("@t/autocompletion/tags.vue")
 );
+const filesAvatar = defineAsyncComponent(() => import("@t/files/avatar.vue"));
 const tagChips = defineAsyncComponent(() => import("@t/chips/tags.vue"));
 const debounceTimer = shallowRef(false);
 const debounce = (func) => {
@@ -107,6 +126,14 @@ const email = computed({
   },
   set(newValue) {
     itemUpdater({ email: newValue });
+  },
+});
+const avatar = computed({
+  get() {
+    return item.value._source.avatar || "";
+  },
+  set(newValue) {
+    itemUpdater({ avatar: newValue });
   },
 });
 const nickname = computed({
@@ -164,7 +191,7 @@ const props = defineProps({
   itemDefinition: {
     type: Object,
     default(rawProps) {
-      return objectTemplate();
+      return objectTemplate({});
     },
   },
   docUUID: {

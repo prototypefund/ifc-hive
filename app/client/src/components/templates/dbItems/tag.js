@@ -1,13 +1,13 @@
-export default function (props) {
+export default function (props = {}) {
   return {
-    _id: "",
+    _id: props._id || "",
     _type: "tag",
-    _project: "",
-    _title: "",
+    _project: props._project || "",
+    _title: props._title || "",
     _source: {
-      title: "",
-      type: "", // default, milestone, status, etc.
-      locked: false,
+      title: props.title || "",
+      type: props.type || "", // default, milestone, status, etc.
+      locked: props.locked || false,
     },
   }
 }

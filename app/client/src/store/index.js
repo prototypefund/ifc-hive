@@ -625,6 +625,17 @@ const applicationReducers = {
                         return mergeDeepRight(state, newWidgets)
                     }
                     return state
+                case 'widgets/remove':
+                    newWidgets = {}
+                    if (action.payload.length > 0) {
+                        const newWidgets = JSON.parse(JSON.stringify(state))
+                        action.payload.forEach(widgetUUID => {
+                            if (!newWidgets[widgetUUID]) console.error("apparently we try to delete a widget we don't have in the state")
+                            delete newWidgets[widgetUUID]
+                        })
+                        return newWidgets
+                    }
+                    return state
                 default:
                     return state
             }
