@@ -399,7 +399,7 @@ export default {
       return {
         _id: "tag-" + data.title,
         _type: "tag",
-        _disId: uuidv4(1),
+        _disId: uuidv4(),
         _project: false,
         _title: data.title,
         _source: {
@@ -416,7 +416,7 @@ export default {
         _id: "user-" + data.nickname,
         _type: "user",
         _path: false,
-        _disId: uuidv4(1),
+        _disId: uuidv4(),
         _title: `${data.firstname} ${data.lastname} @${data.email}`, // Nickname (email)  Organization
         _source: {
           firstname: data.firstname,
@@ -437,9 +437,9 @@ export default {
       created.setDate(created.getDate() - this.getRandomArbitrary(20, 40));
       modified.setDate(created.getDate() - this.getRandomArbitrary(10, 20));
       due.setDate(modified.getDate() + this.getRandomArbitrary(2, 4));
-      created = created.valueOf();
-      modified = modified.valueOf();
-      due = due.valueOf();
+      created = created;
+      modified = modified;
+      due = due;
       return {
         _id: "memo-" + uuidv4(), // UUID
         _path: false,
@@ -447,7 +447,7 @@ export default {
         _type: "memo",
         _title: data.title,
         _created: created,
-        _disId: uuidv4(1),
+        _disId: uuidv4(),
         _modified: modified,
         _source: {
           title: data.title,

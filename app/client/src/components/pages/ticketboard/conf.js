@@ -10,6 +10,8 @@ export default {
             class: 'nice', // a css class you want to have on the widget wrapper
             column: 12, // the width of your widget. represents the flexbox grid numbers from 1-12
             widget: {
+
+                uuid: "ticketBoardWidget",
                 name: 'ticketboard', // the name of the widget, must correspond to the actual folder name the widget files are located in
                 face: 'heavy',
                 props: { // and object which you can use to override the widgets default config in the context of this page

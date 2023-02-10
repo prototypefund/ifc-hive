@@ -9,6 +9,7 @@
 </template>
 
 <script setup>
+import objectTemplate from "../dbItems/organization";
 defineProps({
   props: {
     type: Object,
@@ -33,21 +34,10 @@ defineProps({
     type: String,
     required: true,
   },
-  item: {
+  itemDefinition: {
     type: Object,
-    required: true,
-    default: {
-      _id: false,
-      _type: "org",
-      _path: false,
-      _title: false, // Nickname (email)  Organization
-      _source: {
-        name: false,
-        shortname: false,
-        active: false,
-        description: false,
-        url: false,
-      },
+    default(rawProps) {
+      return objectTemplate();
     },
   },
 });

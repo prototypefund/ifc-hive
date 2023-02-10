@@ -6,9 +6,9 @@ export default {
   },
   slots: [
     {
-      class: "journalspaß12",
       column: 12,
       widget: {
+        uuid: "journalWidget",
         name: "journal"
       }
     }

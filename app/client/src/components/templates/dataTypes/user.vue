@@ -69,6 +69,7 @@ import {
   shallowRef,
   defineAsyncComponent,
 } from "vue";
+import objectTemplate from "../dbItems/user";
 const $store = inject("$store");
 const debugDump = shallowRef(false);
 const tagAutocompletion = defineAsyncComponent(() =>
@@ -162,19 +163,8 @@ const props = defineProps({
   },
   itemDefinition: {
     type: Object,
-    default: {
-      _id: "",
-      _type: "user",
-      _path: "",
-      _title: "", // Nickname (email)  Organization
-      _source: {
-        firstname: "",
-        lastname: "",
-        nickname: "",
-        email: "",
-        organisation: "", // Type organization
-        active: "",
-      },
+    default(rawProps) {
+      return objectTemplate();
     },
   },
   docUUID: {

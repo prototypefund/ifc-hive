@@ -69,6 +69,7 @@ import {
   onMounted,
   onUnmounted,
 } from "vue";
+import objectTemplate from "../dbItems/tag";
 const $store = inject("$store");
 const tagTypes = ["status", "milestone", "default"];
 const showPicker = shallowRef(false);
@@ -157,16 +158,8 @@ const props = defineProps({
   },
   itemDefinition: {
     type: Object,
-    default: {
-      _id: "",
-      _type: "tag",
-      _project: "",
-      _title: "",
-      _source: {
-        title: "",
-        type: "", // default, milestone, status, etc.
-        locked: false,
-      },
+    default(rawProps) {
+      return objectTemplate();
     },
   },
   docUUID: {

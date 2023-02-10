@@ -9,6 +9,7 @@
 </template>
 
 <script setup>
+import objectTemplate from "../dbItems/project";
 defineProps({
   props: {
     type: Object,
@@ -33,23 +34,10 @@ defineProps({
     type: String,
     required: true,
   },
-  item: {
+  itemDefinition: {
     type: Object,
-    required: true,
-    default: {
-      _id: false, // UUID
-      _type: "project", // Meta type
-      _path: false,
-      _title: false,
-      _source: {
-        _id: false,
-        title: false,
-        owner: false, // uuid user
-        description: false,
-        keywords: false,
-        parent: false, // type project
-        path: false, // materialized path #id1#id2#id3 etc.
-      },
+    default(rawProps) {
+      return objectTemplate();
     },
   },
 });

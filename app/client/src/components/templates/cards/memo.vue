@@ -62,7 +62,10 @@
           {{ $t("generics.author") }}
         </v-col>
         <v-col cols="9">
-          <user-list-item :widgetUUID="props.widgetUUID" :docUUID="memo._source.owner" />
+          <QuickListHandler uuid="quickList" :docUUID="memo._source.owner" :dataTitle="memo._source.owner"
+            tab-type="user" action="add">
+            <user-list-item :widgetUUID="props.widgetUUID" :docUUID="memo._source.owner" />
+          </QuickListHandler>
         </v-col>
       </v-row>
       <v-row v-if="memo._source.assigned">
@@ -70,7 +73,10 @@
           {{ $t("generics.assignee") }}
         </v-col>
         <v-col cols="9">
-          <user-list-item :widgetUUID="props.widgetUUID" :docUUID="memo._source.assigned" />
+          <QuickListHandler uuid="quickList" :docUUID="memo._source.assigned" :dataTitle="memo._source.assigned"
+            tab-type="user" action="add">
+            <user-list-item :widgetUUID="props.widgetUUID" :docUUID="memo._source.assigned" />
+          </QuickListHandler>
         </v-col>
       </v-row>
     </v-card-subtitle>
