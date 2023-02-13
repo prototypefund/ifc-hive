@@ -9,10 +9,10 @@ import {
     ref,
 } from "vue";
 import getEnvVariable from '../lib/getEnvVariable'
-import { mergeDeepRight, clone, sortWith, descend, prop } from 'ramda'
+import { mergeDeepRight, clone } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
 import { applicationState, storePatterns, loadingHold } from './state'
-import { basicStoreFilters } from './dataHelper.js'
+import { basicStoreFilters, splitIdentifier, handleIdentifierObjects } from '@lib/dataHelper.js'
 import { widgetConfLoader, widgetTypeConfLoader } from "@lib/widgetLoader";
 
 /*
@@ -45,25 +45,32 @@ const metaReducer = [(reducer) => {
         if (action.type == "pages/add") {
             page = action.payload
             // if we have a widget config for this page we need to setup the widget states
-            if (page.slots) {
+            if (page.slots || page.widget) {
                 widgets = []
-                page.slots.forEach(slot => {
-                    const widget = slot.widget
-                    if (widget) {
-                        if (!widget.uuid) {
-                            widget.uuid = uuidv4()
-                        }
-
-                        if (!state.widgets[widget.uuid]) {
-                            // make a generic widget state map
-                            widgets.push({
-                                uuid: widget.uuid,
-                                name: widget.name,
-                                ...widget.props
-                            })
-                        }
+                const makeWidget = (widget) => {
+                    if (!widget.uuid) {
+                        widget.uuid = uuidv4()
                     }
-                })
+
+                    if (!state.widgets[widget.uuid]) {
+                        // make a generic widget state map
+                        widgets.push({
+                            uuid: widget.uuid,
+                            name: widget.name,
+                            ...widget.props
+                        })
+                    }
+                }
+                if (page.slots) {
+                    page.slots.forEach(slot => {
+                        const widget = slot.widget
+                        if (widget) {
+                            makeWidget(widget)
+                        }
+                    })
+                } else {
+                    makeWidget(page.widget)
+                }
 
                 // add page specific widget configs to state
                 if (widgets.length > 0) {
@@ -71,6 +78,21 @@ const metaReducer = [(reducer) => {
                         type: 'widgets/add',
                         payload: widgets
                     })
+                }
+                if (page.tool) {
+                    store.dispatch({
+                        type: "toolbar/add",
+                        payload: page.tool,
+                    });
+                }
+                if (page.tools) {
+                    page.tools.forEach(tool => {
+                        store.dispatch({
+                            type: "toolbar/add",
+                            payload: tool,
+                        });
+                    })
+
                 }
 
             }
@@ -82,7 +104,6 @@ const metaReducer = [(reducer) => {
 const applicationReducers = {
     queries: (state, action) => {
         let queries, items, query
-        const sortModified = sortWith([descend(prop('_modified'))]);
         if (state) {
             switch (action.type) {
                 case 'init':
@@ -92,14 +113,20 @@ const applicationReducers = {
                     if (action.actionId) {
                         query = JSON.parse(JSON.stringify(queries[action.actionId]))
                         query.data = basicStoreFilters(query.query, query.params || false, dataLookup)
+                        if (query.params.identifier) {
+                            query.identifierObjects = handleIdentifierObjects(query.params.identifier, dataLookup)
+                        }
+
                         query.uuids = Object.keys(query.data)
                         queries[action.actionId] = query
                         return queries
                     } else {
                         Object.values(queries).forEach(query => {
+                            if (query.params.identifier) {
+                                query.identifierObjects = handleIdentifierObjects(query.params.identifier, dataLookup)
+                            }
                             query.data = basicStoreFilters(query.query, query.params || false, dataLookup)
                             query.uuids = Object.keys(query.data)
-
                         })
                     }
                     return queries
@@ -110,8 +137,11 @@ const applicationReducers = {
                             query: action.payload.query,
                             params: action.payload.params || false
                         }
-                        queries[action.payload.actionId].data = basicStoreFilters(action.payload.query, action.payload.params || false, dataLookup)
-                        queries[action.payload.actionId].uuids = Object.keys(queries[action.payload.actionId].data)
+                        store.dispatch({
+                            type: 'queries/execute',
+                            actionId: action.payload.actionId,
+
+                        })
                     }
                     return { ...state, ...queries }
                 case 'queries/remove':
@@ -170,12 +200,10 @@ const applicationReducers = {
                                 data[item._id] = JSON.parse(JSON.stringify(item))
                             }
                         })
-                        if (Object.keys(state).length !== Object.keys(data).length) {
-                            store.dispatch({
-                                type: 'queries/execute',
-                                actionId: false
-                            })
-                        }
+                        store.dispatch({
+                            type: 'queries/execute',
+                            actionId: false
+                        })
                         return data
                     }
                     return state
@@ -237,14 +265,17 @@ const applicationReducers = {
                             console.error("We try to update something we don't have in the dataStore")
 
                         }
-
+                        store.dispatch({
+                            type: "data/push",
+                            payload: {
+                                data: [data[action.docUUID]]
+                            },
+                        })
                     }
                     if (!action.docUUID) {
                         console.error("no docUUID given")
                     }
-                    return {
-                        ...state, ...data
-                    }
+                    return state
                 case 'data/delete':
                     console.error("data/delete not implemented")
                     return state
@@ -673,25 +704,44 @@ if (dataLookup === false) {
     })
 }
 store.$data = {
+    // TODO rethink this whole thing as soon as we have the es and api
     queryObjects: {},
     update: (actionId, docUUID, doc) => {
 
     },
-    get: (actionId, query, params = {}) => {
+    get: (actionId, query, params = {}, updateHook = false, hookCondition = 'all') => {
         // create a deep ref object which will contain the query data as well as the items
-        const queryObj = ref({})
-        store.dispatch({
-            type: "queries/add",
-            payload: {
-                actionId,
-                query,
-                params
-            },
-        })
+        const queryObj = ref({ helper: { basicStoreFilters, splitIdentifier } })
+        if (!store.$data.queryObjects[actionId] || (store.$data.queryObjects[actionId].query !== query || store.$data.queryObjects[actionId].params !== params)) {
+            store.dispatch({
+                type: "queries/add",
+                payload: {
+                    actionId,
+                    query,
+                    params
+                },
+            })
+        } else {
+            return store.$data.queryObjects[actionId]
+        }
+
         const subscriber$ = store.select((state) => state.queries[actionId])
             .subscribe((val) => {
                 // this will fire whenever we have changes to our query
-                if (queryObj.value !== val) {
+                if (queryObj.value !== val && val) {
+                    if (updateHook) {
+                        if (hookCondition === 'all' || !store.$data.queryObjects[actionId]) {
+                            // if we fire for the first time or we want to fire for all update events do it now
+                            updateHook(val, queryObj.value)
+
+                        } else if (hookCondition === 'count' && store.$data.queryObjects[actionId]) {
+                            // check if the uuid counts in the old result match it count of the new result. If not, fire hook
+                            if ((val.uuids && store.$data.queryObjects[actionId].value.uuids) && val.uuids.length !== store.$data.queryObjects[actionId].value.uuids.length) {
+                                updateHook(val, queryObj.value)
+                            }
+
+                        }
+                    }
                     queryObj.value = val;
                 }
 
@@ -703,9 +753,10 @@ store.$data = {
                 type: "queries/remove",
                 actionId
             })
+            delete store.$data.queryObjects[actionId]
         }
+        store.$data.queryObjects[actionId] = queryObj
         return queryObj
     }
 }
-window.debug = store
 export default store

@@ -1,67 +1,25 @@
 <template>
-  <v-container
-    v-if="state && props.uuid"
-    fluid
-    pa-0
-    data-test-container="widgets/ticketboard/default"
-    :data-test-container-uuid="props.uuid"
-  >
-    <div class="ticketContainer" v-if="boards">
-      <table
-        class="ticketTable"
-        v-if="boards.generics && boards.generics.length > 1"
-        :style="{
-          width: boards.generics.length + boards.custom.length * colWidth + 'px',
-        }"
-      >
+  <v-container v-if="state && props.uuid" fluid pa-0 data-test-container="widgets/ticketboard/default"
+    :data-test-container-uuid="props.uuid">
+    <div class="ticketContainer">
+      <table class="ticketTable" v-if="boards.generics.open"
+        :style="{ width: boards.customBoardSort + 2 * colWidth + 'px' }">
         <tbody>
           <tr valign="top">
-            <td v-if="boards.generics[0]">
-              <board-item
-                :width="colWidth"
-                :widgetUUID="props.uuid"
-                :boardId="boards.generics[0].boardId"
-                :identifier="boards.generics[0].identifier"
-                :excluded="boards.generics[0].excluded"
-                generic
-              />
+            <td v-if="boards.generics.open">
+              <pre>
+              {{ items.open }}
+              </pre>
             </td>
-            <draggable
-              v-model="boards.custom"
-              item-key="boardId"
-              class="list-group"
-              ghost-class="ghost"
-              @start="dragging = true"
-              handle=".v-card>.v-card-item>.v-card-item__prepend"
-              :group="{
-                name: 'ticketBoardSort',
-                pull: ['ticketBoardSort'],
-                put: ['ticketBoardSort'],
-              }"
-              @end="saveSorting"
-            >
-              <template #item="{ element }">
-                <td>
-                  <board-item
-                    :width="colWidth"
-                    :widgetUUID="props.uuid"
-                    :boardId="element.boardId"
-                    :identifier="element.identifier"
-                    :excluded="element.excluded"
-                  />
-                </td>
-              </template>
-            </draggable>
-
-            <td v-if="boards.generics[1]">
-              <board-item
-                :width="colWidth"
-                :widgetUUID="props.uuid"
-                :boardId="boards.generics[1].boardId"
-                :identifier="boards.generics[1].identifier"
-                :excluded="boards.generics[1].excluded"
-                generic
-              />
+            <td v-for="boardId in boards.customBoardSort">
+              <pre>
+              {{ items[boardId] }}
+              </pre>
+            </td>
+            <td v-if="boards.generics.closed">
+              <pre>
+              {{ items.closed }}
+              </pre>
             </td>
           </tr>
         </tbody>
@@ -71,13 +29,22 @@
 </template>
 <script setup>
 import { inject, ref, onMounted, computed, onUnmounted, shallowRef } from "vue";
+import { splitIdentifier, basicStoreFilters } from "@lib/dataHelper.js";
 import draggable from "vuedraggable";
 import boardItem from "./items/lightBoard.vue";
 const $store = inject("$store");
 const state = ref({});
+const boards = ref({
+  generics: {
+    open: false,
+    closed: false,
+  },
+  custom: {},
+  customBoardSort: [],
+});
+const items = ref({});
+const customFilter = ref(false);
 const windowWidth = shallowRef(window.innerWidth);
-const boards = ref({});
-const dragging = shallowRef(false);
 const colWidth = computed(() => (windowWidth.value > 700 ? 300 : 200));
 const windowWidth$ = $store
   .select((state) => state.ui.windowWidth)
@@ -87,7 +54,6 @@ const windowWidth$ = $store
 const props = defineProps({
   props: {
     type: Object,
-    required: true,
     default: () => ({}),
   },
   uuid: {
@@ -97,72 +63,127 @@ const props = defineProps({
   actionId: {
     type: String,
     default(rawProps) {
-      return rawProps.uuid + "_ticketboardALL";
+      return rawProps.uuid + "_ticketboard";
     },
   },
 });
-const saveSorting = function (event) {
-  $store.dispatch({
-    type: "widgets/update",
-    uuid: props.uuid,
-    payload: {
-      filter: JSON.parse(JSON.stringify(boards.value)),
-    },
-  });
-  dragging.value = false;
-};
-const makeBoards = (initialSort) => {
-  const identifierReplace = /[:;.]/;
-  if (state.value.filter) {
-    // clone fiter object for latter manipulation
-    const filter = JSON.parse(JSON.stringify(state.value.filter));
-    if (filter.custom && filter.custom.length > 0) {
-      filter.generics.forEach((gen) => {
-        gen.boardId = gen.identifier.replace(identifierReplace, "_");
-        // create an excluded array for the identifier or the custom boards, so they don't show up
-        if (!gen.excluded) gen.excluded = [];
-        filter.custom.forEach((cus) => {
-          gen.excluded.push(cus.identifier);
-        });
-      });
-      filter.custom.forEach((cus) => {
-        // create an excluded array for the identifier or the other custom boards, so they don't show up
-        if (!cus.excluded) cus.excluded = [];
-        filter.custom.forEach((otherCus) => {
-          // add to each custom board the identifiers from the others as excluded
-          if (cus.identifier !== otherCus.identifier) {
-            cus.boardId = cus.identifier.replace(identifierReplace, "_");
-            //cus.excluded.push(otherCus.identifier);
-          }
-        });
-      });
-    }
-    boards.value = filter;
-    // store our current filter set
-    if (initialSort) {
-      $store.dispatch({
-        type: "widgets/update",
-        uuid: props.uuid,
-        payload: {
-          filter,
-        },
-      });
+const addWithoutDuplicate = (sourceList, targetList = []) => {
+  if (Array.isArray(sourceList)) {
+    sourceList.forEach((entry) => {
+      if (targetList.indexOf(entry) === -1) {
+        targetList.push(entry);
+      }
+    });
+  } else {
+    if (targetList.indexOf(sourceList) === -1) {
+      targetList.push(sourceList);
     }
   }
 };
+const queryUpdateHook = (newContent, oldContent) => {
+  // here we receive the old and new query contents, containing a list of uuids and the corresponding dataObjects.
+  console.dir(boards.value);
+  console.dir(items.value);
+  // lets now go through our boards we determined earlier and use our store filter to find the dataItems we want to see in there
+};
+const getRelevantData = (filter) => {
+  // TODO document the data helper functions once you know how you want them.
+  // For now there is a updateHook function in "$store.$data.get" and a hook condition which is either "all" so it fires whenever data is updated or
+  // "count" which makes it fire whenever the uuid count for your query result changes -> use this when you subscribe individually to the uuids you've received
 
+  // when we have to setup our data set, it might be wise to create our sorting targets first
+  createBoardLists(filter);
+  Object.keys(boards.value.generics).forEach((boardId) => {
+    const board = boards.value.generics[boardId];
+    // create a new query for each configured board, we will handle sorting in the hook
+    // create a unique action id corresponding with the component and the board identifier
+    items.value[boardId] = {
+      tickets: $store.$data.get(
+        props.actionId + "_" + boardId,
+        "ALL",
+        {
+          identifier: board.identifier,
+          excluded: board.excluded,
+        },
+        queryUpdateHook,
+        "count"
+      ),
+    };
+    // TODO make this configurable and storable
+    items.value[boardId].customTicketSort = items.value[boardId].tickets.uuids;
+  });
+  Object.keys(boards.value.custom).forEach((boardId) => {
+    const board = boards.value.custom[boardId];
+    items.value[boardId] = {
+      tickets: $store.$data.get(
+        props.actionId + "_" + boardId,
+        "ALL",
+        {
+          identifier: board.identifier,
+          excluded: board.excluded,
+        },
+        queryUpdateHook,
+        "count"
+      ),
+    };
+    // TODO make this configurable and storable
+    items.value[boardId].customTicketSort = items.value[boardId].tickets.uuids;
+  });
+};
+const createBoardLists = (filter) => {
+  const openExclude = [];
+  // for generics we always assume 0 to be open and 1 to be closed
+
+  if (filter.custom.length > 0) {
+    filter.custom.forEach((cus) => {
+      // TODO make this more dynamic maybe?
+      // For now we always assume the identifier here to be just one tag
+      const identifier = splitIdentifier(cus.identifier);
+      openExclude.push(cus.identifier[0]);
+      boards.value.custom[identifier.tags[0]] = {
+        title: identifier.tags[0],
+        boardId: identifier.tags[0],
+        identifier: cus.identifier,
+        excluded: cus.excluded,
+      };
+    });
+  }
+  boards.value.generics = {
+    open: {
+      title: filter.generics.open.title,
+      boardId: filter.generics.open.title,
+      identifier: filter.generics.open.identifier,
+      excluded: filter.generics.open.excluded.concat(openExclude),
+    },
+    closed: {
+      title: filter.generics.closed.title,
+      boardId: filter.generics.closed.title,
+      identifier: filter.generics.closed.identifier,
+      excluded: filter.generics.closed.excluded,
+    },
+  };
+  boards.value.customBoardSort = Object.keys(boards.value.custom);
+};
 const stateSubscriber$ = $store
   .select((state) => state.widgets[props.uuid])
   .subscribe((val) => {
     state.value = val;
-    makeBoards(false);
+    if (!customFilter.value || (val.filter && val.filter !== customFilter.value)) {
+      // Whenever our filters change we will simply rebuild the whole board context as it must be a grave data update from the serverside or the user widget config editor
+      getRelevantData(val.filter);
+    }
   });
-onMounted(() => {
-  makeBoards(true);
-});
+onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
   windowWidth$.unsubscribe();
+  // unsubscribe from all our board queries when we leave
+  Object.keys(boards.value.generics).forEach((boardId) => {
+    items.value[boardId].unsubscribe();
+  });
+  Object.keys(boards.value.custom).forEach((boardId) => {
+    items.value[boardId].unsubscribe();
+  });
 });
 </script>
 <style lang="css" scoped>

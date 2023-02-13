@@ -21,11 +21,12 @@ export const widgetLoader = function (widgetName = 'debug', face = 'default') {
 export const widgetConfLoader = function (widget) {
     return import(`../components/widgets/${widget.name || 'debug'}/conf.js`).then(conf => {
         const widgetConf = conf[widget.face] || conf.default
-        const mergedConf = mergeDeepRight(widgetConf, widget)
+        const mergedConf = mergeDeepRight(mergeDeepRight(widgetConf, widget), widget.props || {})
+        mergedConf.props = false
         store.dispatch({
             type: 'widgets/update',
             uuid: widget.uuid,
-            payload: mergeDeepRight(mergedConf, widget.props || {})
+            payload: mergedConf
         })
     }).catch(e => {
         return e
@@ -40,11 +41,12 @@ export const widgetConfLoader = function (widget) {
 export const widgetTypeConfLoader = function (widget) {
     return import(`../components/widgets/${widget.name || 'debug'}/${widget.type || 'default'}/conf.js`).then(conf => {
         const widgetConf = conf[widget.face] || conf.default
-        const mergedConf = mergeDeepRight(widgetConf, widget)
+        const mergedConf = mergeDeepRight(mergeDeepRight(widgetConf, widget), widget.props || {})
+        mergedConf.props = false
         store.dispatch({
             type: 'widgets/update',
             uuid: widget.uuid,
-            payload: mergeDeepRight(mergedConf, widget.props || {})
+            payload: mergedConf
         })
     }).catch(e => {
         return widgetConfLoader(widget)

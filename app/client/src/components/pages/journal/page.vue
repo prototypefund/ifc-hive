@@ -38,23 +38,7 @@ const props = defineProps({
   },
 });
 
-onMounted(() => {
-  $store.dispatch({
-    type: "toolbar/add",
-    payload: {
-      title: "chartJournal",
-      page: "app.journal",
-      icon: "mdi-chart-donut",
-      iconActive: "mdi-chart-donut-variant",
-      uuid: "journal_chart",
-      widget: {
-        name: "journal",
-        type: "chart",
-        face: "example",
-      },
-    },
-  });
-});
+onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });

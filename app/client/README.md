@@ -108,7 +108,7 @@ You can define what kind of grid you need with Grid Key.
 
 {
     // grid defines the used grid
-    grid: {
+  grid: {
 		type: "default",
 		items: "card",
    		columns: 2
@@ -117,23 +117,43 @@ You can define what kind of grid you need with Grid Key.
   scrollTop: false,
 	// title defines the title of the page
 	title: 'My Title',
-    // slots array defines the used widgets
-    slots: [
-        // first slot 
-      	{
-        column: 6,
-        widget: {
-          name: "myCategory",
-          props: {
-            title: "widget title"
-          }
+    // slots array defines the used widgets within the grid
+  slots: [
+      // first slot 
+      {
+      column: 6,
+      widget: {
+        name: "myCategory",
+        props: {
+          title: "widget title"
         }
-      },
-    ]
+      }
+    },
+  ]
 }
 ```
-
-
+If you don't want to use the grid but instead place widgets manually in your page you can set you config like so
+```javascript
+{
+  grid: false,
+  slots: false,
+  tool: { 
+    // you can also define a tool to be used when loading this page. The config follow the tool config
+  },
+  tools:[
+    {
+      //list of tools
+    }
+  ],
+  widget: { // you can also bypass the grid or use widgets directly in the page via the pageloader. This is fully optional
+    uuid: "mySpecialPageWidget"
+    name: "myCategory",
+    props: {
+      title: "widget title"
+    }  
+  },
+}
+```
 
 #### component.cy.js
 
