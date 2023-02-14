@@ -90,6 +90,7 @@ const $store = inject("$store");
 const state = ref({});
 const tagLookup = $store.$data.get(props.actionId + "_ALL_TAGS", "ALL_TAGS");
 const userLookup = $store.$data.get(props.actionId + "_ALL_USER", "ALL_USER");
+// we could get the all lookup from the data of each board but I'm lazy as fuck and its late already!
 const allLookup = $store.$data.get(props.actionId + "_ALL", "ALL");
 const boards = ref({
   generics: {
@@ -125,7 +126,7 @@ const props = defineProps({
   },
 });
 const queryNewDataHook = (newData, oldData) => {
-  if (oldData.data) {
+  if (oldData.uuids && newData.uuids) {
     // Thats the spot to make some custom and server side sorting magic happen
     if (oldData.uuids.length !== newData.uuids.length) {
       items.value[newData.params.receiver].ticketSort = newData.uuids;
@@ -153,6 +154,7 @@ const handleTagSortingChange = (oldSorting, newSorting, boardId) => {
         }
         itemUpdateObj.closed = docToUpdate._source.closed;
       } else {
+        // whenever we dropped something in neither open nor close, it's definitely open
         itemUpdateObj.closed = false;
       }
       itemUpdateObj.tags = [];
