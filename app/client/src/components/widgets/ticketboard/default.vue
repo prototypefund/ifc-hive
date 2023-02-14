@@ -152,6 +152,8 @@ const handleTagSortingChange = (oldSorting, newSorting, boardId) => {
           docToUpdate._source.closed = true;
         }
         itemUpdateObj.closed = docToUpdate._source.closed;
+      } else {
+        itemUpdateObj.closed = false;
       }
       itemUpdateObj.tags = [];
       // iterate all tags from the current document and remove all of the tags which are configured as status on this board
