@@ -2,24 +2,76 @@
   <v-container v-if="state && props.uuid" fluid pa-0 data-test-container="widgets/ticketboard/default"
     :data-test-container-uuid="props.uuid">
     <div class="ticketContainer">
-      <table class="ticketTable" v-if="boards.generics.open"
-        :style="{ width: boards.customBoardSort + 2 * colWidth + 'px' }">
+      <table class="ticketTable" v-if="boards.generics.open" :style="{ width: boards.boardSort + 2 * colWidth + 'px' }">
         <tbody>
           <tr valign="top">
             <td v-if="boards.generics.open">
-              <pre>
-              {{ items.open }}
-              </pre>
+              <board-item :widgetUUID="props.uuid" boardId="open" :generic="true"
+                :boardItem="{ _title: 'open', color: 'white' }" :width="colWidth">
+                <template v-slot:title> open </template>
+                <template v-slot:tickets="{ boardId }">
+                  <draggable item-key="id" v-model="customSorting.tickets[boardId]" class="list-group"
+                    ghost-class="ghost" @start="dragging = true" @end="dragging = false"
+                    handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend" :group="{
+                      name: 'ticketSort',
+                      pull: ['ticketSort'],
+                      put: ['ticketSort'],
+                    }">
+                    <template #item="{ element }">
+                      <ticket-item :tag-lookup="tagLookup" :user-lookup="userLookup" :widgetUUID="props.uuid"
+                        :boardId="boardId" :ticketItem="items[boardId].tickets.data[element]" />
+                    </template>
+                  </draggable>
+                </template>
+              </board-item>
             </td>
-            <td v-for="boardId in boards.customBoardSort">
-              <pre>
-              {{ items[boardId] }}
-              </pre>
-            </td>
+            <draggable item-key="id" :list="customSorting.boards" class="list-group" ghost-class="ghost"
+              @start="dragging = true" handle=".v-card>.v-card-item>.v-card-item__prepend" :group="{
+                name: 'ticketBoardSort',
+                pull: ['ticketBoardSort'],
+                put: ['ticketBoardSort'],
+              }" @end="dragging = false">
+              <template #item="{ element }">
+                <td>
+                  <board-item :widgetUUID="props.uuid" :boardId="element" :generic="false" :width="colWidth"
+                    :boardItem="tagLookup.data[element] || { _title: element }">
+                    <template v-slot:tickets="{ boardId }">
+                      <draggable item-key="id" v-model="customSorting.tickets[boardId]" class="list-group"
+                        ghost-class="ghost" @start="dragging = true" @end="dragging = false"
+                        handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend" :group="{
+                          name: 'ticketSort',
+                          pull: ['ticketSort'],
+                          put: ['ticketSort'],
+                        }">
+                        <template #item="{ element }">
+                          <ticket-item :tag-lookup="tagLookup" :user-lookup="userLookup" :widgetUUID="props.uuid"
+                            :boardId="boardId" :ticketItem="items[boardId].tickets.data[element]" />
+                        </template>
+                      </draggable>
+                    </template>
+                  </board-item>
+                </td>
+              </template>
+            </draggable>
+
             <td v-if="boards.generics.closed">
-              <pre>
-              {{ items.closed }}
-              </pre>
+              <board-item :widgetUUID="props.uuid" boardId="closed" :boardItem="{ _title: 'closed', color: 'black' }"
+                :generic="true" :width="colWidth">
+                <template v-slot:tickets="{ boardId }">
+                  <draggable item-key="id" v-model="customSorting.tickets[boardId]" class="list-group"
+                    ghost-class="ghost" @start="dragging = true" @end="dragging = false"
+                    handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend" :group="{
+                      name: 'ticketSort',
+                      pull: ['ticketSort'],
+                      put: ['ticketSort'],
+                    }">
+                    <template #item="{ element }">
+                      <ticket-item :tag-lookup="tagLookup" :user-lookup="userLookup" :widgetUUID="props.uuid"
+                        :boardId="boardId" :ticketItem="items[boardId].tickets.data[element]" />
+                    </template>
+                  </draggable>
+                </template>
+              </board-item>
             </td>
           </tr>
         </tbody>
@@ -29,21 +81,26 @@
 </template>
 <script setup>
 import { inject, ref, onMounted, computed, onUnmounted, shallowRef } from "vue";
-import { splitIdentifier, basicStoreFilters } from "@lib/dataHelper.js";
+import { difference } from "ramda";
+import { splitIdentifier } from "@lib/dataHelper.js";
 import draggable from "vuedraggable";
-import boardItem from "./items/lightBoard.vue";
+import boardItem from "./items/board.vue";
+import ticketItem from "./items/ticket.vue";
 const $store = inject("$store");
 const state = ref({});
+const tagLookup = $store.$data.get(props.actionId + "_ALL_TAGS", "ALL_TAGS");
+const userLookup = $store.$data.get(props.actionId + "_ALL_USER", "ALL_USER");
+const allLookup = $store.$data.get(props.actionId + "_ALL", "ALL");
 const boards = ref({
   generics: {
     open: false,
     closed: false,
   },
   custom: {},
-  customBoardSort: [],
+  boardSort: [],
 });
 const items = ref({});
-const customFilter = ref(false);
+const customSorting = ref({ tickets: {}, boards: [] });
 const windowWidth = shallowRef(window.innerWidth);
 const colWidth = computed(() => (windowWidth.value > 700 ? 300 : 200));
 const windowWidth$ = $store
@@ -67,24 +124,67 @@ const props = defineProps({
     },
   },
 });
-const addWithoutDuplicate = (sourceList, targetList = []) => {
-  if (Array.isArray(sourceList)) {
-    sourceList.forEach((entry) => {
-      if (targetList.indexOf(entry) === -1) {
-        targetList.push(entry);
-      }
-    });
-  } else {
-    if (targetList.indexOf(sourceList) === -1) {
-      targetList.push(sourceList);
+const queryNewDataHook = (newData, oldData) => {
+  if (oldData.data) {
+    // Thats the spot to make some custom and server side sorting magic happen
+    if (oldData.uuids.length !== newData.uuids.length) {
+      items.value[newData.params.receiver].ticketSort = newData.uuids;
+      // for now we don't have custom ticket sortings so we'll always override it with the new store order
     }
+    customSorting.value.tickets[newData.params.receiver] = newData.uuids;
   }
 };
-const queryUpdateHook = (newContent, oldContent) => {
-  // here we receive the old and new query contents, containing a list of uuids and the corresponding dataObjects.
-  console.dir(boards.value);
-  console.dir(items.value);
-  // lets now go through our boards we determined earlier and use our store filter to find the dataItems we want to see in there
+const handleTagSortingChange = (oldSorting, newSorting, boardId) => {
+  if (newSorting.length > oldSorting.length) {
+    // we have to change a status
+    const uuidsForDocsToChange = difference(newSorting, oldSorting);
+    // we have to remove all tags from this board and add the boardId we've got as param
+    uuidsForDocsToChange.forEach((uuid) => {
+      const docToUpdate = JSON.parse(JSON.stringify(allLookup.value.data[uuid]));
+      const itemUpdateObj = {};
+
+      if (boardId === "open" || boardId === "closed") {
+        itemUpdateObj.closed = false;
+        // we have to change the close attribute
+        if (boardId === "open") {
+          docToUpdate._source.closed = false;
+        } else {
+          docToUpdate._source.closed = true;
+        }
+        itemUpdateObj.closed = docToUpdate._source.closed;
+      } else {
+        itemUpdateObj.tags = [];
+      }
+      // iterate all tags from the current document and remove all of the tags which are configured as status on this board
+
+      docToUpdate._source.tags.forEach((tag) => {
+        if (boards.value.boardSort.indexOf(tag) === -1) {
+          itemUpdateObj.tags.push(tag);
+        }
+      });
+      if (boardId !== "open" && boardId !== "closed") {
+        itemUpdateObj.tags.push(boardId);
+      }
+      console.dir(itemUpdateObj);
+      $store.dispatch({
+        type: "data/update",
+        docUUID: uuid,
+        payload: itemUpdateObj,
+      });
+    });
+  } else {
+    // we have to change the custom sorting, for now we dont persist it
+    oldSorting = newSorting;
+  }
+};
+const handleBoardSortingChange = (oldSorting, newSorting) => {
+  if (oldSorting.length !== newSorting.length) {
+    // we had a change in board count?
+    console.warn("on the fly changes of board counts are not supported atm");
+  } else {
+    // we have to change the custom sorting, for now we dont persist it
+    oldSorting = newSorting;
+  }
 };
 const getRelevantData = (filter) => {
   // TODO document the data helper functions once you know how you want them.
@@ -104,13 +204,22 @@ const getRelevantData = (filter) => {
         {
           identifier: board.identifier,
           excluded: board.excluded,
+          receiver: boardId,
         },
-        queryUpdateHook,
+        queryNewDataHook,
         "count"
       ),
     };
     // TODO make this configurable and storable
-    items.value[boardId].customTicketSort = items.value[boardId].tickets.uuids;
+    items.value[boardId].ticketSort = items.value[boardId].tickets.uuids;
+    customSorting.value.tickets[boardId] = computed({
+      get() {
+        return items.value[boardId].ticketSort;
+      },
+      set(newVal) {
+        handleTagSortingChange(items.value[boardId].ticketSort, newVal, boardId);
+      },
+    });
   });
   Object.keys(boards.value.custom).forEach((boardId) => {
     const board = boards.value.custom[boardId];
@@ -121,13 +230,23 @@ const getRelevantData = (filter) => {
         {
           identifier: board.identifier,
           excluded: board.excluded,
+          receiver: boardId,
         },
-        queryUpdateHook,
+        queryNewDataHook,
         "count"
       ),
     };
     // TODO make this configurable and storable
-    items.value[boardId].customTicketSort = items.value[boardId].tickets.uuids;
+    items.value[boardId].ticketSort = items.value[boardId].tickets.uuids;
+    // create a computed var for our sorting
+    customSorting.value.tickets[boardId] = computed({
+      get() {
+        return items.value[boardId].ticketSort;
+      },
+      set(newVal) {
+        handleTagSortingChange(items.value[boardId].ticketSort, newVal, boardId);
+      },
+    });
   });
 };
 const createBoardLists = (filter) => {
@@ -162,28 +281,44 @@ const createBoardLists = (filter) => {
       excluded: filter.generics.closed.excluded,
     },
   };
-  boards.value.customBoardSort = Object.keys(boards.value.custom);
+  boards.value.boardSort = Object.keys(boards.value.custom);
+  customSorting.value.boards = computed({
+    get() {
+      return boards.value.boardSort;
+    },
+    set(newVal) {
+      handleBoardSortingChange(boards.value.boardSort, newVal);
+    },
+  });
 };
 const stateSubscriber$ = $store
   .select((state) => state.widgets[props.uuid])
   .subscribe((val) => {
-    state.value = val;
-    if (!customFilter.value || (val.filter && val.filter !== customFilter.value)) {
+    if (val.filter && val.filter !== state.value.value) {
       // Whenever our filters change we will simply rebuild the whole board context as it must be a grave data update from the serverside or the user widget config editor
       getRelevantData(val.filter);
     }
+    state.value = val;
   });
+
 onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
   windowWidth$.unsubscribe();
   // unsubscribe from all our board queries when we leave
   Object.keys(boards.value.generics).forEach((boardId) => {
-    items.value[boardId].unsubscribe();
+    if (items.value[boardId].tickets.unsubscribe) {
+      items.value[boardId].tickets.unsubscribe();
+    }
   });
   Object.keys(boards.value.custom).forEach((boardId) => {
-    items.value[boardId].unsubscribe();
+    if (items.value[boardId].tickets.unsubscribe) {
+      items.value[boardId].tickets.unsubscribe();
+    }
   });
+  tagLookup.value.unsubscribe();
+  userLookup.value.unsubscribe();
+  allLookup.value.unsubscribe();
 });
 </script>
 <style lang="css" scoped>

@@ -11,7 +11,8 @@
             <v-select v-model="type" :items="tagTypes" variant="underlined" :label="$t('generics.type')" />
           </v-col>
           <v-col cols="12">
-            <tag-autocompletion v-if="item._disId" :mode="mode" :widgetUUID="props.widgetUUID" :docUUID="item._id" />
+            <tag-combobox v-if="item._disId" :tag-lookup="tagLookup" :widgetUUID="props.widgetUUID" :mode="mode"
+              :docUUID="item._id" />
           </v-col>
           <v-col cols="12">
             <v-text-field v-model="color" :label="$t('generics.color')" :color="color" variant="underlined"
@@ -73,9 +74,8 @@ import objectTemplate from "../dbItems/tag";
 const $store = inject("$store");
 const tagTypes = ["status", "milestone", "default"];
 const showPicker = shallowRef(false);
-const tagAutocompletion = defineAsyncComponent(() =>
-  import("@t/autocompletion/tags.vue")
-);
+
+const tagCombobox = defineAsyncComponent(() => import("@t/combobox/tags.vue"));
 const tagChips = defineAsyncComponent(() => import("@t/chips/tags.vue"));
 const debugDump = shallowRef(false);
 const debounceTimer = shallowRef(false);
@@ -152,6 +152,12 @@ const props = defineProps({
       return rawProps.widgetUUID + "_dataTypes_tag_" + rawProps.docUUID;
     },
   },
+  actionId: {
+    type: String,
+    default(rawProps) {
+      return rawProps.uuid;
+    },
+  },
   widgetUUID: {
     type: String,
     required: true,
@@ -167,6 +173,7 @@ const props = defineProps({
     required: true,
   },
 });
+const tagLookup = $store.$data.get(props.actionId + "_ALL_TAGS", "ALL_TAGS");
 const item = ref(false);
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
@@ -181,5 +188,6 @@ const dataItemSubscriber$ = $store
 onMounted(() => { });
 onUnmounted(() => {
   dataItemSubscriber$.unsubscribe();
+  tagLookup.value.unsubscribe();
 });
 </script>

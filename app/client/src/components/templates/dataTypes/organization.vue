@@ -34,6 +34,12 @@ defineProps({
     type: String,
     required: true,
   },
+  actionId: {
+    type: String,
+    default(rawProps) {
+      return rawProps.uuid;
+    },
+  },
   itemDefinition: {
     type: Object,
     default(rawProps) {

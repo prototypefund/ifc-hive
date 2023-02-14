@@ -194,6 +194,12 @@ const props = defineProps({
       return objectTemplate({});
     },
   },
+  actionId: {
+    type: String,
+    default(rawProps) {
+      return rawProps.uuid;
+    },
+  },
   docUUID: {
     type: String,
     required: true,

@@ -1,8 +1,11 @@
 <template>
   <v-row data-test-container="templates/chips/tags" :data-test-container-uuid="props.uuid">
     <v-col cols="auto" v-for="tag in props.tags">
-      <v-chip size="small"
-        :color="tags.data[tag] ? tags.data[tag]._source.color || 'grey' : 'grey'">{{ tags.data[tag] ? tags.data[tag]._source.title || tag : tag }}</v-chip>
+      <v-chip size="small" :color="
+        tagLookup.data[tag] ? tagLookup.data[tag]._source.color || 'grey' : 'grey'
+      ">{{
+  tagLookup.data[tag] ? tagLookup.data[tag]._source.title || tag : tag
+}}</v-chip>
     </v-col>
     <v-col cols="auto" />
   </v-row>
@@ -38,14 +41,22 @@ const props = defineProps({
     required: true,
     default: [],
   },
+  tagLookup: {
+    type: Object,
+    required: false,
+  },
   props: {
     type: Object,
     default: {},
   },
 });
-const tags = ref($store.$data.get(props.actionId, "ALL_TAGS"));
+const tagLookup = props.tagLookup
+  ? props.tagLookup
+  : $store.$data.get(props.actionId, "ALL_TAGS");
 onMounted(() => { });
 onUnmounted(() => {
-  tags.unsubscribe();
+  if (tagLookup.value) {
+    tagLookup.value.unsubscribe();
+  }
 });
 </script>

@@ -38,7 +38,7 @@
     </v-card-subtitle>
     <v-card-subtitle>
       <tag-chips v-if="memo._source.tags && memo._source.tags.length > 0" :widgetUUID="props.widgetUUID"
-        :docUUID="memo._id" :tags="memo._source.tags" />
+        :docUUID="memo._id" :tags="memo._source.tags" :tag-lookup="tagLookup" />
     </v-card-subtitle>
     <v-card-text> </v-card-text>
     <v-card-actions>
@@ -64,7 +64,7 @@
         <v-col cols="9">
           <QuickListHandler uuid="quickList" :docUUID="memo._source.owner" :dataTitle="memo._source.owner"
             tab-type="user" action="add">
-            <user-list-item :widgetUUID="props.widgetUUID" :docUUID="memo._source.owner" />
+            <user-list-item :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :docUUID="memo._source.owner" />
           </QuickListHandler>
         </v-col>
       </v-row>
@@ -75,7 +75,7 @@
         <v-col cols="9">
           <QuickListHandler uuid="quickList" :docUUID="memo._source.assigned" :dataTitle="memo._source.assigned"
             tab-type="user" action="add">
-            <user-list-item :widgetUUID="props.widgetUUID" :docUUID="memo._source.assigned" />
+            <user-list-item :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :docUUID="memo._source.assigned" />
           </QuickListHandler>
         </v-col>
       </v-row>
@@ -120,6 +120,14 @@ const props = defineProps({
   props: {
     type: Object,
     default: {},
+  },
+  userLookup: {
+    type: Object,
+    required: false,
+  },
+  tagLookup: {
+    type: Object,
+    required: false,
   },
 });
 const shortenId = (uuid) => {

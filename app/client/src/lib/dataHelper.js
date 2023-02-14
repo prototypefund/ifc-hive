@@ -18,26 +18,6 @@ export const splitIdentifier = (identifier) => {
 
     return attributes
 }
-/*
- * handleIdentifierObjects
- * @param { array } identifier, an array with identifiers i.e prop:value -> tags:my-tag-uuid
- * @param { object } dataLookup, the object containing the data we can lookup the identifier objects from
- *
- * @return { object } will return lookup objects for all identifiers which tourned out to be actual uuids of dataItems
- */
-export const handleIdentifierObjects = (identifier, dataLookup) => {
-    const ids = splitIdentifier(identifier)
-    const identifierObjects = {}
-    forEachObjIndexed((values, attribute) => {
-        values.forEach(val => {
-            if (dataLookup[val]) {
-                identifierObjects[val] = dataLookup[val]
-            }
-        })
-
-    }, ids)
-    return identifierObjects
-}
 export const isTrueFalse = (value) => {
     return ((value === 'true' || value === true) || (value === 'false' || value === false));
 }

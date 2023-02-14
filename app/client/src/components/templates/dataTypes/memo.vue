@@ -8,7 +8,8 @@
             <v-text-field v-model="title" :label="$t('generics.title')" variant="underlined"></v-text-field>
           </v-col>
           <v-col cols="12">
-            <tag-combobox v-if="item._disId" :widgetUUID="props.widgetUUID" :mode="mode" :docUUID="item._id" />
+            <tag-combobox v-if="item._disId" :tag-lookup="tagLookup" :widgetUUID="props.widgetUUID" :mode="mode"
+              :docUUID="item._id" />
           </v-col>
           <v-col cols="12">
             <v-text-field v-model="due" :label="$t('generics.dueDate')" variant="underlined"
@@ -18,8 +19,8 @@
           </v-col>
 
           <v-col cols="12">
-            <user-autocompletion v-if="item._disId" :widgetUUID="props.widgetUUID" :mode="mode" :docUUID="item._id"
-              selectedUserRole="assigned" />
+            <user-autocompletion v-if="item._disId" :user-lookup="userLookup" :widgetUUID="props.widgetUUID"
+              :mode="mode" :docUUID="item._id" selectedUserRole="assigned" />
           </v-col>
           <v-col cols="12">
             <v-switch v-model="closed" hide-details
@@ -34,7 +35,7 @@
             <p>{{ title }}</p>
           </v-col>
           <v-col cols="12"><v-label>{{ $t("generics.tags") }}</v-label>
-            <tag-chips :widgetUUID="props.widgetUUID" :docUUID="item._id" :tags="tags" />
+            <tag-chips :tag-lookup="tagLookup" :widgetUUID="props.widgetUUID" :docUUID="item._id" :tags="tags" />
           </v-col>
           <v-col cols="12">
             <v-label>{{ $t("generics.dueDate") }}</v-label>
@@ -42,7 +43,7 @@
           </v-col>
           <v-col cols="12">
             <v-label>{{ $t("generics.assigned") }}</v-label>
-            <user-chips :widgetUUID="props.widgetUUID" :docUUID="item._id"
+            <user-chips :widgetUUID="props.widgetUUID" :user-lookup="userLookup" :docUUID="item._id"
               :selectedUser="[item._source.assigned]" /></v-col>
           <v-col cols="12">
             <v-switch v-model="closed" hide-details :label="closed ? $t('generics.closed') : $t('generics.open')"
@@ -174,6 +175,12 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  actionId: {
+    type: String,
+    default(rawProps) {
+      return rawProps.uuid;
+    },
+  },
   itemDefinition: {
     type: Object,
     default(rawProps) {
@@ -185,6 +192,8 @@ const props = defineProps({
     required: true,
   },
 });
+const tagLookup = $store.$data.get(props.actionId + "_ALL_TAGS", "ALL_TAGS");
+const userLookup = $store.$data.get(props.actionId + "_ALL_USER", "ALL_USER");
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
@@ -200,5 +209,7 @@ const dataItemSubscriber$ = $store
 onMounted(() => { });
 onUnmounted(() => {
   dataItemSubscriber$.unsubscribe();
+  tagLookup.value.unsubscribe();
+  userLookup.value.unsubscribe();
 });
 </script>

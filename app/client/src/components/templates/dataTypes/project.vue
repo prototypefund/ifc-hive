@@ -22,6 +22,12 @@ defineProps({
       return rawProps.widgetUUID + "_dataTypes_project_" + rawProps.docUUID;
     },
   },
+  actionId: {
+    type: String,
+    default(rawProps) {
+      return rawProps.uuid;
+    },
+  },
   mode: {
     type: String,
     default: "view",

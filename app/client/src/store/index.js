@@ -9,10 +9,10 @@ import {
     ref,
 } from "vue";
 import getEnvVariable from '../lib/getEnvVariable'
-import { mergeDeepRight, clone } from 'ramda'
+import { mergeDeepRight, clone, forEachObjIndexed } from 'ramda'
 import { v4 as uuidv4 } from 'uuid';
 import { applicationState, storePatterns, loadingHold } from './state'
-import { basicStoreFilters, splitIdentifier, handleIdentifierObjects } from '@lib/dataHelper.js'
+import { basicStoreFilters, splitIdentifier } from '@lib/dataHelper.js'
 import { widgetConfLoader, widgetTypeConfLoader } from "@lib/widgetLoader";
 
 /*
@@ -113,18 +113,12 @@ const applicationReducers = {
                     if (action.actionId) {
                         query = JSON.parse(JSON.stringify(queries[action.actionId]))
                         query.data = basicStoreFilters(query.query, query.params || false, dataLookup)
-                        if (query.params.identifier) {
-                            query.identifierObjects = handleIdentifierObjects(query.params.identifier, dataLookup)
-                        }
 
                         query.uuids = Object.keys(query.data)
                         queries[action.actionId] = query
                         return queries
                     } else {
                         Object.values(queries).forEach(query => {
-                            if (query.params.identifier) {
-                                query.identifierObjects = handleIdentifierObjects(query.params.identifier, dataLookup)
-                            }
                             query.data = basicStoreFilters(query.query, query.params || false, dataLookup)
                             query.uuids = Object.keys(query.data)
                         })
@@ -706,13 +700,14 @@ if (dataLookup === false) {
 store.$data = {
     // TODO rethink this whole thing as soon as we have the es and api
     queryObjects: {},
+    dataLookup: dataLookup,
     update: (actionId, docUUID, doc) => {
 
     },
     get: (actionId, query, params = {}, updateHook = false, hookCondition = 'all') => {
         // create a deep ref object which will contain the query data as well as the items
         const queryObj = ref({ helper: { basicStoreFilters, splitIdentifier } })
-        if (!store.$data.queryObjects[actionId] || (store.$data.queryObjects[actionId].query !== query || store.$data.queryObjects[actionId].params !== params)) {
+        if (!store.$data.queryObjects[actionId] || (store.$data.queryObjects[actionId].value.query !== query || store.$data.queryObjects[actionId].value.params !== params)) {
             store.dispatch({
                 type: "queries/add",
                 payload: {
@@ -742,12 +737,16 @@ store.$data = {
 
                         }
                     }
-                    queryObj.value = val;
+                    // iterate the val object to not override 
+                    forEachObjIndexed((value, attribute) => {
+                        queryObj.value[attribute] = value;
+                    }, val)
+
                 }
 
             })
         // add a unsubscribe function to our object so that we can trigger it easily on dismount
-        queryObj.unsubscribe = () => {
+        queryObj.value.unsubscribe = () => {
             subscriber$.unsubscribe()
             store.dispatch({
                 type: "queries/remove",

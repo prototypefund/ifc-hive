@@ -1,6 +1,6 @@
 <template>
   <div data-test-container="templates/autocompletion/tags" :data-test-container-uuid="props.uuid">
-    <v-autocomplete :disabled="disabled" v-model="selectedTags" :items="Object.values(tags.data)" chips
+    <v-autocomplete :disabled="disabled" v-model="selectedTags" :items="Object.values(tagLookup.data)" chips
       item-title="_title" item-value="_id" hide-seleted closable-chips color="blue-grey-lighten-2"
       :label="$t('generics.tags')" multiple />
   </div>
@@ -39,9 +39,15 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  tagLookup: {
+    type: Object,
+    required: false,
+  },
 });
-// get all tags from the store, we do use the the "data" here, which is a plain clone of the tags objects. They are not reactive!
-const tags = ref($store.$data.get(props.actionId, "ALL_TAGS"));
+// get all tags from the store, or the props
+const tagLookup = props.tagLookup
+  ? props.tagLookup
+  : $store.$data.get(props.actionId, "ALL_TAGS");
 // get the document we want to show and edit the tags for. This will be reactive
 const item = ref(false);
 const dataItemSubscriber$ = $store
@@ -65,7 +71,9 @@ const selectedTags = computed({
 });
 onMounted(() => { });
 onUnmounted(() => {
-  tags.unsubscribe();
+  if (tagLookup.value) {
+    tagLookup.value.unsubscribe();
+  }
   dataItemSubscriber$.unsubscribe();
 });
 </script>

@@ -3,7 +3,7 @@
     :data-test-container-uuid="props.uuid">
     <v-timeline align="start" :density="viewPortWidth < 1110 ? 'compact' : 'default'">
       <v-timeline-item v-for="uuid in data.uuids" :key="uuid" max-width="600px">
-        <memo-card-item :widgetUUID="props.uuid" :docUUID="uuid" />
+        <memo-card-item :widgetUUID="props.uuid" :tag-lookup="tags" :docUUID="uuid" />
       </v-timeline-item>
     </v-timeline>
   </v-container>
@@ -42,13 +42,14 @@ const props = defineProps({
     },
   },
 });
-const data = ref($store.$data.get(props.actionId, "ALL_MEMOS"));
-
+const data = $store.$data.get(props.actionId + "_ALL_MEMOS", "ALL_MEMOS");
+const tags = $store.$data.get(props.actionId + "_ALL_TAGS", "ALL_TAGS");
 onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
   viewPortWidthSubscriber$.unsubscribe();
-  data.unsubscribe();
+  tags.value.unsubscribe();
+  data.value.unsubscribe();
 });
 </script>
 
