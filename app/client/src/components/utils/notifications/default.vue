@@ -13,7 +13,7 @@
       </v-btn>
     </template>
 
-    <v-card left class="notificationContent">
+    <v-card left>
       <v-expansion-panels v-model="panel">
         <v-expansion-panel>
           <v-expansion-panel-title>Neu</v-expansion-panel-title>
@@ -155,7 +155,7 @@ onUnmounted(() => {
   visibility: visible;
 }
 
-.notificationContent {
-  width: 500px;
+.notificationDrawer {
+  max-width: 30%;
 }
 </style>

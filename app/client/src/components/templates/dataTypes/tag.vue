@@ -83,7 +83,7 @@ const debounce = (func) => {
   clearTimeout(debounceTimer.value);
   debounceTimer.value = setTimeout(() => {
     if (func) func();
-  }, 500);
+  }, 200);
 };
 const itemUpdater = (newItem) => {
   debounce(() =>
@@ -179,6 +179,7 @@ const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
     if (typeof val === "undefined") {
+      // if the val is undefined, we are creating a new item which means we have to take the itemDefinition as a base for our forms
       item.value = JSON.parse(JSON.stringify(props.itemDefinition));
       item.value._id = props.docUUID;
     } else if (item.value != val) {

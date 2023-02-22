@@ -1,6 +1,7 @@
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import { VVirtualScroll } from 'vuetify/labs/VVirtualScroll'
 import 'vuetify/styles' // Global CSS has to be imported
 import '@mdi/font/css/materialdesignicons.css'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
@@ -38,7 +39,10 @@ const light = {
 
 export const vuetify = createVuetify({
   locale,
-  components,
+  components: {
+    ...components,
+    VVirtualScroll
+  },
   directives,
   theme: {
     defaultTheme: 'dark',

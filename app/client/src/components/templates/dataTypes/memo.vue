@@ -19,8 +19,8 @@
           </v-col>
 
           <v-col cols="12">
-            <user-autocompletion v-if="item._disId" :user-lookup="userLookup" :widgetUUID="props.widgetUUID"
-              :mode="mode" :docUUID="item._id" selectedUserRole="assigned" />
+            <user-autocompletion v-if="item._disId" :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :mode="mode"
+              :docUUID="item._id" selectedUserRole="assigned" />
           </v-col>
           <v-col cols="12">
             <v-switch v-model="closed" hide-details
@@ -87,7 +87,7 @@ const debounce = (func) => {
   clearTimeout(debounceTimer.value);
   debounceTimer.value = setTimeout(() => {
     if (func) func();
-  }, 500);
+  }, 200);
 };
 const itemUpdater = (newItem) => {
   debounce(() =>
@@ -198,6 +198,7 @@ const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
     if (typeof val === "undefined") {
+      // if the val is undefined, we are creating a new item which means we have to take the itemDefinition as a base for our forms
       const plainMemo = JSON.parse(JSON.stringify(props.itemDefinition));
       plainMemo._id = props.docUUID;
       item.value = plainMemo;

@@ -70,10 +70,12 @@
       </v-btn-group>
     </v-card-actions>
     <v-expand-transition>
-      <ticket-member class="transition-fast-in-fast-out v-card--show" v-if="show == `${ticketItem._id}_assignee`"
+      <ticket-user :tag-lookup="props.tagLookup" :key="ticketItem._source.assigned" :user-lookup="props.userLookup"
+        class="transition-fast-in-fast-out v-card--show" v-if="show == `${ticketItem._id}_assignee`"
         :widgetUUID="props.widgetUUID" :docUUID="ticketItem._source.assigned" />
-      <ticket-member class="transition-fast-in-fast-out v-card--show" v-if="show == `${ticketItem._id}_author`"
-        :widgetUUID="props.widgetUUID" :docUUID="ticketItem._source.owner" />
+      <ticket-user :tag-lookup="props.tagLookup" :user-lookup="props.userLookup"
+        class="transition-fast-in-fast-out v-card--show" :key="ticketItem._source.owner"
+        v-if="show == `${ticketItem._id}_author`" :widgetUUID="props.widgetUUID" :docUUID="ticketItem._source.owner" />
       <v-card v-if="show == `${ticketItem._id}_overview`">
         <pre>{{ ticketItem }}</pre>
       </v-card>
@@ -85,7 +87,7 @@ import { computed, shallowRef, defineAsyncComponent } from "vue";
 import QuickListHandler from "@w/quickList/handler.vue";
 const show = shallowRef(false);
 const isHovering = shallowRef(false);
-const ticketMember = computed(() => {
+const ticketUser = computed(() => {
   return defineAsyncComponent(() => import("@t/cards/user.vue"));
 });
 const ticketMemberMouseOver = computed(() => {
