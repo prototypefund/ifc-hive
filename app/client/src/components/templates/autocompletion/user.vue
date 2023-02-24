@@ -78,6 +78,7 @@ const selectedUser = computed({
 });
 onMounted(() => { });
 onUnmounted(() => {
+  // if .value is set, it means that our lookup came from our store $date.get
   if (userLookup.value) {
     userLookup.value.unsubscribe();
   }

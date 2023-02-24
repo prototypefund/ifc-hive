@@ -59,6 +59,7 @@ const userLookup = props.userLookup
   : $store.$data.get(props.actionId, "ALL_USER");
 onMounted(() => { });
 onUnmounted(() => {
+  // if .value is set, it means that our lookup came from our store $date.get
   if (userLookup.value) {
     userLookup.value.unsubscribe();
   }
