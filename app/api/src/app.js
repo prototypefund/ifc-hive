@@ -2,18 +2,28 @@
  * Primary entry file to the app
  */
 import fastifyFabric from 'fastify'
-import fastifySwagger from 'fastify-swagger' // api documentation
-import fastifyCors from 'fastify-cors'
-import fastifySensible from 'fastify-sensible'
+import fastifyCors from '@fastify/cors'
+import fastifySensible from '@fastify/sensible'
 import mongoose from 'mongoose'
-// import autoload from 'fastify-autoload' // autoload routes from directory
+import fastifySwagger from '@fastify/swagger' // api documentation
+import fastifySwaggerUI from '@fastify/swagger-ui'
+import { swaggerConfig, swaggerUiConfig } from './lib/swaggerConfig.js' // swagger api documentation configuration
+import websocket from '@fastify/websocket'
+import healthcheck from 'fastify-custom-healthcheck' // simple health check utility
 import { fileURLToPath } from 'url' // required to emulate __filename
 import { dirname } from 'path' // required to emulate __dirname
 import vary from 'vary' // required to handle the accept-version header
-import swaggerConfig from './lib/swaggerConfig.js' // swagger api documentation configuration
-import healthcheck from 'fastify-healthcheck' // simple health check utility
 import { nanoid } from 'nanoid'
-import jwt from './plugins/authentication/index.js'
+// import jwt from './plugins/authentication/index.js'
+import eventbus from './plugins/eventbus/index.js'
+
+/*
+ * import package.json so we know our app version
+ * @TODO use the new import ... asssert { type: 'json' } method whhen upgrading node.js
+ */
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const _package = require('../package.json')
 
 /*
  * ENV variables for configuration
@@ -28,18 +38,17 @@ import jwt from './plugins/authentication/index.js'
  * import custom components from ./components here.
  * ------------------------------------------------------------------------------------------------
  */
-import notes from './components/note/index.js'
-import access from './components/access/index.js'
+// import notes from './components/note/index.js'
+// import access from './components/access/index.js'
 
 /* manually add __filename and __dirname since they are not available in ES modules */
 global.__filename = fileURLToPath(import.meta.url)
 global.__dirname = dirname(__filename)
 
 /*
- * Build function
- * Creates the app
+ * create app function
  */
-export default function app (opts = {}) {
+export default async function app (opts = {}) {
   // @TODO read opts
 
   /* @TODO make logging configurable with an env variable */
@@ -53,11 +62,42 @@ export default function app (opts = {}) {
     genReqId: () => nanoid()
   })
 
-  // register jwt authentication plugin
-  app.register(jwt, {
-    secret: process.env.API_TOKEN_SECRET,
-    maxAge: process.env.API_TOKEN_MAX_AGE,
+  /*
+   * --------------------------------------------
+   * websocket
+   */
+  app.register(websocket)
+  app.register(eventbus)
+
+  app.register(async function (app) {
+
+    app.get('/memo', function (request, reply) {
+      reply.send({ message: 'Some thing to respond' })
+      app.eventbus.emit('memo_get', { _id: 'something' })
+    })
+
+  /*
+   * Route websocket (generic)
+   */
+    app.get('/websocket', { websocket: true }, function wsHandler (connection, req) {
+
+      connection.socket.on('message', message => {
+        app.log.info('Socket received message')
+        connection.socket.send('hi from server')
+      })
+
+      app.eventbus.on('memo_get', (payload) => {
+        connection.socket.send(JSON.stringify(payload)) 
+      })
+    })
   })
+
+
+  // register jwt authentication plugin
+  // app.register(jwt, {
+  //   secret: process.env.API_TOKEN_SECRET,
+  //   maxAge: process.env.API_TOKEN_MAX_AGE,
+  // })
 
   /*
    * APP CONFIGURATION FROM ENV VARIABLES
@@ -73,10 +113,14 @@ export default function app (opts = {}) {
    * ----------------------------------------------------------------------------------------------
    */
 
+  // the default value for strictQuery will be changed to false in future version
+  // see mongoose depreciation warning.
+  mongoose.set('strictQuery', false)
+
   /* connect to mongodb @TODO make host and database dynamic with env variables */
   mongoose.connect('mongodb://mongo:27017/ifc-hive', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
   // @TODO descorate fastify with mongoose connection
   const db = mongoose.connection
@@ -112,14 +156,12 @@ export default function app (opts = {}) {
       'Origin',
     ]
   })
+
   /* register fastifySensible for easier error handling in responses */
   app.register(fastifySensible)
-  /* autoload our project components from the ./component directory */
-  // app.register(autoload, { dir: join(global.__dirname, 'components') })
   /* register swagger documentation tool */
   app.register(fastifySwagger, swaggerConfig)
-  /* simple health check on /health */
-  app.register(healthcheck)
+  app.register(fastifySwaggerUI, swaggerUiConfig)
 
   /*
    * ACCEPT-VERSION HANDLING
@@ -150,7 +192,9 @@ export default function app (opts = {}) {
   app.addHook('onRequest', (request, reply, done) => {
     // we want the accept-versio header everywhere except when requesting the documentation routes
     // @TODO take care of request.req depreciated
-    if (!request.headers['accept-version'] && !/(docs|health)/.test(request.raw.url)) {
+    if ( !request.headers['accept-version'] &&
+      !/(docs|health|websocket)/.test(request.raw.url) // exclude routes 
+    ) {
       // send error if we are missing the Accept-Version header
       reply
         .status(412)
@@ -167,8 +211,8 @@ export default function app (opts = {}) {
    * REGISTER PROJECT COMPONENTS
    * ----------------------------------------------------------------------------------------------
    */
-  app.register(access, { prefix: '/access' })
-  app.register(notes, { prefix: '/test' })
+  // app.register(access, { prefix: '/access' })
+  // app.register(notes, { prefix: '/test' })
 
   /*
    * DECORATE GLOBALE EVENT EMITTER
@@ -178,6 +222,15 @@ export default function app (opts = {}) {
    * routes in all components can emit events. Commonly events should be
    * handled in the respective components. Try to keep interdependency as minimal as possible.
    */
+  /* simple health check on /health */
+  app.register(healthcheck, {
+    info: {
+      name: _package.name,
+      version: _package.version,
+      env: process.env.NODE_ENV
+    },
+    exposeFailure: process.env.NODE_ENV !== 'production' ? true : false
+  })
 
   return app
 }

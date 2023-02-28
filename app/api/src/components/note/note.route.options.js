@@ -12,10 +12,11 @@ export const noteSchema = {
     title: { type: 'string' },
     content: { type: 'string' },
   },
-  optionalProperties: {
-    createdAt: { type: 'string' },
-    updatedAt: { type: 'string' },
-  }
+  // @TODO breaking change on last update, check how to deal with fields added via plugins
+  // optionalProperties: {
+  //   createdAt: { type: 'string' },
+  //   updatedAt: { type: 'string' },
+  // }
 }
 
 /* when creating a new object we don't expect an _id field in the body */
