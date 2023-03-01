@@ -43,7 +43,6 @@
     "uppy": "^3.2.2",
     "uuid": "8.x",
     "vue": "3.x",
-    "vue-3-socket.io": "1.x",
     "vue-i18n": "9.x",
     "vue-loader": "16.x",
     "vue-resizable": "2.x",

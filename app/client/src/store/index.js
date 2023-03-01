@@ -20,7 +20,6 @@ import { widgetConfLoader, widgetTypeConfLoader } from "@lib/widgetLoader";
  */
 const extensions = getEnvVariable('NODE_ENV') === 'production'
     ? [
-        new LoggerExtension(),
         new ImmutableStateExtension()
     ]
     : [
@@ -202,45 +201,35 @@ const applicationReducers = {
                     }
                     return state
                 case 'data/add':
-                    if (action.docUUID && action.objectDefinition) {
+                    if (action.docUUID) {
                         store.dispatch({
                             type: 'notifications/add',
                             payload: {
                                 event: 'newItem',
-                                message: `a new Item with Id ${action.docUUID} of type ${action.objectDefinition._type} was created`
+                                message: `a new Item with Id ${action.docUUID} of type ${action.type} was created`
                             }
                         })
                         //TODO change this to api usage once it's available
                         if (state[action.docUUID]) {
                             console.error("we have a data/add but we have the item already in the dataStore, this should not happen!")
-                            // if we have the given doUUID in store already, we already created it so lets redirect this call to the update function
-                            store.dispatch({
-                                type: "data/update",
-                                docUUID: action.docUUID,
-                                payload: action.payload,
-                            })
-                            return state
+                            // if we have the given doUUID in store already, we
+                          // already created it so lets redirect this call to
+                          // the update function
                         }
-                        const newItem = JSON.parse(JSON.stringify(action.objectDefinition))
-                        newItem._source = mergeDeepRight(newItem._source, action.payload)
-                        newItem._title = makeTitle(newItem)
-                        newItem._disId = uuidv4(6)
-                        newItem._created = new Date()
-                        newItem._modified = newItem._created
-                        newItem._source.modified = newItem._created
-                        newItem._source.created = newItem._created
-                        store.dispatch({
-                            type: "data/push",
-                            payload: {
-                                data: [newItem]
-                            },
-                        })
-                        return state
+
+                      /*
+                       * request new object from server
+                       */
+                      switch (action.type) {
+                        // TODO send partial to type specific API endpoints: memo, user, tag etc. 
+                      }
+
+                      return state
                     }
                     return state
                 case 'data/update':
+                    debugger
                     //TODO change this to api usage once it's available
-                    data = { _source: {} }
                     if (action.docUUID) {
                         if (state[action.docUUID]) {
                             store.dispatch({
@@ -250,21 +239,17 @@ const applicationReducers = {
                                     message: `a Item with Id ${action.docUUID} of type ${state[action.docUUID]._type} was edited!`
                                 }
                             })
-                            data = JSON.parse(JSON.stringify(state))
-                            item = data[action.docUUID]
-                            item._source = mergeDeepRight(item._source, action.payload)
-                            item._title = makeTitle(item)
+                            item = JSON.parse(JSON.stringify(state[action.docUUID]))        
+
+                          // Send to server action.payload to server PUT Endpoint
+                          switch (item._type) {
+                            // send partial depending on item._type to API endoing /memo /tag etc.
+                          }
 
                         } else {
                             console.error("We try to update something we don't have in the dataStore")
 
                         }
-                        store.dispatch({
-                            type: "data/push",
-                            payload: {
-                                data: [data[action.docUUID]]
-                            },
-                        })
                     }
                     if (!action.docUUID) {
                         console.error("no docUUID given")
@@ -758,4 +743,13 @@ store.$data = {
         return queryObj
     }
 }
+
+// socket.on('data', (data) => {
+//   store.dispatch({
+//     type: "data/push",
+//     payload: {
+//       data: [data]
+//     },
+//   })
+// })
 export default store

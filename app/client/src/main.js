@@ -1,6 +1,5 @@
 import { createApp, h } from 'vue'
 import App from './App.vue'
-import axios from 'axios'
 import Markdown from 'vue3-markdown-it'
 import getEnvVariable from './lib/getEnvVariable'
 import store from './store/index.js'
@@ -10,25 +9,46 @@ import router from './router/index.js'
 import filters from './setup/filters.js'
 import capacitor from './setup/capacitor'
 import VueApexCharts from "vue3-apexcharts";
-
-// get env variables
-const API_BASE_URL = getEnvVariable('VITE_API_BASE_URL')
-
-// set default to accept all API endpoint version
-axios.defaults.headers.common['Accept-Version'] = '*'
-// set base path for API from env file
-axios.defaults.baseURL = API_BASE_URL
+import { createSocket } from './setup/socket.js'
+import log from './setup/logger.js'
+import httpClient, { configClient } from './lib/httpClient.js'
 
 /*
- * Send test request just to make sure we can talk to the back-end.
- * Is the API online? Do we get CORS errors etc?
+ * get env variables to configure the app
+ */
+const API_BASE_URL = getEnvVariable('VITE_API_BASE_URL')
+const SOCKET_URL = getEnvVariable('VITE_APP_SOCKET_URL')
+
+/*
+ * Set up http API client
+ */
+configClient(httpClient, {
+  baseURL: API_BASE_URL,
+})
+
+httpClient.get('/health').then((response) => log.api(response, 'healthcheck'))
+
+/*
+ * set up socket client
+ *
+ * At this point we only know the default endpoint
+ * we will set the security token later, after we have received it via the Rest API
+ */
+const socket = createSocket(SOCKET_URL)
+
+/*
+ * set up store and pass dependencies like socket and api client
+ */
+// @TODO create store here and pass socket and api client via dependency injection
+
+/*
+ *  create app and pass dependencies 
  */
 try {
   // create Vue root component
   const app = createApp({
     render: () => h(App),
   });
-
 
   /* register plugins */
   app.use(i18n)
@@ -39,20 +59,28 @@ try {
   app.use(VueApexCharts);
 
   // Make axios availabe in all components
-  app.config.globalProperties.$api = axios
-  app.provide('$api', axios)
+  app.config.globalProperties.$api = httpClient
+  // provide http client
+  app.provide('$api', httpClient)
+  // provide socket client
+  app.provide('$socket', socket)
+  // provide custom logger instance
+  app.provide('$log', log)
 
-  // TODO find out if this is a brainfart or not. I need $t in the components functions but I don't have this in compose API. Is there another way to get $t in compose api components script part?
+
+  // TODO find out if this is a brainfart or not. I need $t in the components
+  // functions but I don't have this in compose API. Is there another way to
+  // get $t in compose api components script part?
   app.provide('$t', i18n.global.t)
-
   // make store availble in all components
   app.provide('$store', store)
-  // make capacitor availble in all components 
+  // make capacitor availble in all components
   app.provide('$mobile', capacitor || false)
 
   // add global properties to app
   app.config.globalProperties.$filters = filters
   app.provide('$filters', filters)
+
   // mount the app
   app.mount('#app')
 } catch (err) {

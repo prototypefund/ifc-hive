@@ -40,12 +40,15 @@ export const applicationState = {
         history: [],
         items: []
     },
-    // the actual config object of the page you see right now. This will be moved into the pages lookup once you change pages
+    // the actual config object of the page you see right now. This will be
+    // moved into the pages lookup once you change pages
     currentPage: {
     },
     // a lookup map for all the widgets which are currently known to the application context
     widgets: {},
-    // a lookup map for all the pages which are currently known to the application context. Is used as base for the currentPage and will receive up2date page states from currentPage once you change pages
+    // a lookup map for all the pages which are currently known to the
+    // application context. Is used as base for the currentPage and will receive
+    // up2date page states from currentPage once you change pages
     pages: {}
 }
 export const configPatterns = {
@@ -69,7 +72,8 @@ export const configPatterns = {
 }
 export const storePatterns = {
     page: {
-        // this will determine if we always scroll to the last page position or to the top whenever we enter this page
+        // this will determine if we always scroll to the last page position or
+        // to the top whenever we enter this page
         scrollTop: false,
         // grid config for a page
         grid: configPatterns.grid,
@@ -79,13 +83,16 @@ export const storePatterns = {
     widget: {
         // should usually be a i18n key
         title: false,
-        // will usually be set automatically, if set manually, be aware that duplicated uuid lead to shared widget store
+        // will usually be set automatically, if set manually, be aware that
+        // duplicated uuid lead to shared widget store
         uuid: false,
         // the type of widget which represents a folder name under widgets and a config
         name: false,
         // the specific .vue file for the widget
         face: false,
-        // a deeper abstractation level for widgets which are used as tools. ie. type:'add' create a folder called 'add' and create a default.vue or FACE.vue containing your add logic for a given widget
+        // a deeper abstractation level for widgets which are used as tools.
+        // ie. type:'add' create a folder called 'add' and create a default.vue
+        // or FACE.vue containing your add logic for a given widget
         type: false
     }
 }

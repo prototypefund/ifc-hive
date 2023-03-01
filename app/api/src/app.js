@@ -38,6 +38,7 @@ const _package = require('../package.json')
  * import custom components from ./components here.
  * ------------------------------------------------------------------------------------------------
  */
+// testing websocket routes and mechanism
 // import notes from './components/note/index.js'
 // import access from './components/access/index.js'
 
@@ -71,26 +72,63 @@ export default async function app (opts = {}) {
 
   app.register(async function (app) {
 
-    app.get('/memo', function (request, reply) {
+     /*
+      * GET Memo
+      */
+    app.get('/memo/:id', function (request, reply) {
       reply.send({ message: 'Some thing to respond' })
       app.eventbus.emit('memo_get', { _id: 'something' })
     })
 
-  /*
-   * Route websocket (generic)
-   */
+    /*
+     * POST Memo
+     */
+    app.post('/memo', function (request, reply) {
+      reply.send({ message: 'Some thing to respond' })
+      app.eventbus.emit('memo_get', { _id: 'something' })
+    })
+
+    /*
+     * PUT Memo
+     */
+    app.put('/memo/:id', function (request, reply) {
+      reply.send({ message: 'Some thing to respond' })
+      app.eventbus.emit('memo_get', { _id: 'something' })
+    })
+
+    /*
+     * DELETE Memo
+     */
+    app.delete('/memo/:id', function (request, reply) {
+      reply.send({ message: 'Some thing to respond' })
+      app.eventbus.emit('memo_get', { _id: 'something' })
+    })
+
+    /* 
+     * Route websocket (generic) 
+     */
     app.get('/websocket', { websocket: true }, function wsHandler (connection, req) {
+      // create a unique ide for this socket
+      const id = nanoid()
+      connection.socket.id = id
+      // send unique ide back to client
+      app.log.info(`Socket ${connection.socket.id} connected`)
+      connection.socket.send(JSON.stringify({ type: 'id', params: { id } }))
+
+      connection.socket.on('close', message => {
+        app.log.info(`Socket ${connection.socket.id} closed`)
+      })
+
 
       connection.socket.on('message', message => {
-        app.log.info('Socket received message')
-        connection.socket.send('hi from server')
+        // do your thing
       })
 
       app.eventbus.on('memo_get', (payload) => {
         connection.socket.send(JSON.stringify(payload)) 
       })
     })
-  })
+  }, { prefix: '/lab' })
 
 
   // register jwt authentication plugin

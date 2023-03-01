@@ -22,7 +22,12 @@
  *    token: 'string',
  *    params:  { ... }
  *  }
+ *
+ *  {
  */
+
+const readyState = ['SOCKET_CONNECTING', 'SOCKET_OPEN', 'SOCKET_CLOSING', 'SOCKET_CLOSED']
+
 class SocketClient {
   
   /*
@@ -161,6 +166,15 @@ class SocketClient {
         listener.apply(this, args)
     })
   }
+
+  /*
+   * getReadyState 
+   * @return {number} - returns the socket state
+   * @TODO this is  not reliable we need to implement our own ping - pong check
+   */
+  getReadyState () {
+    return this.socket.readyState
+  }
   
   /*
    * Register socket events
@@ -169,7 +183,8 @@ class SocketClient {
     if (!this.socket) return false
 
     this.socket.addEventListener('open', (event) => {
-      this.socket.send('hello from client')
+      // send ping to server, once we are connected
+      this.socket.send(JSON.stringify({ type: 'ping', params: { token: 'some token' } }))
       this.emit('open', event.data)
     })
 
@@ -185,6 +200,7 @@ class SocketClient {
     this.socket.addEventListener('message', (event) => {
       this.emit('message', event.data)
       // @TODO handle message event depending on the type
+      // const data = JSON.parse(event.data)
       const data = JSON.parse(event.data)
 
       switch (data.type) {
@@ -209,8 +225,8 @@ class SocketClient {
         default:
           this.emit('error', { msg: 'Unknown event type from socket server' })
       }
-      
-      
     })
   }
 }
+
+export default SocketClient
