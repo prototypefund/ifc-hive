@@ -2,10 +2,10 @@ import { createApp, h } from 'vue'
 import App from './App.vue'
 import Markdown from 'vue3-markdown-it'
 import getEnvVariable from './lib/getEnvVariable'
-import store from './store/index.js'
+import createStore from './store/index.js'
 import i18n from './setup/i18n.js'
 import vuetify from './setup/vuetify.js'
-import router from './router/index.js'
+import createCustomRouter from './router/index.js'
 import filters from './setup/filters.js'
 import capacitor from './setup/capacitor'
 import VueApexCharts from "vue3-apexcharts";
@@ -19,27 +19,18 @@ import httpClient, { configClient } from './lib/httpClient.js'
 const API_BASE_URL = getEnvVariable('VITE_API_BASE_URL')
 const SOCKET_URL = getEnvVariable('VITE_APP_SOCKET_URL')
 
-/*
- * Set up http API client
- */
-configClient(httpClient, {
-  baseURL: API_BASE_URL,
-})
-
+/* Set up http API client */
+configClient(httpClient, { baseURL: API_BASE_URL, })
 httpClient.get('/health').then((response) => log.api(response, 'healthcheck'))
 
-/*
- * set up socket client
- *
- * At this point we only know the default endpoint
- * we will set the security token later, after we have received it via the Rest API
- */
+/* set up socket client */
 const socket = createSocket(SOCKET_URL)
 
-/*
- * set up store and pass dependencies like socket and api client
- */
-// @TODO create store here and pass socket and api client via dependency injection
+/* set up store and pass dependencies like socket and api client */
+const store = createStore(httpClient, socket, log)
+
+/* Create router */
+const router = createCustomRouter(store)
 
 /*
  *  create app and pass dependencies 

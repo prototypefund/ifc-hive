@@ -1,17 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
 import { forEachHook, beforeResolveHook, afterEachHook } from './routerHooks.js'
-import { store } from '../store/index.js'
 
-// create router instance
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
-})
+export function createCustomRouter (store) {
 
-/* Rooter hooks */
-router.beforeEach(forEachHook(store))
-router.beforeResolve(beforeResolveHook(store))
-router.afterEach(afterEachHook(store))
+  // create router instance
+  const router = createRouter({
+    history: createWebHistory(),
+    routes: routes(store)
+  })
 
-export default router
+  /* Rooter hooks */
+  router.beforeEach(forEachHook(store))
+  router.beforeResolve(beforeResolveHook(store))
+  router.afterEach(afterEachHook(store))
+
+  return router
+}
+
+
+export default createCustomRouter

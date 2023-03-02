@@ -10,6 +10,11 @@
  * Keep track of the current route in the store
  */
 import { loadingHold } from '../store/state'
+
+/*
+ * forEachHook
+ * @param { object } store, mini-rx store instance
+ */
 export function forEachHook(store) {
   return (to, from) => {
     if (to !== from) {
@@ -27,6 +32,7 @@ export function forEachHook(store) {
     }
   }
 }
+
 /*
  * afterEachHook
  * @param { object } store, mini-rx store instance
@@ -48,6 +54,7 @@ export function afterEachHook(store) {
     }
   }
 }
+
 /*
  * beforeResolveHook
  * @param { object } store, mini-rx store instance
