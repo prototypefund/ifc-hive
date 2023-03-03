@@ -12,6 +12,7 @@ import VueApexCharts from "vue3-apexcharts";
 import { createSocket } from './setup/socket.js'
 import log from './setup/logger.js'
 import httpClient, { configClient } from './lib/httpClient.js'
+import EventEmitter  from '@lib/eventEmitter.js'
 
 /*
  * get env variables to configure the app
@@ -26,11 +27,15 @@ httpClient.get('/health').then((response) => log.api(response, 'healthcheck'))
 /* set up socket client */
 const socket = createSocket(SOCKET_URL)
 
+/* create global event bus */
+const eventbus = new EventEmitter()
+
 /* set up store and pass dependencies like socket and api client */
-const store = createStore(httpClient, socket, log)
+const store = createStore(httpClient, socket, log, eventbus)
 
 /* Create router */
 const router = createCustomRouter(store)
+
 
 /*
  *  create app and pass dependencies 
@@ -57,7 +62,8 @@ try {
   app.provide('$socket', socket)
   // provide custom logger instance
   app.provide('$log', log)
-
+  // provide a global eventbus
+  app.provide('$eventbus', eventbus)
 
   // TODO find out if this is a brainfart or not. I need $t in the components
   // functions but I don't have this in compose API. Is there another way to

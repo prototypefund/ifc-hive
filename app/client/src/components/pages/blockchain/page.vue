@@ -2,8 +2,8 @@
   <v-container v-if="state" data-test-container="pages/boilerplate" fluid pa-0>
     <p>This is a Page Boilerplate</p>
     <!--
-      Place any desired template structure around the widget grid,
-      e.g. toolbar, sidebars, footers.
+    Place any desired template structure around the widget grid,
+    e.g. toolbar, sidebars, footers.
     -->
     <Grid v-if="state.slots" />
   </v-container>
@@ -21,8 +21,8 @@ const stateSubscriber$ = $store
     state.value = val;
   });
 
-onMounted(() => {});
-onUnmounted(() => {
-  stateSubscriber$.unsubscribe();
-});
+  onMounted(() => {});
+  onUnmounted(() => {
+    stateSubscriber$.unsubscribe();
+  });
 </script>

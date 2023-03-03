@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { applicationState, storePatterns, loadingHold } from './state'
 import { basicStoreFilters, splitIdentifier } from '@lib/dataHelper.js'
 import { widgetConfLoader, widgetTypeConfLoader } from "@lib/widgetLoader"
+import createEvents from './events.js'  // we can specify event handler here
 
   /*
    * Apply different extensions depending on the environment
@@ -35,8 +36,9 @@ import { widgetConfLoader, widgetTypeConfLoader } from "@lib/widgetLoader"
  * @param {object} $api - axios instance
  * @param {object} $socket - WebsocketClient (see lib/socket.js)
  * @param {object} $log - WebsocketClient (see lib/socket.js)
+ * @param {object} $eventbus - a global eventbus which is also available in all vue components
  */
-export function createStore ($api, $socket, $log) {
+export function createStore ($api, $socket, $log, $eventbus) {
 
   // TODO move this stup to seperate config and helper files
   // helper functions and lookup maps
@@ -630,8 +632,10 @@ export function createStore ($api, $socket, $log) {
                 // get the config file for the current widget
                 if (widget.type) {
                   widgetTypeConfLoader(store)(widget)
+                  $eventbus.emit('widgetTypeConfLoader', widget) // @TODO remove
                 } else {
                   widgetConfLoader(store)(widget)
+                  $eventbus.emit('widgetConfLoader', widget) // @TODO
                 }
                 // add page specific config to widget instance state
                 if (!newWidgets[widget.uuid]) {
@@ -660,12 +664,23 @@ export function createStore ($api, $socket, $log) {
     },
   }
 
+  /*
+   * create and configure the store
+   */
   const store = configureStore({
     extensions,
     reducers: applicationReducers,
     initialState: applicationState,
     metaReducers: metaReducer
   })
+
+  /*
+   * create and register events
+   */
+  const events = createEvents(store, $log)
+
+  $eventbus.on('widgetConfLoader', events.widgetConfLoaderHandler)
+  $eventbus.on('widgetTypeConfLoader', events.widgetTypeConfLoaderHandler)
 
 
   // subscribe to page and widget changes so we can lookup those maps via pages/widgets variables
