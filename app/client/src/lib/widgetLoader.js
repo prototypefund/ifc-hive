@@ -8,9 +8,9 @@ import { mergeDeepRight } from 'ramda'
  * Load a given widget vue file
  */
 export const widgetLoader = function (widgetName = 'debug', face = 'default') {
-    return import(`../components/widgets/${widgetName}/${face}.vue`).catch(e => {
-        return import('../components/widgets/error/default.vue')
-    })
+  return import(`../components/widgets/${widgetName}/${face}.vue`).catch(e => {
+    return import('../components/widgets/error/default.vue')
+  })
 }
 /*
  * widgetConfLoader
@@ -53,9 +53,9 @@ export const widgetTypeConfLoader = function (store) {
           uuid: widget.uuid,
           payload: mergedConf
         })
-    }).catch(e => {
-      return widgetConfLoader(widget)
-    })
+      }).catch(e => {
+        return widgetConfLoader(widget)
+      })
   }
 }
 

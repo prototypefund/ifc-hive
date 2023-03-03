@@ -67,7 +67,7 @@ export default {
     mock,
     mobileStartup: defineAsyncComponent(() =>
       import("./components/utils/mobile/startup.vue")
-    ),
+                                       ),
   },
   inject: ["$api", "$store", "$mobile"],
   props: {
@@ -136,6 +136,7 @@ export default {
       },
     ],
   }),
+
   created() {
     this.$store
       .select((state) => state.currentPage)
@@ -144,12 +145,13 @@ export default {
         this.page = val;
       });
 
-    this.$store
-      .select((state) => state.ui.loading)
-      .subscribe((val) => {
-        this.loading = val;
-      });
+      this.$store
+        .select((state) => state.ui.loading)
+        .subscribe((val) => {
+          this.loading = val;
+        });
   },
+
   mounted() {
     globalTools(this.$store);
     window.addEventListener("resize", this.setDimensions, { passive: true });
@@ -164,6 +166,7 @@ export default {
       });
     }
   },
+
   methods: {
     setScroll: async function (e) {
       if (e.currentTarget.scrollTop > 0) {
@@ -172,12 +175,14 @@ export default {
         this.hasScrolled = false;
       }
     },
+
     scrollTop: async function () {
       if (document.getElementById("appComponent")) {
         document.getElementById("appComponent").scrollTo(0, 0);
         this.hasScrolled = false;
       }
     },
+
     setDimensions: async function () {
       await this.$nextTick(function () {
         //TODO find out why we can't properly use the $refs for size read here.
@@ -204,6 +209,7 @@ export default {
   },
 };
 </script>
+
 <style>
 body,
 html {

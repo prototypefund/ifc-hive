@@ -11,7 +11,7 @@ export function createSocket (socketEndpoint) {
   // create socket
   const socket = new SocketClient()
   socket.connect(socketEndpoint)
-  
+
   /* Report open event */
   socket.on('open', (data) => {
     log.socket('Socket connection established', 'connected')
