@@ -184,6 +184,7 @@ export default {
     },
 
     setDimensions: async function () {
+
       await this.$nextTick(function () {
         //TODO find out why we can't properly use the $refs for size read here.
         const appBarHeight = document.getElementById("appAppbar").offsetHeight;

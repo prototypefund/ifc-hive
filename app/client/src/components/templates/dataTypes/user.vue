@@ -109,7 +109,7 @@ const itemUpdater = (newItem) => {
       type: !item.value._disId ? "data/add" : "data/update",
       docUUID: props.docUUID,
       payload: newItem,
-      type: 'user',
+      objectDefinition: !item.value._disId ? item.value : false
     })
   );
 };

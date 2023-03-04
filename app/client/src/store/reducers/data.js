@@ -1,4 +1,5 @@
 import { applicationState } from '../state'
+import { mergeDeepRight } from 'ramda'
 
 export default ($eventbus) => (state, action) => {
   let data, items, item
@@ -53,7 +54,7 @@ export default ($eventbus) => (state, action) => {
         }
         return state
       case 'data/add':
-        if (action.docUUID) {
+        if (action.docUUID && action.objectDefinition) {
           $eventbus.emit('store/dispatch', {
             type: 'notifications/add',
             payload: {
@@ -61,6 +62,8 @@ export default ($eventbus) => (state, action) => {
               message: `a new Item with Id ${action.docUUID} of type ${action.type} was created`
             }
           })
+          
+
           //TODO change this to api usage once it's available
           if (state[action.docUUID]) {
             console.error("we have a data/add but we have the item already in the dataStore, this should not happen!")
@@ -68,12 +71,19 @@ export default ($eventbus) => (state, action) => {
             // already created it so lets redirect this call to
             // the update function
           }
+          item = JSON.parse(JSON.stringify(action.objectDefinition))
+          item._source = mergeDeepRight(item._source, action.payload)
 
           /*
            * request new object from server
            */
-          switch (action.type) {
+          switch (item._type) {
             // TODO send partial to type specific API endpoints: memo, user, tag etc. 
+            case 'memo':
+              
+              break
+            default: 
+              console.error(`Unknown object type ${item._type}`)
           }
 
           return state
@@ -91,7 +101,10 @@ export default ($eventbus) => (state, action) => {
               }
             })
             item = JSON.parse(JSON.stringify(state[action.docUUID]))        
+            item._source = mergeDeepRight(item._source, action.payload)
 
+             console.log(`%cUpdate object ${item}`, 'color: yellow')
+             console.log(item)
             // Send to server action.payload to server PUT Endpoint
             switch (item._type) {
               // send partial depending on item._type to API endoing /memo /tag etc.

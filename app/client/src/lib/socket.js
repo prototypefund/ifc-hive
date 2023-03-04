@@ -53,7 +53,7 @@ class SocketClient {
      * interval otherweise the server will discard our connection
      * @type {number}
      */
-    this.heartbeatIntervall = 10
+    this.heartbeatIntervall = 2000
     /*
      * Also on the socket we need to authenticate ourselves to the server
      * @type {string}
@@ -73,6 +73,7 @@ class SocketClient {
      * @type {array}
      */
     this.rooms = []
+
   }
 
   /*

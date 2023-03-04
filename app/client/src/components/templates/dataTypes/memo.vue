@@ -94,8 +94,8 @@ const itemUpdater = (newItem) => {
     $store.dispatch({
       type: !item.value._disId ? "data/add" : "data/update",
       docUUID: props.docUUID,
-      payload: newItem,
-      type: 'memo'
+      payload: item.value,
+      objectDefinition: !item.value._disId ? item.value : false
     })
   );
 };
