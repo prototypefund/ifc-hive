@@ -93,7 +93,46 @@ export default async function app (opts = {}) {
      */
     app.put('/memo/:id', function (request, reply) {
       reply.send({ message: 'Some thing to respond' })
-      app.eventbus.emit('memo_get', { _id: 'something' })
+
+      // @TODO update item
+      const updatedObject = JSON.parse(JSON.stringify(request.body))
+
+      // add display ID if we don't have one yet
+      if (!updatedObject._disId || updatedObject._disId.length > 6) {
+        updatedObject._disId = nanoid(6)
+      }
+
+      // update modifed field
+      updatedObject._modified = new Date()
+      // make sure the object id exissts in _source
+      updatedObject._source._id = request.params.id
+
+      /*
+       * Mock update depending on object type
+       */
+      switch (updatedObject._type) {
+        case 'user':
+          let { firstname, lastname, email } = updatedObject._source
+          updatedObject._title = `${firstname} ${lastname} ${email}`
+          break
+        case 'memo':
+          updatedObject._title = updatedObject._source.title
+          break
+        case 'tag':
+          updatedObject._title = updatedObject._source.title
+          break
+        case 'organization':
+          let { name, shortname } = updatedObject._source
+          updatedObject._title = `${shortname} ${name}`
+          break
+        case 'project': 
+          updatedObject._title = updatedObject._source.title
+          break
+        default: 
+      }
+
+      // push updated object into event bus 
+      app.eventbus.emit('push_data', updatedObject )
     })
 
     /*
@@ -101,7 +140,6 @@ export default async function app (opts = {}) {
      */
     app.delete('/memo/:id', function (request, reply) {
       reply.send({ message: 'Some thing to respond' })
-      app.eventbus.emit('memo_get', { _id: 'something' })
     })
 
     /* 
@@ -119,14 +157,40 @@ export default async function app (opts = {}) {
         app.log.info(`Socket ${connection.socket.id} closed`)
       })
 
-
+      /*
+       * Message event, differentiate by custom message type
+       */
       connection.socket.on('message', message => {
-        // do your thing
+        // lets make sure we turn buffers into strings
+        const raw = typeof message === 'string'? message : message.toString()
+        try {
+          const data = JSON.parse(raw)
+
+          // handle message depending on type
+          switch (data.type) {
+            // answer with a pong when receiving a ping
+            case 'ping': 
+              const payload = { type: 'pong', params: { token: data.params.token } }
+              connection.socket.send(JSON.stringify(payload))
+              break
+            default:
+              app.log.error({ msg: `Socket server unknown message type ${data.type}`, data })
+          }
+
+        } catch (error) {
+          app.log.error({ msg: 'Socket server cannot parse message', data: raw })
+        }
       })
 
-      app.eventbus.on('memo_get', (payload) => {
-        connection.socket.send(JSON.stringify(payload)) 
+      /*
+       * Push data event
+       */
+      app.eventbus.on('push_data', (payload) => {
+        app.log.info({ msg: 'Push data to socket', item: payload._id  })
+        const message = { type: 'data', params: { data: payload } } 
+        connection.socket.send(JSON.stringify(message)) 
       })
+
     })
   }, { prefix: '/lab' })
 

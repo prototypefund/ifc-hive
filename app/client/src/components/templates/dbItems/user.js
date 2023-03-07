@@ -5,6 +5,7 @@ export default function (props = {}) {
     _path: props._path || "",
     _title: props._title || "", // Nickname (email)  Organization
     _source: {
+      _id: props._id || "",
       firstname: props.firstname || "",
       lastname: props.lastname || "",
       nickname: props.nickname || "",

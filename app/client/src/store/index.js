@@ -218,11 +218,12 @@ export function createStore ($api, $socket, $log, $eventbus) {
    * create and register events
    * @TODO pseudo effect as events
    */
-  const events = createEvents(store, $log)
+  const events = createEvents(store, $api, $log)
 
   $eventbus.on('store/dispatch', events.dispatch) // generic store.dispatch
   $eventbus.on('widgetConfLoader', events.widgetConfLoaderHandler)
   $eventbus.on('widgetTypeConfLoader', events.widgetTypeConfLoaderHandler)
+  $eventbus.on('data_update', events.apiUpdateItem )
 
   /*
    * Some default subscribers  

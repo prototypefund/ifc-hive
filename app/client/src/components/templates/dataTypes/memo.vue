@@ -90,14 +90,14 @@ const debounce = (func) => {
   }, 200);
 };
 const itemUpdater = (newItem) => {
-  debounce(() =>
+  debounce(() => {
     $store.dispatch({
-      type: !item.value._disId ? "data/add" : "data/update",
+      type: "data/update",
       docUUID: props.docUUID,
-      payload: item.value,
-      objectDefinition: !item.value._disId ? item.value : false
+      payload: newItem, // note: newItem is only a partials
+      objectDefinition: item.value,
     })
-  );
+  });
 };
 const closed = computed({
   get() {

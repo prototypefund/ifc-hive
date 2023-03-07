@@ -9,7 +9,7 @@ import createCustomRouter from './router/index.js'
 import filters from './setup/filters.js'
 import capacitor from './setup/capacitor'
 import VueApexCharts from "vue3-apexcharts";
-import { createSocket } from './setup/socket.js'
+import { createSocket, registerSocketEvents } from './setup/socket.js'
 import log from './setup/logger.js'
 import httpClient, { configClient } from './lib/httpClient.js'
 import EventEmitter  from '@lib/eventEmitter.js'
@@ -35,6 +35,13 @@ const store = createStore(httpClient, socket, log, eventbus)
 
 /* Create router */
 const router = createCustomRouter(store)
+
+/*
+ * Now that we have all vital objects (store, socket, eventbus, httpclient)
+ * register socket events, i.e. react with eventbus or dispatching
+ * store actions
+ */
+registerSocketEvents(socket, store, eventbus, log)
 
 
 /*

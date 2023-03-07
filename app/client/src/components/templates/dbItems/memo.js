@@ -8,6 +8,7 @@ export default function (props = {}) {
     _created: props._created || "",
     _modified: props._modified || "",
     _source: {
+      _id: props._id || "",
       title: props.title || "",
       path: props.path || "", // materialized path
       project: props.project || "",

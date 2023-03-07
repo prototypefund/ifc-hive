@@ -1,4 +1,5 @@
 import { applicationState } from '../state'
+import { mergeDeepRight } from 'ramda'
 
 export default ($eventbus) => (state, action) => {
   if (state) {

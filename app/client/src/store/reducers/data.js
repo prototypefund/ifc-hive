@@ -92,27 +92,17 @@ export default ($eventbus) => (state, action) => {
       case 'data/update':
         //TODO change this to api usage once it's available
         if (action.docUUID) {
+          // @TODO review the differentiation between new and existing docs
           if (state[action.docUUID]) {
-            $eventbus.emit('store/dispatch', {
-              type: 'notifications/add',
-              payload: {
-                event: 'updateItem',
-                message: `a Item with Id ${action.docUUID} of type ${state[action.docUUID]._type} was edited!`
-              }
-            })
+            // update existing doc
             item = JSON.parse(JSON.stringify(state[action.docUUID]))        
-            item._source = mergeDeepRight(item._source, action.payload)
-
-             console.log(`%cUpdate object ${item}`, 'color: yellow')
-             console.log(item)
-            // Send to server action.payload to server PUT Endpoint
-            switch (item._type) {
-              // send partial depending on item._type to API endoing /memo /tag etc.
-            }
-
           } else {
-            console.error("We try to update something we don't have in the dataStore")
+            // create a new doc
+            item = JSON.parse(JSON.stringify(action.objectDefinition))
           }
+
+          item._source = mergeDeepRight(item._source, action.payload)
+          $eventbus.emit('data_update', item)
         }
         if (!action.docUUID) {
           console.error("no docUUID given")

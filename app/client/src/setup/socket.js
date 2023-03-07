@@ -12,24 +12,80 @@ export function createSocket (socketEndpoint) {
   const socket = new SocketClient()
   socket.connect(socketEndpoint)
 
-  /* Report open event */
+  return socket
+}
+
+/*
+ * Register socket events
+ *
+ * @param {object} $socket - a socketClient instance 
+ * @param {object} $store - a minirx-store instance, so we can dispatch actions
+ * @param {object} $eventbus - instance of our custom eventbus
+ */
+export function registerSocketEvents (socket, $store, $eventbus) {
+
+  let intervalId = false
+
+  /*
+   * open event
+   * fired every time we have a new connection established
+   */
   socket.on('open', (data) => {
     log.socket('Socket connection established', 'connected')
-    console.dir(socket)
+    
+    // if we previously tried to connect stop that interval
+    if (intervalId) {
+      clearInterval(intervalId)
+      intervalId = false
+    }
   })
 
-  /* Report when id was received */
+  /*
+   * close event
+   */
+  socket.on('close', (data) => {
+    log.socket('socket connection lost', 'closed')
+
+    // @TODO replace with implement of a sane reconnection routine
+    setTimeout(socket.reconnect(), 3000)  
+  })
+
+  /*
+   * login event
+   * the server has approved our token
+   */
+  socket.on('login', (data) => {
+    log.socket('Socket connection successfully authenticated', 'login successful')
+  })
+
+ /*
+  * timeout event
+  * Our continious healthcheck didn't get a response within the expected time from the server
+  */
+  socket.on('timeout', (data) => {
+    log.error('Websocket didn\'t receive pong in expected resonse time', 
+      'Socket timeout')
+
+    // @TODO replace with implement of a sane reconnection routine
+    setTimeout(socket.reconnect(), 3000) // @TODO
+  })
+
+
+  /* id event, we have received our socket id from the server */
   socket.on('id', (data) => {
-    log.socket({ msg: `ReCeived socket ID ${data.id}`, data }, 'id')
+    log.socket({ msg: `Received socket ID ${data.id}`, data }, 'id')
     socket.id = data.id
   })
 
-  /* Repoert close event @TODO implement ping - pong*/
-  socket.on('close', (data) => {
-    log.socket(data, 'closed')
+  /*
+   * data event
+   * We received a data object from the server
+   */
+  socket.on('data', (data) => {
+    log.socket(data, 'update')
+    // NOTE: always pass array into data/push payload
+    $store.dispatch({ type: 'data/push', payload: { data: [data.data] } })
   })
-
-  return socket
 }
 
 export default createSocket

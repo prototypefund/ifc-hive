@@ -403,6 +403,7 @@ export default {
         _project: false,
         _title: data.title,
         _source: {
+        _id: "tag-" + data.title,
           title: data.title,
           type: data.type,
           color: data.color,
@@ -419,6 +420,7 @@ export default {
         _disId: uuidv4(),
         _title: `${data.firstname} ${data.lastname} @${data.email}`, // Nickname (email)  Organization
         _source: {
+        _id: "user-" + data.nickname,
           firstname: data.firstname,
           lastname: data.lastname,
           nickname: data.nickname,
@@ -450,6 +452,7 @@ export default {
         _disId: uuidv4(),
         _modified: modified,
         _source: {
+        _id: "memo-" + uuidv4(), // UUID
           title: data.title,
           path: data.path, // materialized path
           project: data.project,

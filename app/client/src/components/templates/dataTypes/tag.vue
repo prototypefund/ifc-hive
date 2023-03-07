@@ -88,10 +88,10 @@ const debounce = (func) => {
 const itemUpdater = (newItem) => {
   debounce(() =>
     $store.dispatch({
-      type: !item.value._disId ? "data/add" : "data/update",
+      type: "data/update",
       docUUID: props.docUUID,
-      payload: newItem,
-      type: 'tag'
+      payload: newItem, // note: newItem is only a partials
+      objectDefinition: item.value,
     })
   );
 };

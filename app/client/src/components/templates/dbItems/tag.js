@@ -5,6 +5,7 @@ export default function (props = {}) {
     _project: props._project || "",
     _title: props._title || "",
     _source: {
+      _id: props._id || "",
       title: props.title || "",
       type: props.type || "", // default, milestone, status, etc.
       locked: props.locked || false,
