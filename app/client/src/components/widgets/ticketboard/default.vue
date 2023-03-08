@@ -167,7 +167,6 @@ const handleTagSortingChange = (oldSorting, newSorting, boardId) => {
       if (boardId !== "open" && boardId !== "closed") {
         itemUpdateObj.tags.push(boardId);
       }
-      console.dir(itemUpdateObj);
       $store.dispatch({
         type: "data/update",
         docUUID: uuid,

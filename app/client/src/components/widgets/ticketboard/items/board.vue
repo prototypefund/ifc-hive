@@ -1,8 +1,8 @@
 <template>
-  <v-card :color="boardItem.color || boardItem._source.color" v-if="boardId"
-    :style="{ width: width + 'px', height: '100%' }" class="ticketWrapperCard"
-    :prepend-icon="generic ? 'false' : 'mdi-drag'" data-test-container="widgets/ticketboard/items/board"
-    :data-test-container-uuid="uuid">
+  <v-card v-if="boardId"
+    :style="{ border: '2px solid ' + (boardItem.color || boardItem._source.color), width: width + 'px', height: '100%' }"
+    class="ticketWrapperCard" :prepend-icon="generic ? 'false' : 'false'"
+    data-test-container="widgets/ticketboard/items/board" :data-test-container-uuid="uuid">
     <template v-slot:title v-if="generic">{{ $t("generics." + boardId) }} </template>
     <template v-slot:title v-else>
       <QuickListHandler uuid="quickList" :props="{ mode: 'edit' }" :docUUID="boardId" :dataTitle="boardItem._title"
@@ -47,3 +47,4 @@ defineProps({
   },
 });
 </script>
+<style lang="css" scoped></style>

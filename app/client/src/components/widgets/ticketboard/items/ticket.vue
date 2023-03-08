@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="ticketItem && ticketItem._id" prepend-icon="mdi-drag" class="ticketItem"
+  <v-card variant="outlined" v-if="ticketItem && ticketItem._id" prepend-icon="mdi-drag" class="ticketItem"
     :elevation="isHovering === ticketItem._id ? 12 : 2" :class="{ 'on-hover': isHovering === ticketItem._id }"
     @mouseover="isHovering = ticketItem._id" @mouseout="isHovering = false">
     <template v-slot:title>
@@ -16,7 +16,7 @@
 
     <v-card-text> short description</v-card-text>
     <v-card-subtitle>
-      <v-row no-gutters>
+      <v-row>
         <!--v-col cols="auto" v-if="ticketItem._source.created">
           <v-chip size="small" label text-color="white">
             <v-icon start icon="mdi-calendar-plus"></v-icon>
@@ -35,7 +35,13 @@
             </v-tooltip>
           </v-chip>
         </v-col-->
-        <v-col cols="auto" v-if="ticketItem._source.due">
+        <v-col cols="12" v-if="ticketItem._disId">
+          <v-chip size="small" label text-color="white">
+            <v-icon start icon="mdi-pound-box"></v-icon>
+            {{ ticketItem._disId }}
+          </v-chip>
+        </v-col>
+        <v-col cols="10" v-if="ticketItem._source.due">
           <v-chip size="small" label text-color="white">
             <v-icon start icon="mdi-calendar-alert"></v-icon>
             {{ $d(ticketItem._source.due, "short") }}
@@ -44,7 +50,18 @@
             </v-tooltip>
           </v-chip>
         </v-col>
+        <v-col cols="2" v-if="ticketItem._source.assigned">
+          <v-avatar width="10" end color="indigo">
+            <v-img
+              v-if="props.userLookup.data[ticketItem._source.assigned]._source.avatar && props.userLookup.data[ticketItem._source.assigned]._source.avatar.file"
+              :src="props.userLookup.data[ticketItem._source.assigned]._source.avatar.file" />
+            <span justify="space-around"
+              v-else>{{ props.userLookup.data[ticketItem._source.assigned]._source.firstname.substring(0, 1) }}
+              {{ props.userLookup.data[ticketItem._source.assigned]._source.lastname.substring(0, 1) }}</span>
+          </v-avatar>
+        </v-col>
       </v-row>
+      <br />
       <!--v-row no-gutters>
       <v-col cols="6">#{{ ticketItem._disId }}</v-col>
         <v-col cols="6">
@@ -62,7 +79,7 @@
 
     </v-card-subtitle>
 
-    <v-card-actions>
+    <!--v-card-actions>
       <v-btn-group>
         <v-btn size="x-small" :append-icon="
           show !== `${ticketItem._id}_overview`
@@ -84,7 +101,7 @@
               :docUUID="ticketItem._source.assigned" /> </v-tooltip>
         </v-btn>
       </v-btn-group>
-    </v-card-actions>
+    </!--v-card-actions>
     <v-expand-transition>
       <ticket-user :tag-lookup="props.tagLookup" :key="ticketItem._source.assigned" :user-lookup="props.userLookup"
         class="transition-fast-in-fast-out v-card--show" v-if="show == `${ticketItem._id}_assignee`"
@@ -95,7 +112,7 @@
       <v-card v-if="show == `${ticketItem._id}_overview`">
         <pre>{{ ticketItem }}</pre>
       </v-card>
-    </v-expand-transition>
+    </v-expand-transition-->
   </v-card>
 </template>
 <script setup>
