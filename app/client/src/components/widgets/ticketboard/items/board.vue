@@ -17,7 +17,7 @@
   </v-card>
 </template>
 <script setup>
-import QuickListHandler from "@w/quickList/handler.vue";
+import QuickListHandler from "@w/quickList/handler/click.vue";
 defineProps({
   widgetUUID: {
     type: String,

@@ -9,6 +9,7 @@ export const globalTools = ($store) => {
       uuid: "quickList",
       widget: {
         name: "quickList",
+        face: 'expansionVertical'
       },
     },
   });

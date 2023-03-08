@@ -5,7 +5,7 @@
     <template v-slot:title>
       <QuickListHandler :props="{ mode: 'edit' }" uuid="quickList" :docUUID="ticketItem._id"
         :dataTitle="ticketItem._source.title || ticketItem._title" :tab-type="ticketItem._type" action="add">
-        <v-card-title>{{ ticketItem._source.title || ticketItem._title }}</v-card-title>
+        <v-card-title class="ticketTitle">{{ ticketItem._source.title || ticketItem._title }}</v-card-title>
       </QuickListHandler>
     </template>
 
@@ -16,8 +16,8 @@
 
     <v-card-text> short description</v-card-text>
     <v-card-subtitle>
-      <v-row>
-        <v-col cols="auto" v-if="ticketItem._source.created">
+      <v-row no-gutters>
+        <!--v-col cols="auto" v-if="ticketItem._source.created">
           <v-chip size="small" label text-color="white">
             <v-icon start icon="mdi-calendar-plus"></v-icon>
             {{ $d(ticketItem._source.created, "short") }}
@@ -25,8 +25,8 @@
               {{ $t("generics.created") }}
             </v-tooltip>
           </v-chip>
-        </v-col>
-        <v-col cols="auto" v-if="ticketItem._source.modified">
+        </!--v-col>
+        <v-col-- cols="auto" v-if="ticketItem._source.modified">
           <v-chip size="small" label text-color="white">
             <v-icon start icon="mdi-calendar-edit"></v-icon>
             {{ $d(ticketItem._source.modified, "short") }}
@@ -34,7 +34,7 @@
               {{ $t("generics.modified") }}
             </v-tooltip>
           </v-chip>
-        </v-col>
+        </v-col-->
         <v-col cols="auto" v-if="ticketItem._source.due">
           <v-chip size="small" label text-color="white">
             <v-icon start icon="mdi-calendar-alert"></v-icon>
@@ -45,6 +45,21 @@
           </v-chip>
         </v-col>
       </v-row>
+      <!--v-row no-gutters>
+      <v-col cols="6">#{{ ticketItem._disId }}</v-col>
+        <v-col cols="6">
+         <v-avatar v-if="ticketItem._source.assigned" start color="indigo">
+          <v-img
+            v-if="props.userLookup.data[ticketItem._source.assigned]._source.avatar && props.userLookup.data[ticketItem._source.assigned]._source.avatar.file"
+            :src="props.userLookup.data[ticketItem._source.assigned]._source.avatar.file" />
+          <span justify="space-around"
+            v-else>{{ props.userLookup.data[ticketItem._source.assigned]._source.firstname.substring(0, 1) }}
+            {{ props.userLookup.data[ticketItem._source.assigned]._source.lastname.substring(0, 1) }}</span>
+        </v-avatar>
+        
+        </v-col>
+      </!--v-row-->
+
     </v-card-subtitle>
 
     <v-card-actions>
@@ -66,7 +81,8 @@
             : 'mdi-chevron-down'
         " @click="handleShow(`${ticketItem._id}_assignee`)">{{ $t("generics.assignee") }}
           <v-tooltip activator="parent" location="top"><ticket-member-mouse-over :widgetUUID="props.widgetUUID"
-              :docUUID="ticketItem._source.assigned" /> </v-tooltip></v-btn>
+              :docUUID="ticketItem._source.assigned" /> </v-tooltip>
+        </v-btn>
       </v-btn-group>
     </v-card-actions>
     <v-expand-transition>
@@ -84,7 +100,7 @@
 </template>
 <script setup>
 import { computed, shallowRef, defineAsyncComponent } from "vue";
-import QuickListHandler from "@w/quickList/handler.vue";
+import QuickListHandler from "@w/quickList/handler/click.vue";
 const show = shallowRef(false);
 const isHovering = shallowRef(false);
 const ticketUser = computed(() => {
@@ -137,6 +153,10 @@ const props = defineProps({
 <style lang="css" scoped>
 .ticketWrapperCard {
   height: 100%;
+}
+
+.ticketWrapperCard .ticketTitle {
+  font-size: 0.8em
 }
 
 .ticketWrapperCard .list-group {

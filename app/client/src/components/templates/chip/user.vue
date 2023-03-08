@@ -14,7 +14,7 @@
 
 <script setup>
 import { inject, ref, onMounted, onUnmounted } from "vue";
-import QuickListHandler from "@w/quickList/handler.vue";
+import QuickListHandler from "@w/quickList/handler/click.vue";
 const $store = inject("$store");
 const user = ref(false);
 
@@ -48,6 +48,4 @@ onUnmounted(() => {
   dataItemSubscriber$.unsubscribe();
 });
 </script>
-<style lang="css" scoped>
-
-</style>
+<style lang="css" scoped></style>

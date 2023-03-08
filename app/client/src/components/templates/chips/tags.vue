@@ -1,5 +1,5 @@
 <template>
-  <v-row data-test-container="templates/chips/tags" :data-test-container-uuid="props.uuid">
+  <v-row data-test-container="templates/chips/tags" no-gutters :data-test-container-uuid="props.uuid">
     <v-col cols="auto" v-for="tag in props.tags">
       <v-chip size="small" :color="
         tagLookup.data[tag] ? tagLookup.data[tag]._source.color || 'grey' : 'grey'

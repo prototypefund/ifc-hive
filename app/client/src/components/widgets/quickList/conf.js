@@ -1,5 +1,5 @@
 export default {
   title: 'moin',
-  entryIndex: 0,
+  openItem: 0,
   entries: []
 }

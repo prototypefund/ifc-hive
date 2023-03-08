@@ -1,6 +1,6 @@
 <template>
   <a @click="handleQuickListItem" class="quickListHandler" v-if="state && props.uuid"
-    data-test-container="widgets/quicklist/handler" :data-test-container-uuid="props.uuid">
+    data-test-container="widgets/quickList/handler/click" :data-test-container-uuid="props.uuid">
     <slot></slot>
   </a>
 </template>
@@ -62,7 +62,7 @@ const props = defineProps({
 const handleQuickListItem = () => {
   if (props.uuid && props.docUUID) {
     // make sure that we only have on tab per display type and docUUID
-    let entryIndex = findIndex(propEq("uuid", props.docUUID))(state.value.entries);
+    let openItem = findIndex(propEq("uuid", props.docUUID))(state.value.entries);
     // open the quicklist bar
     if (currentTool.value !== "quickList") {
       $store.dispatch({
@@ -74,9 +74,9 @@ const handleQuickListItem = () => {
     }
 
     const entries = JSON.parse(JSON.stringify(state.value.entries));
-    if (entryIndex > -1) {
+    if (openItem > -1) {
       // as we can have several modes in the quicklist items and different display Types per item, we will simply remove any quicklist entry of the current UUID and create a new one with the proper props from now
-      entries.splice(entryIndex, 1);
+      entries.splice(openItem, 1);
     }
     entries.unshift({
       uuid: props.docUUID,
@@ -85,13 +85,13 @@ const handleQuickListItem = () => {
       title: props.dataTitle,
       props: props.props,
     });
-    entryIndex = 0;
+    openItem = 0;
     $store.dispatch({
       type: "widgets/update",
       uuid: props.uuid,
       payload: {
         entries,
-        entryIndex,
+        openItem,
       },
     });
   }

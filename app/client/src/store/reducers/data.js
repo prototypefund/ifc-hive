@@ -3,28 +3,6 @@ import { mergeDeepRight } from 'ramda'
 
 export default ($eventbus) => (state, action) => {
   let data, items, item
-  const makeTitle = (item) => {
-    let title = item._id
-    if (item._type === 'memo' || item._type === 'tag') {
-      title = item._source.title
-    }
-    if (item._type === 'user') {
-      title = ''
-      if (item._source.firstname) {
-        title = item._source.firstname
-      }
-      if (item._source.lastname) {
-        title = `${title} ${item._source.lastname || ''}`.trim()
-      }
-      if (item._source.nickname) {
-        title = `${title} ${item._source.nickname || ''}`.trim()
-      }
-      if (item._source.email) {
-        title = `${title} ${item._source.email || ''}`.trim()
-      }
-    }
-    return title
-  }
   if (state) {
     switch (action.type) {
       case 'init':
@@ -62,7 +40,7 @@ export default ($eventbus) => (state, action) => {
               message: `a new Item with Id ${action.docUUID} of type ${action.type} was created`
             }
           })
-          
+
 
           //TODO change this to api usage once it's available
           if (state[action.docUUID]) {
@@ -80,9 +58,9 @@ export default ($eventbus) => (state, action) => {
           switch (item._type) {
             // TODO send partial to type specific API endpoints: memo, user, tag etc. 
             case 'memo':
-              
+
               break
-            default: 
+            default:
               console.error(`Unknown object type ${item._type}`)
           }
 
@@ -95,7 +73,7 @@ export default ($eventbus) => (state, action) => {
           // @TODO review the differentiation between new and existing docs
           if (state[action.docUUID]) {
             // update existing doc
-            item = JSON.parse(JSON.stringify(state[action.docUUID]))        
+            item = JSON.parse(JSON.stringify(state[action.docUUID]))
           } else {
             // create a new doc
             item = JSON.parse(JSON.stringify(action.objectDefinition))
