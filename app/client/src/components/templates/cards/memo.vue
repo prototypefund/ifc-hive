@@ -1,53 +1,53 @@
 <template>
   <v-card variant="outlined" v-if="memo" data-test-container="templates/cards/memo"
     :data-test-container-uuid="props.uuid">
-        <v-card-title>
-      <QuickListHandler uuid="quickList" :docUUID="memo._id" :dataTitle="memo._source.title" :tab-type="memo._type"
-              action="add">
+    <v-card-title>
+      <QuickListHandler uuid="quickList" :docUUID="memo._id" :dataTitle="memo._source.title" :type="memo._type"
+        action="add">
         {{ memo._source.title }}
       </QuickListHandler>
     </v-card-title>
-        <v-card-subtitle>
+    <v-card-subtitle>
       <v-chip label color="primary" size="small" class="mr-4"># {{ memo._disId }}
         <v-tooltip activator="parent" location="bottom">
-                  {{ memo._disId }}
+          {{ memo._disId }}
         </v-tooltip>
       </v-chip>
     </v-card-subtitle>
-    
+
     <v-card-subtitle>
       <v-row v-if="memo._created" no-gutters>
         <v-col cols="2"> {{ $t("generics.created") }}: </v-col>
         <v-col cols="auto">
-                  {{ $filters.dateFormat(memo._created) }}
+          {{ $filters.dateFormat(memo._created) }}
         </v-col>
       </v-row>
 
-            <v-row v-if="memo._modified" no-gutters>
+      <v-row v-if="memo._modified" no-gutters>
         <v-col cols="2"> {{ $t("generics.modified") }}: </v-col>
         <v-col cols="auto">
-                  {{ $filters.dateFormat(memo._modified) }}
+          {{ $filters.dateFormat(memo._modified) }}
         </v-col>
       </v-row>
-            <v-row v-if="memo._source.due" no-gutters>
+      <v-row v-if="memo._source.due" no-gutters>
         <v-col cols="2"> {{ $t("generics.due") }}: </v-col>
         <v-col cols="auto">
           {{ $filters.dateFormat(memo._source.due) }}
         </v-col>
       </v-row>
-        </v-card-subtitle>
-        <v-card-subtitle>
-      <tag-chips v-if="memo._source.tags && memo._source.tags.length > 0" :widgetUUID="props.widgetUUID"
-              :docUUID="memo._id" :tags="memo._source.tags" :tag-lookup="tagLookup" />
     </v-card-subtitle>
-        <v-card-text> </v-card-text>
-        <v-card-actions>
+    <v-card-subtitle>
+      <tag-chips v-if="memo._source.tags && memo._source.tags.length > 0" :widgetUUID="props.widgetUUID"
+        :docUUID="memo._id" :tags="memo._source.tags" :tag-lookup="tagLookup" />
+    </v-card-subtitle>
+    <v-card-text> </v-card-text>
+    <v-card-actions>
       <v-btn size="x-small" :append-icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'" @click="show = !show">
         DEBUG
       </v-btn>
     </v-card-actions>
-        <v-expand-transition>
-          <div v-show="show">
+    <v-expand-transition>
+      <div v-show="show">
         <v-divider></v-divider>
 
         <v-card-text>
@@ -62,28 +62,28 @@
           {{ $t("generics.author") }}
         </v-col>
         <v-col cols="9">
-          <QuickListHandler uuid="quickList" :docUUID="memo._source.owner" :dataTitle="memo._source.owner" tab-type="user"
+          <QuickListHandler uuid="quickList" :docUUID="memo._source.owner" :dataTitle="memo._source.owner" type="user"
             action="add">
             <user-list-item :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :docUUID="memo._source.owner" />
-                      </QuickListHandler>
+          </QuickListHandler>
         </v-col>
       </v-row>
       <v-row v-if="memo._source.assigned">
         <v-col cols="3">
           {{ $t("generics.assignee") }}
-                  </v-col>
+        </v-col>
         <v-col cols="9">
-                  <QuickListHandler uuid="quickList" :docUUID="memo._source.assigned" :dataTitle="memo._source.assigned"
-            tab-type="user" action="add">
+          <QuickListHandler uuid="quickList" :docUUID="memo._source.assigned" :dataTitle="memo._source.assigned"
+            type="user" action="add">
             <user-list-item :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :docUUID="memo._source.assigned" />
           </QuickListHandler>
         </v-col>
       </v-row>
-     </v-card-subtitle>
+    </v-card-subtitle>
   </v-card>
-  </template>
+</template>
 
-  <script setup>
+<script setup>
 import {
   inject,
   ref,

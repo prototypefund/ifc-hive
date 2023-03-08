@@ -1,4 +1,4 @@
-import { mergeDeepRight} from 'ramda'
+import { mergeDeepRight } from 'ramda'
 import { applicationState, storePatterns } from '../state'
 
 export default ($eventbus) => (state, action) => {
@@ -23,6 +23,10 @@ export default ($eventbus) => (state, action) => {
         newWidgets = {}
         if (action.payload.length > 0) {
           action.payload.forEach(widget => {
+            if (widget.uuid && state[widget.uuid]) {
+              // if we are in widgets/add but the widget uuid already exists, we do nothing as updates shall be done in widgets/update
+              return state
+            }
             // get the config file for the current widget
             if (widget.type) {
               // @TODO pseudo effect
@@ -37,20 +41,6 @@ export default ($eventbus) => (state, action) => {
             }
           })
           return mergeDeepRight(state, newWidgets)
-        }
-        return state
-
-      /* widgets/remove */
-      case 'widgets/remove':
-        newWidgets = {}
-        if (action.payload.length > 0) {
-          const newWidgets = JSON.parse(JSON.stringify(state))
-          action.payload.forEach(widgetUUID => {
-            if (!newWidgets[widgetUUID])
-              console.error("apparently we try to delete a widget we don't have in the state")
-            delete newWidgets[widgetUUID]
-          })
-          return newWidgets
         }
         return state
 

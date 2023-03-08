@@ -1,15 +1,15 @@
 <template>
   <v-container data-test-container="pages/journal" fluid pa-0>
     <h1>{{ $t("pages.app-journal") }}</h1>
-    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" tab-type="memo"
+    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="memo"
       action="add">
       <v-btn>New Memo</v-btn>
     </QuickListHandler>
-    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" tab-type="user"
+    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="user"
       action="add">
       <v-btn>New User</v-btn>
     </QuickListHandler>
-    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" tab-type="tag"
+    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="tag"
       action="add">
       <v-btn>New Tag</v-btn>
     </QuickListHandler>

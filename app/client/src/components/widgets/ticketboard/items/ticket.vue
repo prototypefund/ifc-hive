@@ -4,7 +4,7 @@
     @mouseover="isHovering = ticketItem._id" @mouseout="isHovering = false">
     <template v-slot:title>
       <QuickListHandler :props="{ mode: 'edit' }" uuid="quickList" :docUUID="ticketItem._id"
-        :dataTitle="ticketItem._source.title || ticketItem._title" :tab-type="ticketItem._type" action="add">
+        :dataTitle="ticketItem._source.title || ticketItem._title" :type="ticketItem._type" action="add">
         <v-card-title class="ticketTitle">{{ ticketItem._source.title || ticketItem._title }}</v-card-title>
       </QuickListHandler>
     </template>

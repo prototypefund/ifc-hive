@@ -85,12 +85,5 @@ onMounted(() => {
 });
 onUnmounted(() => {
     dataItemSubscriber$.unsubscribe();
-    if (uploader.value) {
-        // remove our widget store if we had an uploade once
-        $store.dispatch({
-            type: "widgets/remove",
-            payload: [uploader.value.uuid],
-        });
-    }
 });
 </script>

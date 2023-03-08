@@ -1,55 +1,21 @@
 <template>
-  <v-app-bar
-    density="compact"
-    flat
-    color="grey-lighten-2"
-    class="toolBar"
-    id="appToolbar"
-    data-test-container="utils/toolbar/default"
-  >
-    <v-toolbar-title class="d-none d-sm-none d-md-flex d-lg-flex d-xl-flex"
-      >{{ $t("widgets.tools.title") }}
+  <v-app-bar density="compact" flat color="grey-lighten-2" class="toolBar" id="appToolbar"
+    data-test-container="utils/toolbar/default">
+    <v-toolbar-title class="d-none d-sm-none d-md-flex d-lg-flex d-xl-flex">{{ $t("widgets.tools.title") }}
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-slide-x-transition>
-      <v-progress-linear
-        v-if="loading"
-        class="loader"
-        indeterminate
-        color="primary"
-      ></v-progress-linear>
+      <v-progress-linear v-if="loading" class="loader" indeterminate color="primary"></v-progress-linear>
     </v-slide-x-transition>
     <v-slide-x-transition>
-      <v-tabs
-        v-if="!loading"
-        :density="!currentTool ? 'compact' : 'default'"
-        v-model="currentTool"
-        fixed-tabs
-      >
-        <v-tab
-          class="closeBtnWrapper active"
-          :class="{ hidden: currentTool === false }"
-          :value="false"
-        >
-          <v-btn
-            variant="plain"
-            icon="mdi-chevron-right"
-            @click.stop="currentTool = false"
-          />
+      <v-tabs v-if="!loading" :density="!currentTool ? 'compact' : 'default'" v-model="currentTool" fixed-tabs>
+        <v-tab class="closeBtnWrapper active" :class="{ hidden: currentTool === false }" :value="false">
+          <v-btn variant="plain" icon="mdi-chevron-right" @click.stop="currentTool = false" />
         </v-tab>
         <template v-for="(tool, key) in state">
-          <v-tab
-            :class="{ active: currentTool === key }"
-            v-if="checkVisibility(tool)"
-            :value="key"
-          >
-            <a
-              v-if="currentTool === key"
-              class="closeOverlay"
-              @click.stop="currentTool = false"
-            ></a>
-            <span class="d-none d-sm-flex d-md-flex d-lg-flex d-xl-flex"
-              >{{ $t("widgets." + tool.title) }}
+          <v-tab :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key">
+            <a v-if="currentTool === key" class="closeOverlay" @click.stop="currentTool = false"></a>
+            <span class="d-none d-sm-flex d-md-flex d-lg-flex d-xl-flex">{{ $t("widgets.tools." + tool.title) }}
             </span>
             <v-icon v-if="currentTool === key">{{ tool.iconActive }}</v-icon>
             <v-icon v-else>{{ tool.icon }}</v-icon>
@@ -59,25 +25,16 @@
     </v-slide-x-transition>
   </v-app-bar>
 
-  <v-container
-    v-if="currentTool && currentComponent"
-    fluid
-    :class="{ hidden: loading }"
-    class="toolContent primary"
+  <v-container v-if="currentTool && currentComponent" fluid :class="{ hidden: loading }" class="toolContent primary"
     :style="{
       height: viewPortHeight + 'px',
       width: viewPortWidth < 800 ? viewPortWidth + 'px' : '60%',
-    }"
-  >
+    }">
     <hr class="contentLine" />
     <v-slide-x-reverse-transition>
       <v-card flat>
-        <component
-          :is="currentComponent"
-          :uuid="currentTool"
-          :props="state[currentTool].widget.props || {}"
-          class="toolComponentWrapper"
-        >
+        <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}"
+          class="toolComponentWrapper">
         </component>
       </v-card>
     </v-slide-x-reverse-transition>
@@ -220,7 +177,7 @@ export default {
   overflow: hidden;
 }
 
-.toolContent > .v-card {
+.toolContent>.v-card {
   height: 100%;
   padding-bottom: 5px;
 }

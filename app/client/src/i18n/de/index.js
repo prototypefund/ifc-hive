@@ -49,8 +49,10 @@ export default {
     tags: 'Tags',
     assigned: 'Zugewiesen',
     color: 'Farbe',
-    tagType: 'Tag Typ'
-
+    tagType: 'Tag Typ',
+    mode: 'Modus',
+    edit: 'Bearbeiten',
+    view: 'Ansehen'
   },
   ui: {
     uiSettings: 'Oberflächen Einstellungen',

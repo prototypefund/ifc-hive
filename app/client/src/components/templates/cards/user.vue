@@ -4,7 +4,7 @@
     <div class="d-flex justify-between">
       <v-card-title class="flex-grow-1 flex-column align-start" :style="{ 'max-width': '80%' }">
         <div class="text-h5 text-truncate">
-          <QuickListHandler uuid="quickList" :docUUID="user._id" :dataTitle="user._title" tab-type="user"
+          <QuickListHandler uuid="quickList" :docUUID="user._id" :dataTitle="user._title" type="user"
             :props="{ mode: 'edit' }" action="add">
             {{ user._source.firstname }} {{ user._source.lastname }}
           </QuickListHandler>

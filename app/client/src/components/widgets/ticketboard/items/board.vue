@@ -6,7 +6,7 @@
     <template v-slot:title v-if="generic">{{ $t("generics." + boardId) }} </template>
     <template v-slot:title v-else>
       <QuickListHandler uuid="quickList" :props="{ mode: 'edit' }" :docUUID="boardId" :dataTitle="boardItem._title"
-        :tab-type="boardItem._type" action="add">
+        :type="boardItem._type" action="add">
         {{ boardItem._title }}
       </QuickListHandler>
     </template>

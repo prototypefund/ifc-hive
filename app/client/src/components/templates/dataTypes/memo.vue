@@ -1,14 +1,23 @@
 <template>
   <v-card flat v-if="item" data-test-container="templates/dataTypes/memo" :data-test-container-uuid="props.uuid">
-    <v-card-title>{{ item._title }}</v-card-title>
+    <v-card-title>
+      <v-row no-gutters>
+        <v-col align-self="start" cols="9"> {{ item._title }}</v-col>
+        <v-col align-self="end" cols="3" v-if="item._disId">
+          <v-switch v-model="editMode" hide-details true-value="edit" false-value="view"
+            :label="$t('generics.mode') + ': ' + $t('generics.' + editMode)"></v-switch>
+        </v-col>
+      </v-row>
+    </v-card-title>
+
     <v-card-text>
-      <div v-if="mode === 'edit'">
+      <div v-if="editMode === 'edit'">
         <v-row>
           <v-col cols="12">
             <v-text-field v-model="title" :label="$t('generics.title')" variant="underlined"></v-text-field>
           </v-col>
           <v-col cols="12">
-            <tag-combobox v-if="item._disId" :tag-lookup="tagLookup" :widgetUUID="props.widgetUUID" :mode="mode"
+            <tag-combobox v-if="item._disId" :tag-lookup="tagLookup" :widgetUUID="props.widgetUUID" mode="edit"
               :docUUID="item._id" />
           </v-col>
           <v-col cols="12">
@@ -19,7 +28,7 @@
           </v-col>
 
           <v-col cols="12">
-            <user-autocompletion v-if="item._disId" :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :mode="mode"
+            <user-autocompletion v-if="item._disId" :user-lookup="userLookup" :widgetUUID="props.widgetUUID" mode="edit"
               :docUUID="item._id" selectedUserRole="assigned" />
           </v-col>
           <v-col cols="12">
@@ -81,6 +90,7 @@ const userChips = defineAsyncComponent(() => import("@t/chips/user.vue"));
 const userAutocompletion = defineAsyncComponent(() =>
   import("@t/autocompletion/user.vue")
 );
+const editMode = shallowRef('view');
 const item = ref(false);
 const debounceTimer = shallowRef(false);
 const debounce = (func) => {
@@ -207,7 +217,9 @@ const dataItemSubscriber$ = $store
     }
   });
 
-onMounted(() => { });
+onMounted(() => {
+  editMode.value = props.mode
+});
 onUnmounted(() => {
   dataItemSubscriber$.unsubscribe();
   tagLookup.value.unsubscribe();

@@ -49,7 +49,10 @@ export default {
     tags: 'Tags',
     assigned: 'Assigned',
     color: 'Color',
-    tagType: 'Tag Type'
+    tagType: 'Tag Type',
+    mode: 'Mode',
+    edit: 'edit',
+    view: 'view'
   },
   ui: {
     uiSettings: 'UI Settings',

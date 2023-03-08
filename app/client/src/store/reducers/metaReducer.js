@@ -2,13 +2,14 @@ import { v4 as uuidv4 } from 'uuid'
 
 export default ($eventbus) => [(reducer) => {
   return (state, action) => {
-    let page, widgets
+    let page, widgets, pageUUID
 
     // meta "effect like" reducer for widget add before page add
     if (action.type == "pages/add") {
       page = action.payload
+      pageUUID = action.payload.uuid || action.routeName.replace('.', '-')
       // if we have a widget config for this page we need to setup the widget states
-      if (page.slots || page.widget) {
+      if ((page.slots || page.widget) && !state.pages[pageUUID]) {
         widgets = []
         const makeWidget = (widget) => {
           if (!widget.uuid) {
