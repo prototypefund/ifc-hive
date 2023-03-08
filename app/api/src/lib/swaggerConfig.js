@@ -26,13 +26,9 @@ export const swaggerConfig = {
       description: 'FInd more documentation here'
     },
     tags: [
-      { name: 'user', description: 'Represents a natural person, which belongs to an organization' },
-      { name: 'organization', description: 'Represents an organization' },
-      { name: 'project', description: 'Represents the project or child-project scope for a Projectjournal' },
-      { name: 'memo', description: 'Represents a memo (a.k.a. ticket, issue, note) in the scope of a project' },
-      { name: 'tag', description: 'Represents a label to be attached to a memo. Tags exists in the scope of a project.' },
-      { name: 'permission', description: 'Represents user/project specific roles' },
-      { name: 'note', description: 'A simpel test object for development.' }
+      { name: 'user',
+        description: 'Represents a natural person, which belongs to an organization'
+      },
     ],
     securityDefinitions: {
       apiKey: {
@@ -47,6 +43,9 @@ export const swaggerConfig = {
 
 /*
  * @fastify/swagger-ui configuration
+ *
+ * Since the last major update the swagger interface comes in its own plugin
+ * and with its own configuration.
  */
 export const swaggerUiConfig = {
   routePrefix: '/docs',
@@ -60,7 +59,8 @@ export const swaggerUiConfig = {
     preHandler: function (request, reply, next) { next() }
   },
   staticCSP: true,
-  transformStaticCSP: (header) => header
+  transformStaticCSP: (header) => header,
+  exposeRoute: true
 }
 
 export default swaggerConfig

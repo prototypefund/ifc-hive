@@ -8,7 +8,7 @@ export function isObject (value) {
 
 /*
  * Recursively remove _id properties from object
- * @param {Object} obj, the object or schema to remote the _id property from
+ * @param {Object} obj, the object or schema to remove the _id property from
  *
  * @TODO complete recursive removal of properties
  */

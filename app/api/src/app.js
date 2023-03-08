@@ -22,8 +22,12 @@ import eventbus from './plugins/eventbus/index.js'
  * @TODO use the new import ... asssert { type: 'json' } method whhen upgrading node.js
  */
 import { createRequire } from "module";
-const require = createRequire(import.meta.url);
+const require = createRequire(import.meta.url)
 const _package = require('../package.json')
+
+/* manually add __filename and __dirname since they are not available in ES modules */
+global.__filename = fileURLToPath(import.meta.url)
+global.__dirname = dirname(__filename)
 
 /*
  * ENV variables for configuration
@@ -32,25 +36,24 @@ const _package = require('../package.json')
  * API_TOKEN_SECRET     secret for signing the JWT token
  * API_TOKEN_MAX_AGE    max age for valig JWT, e.g. '3600' (seconds), '1d' (days), '1h' (hours)
  * API_PORT             port for the api, defaults to 3000
+ *
+ * @TODO add env variables for mongo, es etc. Basically all configuratioan
+ * should be done by env-variables.
+ * @TODO add sensible defaults for all env variables.
  */
 
 /*
- * import custom components from ./components here.
- * ------------------------------------------------------------------------------------------------
+ * ---------------------------------------------------------------------
+ * IMPORT YOUR CUSTOM COMPONENTS HERE from ./components
+ * ---------------------------------------------------------------------
  */
-// testing websocket routes and mechanism
-// import notes from './components/note/index.js'
-// import access from './components/access/index.js'
-
-/* manually add __filename and __dirname since they are not available in ES modules */
-global.__filename = fileURLToPath(import.meta.url)
-global.__dirname = dirname(__filename)
+// lab routes for naive socket integration
+import lab from './components/lab/index.js' 
 
 /*
  * create app function
  */
 export default async function app (opts = {}) {
-  // @TODO read opts
 
   /* @TODO make logging configurable with an env variable */
   const app = fastifyFabric({
@@ -63,139 +66,12 @@ export default async function app (opts = {}) {
     genReqId: () => nanoid()
   })
 
-  /*
-   * --------------------------------------------
-   * websocket
-   */
+  /* register websocket server */
   app.register(websocket)
+  /* register custom event bus */
   app.register(eventbus)
 
-  app.register(async function (app) {
-
-     /*
-      * GET Memo
-      */
-    app.get('/memo/:id', function (request, reply) {
-      reply.send({ message: 'Some thing to respond' })
-      app.eventbus.emit('memo_get', { _id: 'something' })
-    })
-
-    /*
-     * POST Memo
-     */
-    app.post('/memo', function (request, reply) {
-      reply.send({ message: 'Some thing to respond' })
-      app.eventbus.emit('memo_get', { _id: 'something' })
-    })
-
-    /*
-     * PUT Memo
-     */
-    app.put('/memo/:id', function (request, reply) {
-      reply.send({ message: 'Some thing to respond' })
-
-      // @TODO update item
-      const updatedObject = JSON.parse(JSON.stringify(request.body))
-
-      // add display ID if we don't have one yet
-      if (!updatedObject._disId || updatedObject._disId.length > 6) {
-        updatedObject._disId = nanoid(6)
-      }
-
-      // update modifed field
-      updatedObject._modified = new Date()
-      // make sure the object id exissts in _source
-      updatedObject._source._id = request.params.id
-
-      /*
-       * Mock update depending on object type
-       */
-      switch (updatedObject._type) {
-        case 'user':
-          let { firstname, lastname, email } = updatedObject._source
-          updatedObject._title = `${firstname} ${lastname} ${email}`
-          break
-        case 'memo':
-          updatedObject._title = updatedObject._source.title
-          break
-        case 'tag':
-          updatedObject._title = updatedObject._source.title
-          break
-        case 'organization':
-          let { name, shortname } = updatedObject._source
-          updatedObject._title = `${shortname} ${name}`
-          break
-        case 'project': 
-          updatedObject._title = updatedObject._source.title
-          break
-        default: 
-      }
-
-      // push updated object into event bus 
-      app.eventbus.emit('push_data', updatedObject )
-    })
-
-    /*
-     * DELETE Memo
-     */
-    app.delete('/memo/:id', function (request, reply) {
-      reply.send({ message: 'Some thing to respond' })
-    })
-
-    /* 
-     * Route websocket (generic) 
-     */
-    app.get('/websocket', { websocket: true }, function wsHandler (connection, req) {
-      // create a unique ide for this socket
-      const id = nanoid()
-      connection.socket.id = id
-      // send unique ide back to client
-      app.log.info(`Socket ${connection.socket.id} connected`)
-      connection.socket.send(JSON.stringify({ type: 'id', params: { id } }))
-
-      connection.socket.on('close', message => {
-        app.log.info(`Socket ${connection.socket.id} closed`)
-      })
-
-      /*
-       * Message event, differentiate by custom message type
-       */
-      connection.socket.on('message', message => {
-        // lets make sure we turn buffers into strings
-        const raw = typeof message === 'string'? message : message.toString()
-        try {
-          const data = JSON.parse(raw)
-
-          // handle message depending on type
-          switch (data.type) {
-            // answer with a pong when receiving a ping
-            case 'ping': 
-              const payload = { type: 'pong', params: { token: data.params.token } }
-              connection.socket.send(JSON.stringify(payload))
-              break
-            default:
-              app.log.error({ msg: `Socket server unknown message type ${data.type}`, data })
-          }
-
-        } catch (error) {
-          app.log.error({ msg: 'Socket server cannot parse message', data: raw })
-        }
-      })
-
-      /*
-       * Push data event
-       */
-      app.eventbus.on('push_data', (payload) => {
-        app.log.info({ msg: 'Push data to socket', item: payload._id  })
-        const message = { type: 'data', params: { data: payload } } 
-        connection.socket.send(JSON.stringify(message)) 
-      })
-
-    })
-  }, { prefix: '/lab' })
-
-
-  // register jwt authentication plugin
+  /* register jwt authentication plugin */
   // app.register(jwt, {
   //   secret: process.env.API_TOKEN_SECRET,
   //   maxAge: process.env.API_TOKEN_MAX_AGE,
@@ -203,7 +79,6 @@ export default async function app (opts = {}) {
 
   /*
    * APP CONFIGURATION FROM ENV VARIABLES
-   * ----------------------------------------------------------------------------------------------
    */
   if (!process.env.API_TOKEN_SECRET || process.env.API_TOKEN_SECRET === 'undefined') {
     app.log.fatal('Missing config API_SECRET')
@@ -212,9 +87,7 @@ export default async function app (opts = {}) {
 
   /*
    * CONNECT TO MONGO
-   * ----------------------------------------------------------------------------------------------
    */
-
   // the default value for strictQuery will be changed to false in future version
   // see mongoose depreciation warning.
   mongoose.set('strictQuery', false)
@@ -236,7 +109,6 @@ export default async function app (opts = {}) {
 
   /*
    * REGISTER AND CONFIGURE GLOBAL PLUGINS
-   * ----------------------------------------------------------------------------------------------
    */
   /* register CORS plugins */
   app.register(fastifyCors, {
@@ -263,13 +135,33 @@ export default async function app (opts = {}) {
   app.register(fastifySensible)
   /* register swagger documentation tool */
   app.register(fastifySwagger, swaggerConfig)
+  /* register swagger UI component, which is now its own thing */
   app.register(fastifySwaggerUI, swaggerUiConfig)
 
   /*
-   * ACCEPT-VERSION HANDLING
-   * ----------------------------------------------------------------------------------------------
+   * add health check
    *
-   * We are using versioning for out end-points. Following the fastify
+   * @TODO add custom functions to checkt presence and health of
+   *  - mongodb
+   *  - elasticsearch
+   *  - redis
+   *  - socket server
+   */
+  /* simple health check on /health */
+  app.register(healthcheck, {
+    info: {
+      name: _package.name,
+      version: _package.version,
+      env: process.env.NODE_ENV
+    },
+    schema: false, // @TODO pass custom schema for swagger
+    exposeFailure: process.env.NODE_ENV !== 'production' ? true : false
+  })
+
+  /*
+   * ACCEPT-VERSION Header check
+   *
+   * We are using versioning for out API end-points. Following the fastify
    * recommendation regarding the version contraint we add the following hook
    * in order to prevent cache poisoning attacks. see
    * https://www.fastify.io/docs/latest/Reference/Routes/#constraints
@@ -294,8 +186,9 @@ export default async function app (opts = {}) {
   app.addHook('onRequest', (request, reply, done) => {
     // we want the accept-versio header everywhere except when requesting the documentation routes
     // @TODO take care of request.req depreciated
-    if ( !request.headers['accept-version'] &&
-      !/(docs|health|websocket)/.test(request.raw.url) // exclude routes 
+    if ( !request.headers['accept-version']
+      && !/(docs|health|websocket)/.test(request.raw.url) // exclude routes 
+      && process.env.NODE_ENV === 'production' // only be strict in production @TODO sure?
     ) {
       // send error if we are missing the Accept-Version header
       reply
@@ -309,30 +202,15 @@ export default async function app (opts = {}) {
     done()
   })
 
-  /*
-   * REGISTER PROJECT COMPONENTS
-   * ----------------------------------------------------------------------------------------------
-   */
-  // app.register(access, { prefix: '/access' })
-  // app.register(notes, { prefix: '/test' })
+
 
   /*
-   * DECORATE GLOBALE EVENT EMITTER
-   * ----------------------------------------------------------------------------------------------
-   *
-   * Add a global event emitter and decorate the request object, so that all
-   * routes in all components can emit events. Commonly events should be
-   * handled in the respective components. Try to keep interdependency as minimal as possible.
+   * ---------------------------------------------------------------------
+   * REGISTER YOUR PROJECT COMPONENTS HERE
+   * ---------------------------------------------------------------------
    */
-  /* simple health check on /health */
-  app.register(healthcheck, {
-    info: {
-      name: _package.name,
-      version: _package.version,
-      env: process.env.NODE_ENV
-    },
-    exposeFailure: process.env.NODE_ENV !== 'production' ? true : false
-  })
+  app.register(lab, { prefix: '/lab' })
 
+  // return the configured app
   return app
 }
