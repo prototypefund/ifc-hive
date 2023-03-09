@@ -1,21 +1,31 @@
 import { S } from 'fluent-json-schema'
 import { userBaseSchema } from './schemas.js'
+import User from '../../model/user/user.model.js'
 
 /* versions */
 const VERSIONS = ['1.0.0']
 
 /* handler */
 async function handler (request, response) {
-  return response.send({
-    message: 'objectUpdated',
-    requestId: '1234ABFD',
-    actionId: null,
-  })  
+  // create a user by means of test
+  try {
+    const newUser = await User.create(request.body.user)
+    // return response object
+    return response.send({
+      message: `objectUpdated ${newUser._id}`,
+      requestId: '1234ABFD',
+      actionId: null,
+    })  
+  } catch (err) {
+    response.code(500)
+    response.send(err)
+  }
+  
 }
 
 /* body */
 const body = S.object()
-  .prop('user', S.anyOf([userBaseSchema.without(['password', 'resetkey'])]))
+  .prop('user', S.oneOf([userBaseSchema.without(['resetkey'])]))
   .prop('actionid', S.string())
 
 /* params */
@@ -37,13 +47,13 @@ const headers = S.object()
   .required('Accept-Version')
 
 /*
- * Schema
+ * route options
  */
 export const userPostOptions = {
   constraints: { version: '1.0.0' },
   handler: handler,
   schema: {
-    summary: 'Create a new user',
+    summary: 'Create a new user [admin]',
     description: `Other than with most objects we create a dedicated POST
       route, because user._id is always generated on the server. Creating a new
     user requires some procedures which are best encapsulated in this dedicated
@@ -53,7 +63,7 @@ export const userPostOptions = {
     headers,
     response: {
       '2xx': response
-    }
+    },
   }
 }
 

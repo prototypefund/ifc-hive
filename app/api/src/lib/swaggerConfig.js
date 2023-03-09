@@ -8,6 +8,13 @@
  * For furhter information see:
  * https://github.com/fastify/fastify-swagger/blob/master/MIGRATION.md
  */
+/*
+ * import package.json so we know our app version
+ * @TODO use the new import ... asssert { type: 'json' } method whhen upgrading node.js
+ */
+import { createRequire } from "module";
+const require = createRequire(import.meta.url)
+const _package = require('../../package.json')
 
 /*
  * @fastify/swagger openapi-specification configuration
@@ -18,25 +25,35 @@ export const swaggerConfig = {
   openapi: {
     info: {
       title: 'ifc-hive-api',
-      description: 'API documenation for the ifc-hive platform.',
-      version: '0.0.1'
+      description: `API documenation for the ifc-hive platform.`,
+      version: _package.version,
+      termsOfService: 'https://www.pacifico/info/term',
+      license: { name: 'MIT License', url: 'https://repo.karo.design' },
+      contact: {
+        name: 'Pacifico Building Data Service UG',
+        url: 'https://www.pacifico.info/support'
+      }
     },
     externalDocs: {
       url: 'https://ifc-hive.karo.design',
-      description: 'FInd more documentation here'
+      description: 'Further documentation and guides.'
     },
     tags: [
       { name: 'core/user',
-        description: 'Represents a natural person, which belongs to an organization'
+        description: 'Represents a natural person, which belongs to an organization',
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
       },
       { name: 'core/organization',
-        description: 'User can choose to get notified on state changes.'
+        description: 'User can choose to get notified on state changes.',
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about the organization concept' }
       },
       { name: 'core/permission',
-        description: 'Represents a privelege.'
+        description: 'Represents a privelege.',
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about the permission concept' }
       },
       { name: 'core/subscription',
-        description: 'User can choose to get notified on state changes.'
+        description: 'User can choose to get notified on state changes.',
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about the subscription concept' }
       },
     ],
     securityDefinitions: {
@@ -59,7 +76,6 @@ export const swaggerConfig = {
 export const swaggerUiConfig = {
   routePrefix: '/docs',
   uiConcfig: {
-    docExpansion: 'full',
     deepLinking: true,
     defaultModelsExpandDepth: 5,
     defaultModelExpandDepth: 5,

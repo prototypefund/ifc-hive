@@ -13,15 +13,6 @@ async function handler (request, response) {
   })  
 }
 
-/* body */
-const body = S.object()
-  .prop('user', S.oneOf([userBaseSchema.without(['password', 'resetkey'])]))
-  .prop('actionid', S.string())
-
-/* params */
-const params = S.object()
-  .prop('id', S.string().required())
-
 /* query */
 const query = null 
 
@@ -40,18 +31,14 @@ const headers = S.object()
 /*
  * route options
  */
-export const userPutOptions = {
+export const userSearchOptions = {
   constraints: { version: '1.0.0' },
   handler: handler,
   schema: {
-    summary: 'Update a user [admin, maintainer, owner]',
-    description: `Other than with most objects we create a dedicated POST
-      route, because user._id is always generated on the server. Creating a new
-    user requires some procedures which are best encapsulated in this dedicated
-    API endpoint.`,
+    summary: 'Search in all users [admin]',
+    description: `Users in the search index are fully rendered with populated
+    organization, permission and subscription fields.`,
     tags: ['core/user'],
-    body,
-    params,
     headers,
     response: {
       '2xx': response
@@ -59,4 +46,4 @@ export const userPutOptions = {
   }
 }
 
-export default userPutOptions
+export default userSearchOptions

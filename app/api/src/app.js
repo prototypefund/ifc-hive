@@ -203,8 +203,6 @@ export default async function app (opts = {}) {
     done()
   })
 
-
-
   /*
    * ---------------------------------------------------------------------
    * REGISTER YOUR PROJECT COMPONENTS HERE

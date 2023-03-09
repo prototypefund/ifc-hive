@@ -6,7 +6,7 @@ const VERSIONS = ['1.0.0']
 /* handler */
 async function handler (reqeust, response) {
   return response.send({
-    message: 'objectsRetrieved',
+    message: 'objectDeleted',
     requestId: '1235',
     actionId: '234',
   })
@@ -24,18 +24,16 @@ const headers = S.object()
 /*
  * route options
  */
-export const userGetOptions = {
+export const userDeleteOptions = {
   constraints: { version: '1.0.0' },
   handler: handler,
   schema: {
-    summary: 'Get a single user [admin, maintainer, owner]',
-    description: `Retrieve a single user, e.g. to edit the object. Only
-    administrators, project maintainers and the user himself/herself can access
-    this object directly.`,
+    summary: 'Delete a single user [admin, maintainer, owner]',
+    description: `Notice that in order to ensure data integrity the systems interally handles a soft-delete concept. In order to adhere to the GDPR (auf Deutsch DSGVO) the user's attributes may be overwritten with pseudo-values.`,
     tags: ['core/user'],
     headers,
     params,
   },
 }
 
-export default userGetOptions
+export default userDeleteOptions
