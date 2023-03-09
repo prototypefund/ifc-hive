@@ -26,8 +26,17 @@ export const swaggerConfig = {
       description: 'FInd more documentation here'
     },
     tags: [
-      { name: 'user',
+      { name: 'core/user',
         description: 'Represents a natural person, which belongs to an organization'
+      },
+      { name: 'core/organization',
+        description: 'User can choose to get notified on state changes.'
+      },
+      { name: 'core/permission',
+        description: 'Represents a privelege.'
+      },
+      { name: 'core/subscription',
+        description: 'User can choose to get notified on state changes.'
       },
     ],
     securityDefinitions: {
@@ -52,11 +61,15 @@ export const swaggerUiConfig = {
   uiConcfig: {
     docExpansion: 'full',
     deepLinking: true,
+    defaultModelsExpandDepth: 5,
+    defaultModelExpandDepth: 5,
+    defaultModelRendering: 'model'
   },
   // uiHooks just as a reminder
   uiHooks: {
     onRequest: function (request, reply, next) { next() },
     preHandler: function (request, reply, next) { next() }
+
   },
   staticCSP: true,
   transformStaticCSP: (header) => header,

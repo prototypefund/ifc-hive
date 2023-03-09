@@ -14,8 +14,8 @@ import { fileURLToPath } from 'url' // required to emulate __filename
 import { dirname } from 'path' // required to emulate __dirname
 import vary from 'vary' // required to handle the accept-version header
 import { nanoid } from 'nanoid'
-// import jwt from './plugins/authentication/index.js'
 import eventbus from './plugins/eventbus/index.js'
+// import jwt from './plugins/authentication/index.js'
 
 /*
  * import package.json so we know our app version
@@ -49,6 +49,7 @@ global.__dirname = dirname(__filename)
  */
 // lab routes for naive socket integration
 import lab from './components/lab/index.js' 
+import core from './services/core/index.js'
 
 /*
  * create app function
@@ -210,6 +211,7 @@ export default async function app (opts = {}) {
    * ---------------------------------------------------------------------
    */
   app.register(lab, { prefix: '/lab' })
+  app.register(core, { prefix: '/core' })
 
   // return the configured app
   return app
