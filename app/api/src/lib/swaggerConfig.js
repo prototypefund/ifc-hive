@@ -56,14 +56,16 @@ export const swaggerConfig = {
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the subscription concept' }
       },
     ],
-    securityDefinitions: {
-      apiKey: {
-        description: 'Example: "Bearer {token}"',
-        type: 'apiKey',
-        name: 'Authorization',
-        in: 'header'
+    components: {
+      securitySchemes: {
+        apiKey: {
+          type: 'apiKey',
+          name: 'apiKey',
+          in: 'header',
+          description: `Use the <bold>POST /core/user/login</bold> API endpoint to create a token. Then use the resulting token as indicated in the following example.<br /><br /> Example \"Bearer $TOKEN\"`
+        }
       }
-    }
+    },
   },
 }
 

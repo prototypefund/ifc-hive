@@ -64,6 +64,7 @@ export const userPostOptions = {
     response: {
       '2xx': response
     },
+    security: [ { apiKey: [] } ]
   }
 }
 
