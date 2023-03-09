@@ -25,7 +25,7 @@ async function handler (request, response) {
 
 /* body */
 const body = S.object()
-  .prop('user', S.oneOf([userBaseSchema.without(['resetkey'])]))
+  .prop('user', userBaseSchema.without(['resetkey']))
   .prop('actionid', S.string())
 
 /* params */

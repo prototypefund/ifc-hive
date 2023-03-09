@@ -77,21 +77,21 @@ export const swaggerConfig = {
  */
 export const swaggerUiConfig = {
   routePrefix: '/docs',
-  uiConcfig: {
+  uiConfig: {
     deepLinking: true,
-    defaultModelsExpandDepth: 5,
-    defaultModelExpandDepth: 5,
-    defaultModelRendering: 'model'
+    defaultModelsExpandDepth: 10,
+    defaultModelExpandDepth: 10,
+    docExpansion: 'none',
   },
   // uiHooks just as a reminder
   uiHooks: {
     onRequest: function (request, reply, next) { next() },
-    preHandler: function (request, reply, next) { next() }
+    preHandler: function (request, reply, next) { next() },
 
   },
   staticCSP: true,
   transformStaticCSP: (header) => header,
-  exposeRoute: true
+  exposeRoute: true,
 }
 
 export default swaggerConfig
