@@ -81,7 +81,7 @@ export const swaggerUiConfig = {
     deepLinking: true,
     defaultModelsExpandDepth: 10,
     defaultModelExpandDepth: 10,
-    docExpansion: 'none',
+    docExpansion: 'list',
   },
   // uiHooks just as a reminder
   uiHooks: {
