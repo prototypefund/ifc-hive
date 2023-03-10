@@ -27,10 +27,10 @@ function mapIds (objects, idLookup) {
   // early return if there is nothing to do
   if (!objects || !Array.isArray(objects) || objects.length < 1) return 
   // iterate over objects and replace the origina obj._id with the UUID from idLookup
-  // return objects.p((e) => { 
-  //   e._id = idLookup[e._id]
-  //   return e
-  // })
+  return objects.map((e) => { 
+    e._id = idLookup[e._id]
+    return e
+  })
 }
 
 /*
@@ -46,16 +46,17 @@ export default function (app) {
   async function handler (request, response) {
     try { 
       const idMap = ids.reduce((acc,curr)=> (acc[curr] = uuidv4(), acc), {})
+      const refUsers = JSON.parse(JSON.stringify(Users))
       // generate new uuids in idMap
       await User.deleteMany({})
 
-      // request.log.info(`Mongodb truncated collection ${User.collection.collectionName}`)
-      const newUsers = mapIds(Users, idMap)
-      // newUsers.forEach(async function (u) {
-      //   await User.create(u)
-      // })
+      request.log.info(`Mongodb truncated collection ${User.collection.collectionName}`)
+      const newUsers = mapIds(refUsers, idMap)
+      newUsers.forEach(async function (u) {
+        await User.create(u)
+      })
 
-      return { newUsers }
+      return { newUsers, idMap }
     } catch (err) {
       app.httpErrors.internalServerError(err)
     }

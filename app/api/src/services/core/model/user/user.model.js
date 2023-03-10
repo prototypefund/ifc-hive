@@ -7,8 +7,8 @@ import mongoose from 'mongoose'
 const { Schema } = mongoose
 import bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid'
-import { customAlphabet } from 'nanoid'
-const nanoid = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-@!', 64)
+import { randomIdGenerator } from '#src/lib/miscHelpers.js'
+const randomId = randomIdGenerator(64)
 
 const SALT_FACTOR = 10
 
@@ -50,6 +50,8 @@ const userSchema = new Schema({
 
   /* keep track of last password update */
   passwordUpdated: { type: Date, default: null },
+
+  signedTerms: { type: Boolean, default: false },
 
   /* reset key, required when user needs to reset password */
   resetKey: {
@@ -142,7 +144,7 @@ userSchema.methods.checkPassword = function (guess) {
  * In case the user needs to reset his password, we need a temporary key
  */
 userSchema.methods.setResetKey = function () {
-  this.resetKey = nanoid()
+  this.resetKey = randomId()
   return this.resetKey
 }
 

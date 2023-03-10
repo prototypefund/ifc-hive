@@ -2,7 +2,12 @@ import { S } from 'fluent-json-schema'
 import { userBaseSchema } from './schemas.js'
 import User from '../../model/user/user.model.js'
 import { defaultHeadersSchema } from '#src/lib/headersHelper.js'
+import { randomIdGenerator } from '#src/lib/miscHelpers.js'
+const randomId = randomIdGenerator(16)
 
+/*
+ * POST user login
+ */
 export default function (app) {
   /* versions */
   const VERSIONS = ['1.0.0']
@@ -32,8 +37,13 @@ export default function (app) {
         user = await User.findOne({ email: request.body.email })
         // send 401 if we didn't find any user with this email
         if (!user) return app.httpErrors.unauthorized()
-        // @TODO  check for blocked and unverified users or password resets
-        // if (user.blocked || !user.email_verified) return app.httpErrors.forbidden()
+
+        // do not grant access under the following conditions
+        if (user.blocked || !user.email_verified)
+          return app.httpErrors.forbidden()
+
+        // @TODO notify user when there is an active reset token
+        // if (user.reset_token) ...
 
         // check password
         const isCorrectPassword = await user.checkPassword(request.body.password)
@@ -46,9 +56,13 @@ export default function (app) {
         id: user._id,
         name: `${user.firstname} ${user.lastname}`,
         nickname: user.nickname,
-        sub: user._id
+        sub: user._id,
       }
 
+      // add token id to payload
+      payload.tokenId = randomId()
+
+      // sign the token
       const token = app.jwt.sign(payload)
       const decoded = app.jwt.decode(token)
 
