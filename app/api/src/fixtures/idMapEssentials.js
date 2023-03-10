@@ -12,6 +12,6 @@ export default [
   'userBerta',
   'userCaesar',
   'orgaBetreiber',
-  'orgaKunde1',
-  'orgaKunde2',
+  'orgaPacifico',
+  'orgaAcme',
 ] 

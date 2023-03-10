@@ -4,12 +4,13 @@
  * This route drops the complete database, reads fixture-data from ./src/fixtures
  * and imports these fixtures as fresh state.
  */
-import { S } from 'fluent-json-schema'
-import User from '../../model/user/user.model.js'
 import idMapEssentials from '#src/fixtures/idMapEssentials.js'
 import idMapDevelopment from '#src/fixtures/idMapDevelopment.js'
 import { defaultHeadersSchema } from '#src/lib/headersHelper.js'
+import User from '../../model/user/user.model.js'
 import Users from '#src/fixtures/essentials/core_user.js'
+import Organization from '../../model/organization/orga.model.js'
+import Orgas from '#src/fixtures/essentials/core_organization.js'
 import { v4 as uuidv4 } from 'uuid'
 
 /*
@@ -23,12 +24,12 @@ const ids = idMapEssentials.concat(idMapDevelopment)
  * @param {array} objects - array of objectsw with human-friendly placeholder ID's
  * @param {object} id = the idMap with key value pairs for humand-friendly ID to UUIDv4
  */
-function mapIds (objects, idLookup) {
+function mapIds (objects, idLookup, fields = ['_id']) {
   // early return if there is nothing to do
   if (!objects || !Array.isArray(objects) || objects.length < 1) return 
   // iterate over objects and replace the origina obj._id with the UUID from idLookup
   return objects.map((e) => { 
-    e._id = idLookup[e._id]
+    fields.forEach((f) => { e[f] = idLookup[e[f]] })
     return e
   })
 }
@@ -45,18 +46,35 @@ export default function (app) {
    */
   async function handler (request, response) {
     try { 
+
+      
+      // create a fresh idMap
       const idMap = ids.reduce((acc,curr)=> (acc[curr] = uuidv4(), acc), {})
-      const refUsers = JSON.parse(JSON.stringify(Users))
-      // generate new uuids in idMap
-      await User.deleteMany({})
 
-      request.log.info(`Mongodb truncated collection ${User.collection.collectionName}`)
-      const newUsers = mapIds(refUsers, idMap)
+      /* import organizations */
+      const refOrgas = JSON.parse(JSON.stringify(Orgas))
+      await Organization.deleteMany()
+      const newOrgas = mapIds(refOrgas, idMap)
+      await Organization.insertMany(newOrgas)
+      
+      /* import users */
+      const createPromises = []
+      const refUsers = JSON.parse(JSON.stringify(Users)) // clone user fixtures
+      await User.deleteMany({}) // truncate user collection
+      const newUsers = mapIds(refUsers, idMap, ['_id','organization']) // map _id fields
+      // cretae users, note that inserMany does not call the preSave hook,
+      // which we need when saving new users
       newUsers.forEach(async function (u) {
-        await User.create(u)
+        createPromises.push(User.create(u))
       })
+      // create all user documents
+      await Promise.all(createPromises)
 
-      return { newUsers, idMap }
+      return {
+        organizationCount: await Organization.countDocuments(),
+        userCount: await User.find()
+      }
+
     } catch (err) {
       app.httpErrors.internalServerError(err)
     }

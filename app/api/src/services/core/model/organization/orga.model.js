@@ -30,12 +30,12 @@ const orgaSchema = new Schema({
     type: String,
     unique: true,
     trim: true,
-    maxLength: 20,
+    maxLength: 12,
   }
     
 }, { timestamp: true })
 
-const OrgaModel = mongoose.model('ifc_core_organization', orgaschema)
+const OrgaModel = mongoose.model('ifc_core_organization', orgaSchema)
 
 export default OrgaModel
 

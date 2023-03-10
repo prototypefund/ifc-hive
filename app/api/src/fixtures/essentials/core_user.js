@@ -8,7 +8,8 @@ export default [
     password: 'administrator',
     active: true,
     blocked: false,
-    email_verified: true 
+    email_verified: true ,
+    organization: 'orgaPacifico',
   },
   {
     _id: 'userBerta',
@@ -19,7 +20,8 @@ export default [
     password: 'administrator',
     active: true,
     blocked: false,
-    email_verified: true 
+    email_verified: true,
+    organization: 'orgaPacifico',
   },
   {
     _id: 'userCaesar',
@@ -30,6 +32,7 @@ export default [
     password: 'administrator',
     active: true,
     blocked: false,
-    email_verified: true 
+    email_verified: true,
+    organization: 'orgaAcme',
   },
 ]

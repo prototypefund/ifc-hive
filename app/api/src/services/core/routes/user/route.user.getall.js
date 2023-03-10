@@ -11,6 +11,8 @@ export default function (app) {
   async function handler (request, response) {
     try {
       const users = await User.find()
+                              .populate('organization')
+                              .exec()
       return { users }
     } catch (err) {
       app.httpErrors.internalServerError()
