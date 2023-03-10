@@ -1,3 +1,4 @@
+// user
 import userPostOptions from './routes/user/route.user.post.js'
 import usersGetOptions from './routes/user/route.user.getall.js'
 import userGetOptions from './routes/user/route.user.get.js'
@@ -5,6 +6,9 @@ import userPutOptions from './routes/user/route.user.put.js'
 import userDeleteOptions from './routes/user/route.user.delete.js'
 import userSearchOptions from './routes/user/route.user.search.js'
 import userLoginOptions from './routes/user/route.user.login.js'
+
+// system
+import systemFixtures from './routes/system/route.system.fixtures.js'
 
 /*
  * Core service export all routes
@@ -22,5 +26,8 @@ export default async function (app) {
   app.delete('/user/:id', userDeleteOptions)
   app.post('/users/search', userSearchOptions)
   app.post('/user/login', userLoginOptions(app))
+
+  /* system routes */
+  app.post('/system/fixtures', systemFixtures(app))
 }
 

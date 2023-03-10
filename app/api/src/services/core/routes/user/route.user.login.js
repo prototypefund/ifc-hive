@@ -77,6 +77,7 @@ export default function (app) {
   const response = S.object()
     .prop('token', S.string())
     .prop('decoded', S.default)
+    .prop('user', userBaseSchema.without(['password', 'resetToken', 'blocked', 'email_verified']))
 
   /*
    * route options

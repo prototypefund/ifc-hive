@@ -43,6 +43,10 @@ export const swaggerConfig = {
         description: 'Represents a natural person, which belongs to an organization',
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
       },
+      { name: 'core/system',
+        description: 'Endpoints for system maintenance during development and production',
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
+      },
       { name: 'core/organization',
         description: 'User can choose to get notified on state changes.',
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the organization concept' }

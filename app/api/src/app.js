@@ -117,6 +117,10 @@ export default async function app (opts = {}) {
     app.log.info('Mongodb connected')
   })
 
+  // make the db connection available in all routes
+  // @TODO insert into onReqeust  Hook
+  app.decorateRequest('db', db)
+
   /*
    * REGISTER AND CONFIGURE GLOBAL PLUGINS
    */

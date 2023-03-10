@@ -7,11 +7,11 @@
  */
 import { v4 as uuidv4 } from 'uuid'
 
-export default {
-  userAnton: uuidv4(),
-  userBerta: uuidv4(),
-  userCaesar: uuidv4(),
-  orgaBetreiber: uuidv4(),
-  orgaKunde1: uuidv4(),
-  orgaKunde2: uuidv4(),
-}
+export default [
+  'userAnton',
+  'userBerta',
+  'userCaesar',
+  'orgaBetreiber',
+  'orgaKunde1',
+  'orgaKunde2',
+] 
