@@ -11,6 +11,7 @@ vim-session
 .DS_Store
 
 # just in case when moving arround keys
+keys
 /ssh
 /.ssh
 id_rsa

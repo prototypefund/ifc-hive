@@ -28,13 +28,13 @@ const userSchema = new Schema({
   },
 
   /* title */
-  title: { type: String },
+  title: { type: String, default: null},
 
   /* firstname */
-  firstname: { type: String },
+  firstname: { type: String, default: null },
 
   /* lastname */
-  lastname: { type: String },
+  lastname: { type: String, default: null },
 
   /* is the email address yet verified? */
   email_verified: { type: Boolean, default: false },
