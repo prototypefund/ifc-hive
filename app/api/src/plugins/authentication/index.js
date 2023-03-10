@@ -1,3 +1,15 @@
+/*
+ * authentication plugin
+ *
+ * decorarte fastify with an authentication method which we can use in the
+ * route definitions like so:
+ *
+ * {
+ *    contraints: {},
+ *    onRequest: [app.authenticate],
+ *    schema: {...}
+ * }
+ */
 import fp from 'fastify-plugin'
 import jwt from '@fastify/jwt'
 
@@ -12,6 +24,8 @@ export default fp(async function (fastify, opts = {}) {
     },
     verify: { allowedIss: 'api.projectjournal.pacifico.info' }
   }
+
+  // merge proved opts with defaults
   const mergedOptions = {...defaults, ...opts}
 
   /* register the plugin */

@@ -27,6 +27,12 @@ const userSchema = new Schema({
     unique: true
   },
 
+  organization: {
+    type: Schema.Types.String,
+    ref: 'ifc_core_organization',
+    default: null,
+  },
+
   /* title */
   title: { type: String, default: null},
 

@@ -1,3 +1,9 @@
+/*
+ * User Login route 
+ *
+ * Provied some valid user credentials (username/password) this routes returns
+ * a JWT token. 
+ */
 import { S } from 'fluent-json-schema'
 import { userBaseSchema } from './schemas.js'
 import User from '../../model/user/user.model.js'

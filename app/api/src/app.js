@@ -56,7 +56,7 @@ global.__dirname = dirname(__filename)
  * ---------------------------------------------------------------------
  */
 // lab routes for naive socket integration
-import lab from './components/lab/index.js' 
+import lab from './services/lab/index.js' 
 import core from './services/core/index.js'
 
 /*
@@ -80,29 +80,36 @@ export default async function app (opts = {}) {
       }
   })
 
-  /* register websocket server */
-  app.register(websocket)
-  /* register custom event bus */
-  app.register(eventbus)
-
-  /* register jwt authentication plugin */
-  // @TODO use scrent in development, use public/private key in production
-  app.register(jwt, { secret: process.env.API_TOKEN_SECRET })
-
   /*
-   * APP CONFIGURATION FROM ENV VARIABLES
+   * Check ENV variables
    */
   if (!process.env.API_TOKEN_SECRET || typeof process.env.API_TOKEN_SECRET === 'undefined') {
     app.log.fatal('Missing config API_SECRET')
     process.exit(1)
   }
 
+  /*
+   * register custom plugiins
+   */
+  /* register websocket server */
+  app.register(websocket)
+  /* register custom event bus */
+  app.register(eventbus)
+  /* register jwt authentication plugin */
+  app.register(jwt, { secret: process.env.API_TOKEN_SECRET })
   /* connect to mongo */
   app.register(mongodb, { uri: process.env.MONGO_URL })
 
   /*
-   * REGISTER AND CONFIGURE GLOBAL PLUGINS
+   * register other plugins
    */
+  /* register fastifySensible for easier error handling in responses */
+  app.register(fastifySensible)
+  /* register swagger documentation tool */
+  app.register(fastifySwagger, swaggerConfig)
+  /* register swagger UI component, which is now its own thing */
+  app.register(fastifySwaggerUI, swaggerUiConfig)
+
   /* register CORS plugins */
   app.register(fastifyCors, {
     /* allow acces from everywhere. Overwrite this in prod env (nginx), e.g. client domain only */
@@ -123,13 +130,6 @@ export default async function app (opts = {}) {
       'Origin',
     ]
   })
-
-  /* register fastifySensible for easier error handling in responses */
-  app.register(fastifySensible)
-  /* register swagger documentation tool */
-  app.register(fastifySwagger, swaggerConfig)
-  /* register swagger UI component, which is now its own thing */
-  app.register(fastifySwaggerUI, swaggerUiConfig)
 
   /*
    * add health check

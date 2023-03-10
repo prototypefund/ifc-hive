@@ -71,11 +71,13 @@ export default function (app) {
   return {
     constraints: { version: '1.0.0' },
     handler: handler,
+    onRequest: [app.authenticate],
     schema: {
       summary: 'Load data fixtures (NOTE: deletes database)',
       description: `<strong>DELETES AND REINSTALLS THE COMPLETE DB</strong>. Dumps he database and loads data fixtures. `,
       tags: ['core/system'],
       headers,
+      security: [ { apiKey: [] } ],
     }
   }
 }

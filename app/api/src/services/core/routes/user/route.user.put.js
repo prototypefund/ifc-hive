@@ -41,26 +41,26 @@ export default function (app) {
 
   /*
    * route options
-    */
-    return  {
-      constraints: { version: '1.0.0' },
-      handler: handler,
-      onRequest: [app.authenticate],
-      schema: {
-        summary: 'Update a user [admin, maintainer, owner]',
+   */
+  return  {
+    constraints: { version: '1.0.0' },
+    handler: handler,
+    onRequest: [app.authenticate],
+    schema: {
+      summary: 'Update a user [admin, maintainer, owner]',
       description: `Other than with most objects we create a dedicated POST
         route, because user._id is always generated on the server. Creating a new
       user requires some procedures which are best encapsulated in this dedicated
         API endpoint.`,
-        tags: ['core/user'],
-        body,
-        params,
-        headers,
-        // response: {
-        //   '2xx': response
-        // },
-        security: [ { apiKey: [] } ],
-      }
+      tags: ['core/user'],
+      body,
+      params,
+      headers,
+      // response: {
+      //   '2xx': response
+      // },
+      security: [ { apiKey: [] } ],
     }
+  }
 }
 

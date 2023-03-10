@@ -1,14 +1,20 @@
 import fp from 'fastify-plugin'
 import mongoose from 'mongoose'
 
+mongoose.set('strictQuery', false)
+
+  // do not use pluralized versions of the model names as collections names
+mongoose.pluralize(function (name) { return name })
+
 export default fp(async function (app, opts) {
-  mongoose.set('strictQuery', false)
 
   /* connect to mongodb @TODO make host and database dynamic with env variables */
   mongoose.connect(opts.uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
+
+
   // @TODO descorate fastify with mongoose connection
   const db = mongoose.connection
 

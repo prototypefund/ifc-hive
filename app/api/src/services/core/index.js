@@ -20,11 +20,11 @@ export default async function (app) {
 
   /* User routes */
   app.post('/users', userPostOptions(app))
-  app.get('/users', usersGetOptions)
-  app.get('/user/:id', userGetOptions)
+  app.get('/users', usersGetOptions(app))
+  app.get('/user/:id', userGetOptions(app))
   app.put('/user/:id', userPutOptions(app))
-  app.delete('/user/:id', userDeleteOptions)
-  app.post('/users/search', userSearchOptions)
+  app.delete('/user/:id', userDeleteOptions(app))
+  app.post('/users/search', userSearchOptions(app))
   app.post('/user/login', userLoginOptions(app))
 
   /* system routes */
