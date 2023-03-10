@@ -27,6 +27,15 @@ const userSchema = new Schema({
     unique: true
   },
 
+  /* title */
+  title: { type: String },
+
+  /* firstname */
+  firstname: { type: String },
+
+  /* lastname */
+  lastname: { type: String },
+
   /* is the email address yet verified? */
   email_verified: { type: Boolean, default: false },
 

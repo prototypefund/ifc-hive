@@ -4,6 +4,7 @@ import userGetOptions from './routes/user/route.user.get.js'
 import userPutOptions from './routes/user/route.user.put.js'
 import userDeleteOptions from './routes/user/route.user.delete.js'
 import userSearchOptions from './routes/user/route.user.search.js'
+import userLoginOptions from './routes/user/route.user.login.js'
 
 /*
  * Core service export all routes
@@ -14,11 +15,12 @@ export default async function (app) {
   app.get('/alive', function (request, reply) {})
 
   /* User routes */
-  app.post('/users', userPostOptions)
+  app.post('/users', userPostOptions(app))
   app.get('/users', usersGetOptions)
   app.get('/user/:id', userGetOptions)
-  app.put('/user/:id', userPutOptions)
+  app.put('/user/:id', userPutOptions(app))
   app.delete('/user/:id', userDeleteOptions)
   app.post('/users/search', userSearchOptions)
+  app.post('/user/login', userLoginOptions(app))
 }
 

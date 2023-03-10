@@ -60,7 +60,7 @@ export const swaggerConfig = {
       securitySchemes: {
         apiKey: {
           type: 'apiKey',
-          name: 'apiKey',
+          name: 'Authorization',
           in: 'header',
           description: `Use the <bold>POST /core/user/login</bold> API endpoint to create a token. Then use the resulting token as indicated in the following example.<br /><br /> Example \"Bearer $TOKEN\"`
         }

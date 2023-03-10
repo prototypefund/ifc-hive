@@ -15,7 +15,7 @@ import { dirname } from 'path' // required to emulate __dirname
 import vary from 'vary' // required to handle the accept-version header
 import { nanoid } from 'nanoid'
 import eventbus from './plugins/eventbus/index.js'
-// import jwt from './plugins/authentication/index.js'
+import jwt from './plugins/authentication/index.js'
 
 /*
  * import package.json so we know our app version
@@ -33,13 +33,19 @@ global.__dirname = dirname(__filename)
  * ENV variables for configuration
  *
  * NODE_ENV             development, production, test
+ * API_PORT             port for the api, defaults to 3000
+ * API_TOKEN_PUBLIC_KEY
+ * API_TOKEN_PRIVAT_KEY
  * API_TOKEN_SECRET     secret for signing the JWT token
  * API_TOKEN_MAX_AGE    max age for valig JWT, e.g. '3600' (seconds), '1d' (days), '1h' (hours)
- * API_PORT             port for the api, defaults to 3000
+ * API_ROOT_PASSWORD
+ * API_ROOT_USERNAME
  *
  * @TODO add env variables for mongo, es etc. Basically all configuratioan
  * should be done by env-variables.
  * @TODO add sensible defaults for all env variables.
+ * @TODO use ajv to validate our env variables schema, e.g. PORT should be an
+ * integer etc.
  */
 
 /*
@@ -64,7 +70,12 @@ export default async function app (opts = {}) {
     // we are behind a trusted proxy
     trustProxy: true,
     // custom request id generator
-    genReqId: () => nanoid()
+    genReqId: (request) => { 
+        // if we got an x-request-id header from the client, use its value
+        if(request.headers['x-request-id']) return request.headers['x-request-id']
+        // otherwise generate a unique id and prepend it with api
+        return `api-${nanoid()}`
+      }
   })
 
   /* register websocket server */
@@ -73,10 +84,8 @@ export default async function app (opts = {}) {
   app.register(eventbus)
 
   /* register jwt authentication plugin */
-  // app.register(jwt, {
-  //   secret: process.env.API_TOKEN_SECRET,
-  //   maxAge: process.env.API_TOKEN_MAX_AGE,
-  // })
+  // @TODO use scrent in development, use public/private key in production
+  app.register(jwt, { secret: process.env.API_TOKEN_SECRET })
 
   /*
    * APP CONFIGURATION FROM ENV VARIABLES
