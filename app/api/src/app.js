@@ -4,7 +4,7 @@
 import fastifyFabric from 'fastify'
 import fastifyCors from '@fastify/cors'
 import fastifySensible from '@fastify/sensible'
-import mongoose from 'mongoose'
+// import mongoose from 'mongoose'
 import fastifySwagger from '@fastify/swagger' // api documentation
 import fastifySwaggerUI from '@fastify/swagger-ui'
 import { swaggerConfig, swaggerUiConfig } from './lib/swaggerConfig.js' // swagger api documentation configuration
@@ -16,6 +16,7 @@ import vary from 'vary' // required to handle the accept-version header
 import { nanoid } from 'nanoid'
 import eventbus from './plugins/eventbus/index.js'
 import jwt from './plugins/authentication/index.js'
+import mongodb from './plugins/mongodb/index.js'
 
 /*
  * import package.json so we know our app version
@@ -40,6 +41,7 @@ global.__dirname = dirname(__filename)
  * API_TOKEN_MAX_AGE    max age for valig JWT, e.g. '3600' (seconds), '1d' (days), '1h' (hours)
  * API_ROOT_PASSWORD
  * API_ROOT_USERNAME
+ * MONGO_HOST
  *
  * @TODO add env variables for mongo, es etc. Basically all configuratioan
  * should be done by env-variables.
@@ -90,36 +92,13 @@ export default async function app (opts = {}) {
   /*
    * APP CONFIGURATION FROM ENV VARIABLES
    */
-  if (!process.env.API_TOKEN_SECRET || process.env.API_TOKEN_SECRET === 'undefined') {
+  if (!process.env.API_TOKEN_SECRET || typeof process.env.API_TOKEN_SECRET === 'undefined') {
     app.log.fatal('Missing config API_SECRET')
     process.exit(1)
   }
 
-  /*
-   * CONNECT TO MONGO
-   */
-  // the default value for strictQuery will be changed to false in future version
-  // see mongoose depreciation warning.
-  mongoose.set('strictQuery', false)
-
-  /* connect to mongodb @TODO make host and database dynamic with env variables */
-  mongoose.connect('mongodb://mongo:27017/ifc-hive', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  // @TODO descorate fastify with mongoose connection
-  const db = mongoose.connection
-
-  // add mongoose event handlers
-  db.on('error', console.error.bind(console, 'mongo connection error:'))
-  db.once('open', () => {
-    app.log.debug('some debugging output')
-    app.log.info('Mongodb connected')
-  })
-
-  // make the db connection available in all routes
-  // @TODO insert into onReqeust  Hook
-  app.decorateRequest('db', db)
+  /* connect to mongo */
+  app.register(mongodb, { uri: process.env.MONGO_URL })
 
   /*
    * REGISTER AND CONFIGURE GLOBAL PLUGINS

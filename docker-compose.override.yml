@@ -41,6 +41,7 @@ services:
       - API_TOKEN_MAX_AGE=86400
       - API_ROOT_EMAIL=daniel@karo.berlin
       - API_ROOT_PASSWORD=administrator
+      - MONGO_URL=mongodb://mongo:27017/ifc-hive
     command: yarn run dev
     ports:
       - "8082:3000"

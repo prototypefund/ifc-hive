@@ -77,6 +77,8 @@ const userSchema = new Schema({
 
 /*
  * Pre save
+ *
+ * Before saving the object we need to hash the password
  */
 userSchema.pre('save', function (done) {
 
@@ -89,6 +91,7 @@ userSchema.pre('save', function (done) {
   // do we need to set the restPassword key? As it is unique, mongo needs some
   // value to prevent multiple documents from having null
   if (!this.resetKey || this.resetKey === '') { this.setResetKey() }
+
   // generate hash
   bcrypt.genSalt(SALT_FACTOR)
     // generate hash
@@ -106,7 +109,7 @@ userSchema.pre('save', function (done) {
 })
 
 /*
- * Set Password
+ * Set Password method
  */
 userSchema.methods.setPassword = function (password) {
   return new Promise((resolve, reject) => {
@@ -128,7 +131,7 @@ userSchema.methods.setPassword = function (password) {
 }
 
 /*
- * check password
+ * check password method
  */
 userSchema.methods.checkPassword = function (guess) {
   return new Promise((resolve) => {
