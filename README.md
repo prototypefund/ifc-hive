@@ -5,7 +5,7 @@ Plattform für transparente und rechtssichere Projektkommunikation
 
 ## Quickstart for development
 
-#### Spin up all service
+### Spin up all service
 
 Note:
   - the default default environment is NOT meant for production. In production
@@ -19,27 +19,27 @@ During development it is best to pass the `--build`-flag to make sure everything
 is fresh and cheerful.
 
 
-#### Global admin commands
+### Global admin commands
 
 To make live easier there is `./admin` command available in the project root. 
 
  - `./admin -h` show all available sub-commands
  - `./admin log [service-name]` prints the logs of a service. defaults to the
      `ifc-hive-api`-service if no argument is provided.
-- `./admin install dev` adds a commit-message-template and a commit-msg hook to
+ - `./admin install dev` adds a commit-message-template and a commit-msg hook to
     enforce a consistent format for the commit subject line.
 
-#### Documentation 
+## Documentation 
 
   - [User Documentation and product overview](http://localhost:8089) 
       (not yet online, available in the api service under `/docs`)
   - Technical documentation of services
     - [Global](./docs) installation, maintenance, recommendations etc.
     - [REST-API Documentation](http://localhost:8082/docs) OpenAPI 3 documentation
-    - [Web Client](./app/client/docs)
-    - [API](./app/api/docs)
-    - [Register](./app/reg/docs)
 
-
-
+### Technical documentation for the available services
+  - [Client](./app/client/README.md)the web client 
+  - [API](./app/api/README.md) the main application
+  - [Register](./app/reg/README.md) the blockchain register
+  - [Docs](./app/docs/README.md) user documentation with static site generator
 

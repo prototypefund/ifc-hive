@@ -1,4 +1,4 @@
-# Vuepress Starter Page
+# pacifico-projectjournal User documentation
 
 See [VuePress Website](https://vuepress.vuejs.org/) for documentation. This
 project is a very basic VuePress boilerplate. Please note the the markdown
