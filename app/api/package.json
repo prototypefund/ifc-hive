@@ -27,6 +27,8 @@
     "fluent-json-schema": "^4.1.0",
     "mongoose": "^6.10.0",
     "nanoid": "^4.0.1",
+    "object-delete-key": "^4.0.8",
+    "ramda": "^0.28.0",
     "uuid": "^9.0.0",
     "vary": "^1.1.2"
   },

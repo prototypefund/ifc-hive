@@ -7,7 +7,7 @@ import mongoose from 'mongoose'
 const { Schema } = mongoose
 import bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid'
-import { randomIdGenerator } from '#src/lib/miscHelpers.js'
+import { randomIdGenerator } from '#src/lib/helpers.js'
 const randomId = randomIdGenerator(64)
 
 const SALT_FACTOR = 10

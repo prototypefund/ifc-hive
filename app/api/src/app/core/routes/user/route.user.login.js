@@ -8,7 +8,7 @@ import { S } from 'fluent-json-schema'
 import { userBaseSchema } from './schemas.js'
 import User from '../../model/user/user.model.js'
 import { defaultHeadersSchema } from '#src/lib/headersHelper.js'
-import { randomIdGenerator } from '#src/lib/miscHelpers.js'
+import { randomIdGenerator } from '#src/lib/helpers.js'
 const randomId = randomIdGenerator(16)
 
 /*
