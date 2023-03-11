@@ -54,3 +54,37 @@ export function updateDeepObjectByPath (obj, path, value) {
     .reduce((prev, cur) => prev && prev[cur], obj)
   )
 }
+
+/*
+ * @params {object, string} the attribute to extract the id from
+ *
+ * use this when you are not sure, whether an _id or an object with an attribut
+ * _id is provides.  e.g req.body.group might be
+ *
+ * @example
+ * extractId('1234') // => '1234'
+ * extractId({ _id: '1234', name: 'some name' }) // => '1234'
+ * extractId({ id: '1234', name: 'some name' }) // => '1234'
+ * extractId({ ID: '1234', name: 'some name' }) // => '1234'
+ */
+export function extractId (requestBodyAttr) {
+  if (!requestBodyAttr || requestBodyAttr === null || requestBodyAttr === undefined) {
+    return null;
+  }
+  if (typeof requestBodyAttr === 'string') {
+    return requestBodyAttr;
+  }
+  if (typeof requestBodyAttr === 'object' && requestBodyAttr._id !== undefined) {
+    return requestBodyAttr._id;
+  }
+  if (typeof requestBodyAttr === 'object' && requestBodyAttr.id !== undefined) {
+    return requestBodyAttr.id;
+  }
+  if (typeof requestBodyAttr === 'object' && requestBodyAttr.Id !== undefined) {
+    return requestBodyAttr.Id;
+  }
+  if (typeof requestBodyAttr === 'object' && requestBodyAttr.ID !== undefined) {
+    return requestBodyAttr.ID;
+  }
+  return false;
+}

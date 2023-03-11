@@ -56,8 +56,8 @@ global.__dirname = dirname(__filename)
  * ---------------------------------------------------------------------
  */
 // lab routes for naive socket integration
-import lab from './services/lab/index.js' 
-import core from './services/core/index.js'
+import lab from './app/lab/index.js' 
+import core from './app/core/index.js'
 
 /*
  * create app function
@@ -202,6 +202,12 @@ export default async function app (opts = {}) {
    */
   app.register(lab, { prefix: '/lab' })
   app.register(core, { prefix: '/core' })
+
+  /*
+   * ---------------------------------------------------------------------
+   * REGISTER GLOBAL EVENTS
+   * ---------------------------------------------------------------------
+   */
 
   // return the configured app
   return app
