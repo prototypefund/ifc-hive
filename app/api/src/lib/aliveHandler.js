@@ -23,7 +23,7 @@ export function aliveHandler (req, res) {
   res.send({
     url: req.url,
     routerPath: req.routerPath,
-    id: req.id,
+    requestId: req.id,
     method: req.method,
     body: req.body,
     params: req.params,
@@ -41,7 +41,7 @@ export const aliveHandlerSchema = {
   properties: {
     url: { type: 'string' },
     routerPath: { type: 'string' },
-    id: { type: 'string' },
+    requestId: { type: 'string' },
     method: { type: 'string' },
     body: { type: 'object' },
     params: { type: 'array' },

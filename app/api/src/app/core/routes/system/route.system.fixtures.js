@@ -8,9 +8,17 @@ import idMapEssentials from '#src/fixtures/idMapEssentials.js'
 import idMapDevelopment from '#src/fixtures/idMapDevelopment.js'
 import { defaultHeadersSchema } from '#src/lib/headersHelper.js'
 import User from '../../model/user/user.model.js'
-import Users from '#src/fixtures/essentials/core_user.js'
+import users from '#src/fixtures/essentials/core_user.js'
+import Account from '../../model/account/account.model.js'
+import accounts from '#src/fixtures/essentials/core_account.js'
 import Organization from '../../model/organization/orga.model.js'
-import Orgas from '#src/fixtures/essentials/core_organization.js'
+import orgas from '#src/fixtures/essentials/core_organization.js'
+import Tag from '../../model/tag/tag.model.js'
+import tags from '#src/fixtures/essentials/core_tag.js'
+import Project from '../../model/project/project.model.js'
+import projects from '#src/fixtures/essentials/core_project.js'
+import Permission from '../../model/permission/permission.model.js'
+import permissions from '#src/fixtures/essentials/core_permission.js'
 import { v4 as uuidv4 } from 'uuid'
 
 /*
@@ -52,14 +60,14 @@ export default function (app) {
       const idMap = ids.reduce((acc,curr)=> (acc[curr] = uuidv4(), acc), {})
 
       /* import organizations */
-      const refOrgas = JSON.parse(JSON.stringify(Orgas))
+      const refOrgas = JSON.parse(JSON.stringify(orgas))
       await Organization.deleteMany()
       const newOrgas = mapIds(refOrgas, idMap)
       await Organization.insertMany(newOrgas)
       
       /* import users */
       const createPromises = []
-      const refUsers = JSON.parse(JSON.stringify(Users)) // clone user fixtures
+      const refUsers = JSON.parse(JSON.stringify(users)) // clone user fixtures
       await User.deleteMany({}) // truncate user collection
       const newUsers = mapIds(refUsers, idMap, ['_id','organization']) // map _id fields
       // cretae users, note that inserMany does not call the preSave hook,
@@ -70,9 +78,36 @@ export default function (app) {
       // create all user documents
       await Promise.all(createPromises)
 
+      /* import accounts */
+      const refAccounts = JSON.parse(JSON.stringify(accounts))
+      await Account.deleteMany()
+      const newAccounts = mapIds(refAccounts, idMap, ['_id', 'owner', 'organization' ])
+      await Account.insertMany(newAccounts)
+
+      /* import tags */
+      const refTags = JSON.parse(JSON.stringify(tags))
+      await Tag.deleteMany()
+      const newTags = mapIds(refTags, idMap, ['_id' ])
+      await Tag.insertMany(newTags)
+
+      /* import projects */
+      const refProjects = JSON.parse(JSON.stringify(projects))
+      await Project.deleteMany()
+      const newProjects = mapIds(refProjects, idMap, ['_id' ])
+      await Project.insertMany(newProjects)
+
+      /* import permissions
+       */
+
+      /*
+       * send response with object counts
+       */
       return {
-        organizationCount: await Organization.countDocuments(),
-        userCount: await User.find()
+        organizations: await Organization.countDocuments(),
+        user: await User.countDocuments(),
+        accounts: await Account.countDocuments(),
+        tags: await Tag.countDocuments(),
+        projects: await Project.countDocuments(),
       }
 
     } catch (err) {

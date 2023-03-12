@@ -25,7 +25,13 @@ export const swaggerConfig = {
   openapi: {
     info: {
       title: 'ifc-hive-api',
-      description: `API documenation for the ifc-hive platform.`,
+      description: `API documenation for the ifc-hive platform. Further information
+         <ul>
+          <li>Further documentation in the repo</li>
+          <li>General request atonomy</li>
+          <li>Managing the socket in the client</li>
+          <li>Search queries with example use cases</li>
+        </ul>`,
       version: _package.version,
       termsOfService: 'https://www.pacifico/info/term',
       license: { name: 'MIT License', url: 'https://repo.karo.design' },
@@ -36,15 +42,15 @@ export const swaggerConfig = {
     },
     externalDocs: {
       url: 'https://ifc-hive.karo.design',
-      description: 'Further documentation and guides.'
+      description: 'Further documentation and guides'
     },
     tags: [
-      { name: 'core/user',
-        description: 'Represents a natural person, which belongs to an organization',
+      { name: 'core/account',
+        description: 'Represents a legal entity, every user belongs to an account.',
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
       },
-      { name: 'core/system',
-        description: 'Endpoints for system maintenance during development and production',
+      { name: 'core/user',
+        description: 'Represents a natural person, which belongs to an organization',
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
       },
       { name: 'core/organization',
@@ -55,9 +61,21 @@ export const swaggerConfig = {
         description: 'Represents a privelege.',
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the permission concept' }
       },
-      { name: 'core/subscription',
-        description: 'User can choose to get notified on state changes.',
-        externalDocs: { url: 'https://repo.karo.design', description: 'more about the subscription concept' }
+      { name: 'core/system',
+        description: 'Endpoints for system maintenance during development and production',
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
+      },
+      { name: 'journal/project',
+        description: 'Represents the default scope for permissions. Has users and a root-memo assigned.',
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
+      },
+      { name: 'journal/ticket',
+        description: 'Represents the default scope for permissions. Has users and a root-memo assigned.',
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
+      },
+      { name: 'journal/register',
+        description: 'Registers are the nodes and agents in the blockchain network.',
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
       },
     ],
     components: {

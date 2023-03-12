@@ -3,25 +3,22 @@ const { Schema } = mongoose
 import { v4 as uuidv4 } from 'uuid'
 
 
-const organizationSchema = new Schema({
+const projectSchema = new Schema({
   _id: { // note we do not need and also cannot specify the property unique: true
     type: String,
     default: uuidv4(),
   },
 
   /* The full company name */
-  name: {
+  title: {
     type: String,
     required: true,
-    unique: true,
     maxLength: 200,
   },
 
   /* A shorted version of the company name which everybody understands */
-  shortname: {
+  shorttitle: {
     type: String,
-    unique: true,
-    trim: true,
     maxLength: 40,
   },
 
@@ -29,18 +26,21 @@ const organizationSchema = new Schema({
   code: {
     type: String,
     unique: true,
-    trim: true,
     maxLength: 12,
   },
 
   /* tags */
   tags: [String],
 
+  /* description */
+  description: { type: String },
+
   /* soft delete */
   isDeleted: { type: false }
     
 }, { timestamp: true })
 
-const Organization= mongoose.model('pacifico_core_organization', organizationSchema)
+const Project = mongoose.model('pacifico_core_project', projectSchema)
 
-export default Organization
+export default Project
+

@@ -13,14 +13,17 @@ const randomId = randomIdGenerator(64)
 const SALT_FACTOR = 10
 
 const userSchema = new Schema({
+
   _id: { // note we do not need and also cannot specify the property unique: true
     type: String,
     default: uuidv4(),
   },
+
   nickname: {
     type: String,
     required: true
   },
+
   email: {
     type: String,
     required: true,
@@ -30,6 +33,12 @@ const userSchema = new Schema({
   organization: {
     type: Schema.Types.String,
     ref: 'ifc_core_organization',
+    default: null,
+  },
+
+  organization: {
+    type: Schema.Types.String,
+    ref: 'ifc_core_account',
     default: null,
   },
 
@@ -57,6 +66,7 @@ const userSchema = new Schema({
   /* keep track of last password update */
   passwordUpdated: { type: Date, default: null },
 
+  /* signed terms, we also keep track in the logs of this event */
   signedTerms: { type: Boolean, default: false },
 
   /* reset key, required when user needs to reset password */
@@ -73,11 +83,16 @@ const userSchema = new Schema({
    */
   resetDate: { type: Date, default: null },
 
+  /* tags */
+  tags: [String],
+
+  /* soft delete */
+  isDeleted: { type: false },
+
   /* settings */
   settings: {
     emailSignature: { type: String, default: null },
   },
-
 
 }, { timestamps: true })
 
@@ -157,6 +172,6 @@ userSchema.methods.setResetKey = function () {
   return this.resetKey
 }
 
-const UserModel = mongoose.model('ifc_core_user', userSchema)
+const User = mongoose.model('pacifico_core_user', userSchema)
 
-export default UserModel
+export default User

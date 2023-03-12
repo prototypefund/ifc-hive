@@ -5,13 +5,34 @@
  * fixtures we maintain a map of human-friendly ID's to actual UUID's for
  * the fixtures.
  */
-import { v4 as uuidv4 } from 'uuid'
 
 export default [
+  /* users */
   'userAnton',
   'userBerta',
   'userCaesar',
+
+  /* organizations */
   'orgaBetreiber',
   'orgaPacifico',
   'orgaAcme',
+
+  /* accounts */
+  'accountDefault',
+
+  /* tags */
+  'tagMilestone',
+  'tagImportant',
+  'tagToDo',
+  'tagDoing',
+  'tagDone',
+  'tagRequirement',
+
+  /* projects */
+  'projectFirst',
+  'projectClient',
+
+  /* permissions */
+  'permUserAntonProjectClient',
+  'permissionAntonAccountDefault',
 ] 
