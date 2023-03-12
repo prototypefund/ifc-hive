@@ -26,6 +26,7 @@
     "fastify-healthcheck": "^4.4.0",
     "fluent-json-schema": "^4.1.0",
     "mongoose": "^6.10.0",
+    "mongoose-mpath": "^3.0.2",
     "nanoid": "^4.0.1",
     "object-delete-key": "^4.0.8",
     "ramda": "^0.28.0",

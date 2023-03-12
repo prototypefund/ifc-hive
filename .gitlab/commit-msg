@@ -6,6 +6,8 @@
 #
 # IMPORTANT:
 # Make sure this file is executable and copied or linked to the project's ./git/hooks directory.
+# 
+# @TODO grep warns about 'stray \ before #'
 
 
 RED='\033[0;31m'
@@ -19,7 +21,7 @@ MSG=$1
 SUBJECT=$(sed "/^\#/d" $MSG  | head -n 1)
 
 # test format of commit subject line
-if ! echo "$SUBJECT" | grep -qE "^(feat|fix|refactor|style|doc|chore|devops|test|version|hack|WIP|wip)(\s\([a-z ]+\))?(\s\#[0-9]{1,6}):.+"; then
+if ! echo "$SUBJECT" | grep -qE "^(feat|fix|refactor|style|doc|chore|devops|test|version|hack|WIP|wip)(\s\([a-z ]+\))?(\s\#[0-9]{1,6}):(.{1,80})"; then
     # cat "$MSG"
     printf "${RED}ERROR:\n"
     printf "${RED}COMMIT MESSAGE FORMAT ERROR: Please use the following format:${NC}\n"

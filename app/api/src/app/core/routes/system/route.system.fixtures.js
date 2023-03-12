@@ -19,6 +19,8 @@ import Project from '../../model/project/project.model.js'
 import projects from '#src/fixtures/essentials/core_project.js'
 import Permission from '../../model/permission/permission.model.js'
 import permissions from '#src/fixtures/essentials/core_permission.js'
+import tickets from '#src/fixtures/essentials/journal_ticket.js'
+import Ticket from '../../../journal/model/ticket/ticket.model.js'
 import { v4 as uuidv4 } from 'uuid'
 
 /*
@@ -37,7 +39,7 @@ function mapIds (objects, idLookup, fields = ['_id']) {
   if (!objects || !Array.isArray(objects) || objects.length < 1) return 
   // iterate over objects and replace the origina obj._id with the UUID from idLookup
   return objects.map((e) => { 
-    fields.forEach((f) => { e[f] = idLookup[e[f]] })
+    fields.forEach((f) => { if (e[f]) { e[f] = idLookup[e[f]] } })
     return e
   })
 }
@@ -100,22 +102,51 @@ export default function (app) {
       const refPermissions = JSON.parse(JSON.stringify(permissions))
       await Permission.deleteMany()
       const newPermissions = mapIds(refPermissions, idMap, ['_id', 'subjectId', 'objectId'])
-      // await Permission.insertMany(newPermissions)
-      // newPermissions.forEach((p) => { pp.push(Permission.create(p)) })
-      // await Promise.all(pp)
       Permission.insertMany(newPermissions)
 
-      /*
-       * send response with object counts
-       */
-      return {
-        organizations: await Organization.countDocuments(),
-        user: await User.countDocuments(),
-        accounts: await Account.countDocuments(),
-        tags: await Tag.countDocuments(),
-        projects: await Project.countDocuments(),
-        permissions: '',
+      
+      const refTickets = JSON.parse(JSON.stringify(tickets))
+      const newTickets = mapIds(refTickets, idMap, ['_id', 'parent'])
+
+      try {
+
+        await Ticket.deleteMany()
+
+        // @TODO write function to iterate over promises and force sequential resolution as
+        // we need the parent to exist when we instert the child
+        const t0 = new Ticket(newTickets[0])
+        await t0.save()
+        const t1 = new Ticket(newTickets[1])
+        await t1.save()
+        const t2 = new Ticket(newTickets[2])
+        await t2.save()
+        const t3 = new Ticket(newTickets[3])
+        await t3.save()
+        const t4 = new Ticket(newTickets[4])
+        await t4.save()
+        const t5 = new Ticket(newTickets[5])
+        await t5.save()
+        const t6 = new Ticket(newTickets[6])
+        await t6.save()
+
+        /*
+         * send response with object counts
+         */
+        return {
+          organizations: await Organization.countDocuments(),
+          user: await User.countDocuments(),
+          accounts: await Account.countDocuments(),
+          tags: await Tag.countDocuments(),
+          projects: await Project.countDocuments(),
+          permissions: await Permission.countDocuments(),
+          tickets: await Ticket.getChildrenTree({ rootDoc: t0 }),
+        }
+
+      } catch (error) {
+        console.log(err)
       }
+
+
 
     } catch (err) {
       app.httpErrors.internalServerError(err)

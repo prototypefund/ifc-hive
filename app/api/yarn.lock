@@ -1617,6 +1617,11 @@ bind-obj-methods@^3.0.0:
   resolved "https://registry.yarnpkg.com/bind-obj-methods/-/bind-obj-methods-3.0.0.tgz#65b66544d9d668d80dfefe2089dd347ad1dbcaed"
   integrity sha512-nLEaaz3/sEzNSyPWRsN9HNsqwk1AUyECtGj+XwGdIi3xABnEqecvXtIJ0wehQXuuER5uZ/5fTs2usONgYjG+iw==
 
+bluebird@^3.1.1:
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
+  integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
+
 bn.js@^4.0.0:
   version "4.12.0"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.12.0.tgz#775b3f278efbb9718eec7361f483fb36fbbfea88"
@@ -3354,7 +3359,7 @@ lodash.pullall@^4.2.0:
   resolved "https://registry.yarnpkg.com/lodash.pullall/-/lodash.pullall-4.2.0.tgz#9d98b8518b7c965b0fae4099bd9fb7df8bbf38ba"
   integrity sha512-VhqxBKH0ZxPpLhiu68YD1KnHmbhQJQctcipvmFnqIBDYzcIHzf3Zpu0tpeOKtR4x76p9yohc506eGdOjTmyIBg==
 
-lodash@^4.17.20:
+lodash@^4.17.20, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -3502,10 +3507,32 @@ mongodb@4.14.0:
     "@aws-sdk/credential-providers" "^3.186.0"
     saslprep "^1.0.3"
 
+mongoose-mpath@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/mongoose-mpath/-/mongoose-mpath-3.0.2.tgz#3ebfb794168f07c12d8a03c13c4426f598feca37"
+  integrity sha512-TNRV6mc16V60egIzw2hkypXPs4zcC8efIn4bJDoV170a1BGtfirkzHf++5bKlipGd5daorCEozLh5Yrxmk7DGQ==
+  dependencies:
+    lodash "^4.17.21"
+    mongoose "^6.8.2"
+    stream-worker "^2.0.2"
+
 mongoose@^6.10.0:
   version "6.10.0"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.10.0.tgz#42aa9134b665cb17d7b6e9a7ba89f89751021074"
   integrity sha512-0zrKDEnmNscYyAyN94smo2LlJ63gaezKHpHM+KQ+6EiAgAnah5Kt3hQSYzOTQX/63YNdT1oJXiLlB5LqTdcjUw==
+  dependencies:
+    bson "^4.7.0"
+    kareem "2.5.1"
+    mongodb "4.14.0"
+    mpath "0.9.0"
+    mquery "4.0.3"
+    ms "2.1.3"
+    sift "16.0.1"
+
+mongoose@^6.8.2:
+  version "6.10.2"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.10.2.tgz#c18487e8b61ff7b35a1e2360be24bbd17316f3ed"
+  integrity sha512-9/AbheG2PiVVBWLx3S6LgCIEQNdMppjdnp/WH9nLGjFzjJeb9LiHNPEtsOGOm8qXmuICHMdbn5iUFAsLWWvpEw==
   dependencies:
     bson "^4.7.0"
     kareem "2.5.1"
@@ -4352,6 +4379,13 @@ steed@^1.1.3:
     fastq "^1.3.0"
     fastseries "^1.7.0"
     reusify "^1.0.0"
+
+stream-worker@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/stream-worker/-/stream-worker-2.0.2.tgz#26598c5da0b6243fecc523da4c57e4bee48d35ad"
+  integrity sha512-5y+ms21neu/sHtvjXyuSWtxpr2teKxB1CHOECU7EqoR+u8IVZ7PL7ZWDXcFVad0J/kgqVfCn8WSBeFrDzjSRcw==
+  dependencies:
+    bluebird "^3.1.1"
 
 "string-width@^1.0.2 || 2 || 3 || 4", string-width@^4.0.0, string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.2, string-width@^4.2.3:
   version "4.2.3"

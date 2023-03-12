@@ -35,4 +35,13 @@ export default [
   /* permissions */
   'permUserAntonProjectClient',
   'permUserAntonAccountDefault',
+
+  /* tickets */
+  'ticket_0',
+  'ticket_1',
+  'ticket_2',
+  'ticket_3',
+  'ticket_4',
+  'ticket_5',
+  'ticket_6',
 ] 
