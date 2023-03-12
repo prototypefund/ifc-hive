@@ -160,7 +160,7 @@ export default function (app) {
    * route definition
    */
   return {
-    constraints: { version: '1.0.0' },
+    // constraints: { version: '1.0.0' },
     handler: handler,
     onRequest: [app.authenticate],
     schema: {

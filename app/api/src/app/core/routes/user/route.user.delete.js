@@ -26,7 +26,7 @@ export default function (app) {
    * route options
    */
   return {
-    constraints: { version: '1.0.0' },
+    // constraints: { version: '1.0.0' },
     handler: handler,
     onRequest: [app.authenticate],
     schema: {
@@ -36,7 +36,7 @@ export default function (app) {
     (auf Deutsch DSGVO) the user's attributes may be overwritten with
     pseudo-values.`,
       tags: ['core/user'],
-      headers,
+      // headers,
       params,
       security: [ { apiKey: [] } ],
     },

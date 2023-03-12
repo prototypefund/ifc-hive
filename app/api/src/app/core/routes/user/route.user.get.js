@@ -28,7 +28,7 @@ export default function (app) {
    * route options
    */
   return {
-    constraints: { version: '1.0.0' },
+    // constraints: { version: '1.0.0' },
     handler: handler,
     onRequest: [app.authenticate],
     schema: {
@@ -37,7 +37,7 @@ export default function (app) {
     administrators, project maintainers and the user himself/herself can access
     this object directly.`,
       tags: ['core/user'],
-      headers,
+      // headers,
       params,
       security: [ { apiKey: [] } ],
     },

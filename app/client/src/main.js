@@ -22,7 +22,9 @@ const SOCKET_URL = getEnvVariable('VITE_APP_SOCKET_URL')
 
 /* Set up http API client */
 configClient(httpClient, { baseURL: API_BASE_URL, })
-httpClient.get('/health').then((response) => log.api(response, 'healthcheck'))
+
+ httpClient.get('http://localhost:8082/health').then((response) => log.api(response, 'healthcheck'))
+
 
 /* set up socket client */
 const socket = createSocket(SOCKET_URL)

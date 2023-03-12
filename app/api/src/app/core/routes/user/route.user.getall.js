@@ -28,7 +28,7 @@ export default function (app) {
    * route options
    */
   return {
-    constraints: { version: '1.0.0' },
+    // constraints: { version: '1.0.0' },
     handler: handler,
     onRequest: [app.authenticate],
     schema: {
@@ -38,7 +38,7 @@ export default function (app) {
     retrieving a collection of users should be done via the
     project-search-index.`,
       tags: ['core/user'],
-      headers,
+      // headers,
       security: [ { apiKey: [] } ],
     },
   }

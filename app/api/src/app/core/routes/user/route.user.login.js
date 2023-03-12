@@ -103,7 +103,7 @@ export default function (app) {
    * route options
    */
   return {
-    constraints: { version: '1.0.0' },
+    // constraints: { version: '1.0.0' },
     handler: handler,
     schema: {
       summary: 'Request an access token',
@@ -111,7 +111,7 @@ export default function (app) {
       returns a JWT token to access protected routes.`,
       tags: ['core/user'],
       body,
-      headers,
+      // headers,
       response: {
         '2xx': response
       }

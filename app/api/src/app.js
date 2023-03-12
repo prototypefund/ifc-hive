@@ -147,9 +147,9 @@ export default async function app (opts = {}) {
       version: _package.version,
       env: process.env.NODE_ENV
     },
-    path: '/health',
-    schema: { tags: ['core/system'] }, // @TODO pass custom schema for swagger
-    exposeFailure: process.env.NODE_ENV !== 'production' ? true : false
+    // path: '/health',
+    // schema: { tags: ['core/system'] }, // @TODO pass custom schema for swagger
+    // exposeFailure: process.env.NODE_ENV !== 'production' ? true : false
   })
 
   /*

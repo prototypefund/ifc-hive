@@ -27,6 +27,7 @@ export const httpClient = axios.create({
 export function configClient (client, config) {
   // set base uslr
   client.defaults.baseURL = config.baseURL
+  client.defaults.headers.common['Accept-Version'] = '*'
 }
 
 

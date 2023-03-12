@@ -33,7 +33,7 @@ export default function (app) {
    * route options
    */
   return {
-    constraints: { version: '1.0.0' },
+    // constraints: { version: '1.0.0' },
     handler: handler,
     onRequest: [app.authenticate],
     schema: {
@@ -41,7 +41,7 @@ export default function (app) {
       description: `Users in the search index are fully rendered with populated
     organization, permission and subscription fields.`,
       tags: ['core/user'],
-      headers,
+      // headers,
       response: {
         '2xx': response
       },

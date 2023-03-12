@@ -150,9 +150,9 @@ class SocketClient {
     this.lastPingTimestamp = false
     this.pingMap = {}
 
-    this.socket = new WebSocket(this.host)
-    this._registerSocketEvents()
-    this.retryCount += 1
+    // this.socket = new WebSocket(this.host)
+    // this._registerSocketEvents()
+    // this.retryCount += 1
   }
 
   /*
@@ -258,6 +258,7 @@ class SocketClient {
       if (this.heartbeatIntervallId) {
         clearInterval(this.heartbeatIntervallId)
       }
+      delete this.socket
     })
 
     /* error event */

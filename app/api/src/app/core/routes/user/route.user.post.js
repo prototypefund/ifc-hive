@@ -54,7 +54,7 @@ export default function (app) {
    * route options
    */
   return {
-    constraints: { version: '1.0.0' },
+    // constraints: { version: '1.0.0' },
     handler: handler,
     onRequest: [app.authenticate],
     schema: {
@@ -65,7 +65,7 @@ export default function (app) {
     API endpoint.`,
       tags: ['core/user'],
       body,
-      headers,
+      // headers,
       response: {
         '2xx': response
       },
