@@ -96,8 +96,14 @@ export default function (app) {
       const newProjects = mapIds(refProjects, idMap, ['_id' ])
       await Project.insertMany(newProjects)
 
-      /* import permissions
-       */
+      /* import permissions */
+      const refPermissions = JSON.parse(JSON.stringify(permissions))
+      await Permission.deleteMany()
+      const newPermissions = mapIds(refPermissions, idMap, ['_id', 'subjectId', 'objectId'])
+      // await Permission.insertMany(newPermissions)
+      // newPermissions.forEach((p) => { pp.push(Permission.create(p)) })
+      // await Promise.all(pp)
+      Permission.insertMany(newPermissions)
 
       /*
        * send response with object counts
@@ -108,6 +114,7 @@ export default function (app) {
         accounts: await Account.countDocuments(),
         tags: await Tag.countDocuments(),
         projects: await Project.countDocuments(),
+        permissions: '',
       }
 
     } catch (err) {

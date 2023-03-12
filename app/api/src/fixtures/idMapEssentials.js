@@ -34,5 +34,5 @@ export default [
 
   /* permissions */
   'permUserAntonProjectClient',
-  'permissionAntonAccountDefault',
+  'permUserAntonAccountDefault',
 ] 

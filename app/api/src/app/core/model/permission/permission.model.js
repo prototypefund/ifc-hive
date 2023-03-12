@@ -19,22 +19,22 @@ const permissionSchema = new Schema({
   /* A optional code for the company */
   code: { type: String, unique: true, default: randomIdGenerator(64)() },
 
-  /* subject ID who is this permission for? */
+  // /* subject ID who is this permission for? */
   subjectId: { type: String, default: null, required: true },
-
-  /* what kind of entity is this? user, account? */
+  //
+  // /* what kind of entity is this? user, account? */
   subjectType: { type: String, default: null, required: true },
-
-  /* which object does the permission refer? */
-  objecttId: { type: String, default: null, required: true },
-
-  /* what kiind of object is the target object? */
+  //
+  // /* which object does the permission refer? */
+  objectId: { type: String, default: null, required: true },
+  //
+  // /* what kiind of object is the target object? */
   objectType: { type: String, default: null, required: true },
-
-  /* when does the ermission expire? */
+  //
+  // /* when does the ermission expire? */
   expires: { type: Date, default: null },
-
-  /* our permission value as integer, which we will use in a bit-wise fashion */
+  //
+  // /* our permission value as integer, which we will use in a bit-wise fashion */
   value: { type: Number, default: 0 },
     
 }, { timestamp: true })
