@@ -28,6 +28,7 @@
  *  When answering a ping with a pong the party answering needs to send back the exakt
  *  same data along. 
  */
+import io from 'socket.io-client'
 
 const readyState = {
   'CONNECTING': 0,
@@ -133,26 +134,7 @@ class SocketClient {
   connect (host, token) {
     this.host = host
     this.token = token
-    this.socket = new WebSocket(host)
-    this._registerSocketEvents()
-  }
-
-  /*
-   *   
-   */
-  reconnect() {
-
-    // return false if we are connected
-    // if (this.socket.readyState === 1) return false
-
-    // reset our healthcheck properties as we are apparantly off-line
-    this.lastPingTimestamp = false
-    this.lastPingTimestamp = false
-    this.pingMap = {}
-
-    // this.socket = new WebSocket(this.host)
-    // this._registerSocketEvents()
-    // this.retryCount += 1
+    this.socket = io(host)
   }
 
   /*
@@ -227,158 +209,6 @@ class SocketClient {
         listener.apply(this, args)
     })
   }
-
-  /*
-   * getReadyState 
-   * @return {number} - returns the socket state
-   * @TODO this is  not reliable we need to implement our own ping - pong check
-   */
-  getReadyState () {
-    return this.socket.readyState
-  }
-  
-  /*
-   * Register socket events
-   */
-  _registerSocketEvents () {
-    if (!this.socket) return false
-
-    /* open event */
-    this.socket.addEventListener('open', (event) => {
-      this.emit('open', event.data)
-      this.retryCount = 0
-      this.heartbeat = true
-      this._sendHeartbeat()
-    })
-
-    /* close event */
-    this.socket.addEventListener('close', (event) => {
-      this.emit('close', event.data)
-      this.heartbeat = false
-      if (this.heartbeatIntervallId) {
-        clearInterval(this.heartbeatIntervallId)
-      }
-      delete this.socket
-    })
-
-    /* error event */
-    this.socket.addEventListener('error', (event) => {
-      this.emit('error', event.data)
-    })
-
-    /*
-     * message event
-     *
-     * Messages from the server arrive in two formats
-     * 1. "__ping__" expects a "__pong__" reponse (this._pong())
-     * 2. any data object meaningful to the business logic come in the form:
-     *
-     *    {
-     *      type: 'string',
-     *      params:  { ... }
-     *    }
-     */
-    this.socket.addEventListener('message', (event) => {
-
-
-      // emit a message event anyway, just in case somebody is interested in the raw messages
-      this.emit('message', event.data)
-
-      // @TODO handle message event depending on the type
-      // const data = JSON.parse(event.data)
-      const data = JSON.parse(event.data)
-
-      switch (data.type) {
-        case 'pong':
-          this.emit('pong', data.params)
-          this._handlePong(data.params.token)
-          break
-        /* incoming data objects as handled by our application logic, e.g. user, memo, tag etc.  */
-        case 'data':
-          this.emit('data', data.params)
-          break
-        /* confirmation that our request to join a room was granted by the server */
-        case 'join': 
-          this.emit('join', data.params)
-          break
-        /* confirmation form the server that we left a socket room */
-        case 'leave':
-          this.emit('leave', data.params)
-          break
-        /* confirmation that we now have an authenticated socket connection  */
-        case 'login':
-          this.emit('login', data.params)
-          break
-        /* confirmation the server no longer considers us authenticated  */
-        case 'logout':
-          this.emit('logout', data.params)
-          break
-        /* the server tells us our unique socket id for the current connection  */
-        case 'id':
-          this.emit('id', data.params)
-          break
-        default:
-          this.emit('error', { msg: 'Unknown event type from socket server' })
-      }
-    })
-  }
-
-  /*
-   * Send pong
-   *
-   * The server expects us to promptly answer with a pong message whenever we
-   * recieve a ping. Via this ping-pong routine both side monitor if the
-   * connection is still intact. 
-   */
-  _pong (token) {
-    const payload = { type: 'pong', params: { token } }
-    return this.socket.send(JSON.stringify(payload))
-  }
-
-  /*
-   * Ping
-   *
-   * Sends a ping to the server and initiates house keeping
-   * of the previously send pings
-   */
-  _ping () {
-    if (!this.heartbeat) return false
-
-    // Have send a previous ping and are we still waiting for a pong?
-    // if so emit a connection error
-    if (this.lastPingTimestamp && this.lastPingToken) {
-      if (this.pingMap !== {} && this.pingMap[this.lastPingToken]) {
-        this.emit('timeout')
-      }
-    }
-
-    // send a new ping
-    this.lastPingToken = Date.now() // @TODO should unique id, e.g. nanoid()
-    this.lastPingTimestamp = Date.now()
-    const payload = JSON.stringify({ type: 'ping', params: { token: this.lastPingTimestamp } })
-    this.socket.send(payload)
-    // save ping in 
-    this.pingMap[this.lastPingToken] = this.lastPingTimestamp
-
-  }
-  
-  /*
-   * Remove pint event from map, so we know a particual ping received its pong
-   * @type {string} token
-   */
-  _handlePong (token) {
-    if (this.pingMap[token]) {
-      delete this.pingMap[token]
-    }
-  }
-
-  /*
-   * start the heartbeat 
-   */
-  _sendHeartbeat () {
-    this.heartbeatIntervallId = setInterval( () => this._ping(), this.heartbeatIntervall)
-  }
-  
 }
 
 export default SocketClient

@@ -1,10 +1,15 @@
+/*
+ * socket plug 
+ *
+ * decorates the fassstify instance with a socket.io server.
+ */
 import fp from 'fastify-plugin'
 import { Server } from 'socket.io'
 
 export default fp(async function(app, opts) {
 
   const defaults = {
-    cors: false,
+    cors: { origin: /localhost/ },
     connectionTimeout: 45000,
     pingInterval: 25000,
     pingTimeout: 20000

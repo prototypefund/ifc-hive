@@ -259,6 +259,11 @@ export default async function app (opts = {}) {
     console.log(err.context)
   })
 
+  app.eventbus.on('dataUpdate', (payload) => {
+    // validate schema
+    app.wss.emit('data', payload)
+  })
+
   // return the configured app
   return app
 }

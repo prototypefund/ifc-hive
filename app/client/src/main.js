@@ -15,6 +15,20 @@ import httpClient, { configClient } from './lib/httpClient.js'
 import EventEmitter  from '@lib/eventEmitter.js'
 
 /*
+ * @TODO move to file
+ */
+import io from 'socket.io-client'
+const s = io('http://localhost:8082')
+
+s.on('connect', () => {
+  log.socket('connect', `with id ${s.id}`)
+})
+
+s.on('hello', (data) => {
+  log.socket(data, 'look, we got something' )
+})
+
+/*
  * get env variables to configure the app
  */
 const API_BASE_URL = getEnvVariable('VITE_API_BASE_URL')
@@ -23,7 +37,8 @@ const SOCKET_URL = getEnvVariable('VITE_APP_SOCKET_URL')
 /* Set up http API client */
 configClient(httpClient, { baseURL: API_BASE_URL, })
 
- httpClient.get('http://localhost:8082/health').then((response) => log.api(response, 'healthcheck'))
+// @TODO clean up and make dynamic
+httpClient.get('http://localhost:8082/health').then((response) => log.api(response, 'healthcheck'))
 
 
 /* set up socket client */

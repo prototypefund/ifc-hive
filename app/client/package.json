@@ -40,6 +40,7 @@
     "rxjs": "7.x",
     "sass": "1.x",
     "semver": "7.x",
+    "socket.io-client": "^4.6.1",
     "uppy": "^3.2.2",
     "uuid": "8.x",
     "vue": "3.x",
@@ -57,7 +58,6 @@
     "#src/*": "./src/*.js"
   },
   "devDependencies": {
-    "terser": "5.x",
     "@capacitor/android": "4.x",
     "@capacitor/camera": "4.x",
     "@capacitor/cli": "4.x",
@@ -72,14 +72,16 @@
     "@capacitor/toast": "4.x",
     "@cypress/vite-dev-server": "2.x",
     "@cypress/vue": "3.x",
-    "@storybook/builder-vite": "0.2.4",
     "@storybook/addon-actions": "6.x",
     "@storybook/addon-essentials": "6.x",
     "@storybook/addon-interactions": "6.x",
     "@storybook/addon-links": "6.x",
     "@storybook/addon-storysource": "6.x",
+    "@storybook/builder-vite": "0.2.4",
     "@storybook/vue3": "6.x",
-    "storybook-dark-mode": "1.x",
+    "@vitejs/plugin-vue": "3.x",
+    "cypress": "12.0.2",
+    "cypress-vite": "1.2.1",
     "eslint": "7.x",
     "eslint-config-standard": "16.x",
     "eslint-plugin-cypress": "2.x",
@@ -87,12 +89,11 @@
     "eslint-plugin-node": "11.x",
     "eslint-plugin-promise": "5.x",
     "eslint-plugin-storybook": "0.x",
-    "@vitejs/plugin-vue": "3.x",
     "happy-dom": "7.x",
+    "start-server-and-test": "1.14.0",
+    "storybook-dark-mode": "1.x",
+    "terser": "5.x",
     "vite": "3.x",
-    "vitest": "0.x",
-    "cypress": "12.0.2",
-    "cypress-vite": "1.2.1",
-    "start-server-and-test": "1.14.0"
+    "vitest": "0.x"
   }
 }
