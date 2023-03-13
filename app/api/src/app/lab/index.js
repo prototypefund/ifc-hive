@@ -93,52 +93,52 @@ export default async function (app) {
   /* 
    * GET websocket
    */
-  app.get('/websocket', { websocket: true }, function wsHandler (connection, req) {
-    // create a unique ide for this socket
-    const id = nanoid()
-    connection.socket.id = id
-
-    // send unique socket id to client
-    app.log.info(`Socket ${connection.socket.id} connected`)
-    connection.socket.send(JSON.stringify({ type: 'id', params: { id } }))
-
-    /* connection closed event */
-    connection.socket.on('close', message => {
-      app.log.info(`Socket ${connection.socket.id} closed`)
-    })
-
-    /* Message event, handle depending on the object type (memo, user, etc.) */
-    connection.socket.on('message', message => {
-      // lets make sure we turn buffers into strings
-      const raw = typeof message === 'string'? message : message.toString()
-      try {
-        const data = JSON.parse(raw)
-
-        // handle message depending on type
-        switch (data.type) {
-            // answer with a pong when receiving a ping
-          case 'ping': 
-            const payload = { type: 'pong', params: { token: data.params.token } }
-            connection.socket.send(JSON.stringify(payload))
-            break
-          default:
-            app.log.error({ msg: `Socket server unknown message type ${data.type}`, data })
-        }
-
-      } catch (error) {
-        app.log.error({ msg: 'Socket server cannot parse message', data: raw })
-      }
-    })
-
-    /* Push data to client */
-    app.eventbus.on('push_data', (payload) => {
-      app.log.info({ msg: 'Push data to socket', item: payload._id  })
-      // build message in required format
-      const message = { type: 'data', params: { data: payload } } 
-      // send message to client
-      connection.socket.send(JSON.stringify(message)) 
-    })
-
-  })
+  // app.get('/websocket', { websocket: true }, function wsHandler (connection, req) {
+  //   // create a unique ide for this socket
+  //   const id = nanoid()
+  //   connection.socket.id = id
+  //
+  //   // send unique socket id to client
+  //   app.log.info(`Socket ${connection.socket.id} connected`)
+  //   connection.socket.send(JSON.stringify({ type: 'id', params: { id } }))
+  //
+  //   /* connection closed event */
+  //   connection.socket.on('close', message => {
+  //     app.log.info(`Socket ${connection.socket.id} closed`)
+  //   })
+  //
+  //   /* Message event, handle depending on the object type (memo, user, etc.) */
+  //   connection.socket.on('message', message => {
+  //     // lets make sure we turn buffers into strings
+  //     const raw = typeof message === 'string'? message : message.toString()
+  //     try {
+  //       const data = JSON.parse(raw)
+  //
+  //       // handle message depending on type
+  //       switch (data.type) {
+  //           // answer with a pong when receiving a ping
+  //         case 'ping': 
+  //           const payload = { type: 'pong', params: { token: data.params.token } }
+  //           connection.socket.send(JSON.stringify(payload))
+  //           break
+  //         default:
+  //           app.log.error({ msg: `Socket server unknown message type ${data.type}`, data })
+  //       }
+  //
+  //     } catch (error) {
+  //       app.log.error({ msg: 'Socket server cannot parse message', data: raw })
+  //     }
+  //   })
+  //
+  //   /* Push data to client */
+  //   app.eventbus.on('push_data', (payload) => {
+  //     app.log.info({ msg: 'Push data to socket', item: payload._id  })
+  //     // build message in required format
+  //     const message = { type: 'data', params: { data: payload } } 
+  //     // send message to client
+  //     connection.socket.send(JSON.stringify(message)) 
+  //   })
+  //
+  // })
 
 } 

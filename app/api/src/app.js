@@ -8,7 +8,6 @@ import fastifySensible from '@fastify/sensible'
 import fastifySwagger from '@fastify/swagger' // api documentation
 import fastifySwaggerUI from '@fastify/swagger-ui'
 import { swaggerConfig, swaggerUiConfig } from './lib/swaggerConfig.js' // swagger api documentation configuration
-import websocket from '@fastify/websocket'
 import healthcheck from 'fastify-custom-healthcheck' // simple health check utility
 import { fileURLToPath } from 'url' // required to emulate __filename
 import { dirname } from 'path' // required to emulate __dirname
@@ -17,6 +16,7 @@ import { nanoid } from 'nanoid'
 import eventbus from './plugins/eventbus/index.js'
 import jwt from './plugins/authentication/index.js'
 import mongodb from './plugins/mongodb/index.js'
+import socket from './plugins/socket/index.js'
 
 /*
  * import package.json so we know our app version
@@ -39,9 +39,13 @@ global.__dirname = dirname(__filename)
  * API_TOKEN_PRIVAT_KEY
  * API_TOKEN_SECRET     secret for signing the JWT token
  * API_TOKEN_MAX_AGE    max age for valig JWT, e.g. '3600' (seconds), '1d' (days), '1h' (hours)
- * API_ROOT_PASSWORD
- * API_ROOT_USERNAME
- * MONGO_HOST
+ * API_ROOT_PASSWORD    with the root password and email we can always create a token and login
+ * API_ROOT_EMAIL       
+ * MONGO_HOST           mongo host with or without login credentials (e.g. if external server)
+ * SOCKET_CORS          https://socket.io/docs/v4/server-options/#cors
+ * SOCKET_TIMEOUT       45000   
+ * SOCKET_PING_INTERVALL  25000
+ * SOCKET_PING_TIMEOUT    20000
  *
  * @TODO add env variables for mongo, es etc. Basically all configuratioan
  * should be done by env-variables.
@@ -91,14 +95,14 @@ export default async function app (opts = {}) {
   /*
    * register custom plugiins
    */
-  /* register websocket server */
-  app.register(websocket)
   /* register custom event bus */
   app.register(eventbus)
   /* register jwt authentication plugin */
   app.register(jwt, { secret: process.env.API_TOKEN_SECRET })
   /* connect to mongo */
   app.register(mongodb, { uri: process.env.MONGO_URL })
+
+  app.register(socket)
 
   /*
    * register other plugins
@@ -209,6 +213,51 @@ export default async function app (opts = {}) {
    * REGISTER GLOBAL EVENTS
    * ---------------------------------------------------------------------
    */
+
+  await app.ready()
+
+  app.wss.on('connection', (socket) => {
+
+    socket.on('join', (room) => {
+      app.log.info(`[Socket] room 7 entered by ${socket.id}`)
+      socket.join('7')
+      app.wss.sockets.in('7').emit('hello', {msg: `Hello ${socket.id}`})
+      app.wss.in('7').fetchSockets()
+        .then((sockets) => { 
+          app.log.info({ msg: 'members', socket: sockets.map(s => s.id) })
+        })
+        .catch((err) => { console.log(err) })
+    })
+
+    socket.on('leave', (room) => {
+      socket.leave('7')
+      app.wss.sockets.in('7').emit('hello', {msg: `left room ${socket.id}`})
+      app.wss.in('7').fetchSockets()
+        .then((sockets) => { 
+          app.log.info({ msg: 'members', socket: sockets.map(s => s.id) })
+        })
+        .catch((err) => { console.log(err) })
+    })
+
+    socket.on('details', (args) => {
+      app.log.info('[Socket] details received') 
+      app.wss.emit('hello', { msg: 'we got your message' })
+    })
+
+    app.log.warn(`[socket] connected ${socket.id}`)
+    app.wss.emit('hello', { msg: 'some message to you' })
+
+    socket.on('disconnect', () => {
+      app.log.warn(`[socket] disconnected ${socket.id}`)
+    })
+  })
+
+  app.wss.on('connection_error', (err) => {
+    console.log(err.req)
+    console.log(err.code)
+    console.log(err.message)
+    console.log(err.context)
+  })
 
   // return the configured app
   return app
