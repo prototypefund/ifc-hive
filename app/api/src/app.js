@@ -264,6 +264,12 @@ export default async function app (opts = {}) {
     app.wss.emit('data', payload)
   })
 
+  app.eventbus.on('dataNew', (payload) => {
+    // validate schema
+    app.wss.emit('data', payload)
+  })
+
+
   // return the configured app
   return app
 }

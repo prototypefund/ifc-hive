@@ -10,23 +10,11 @@ import filters from './setup/filters.js'
 import capacitor from './setup/capacitor'
 import VueApexCharts from "vue3-apexcharts";
 import { createSocket, registerSocketEvents } from './setup/socket.js'
-import log from './setup/logger.js'
+import log from '@lib/logger.js'
 import httpClient, { configClient } from './lib/httpClient.js'
 import EventEmitter  from '@lib/eventEmitter.js'
+import { registerApiHandlerEvents } from './setup/apiClient'
 
-/*
- * @TODO move to file
- */
-import io from 'socket.io-client'
-const s = io('http://localhost:8082')
-
-s.on('connect', () => {
-  log.socket('connect', `with id ${s.id}`)
-})
-
-s.on('hello', (data) => {
-  log.socket(data, 'look, we got something' )
-})
 
 /*
  * get env variables to configure the app
@@ -37,29 +25,33 @@ const SOCKET_URL = getEnvVariable('VITE_APP_SOCKET_URL')
 /* Set up http API client */
 configClient(httpClient, { baseURL: API_BASE_URL, })
 
-// @TODO clean up and make dynamic
-httpClient.get('http://localhost:8082/health').then((response) => log.api(response, 'healthcheck'))
+const apiHealthcheck = async () => {
+  try {
+    const healthcheckResponse = await httpClient.get(`${API_BASE_URL}/health`)
+    log.api('healthcheck', healthcheckResponse,)
+  } catch(err) {
+    console.error(`Can\'t connect to API ${API_BASE_URL}`)
+    console.error(err)
+  }
+}
+apiHealthcheck()
 
 
 /* set up socket client */
 const socket = createSocket(SOCKET_URL)
-
 /* create global event bus */
 const eventbus = new EventEmitter()
-
 /* set up store and pass dependencies like socket and api client */
-const store = createStore(httpClient, socket, log, eventbus)
-
+// remove the socket and httpClient from the store, we communicate via the eventbus
+const store = createStore(eventbus)
 /* Create router */
 const router = createCustomRouter(store)
 
 /*
  * Now that we have all vital objects (store, socket, eventbus, httpclient)
- * register socket events, i.e. react with eventbus or dispatching
- * store actions
  */
-registerSocketEvents(socket, store, eventbus, log)
-
+registerSocketEvents(socket, store, eventbus)
+registerApiHandlerEvents(httpClient, store, eventbus)
 
 /*
  *  create app and pass dependencies 
@@ -97,7 +89,6 @@ try {
   app.provide('$store', store)
   // make capacitor availble in all components
   app.provide('$mobile', capacitor || false)
-
   // add global properties to app
   app.config.globalProperties.$filters = filters
   app.provide('$filters', filters)

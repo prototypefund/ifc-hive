@@ -43,12 +43,9 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
 /*
  * createStore 
  *
- * @param {object} $api - axios instance
- * @param {object} $socket - WebsocketClient (see lib/socket.js)
- * @param {object} $log - WebsocketClient (see lib/socket.js)
  * @param {object} $eventbus - a global eventbus which is also available in all vue components
  */
-export function createStore ($api, $socket, $log, $eventbus) {
+export function createStore ($eventbus) {
 
   // TODO move this stup to seperate config and helper files
   // helper functions and lookup maps
@@ -217,13 +214,13 @@ export function createStore ($api, $socket, $log, $eventbus) {
   /*
    * create and register events
    * @TODO pseudo effect as events
+   *
    */
-  const events = createEvents(store, $api, $log)
+  const events = createEvents(store, $eventbus)
 
   $eventbus.on('store/dispatch', events.dispatch) // generic store.dispatch
   $eventbus.on('widgetConfLoader', events.widgetConfLoaderHandler)
   $eventbus.on('widgetTypeConfLoader', events.widgetTypeConfLoaderHandler)
-  $eventbus.on('data_update', events.apiUpdateItem )
 
   /*
    * Some default subscribers  

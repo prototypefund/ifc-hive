@@ -16,9 +16,9 @@
  *
  * 2. Or use short cuts for types with message/data and title as paramaters
  *
- *    log.api(data, 'GET memo')
+ *    log.api('GET memo', data)
  *    log.store(data, 'My custom log event')
- *    log.socket({ msg: 'some message', data: {} }, 'subject or title')
+ *    log.socket('subject line', { msg: 'some message', data: {} })
  *    log.info('Simple message')
  *
  * NOTE: Beware that when using the error class the console will point you to the
@@ -37,6 +37,7 @@ const TYPE = {
   socket: 'color: #eee600',
   error: 'color: #fc4b4b',
   warning: 'color: #CC8800',
+  default: '',
 }
 
 /*
@@ -87,35 +88,34 @@ class Logger {
    */
 
   /* socket */
-  socket (message, title, level) {
+  socket (title, message, level) {
     this.log(message, 'socket', title, level)
   }
 
   /* store */
-  store (message, title, level) {
+  store (title, message, level) {
     this.log(message, 'store', title, level)
   }
 
   /* api */
-  api (message, title, level) {
+  api (title, message, level) {
     this.log(message, 'api', title, level)
   }
 
   /* error - better use default console.error */
-  error (message, title, level) {
+  error (title, message, level) {
     this.log(message, 'error', title, 0)
   }
 
   /* warning */
-  warning (message, title, level) {
+  warning (title, message, level) {
     this.log(message, 'warning', title, level)
   }
 
   /* info  */
-  info (message, title, level) {
+  info (title, message, level) {
     this.log(message, 'default', title, level )
   }
-
 }
 
-export default Logger
+export default new Logger()
