@@ -16,7 +16,7 @@ const permissionSchema = new Schema({
    */
   type: { type: String, default: null },
 
-  /* A optional code for the company */
+  /* A optional code */
   code: { type: String, unique: true, default: randomIdGenerator(64)() },
 
   // /* subject ID who is this permission for? */

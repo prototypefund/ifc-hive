@@ -86,17 +86,18 @@ export default function (app) {
       const newAccounts = mapIds(refAccounts, idMap, ['_id', 'owner', 'organization' ])
       await Account.insertMany(newAccounts)
 
-      /* import tags */
-      const refTags = JSON.parse(JSON.stringify(tags))
-      await Tag.deleteMany()
-      const newTags = mapIds(refTags, idMap, ['_id' ])
-      await Tag.insertMany(newTags)
 
       /* import projects */
       const refProjects = JSON.parse(JSON.stringify(projects))
       await Project.deleteMany()
       const newProjects = mapIds(refProjects, idMap, ['_id' ])
       await Project.insertMany(newProjects)
+
+      /* import tags */
+      const refTags = JSON.parse(JSON.stringify(tags))
+      await Tag.deleteMany()
+      const newTags = mapIds(refTags, idMap, ['_id' , 'project'])
+      await Tag.insertMany(newTags)
 
       /* import permissions */
       const refPermissions = JSON.parse(JSON.stringify(permissions))
@@ -139,7 +140,7 @@ export default function (app) {
           tags: await Tag.countDocuments(),
           projects: await Project.countDocuments(),
           permissions: await Permission.countDocuments(),
-          tickets: await Ticket.getChildrenTree({ rootDoc: t0 }),
+          // tickets: await Ticket.getChildrenTree({ rootDoc: t0 }),
         }
 
       } catch (error) {

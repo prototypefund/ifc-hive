@@ -1,5 +1,5 @@
 import { S } from 'fluent-json-schema'
-import { userBaseSchema } from './schemas.js'
+import { userBaseSchema } from '../../model/user/user.schema.js'
 import User from '../../model/user/user.model.js'
 
 

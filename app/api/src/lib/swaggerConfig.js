@@ -61,6 +61,10 @@ export const swaggerConfig = {
         description: 'Represents a privelege.',
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the permission concept' }
       },
+      { name: 'core/tag',
+        description: 'Represent a label.',
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about the tag concept' }
+      },
       { name: 'core/system',
         description: 'Endpoints for system maintenance during development and production',
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
@@ -99,6 +103,7 @@ export const swaggerConfig = {
  */
 export const swaggerUiConfig = {
   routePrefix: '/docs',
+  deepLinking: true,
   uiConfig: {
     deepLinking: true,
     defaultModelsExpandDepth: 10,

@@ -25,8 +25,4 @@ export const userBaseSchema = S.object()
 
 export const userResponseSchema = userBaseSchema.without(['password', 'resetkey'])
 
-export const userAvatar = S.object()
-
-export const userOrganization = S.object()
-
 

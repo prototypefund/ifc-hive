@@ -5,7 +5,7 @@
  * a JWT token. 
  */
 import { S } from 'fluent-json-schema'
-import { userBaseSchema } from './schemas.js'
+import { userBaseSchema } from '../..//model/user/user.schema.js'
 import User from '../../model/user/user.model.js'
 import { defaultHeadersSchema } from '#src/lib/headersHelper.js'
 import { randomIdGenerator } from '#src/lib/helpers.js'
