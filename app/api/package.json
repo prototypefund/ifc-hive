@@ -31,9 +31,7 @@
     "ramda": "^0.28.0",
     "socket.io": "^4.6.1",
     "uuid": "^9.0.0",
-    "vary": "^1.1.2"
-  },
-  "devDependencies": {
+    "vary": "^1.1.2",
     "eslint": "^8.34.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.27.5",

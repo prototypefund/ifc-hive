@@ -17,6 +17,7 @@ import eventbus from './plugins/eventbus/index.js'
 import jwt from './plugins/authentication/index.js'
 import mongodb from './plugins/mongodb/index.js'
 import socket from './plugins/socket/index.js'
+import { registerSocketEvents } from './lib/socket/handleEvents.js'
 
 /*
  * import package.json so we know our app version
@@ -215,59 +216,7 @@ export default async function app (opts = {}) {
    */
 
   await app.ready()
-
-  app.wss.on('connection', (socket) => {
-
-    socket.on('join', (room) => {
-      app.log.info(`[Socket] room 7 entered by ${socket.id}`)
-      socket.join('7')
-      app.wss.sockets.in('7').emit('hello', {msg: `Hello ${socket.id}`})
-      app.wss.in('7').fetchSockets()
-        .then((sockets) => { 
-          app.log.info({ msg: 'members', socket: sockets.map(s => s.id) })
-        })
-        .catch((err) => { console.log(err) })
-    })
-
-    socket.on('leave', (room) => {
-      socket.leave('7')
-      app.wss.sockets.in('7').emit('hello', {msg: `left room ${socket.id}`})
-      app.wss.in('7').fetchSockets()
-        .then((sockets) => { 
-          app.log.info({ msg: 'members', socket: sockets.map(s => s.id) })
-        })
-        .catch((err) => { console.log(err) })
-    })
-
-    socket.on('details', (args) => {
-      app.log.info('[Socket] details received') 
-      app.wss.emit('hello', { msg: 'we got your message' })
-    })
-
-    app.log.warn(`[socket] connected ${socket.id}`)
-    app.wss.emit('hello', { msg: 'some message to you' })
-
-    socket.on('disconnect', () => {
-      app.log.warn(`[socket] disconnected ${socket.id}`)
-    })
-  })
-
-  app.wss.on('connection_error', (err) => {
-    console.log(err.req)
-    console.log(err.code)
-    console.log(err.message)
-    console.log(err.context)
-  })
-
-  app.eventbus.on('dataUpdate', (payload) => {
-    // validate schema
-    app.wss.emit('data', payload)
-  })
-
-  app.eventbus.on('dataNew', (payload) => {
-    // validate schema
-    app.wss.emit('data', payload)
-  })
+  registerSocketEvents(app)
 
 
   // return the configured app
