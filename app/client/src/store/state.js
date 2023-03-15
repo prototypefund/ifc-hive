@@ -24,7 +24,7 @@ export const applicationState = {
   queries: {},
   socket: {
     status: null, 
-    lastRequestId: null,
+    message: null,
   },
   user: {
     uuid: false,

@@ -21,6 +21,7 @@
         <status-bar />
       </p>
 
+      <socket-status />
       <!-- notifications -->
       <Notifications />
     </v-app-bar>
@@ -57,6 +58,8 @@ import StatusBar from "@u/uploader/statusBar.vue";
 import ProgressBar from "@u/uploader/progressBar.vue";
 import { globalTools } from "./setup/application";
 import mock from "./mock.vue";
+import socketStatus from "@u/socketStatus.vue"
+
 export default {
   components: {
     Notifications,
@@ -65,6 +68,7 @@ export default {
     StatusBar,
     ProgressBar,
     mock,
+    socketStatus,
     mobileStartup: defineAsyncComponent(() =>
       import("./components/utils/mobile/startup.vue")
                                        ),

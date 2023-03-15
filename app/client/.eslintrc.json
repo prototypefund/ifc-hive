@@ -12,7 +12,8 @@
         "sourceType": "module"
     },
     "rules": {
-      "comma-dangle": "off"
+      "comma-dangle": "off",
+      "vue/no-multiple-template-root": "off"
     },
     "plugins": ["cypress"],
     "globals": {

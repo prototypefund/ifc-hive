@@ -32,16 +32,22 @@ export function registerSocketEvents ($socket, $store, $eventbus) {
   $socket.on('connect', (data) => {
     log.socket('connected', 'Socket connection established')
 
-    $store.dispatch({
-      type: 'socket/status',
-      payload: { status: 1 }
-    })
+    $store.dispatch({ type: 'socket/status', payload: { status: 1, message: 'Connected' } })
     // if we previously tried to connect stop that interval
     if (intervalId) {
       clearInterval(intervalId)
       intervalId = false
     }
   })
+
+  $socket.on('disconnect', () => {
+    $store.dispatch({ type: 'socket/status', payload: { status: 0, message: 'disconnect' } })
+  })
+
+  $socket.on('reconnect', () => {
+    $store.dispatch({ type: 'socket/status', payload: { status: 2, message: 'Reconnect' } })
+  })
+
 
   /* generic hello event */
   $socket.on('hello', (data) => {
@@ -66,6 +72,8 @@ export function registerSocketEvents ($socket, $store, $eventbus) {
   * Our continious healthcheck didn't get a response within the expected time from the server
   */
   $socket.on('timeout', (data) => {
+    $store.dispatch({ type: 'socket/status', payload: { status: 'Timeout' } })
+
     log.error('Websocket didn\'t receive pong in expected resonse time', 
       'Socket timeout')
 
