@@ -30,7 +30,7 @@
 <script setup>
 import { inject, ref, onMounted, onUnmounted } from "vue";
 import { stringToColour } from "@lib/uiHelper.js";
-import QuickListHandler from "@w/quickList/handler/click.vue";
+import QuickListHandler from "@w/quickList/handler/batch.vue";
 const $store = inject("$store");
 
 const props = defineProps({

@@ -1,24 +1,30 @@
 <template>
   <v-card flat class="quickListWrapper" v-if="state" data-test-container="widgets/quicklist/expansionVertical"
     :data-test-container-uuid="props.uuid">
+
+    <v-card-actions>
+      <v-btn size="x-small" :append-icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'" @click="show = !show">
+        Batch edit
+      </v-btn>
+    </v-card-actions>
+    <v-expand-transition>
+      <div v-show="show">
+        <v-divider />
+        <v-card-text>
+          <batch-edit :widgetUUID="props.uuid" />
+        </v-card-text>
+        <v-divider />
+      </div>
+    </v-expand-transition>
     <v-expansion-panels v-model="openItem" variant="popout" class="my-4" v-if="state.entries.length > 0">
       <v-expansion-panel v-for="(item, index) in state.entries" :key="index">
         <v-expansion-panel-title>
           <template v-slot:default="{ expanded }">
             {{ item.type }} - {{ item.title }}
           </template>
-          <!--template v-slot:actions="{ expanded }">
-            //TODO add a edit mode switch once vuetify supports proper action buttons on expand panels
-            <v-fade-transition leave-absolute>
-              <span v-if="expanded" :key="index + '_expanded'">
-                {{ state.entries[index].props.mode }}
-                <v-switch v-model="openPanelMode" color="primary" label="mode" value="edit" hide-details></v-switch>
-              </span>
-            </v-fade-transition>
-          </!--template-->
         </v-expansion-panel-title>
         <v-expansion-panel-text>
-          <component v-if="component" :props="item.props" widgetUUID="quickList" :docUUID="item.uuid" />
+          <component v-if="component" :props="item.props" :widgetUUID="props.uuid" :docUUID="item.uuid" />
         </v-expansion-panel-text>
 
       </v-expansion-panel>
@@ -27,10 +33,12 @@
   </v-card>
 </template>
 <script setup>
-import { inject, ref, onMounted, onUnmounted, computed, defineAsyncComponent } from "vue";
+import { inject, ref, shallowRef, onMounted, onUnmounted, computed, defineAsyncComponent } from "vue";
 import noResultsYet from "@t/noResultsYet.vue";
+import batchEdit from "./batchEdit.vue"
 const $store = inject("$store");
 const state = ref({});
+const show = shallowRef(false);
 
 const stateSubscriber$ = $store
   .select((state) => state.widgets[props.uuid])
@@ -67,23 +75,6 @@ const openItem = computed({
     });
   },
 });
-const openPanelMode = computed({
-  // getter
-  get() {
-    return state.value.entries[state.value.openItem].props.mode || 'view'
-  },
-  // setter
-  set(newValue) {
-    debugger
-    $store.dispatch({
-      type: "widgets/update",
-      uuid: props.uuid,
-      payload: {
-        openItem: newValue,
-      },
-    });
-  },
-});
 const props = defineProps({
   urlParams: {
     type: String,
@@ -98,7 +89,7 @@ const props = defineProps({
     default: "default param",
   },
 });
-function closeTabConfirmed(index) {
+function removeEntry(index) {
   const entries = JSON.parse(JSON.stringify(state.value.entries));
   let openItem = state.value.openItem;
   entries.splice(index, 1);
@@ -127,11 +118,6 @@ function closeTabConfirmed(index) {
     },
   });
   this.overlay = false;
-}
-function closeTab(index) {
-  this.overlay = index;
-  // TODO add confirm dialogue here, apparently overlay does not work atm in vuetify rc
-  this.closeTabConfirmed(index);
 }
 onMounted(() => { });
 onUnmounted(() => {

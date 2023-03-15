@@ -19,6 +19,7 @@ export default (store, dataLookup) => ({
   get: (actionId, query, params = {}, updateHook = false, hookCondition = 'all') => {
     // create a deep ref object which will contain the query data as well as the items
     const queryObj = ref({ helper: { basicStoreFilters, splitIdentifier } })
+
     if (!store.$data.queryObjects[actionId]
       || (store.$data.queryObjects[actionId].value.query !== query
         || store.$data.queryObjects[actionId].value.params !== params)) {

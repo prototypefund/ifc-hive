@@ -17,24 +17,6 @@
     <v-card-text> short description</v-card-text>
     <v-card-subtitle>
       <v-row>
-        <!--v-col cols="auto" v-if="ticketItem._source.created">
-          <v-chip size="small" label text-color="white">
-            <v-icon start icon="mdi-calendar-plus"></v-icon>
-            {{ $d(ticketItem._source.created, "short") }}
-            <v-tooltip activator="parent" location="end">
-              {{ $t("generics.created") }}
-            </v-tooltip>
-          </v-chip>
-        </!--v-col>
-        <v-col-- cols="auto" v-if="ticketItem._source.modified">
-          <v-chip size="small" label text-color="white">
-            <v-icon start icon="mdi-calendar-edit"></v-icon>
-            {{ $d(ticketItem._source.modified, "short") }}
-            <v-tooltip activator="parent" location="end">
-              {{ $t("generics.modified") }}
-            </v-tooltip>
-          </v-chip>
-        </v-col-->
         <v-col cols="12" v-if="ticketItem._disId">
           <v-chip size="small" label text-color="white">
             <v-icon start icon="mdi-pound-box"></v-icon>
@@ -62,62 +44,12 @@
         </v-col>
       </v-row>
       <br />
-      <!--v-row no-gutters>
-      <v-col cols="6">#{{ ticketItem._disId }}</v-col>
-        <v-col cols="6">
-         <v-avatar v-if="ticketItem._source.assigned" start color="indigo">
-          <v-img
-            v-if="props.userLookup.data[ticketItem._source.assigned]._source.avatar && props.userLookup.data[ticketItem._source.assigned]._source.avatar.file"
-            :src="props.userLookup.data[ticketItem._source.assigned]._source.avatar.file" />
-          <span justify="space-around"
-            v-else>{{ props.userLookup.data[ticketItem._source.assigned]._source.firstname.substring(0, 1) }}
-            {{ props.userLookup.data[ticketItem._source.assigned]._source.lastname.substring(0, 1) }}</span>
-        </v-avatar>
-        
-        </v-col>
-      </!--v-row-->
-
     </v-card-subtitle>
-
-    <!--v-card-actions>
-      <v-btn-group>
-        <v-btn size="x-small" :append-icon="
-          show !== `${ticketItem._id}_overview`
-            ? 'mdi-chevron-left'
-            : 'mdi-chevron-down'
-        " @click="handleShow(`${ticketItem._id}_overview`)">{{ $t("generics.overview") }}</v-btn>
-        <v-btn size="x-small" v-if="ticketItem._source.owner" :append-icon="
-          show !== `${ticketItem._id}_author` ? 'mdi-chevron-left' : 'mdi-chevron-down'
-        " @click="handleShow(`${ticketItem._id}_author`)">{{ $t("generics.author") }}
-          <v-tooltip activator="parent" location="top">
-            <ticket-member-mouse-over :widgetUUID="props.widgetUUID" :docUUID="ticketItem._source.owner" />
-          </v-tooltip></v-btn>
-        <v-btn size="x-small" v-if="ticketItem._source.assigned" :append-icon="
-          show !== `${ticketItem._id}_assignee`
-            ? 'mdi-chevron-left'
-            : 'mdi-chevron-down'
-        " @click="handleShow(`${ticketItem._id}_assignee`)">{{ $t("generics.assignee") }}
-          <v-tooltip activator="parent" location="top"><ticket-member-mouse-over :widgetUUID="props.widgetUUID"
-              :docUUID="ticketItem._source.assigned" /> </v-tooltip>
-        </v-btn>
-      </v-btn-group>
-    </!--v-card-actions>
-    <v-expand-transition>
-      <ticket-user :tag-lookup="props.tagLookup" :key="ticketItem._source.assigned" :user-lookup="props.userLookup"
-        class="transition-fast-in-fast-out v-card--show" v-if="show == `${ticketItem._id}_assignee`"
-        :widgetUUID="props.widgetUUID" :docUUID="ticketItem._source.assigned" />
-      <ticket-user :tag-lookup="props.tagLookup" :user-lookup="props.userLookup"
-        class="transition-fast-in-fast-out v-card--show" :key="ticketItem._source.owner"
-        v-if="show == `${ticketItem._id}_author`" :widgetUUID="props.widgetUUID" :docUUID="ticketItem._source.owner" />
-      <v-card v-if="show == `${ticketItem._id}_overview`">
-        <pre>{{ ticketItem }}</pre>
-      </v-card>
-    </v-expand-transition-->
   </v-card>
 </template>
 <script setup>
 import { computed, shallowRef, defineAsyncComponent } from "vue";
-import QuickListHandler from "@w/quickList/handler/click.vue";
+import QuickListHandler from "@w/quickList/handler/batch.vue";
 const show = shallowRef(false);
 const isHovering = shallowRef(false);
 const ticketUser = computed(() => {
