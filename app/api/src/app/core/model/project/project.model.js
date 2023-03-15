@@ -29,6 +29,12 @@ const projectSchema = new Schema({
     maxLength: 12,
   },
 
+  account: {
+    type: Schema.Types.String,
+    ref: 'pacifico_core_account',
+    default: null,
+  },
+
   /* tags */
   tags: [String],
 

@@ -1,18 +1,21 @@
+/*
+ * project remove route
+ */
 import { S } from 'fluent-json-schema'
-import { tagResponseSchema } from '../../model/tag/tag.schema.js'
-import Tag from '../../model/tag/tag.model.js'
+import { projectResponseSchema } from '../../model/project/project.schema.js'
+import Project from '../../model/project/project.model.js'
 
 export default function (app) {
 
   async function handler (request, response) {
     try {
-      const tag = await Tag.findOneAndUpdate(
+      const project = await Project.findOneAndUpdate(
         { _id: request.params.id }, 
         { isDeleted: true },
         { new: true })
 
-      if (!tag) return app.httpErrors.notFound()
-      return  tag 
+      if (!project) return app.httpErrors.notFound()
+      return  project 
     } catch (err) {
       app.httpErrors.internalServerError()
     }
@@ -28,13 +31,13 @@ export default function (app) {
     handler,
     onRequest: [app.authenticate],
     schema: {
-      summary: 'Delete a tag by id.',
-      tags: ['core/tag'],
+      summary: 'Delete a project by id',
+      tags: ['core/project'],
       security: [ { apiKey: [] } ],
       params,
       response: {
-        '2xx': tagResponseSchema,
-      },
+        '2xx': projectResponseSchema,
+      }
     },
   }
 }

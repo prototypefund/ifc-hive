@@ -24,8 +24,8 @@ export const swaggerConfig = {
   mode: 'dynamic',
   openapi: {
     info: {
-      title: 'ifc-hive-api',
-      description: `API documenation for the ifc-hive platform. Further information
+      title: 'Pacifico Projektjournal API',
+      description: `API documenation for the pacifico-projectjournal-api platform. Further information
          <ul>
           <li>Further documentation in the repo</li>
           <li>General request atonomy</li>
@@ -46,31 +46,35 @@ export const swaggerConfig = {
     },
     tags: [
       { name: 'core/account',
-        description: 'Represents a legal entity, every user belongs to an account.',
+        description: 'Represents a legal entity, which can manage their own users and projects.',
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
+      },
+      { name: 'core/project',
+        description: 'Represents the default scope for permissions, belongs to an account and has users and a root-memo assigned.',
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
       },
       { name: 'core/user',
-        description: 'Represents a natural person, which belongs to an organization',
+        description: 'Represents a natural person, belongs to an account and optionally to an organization',
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
       },
       { name: 'core/organization',
-        description: 'User can choose to get notified on state changes.',
+        description: 'Users can optionally refer to an organization, to avoid redundancy and for search and batch operations.',
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the organization concept' }
       },
       { name: 'core/permission',
-        description: 'Represents a privelege.',
+        description: 'Represents various priveleges such as read/write access and subscriptions.',
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the permission concept' }
       },
+      { name: 'core/group',
+        description: 'Users belonging to a group inherit permissions granted to that group.',
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about the group concept' }
+      },
       { name: 'core/tag',
-        description: 'Represent a label.',
+        description: 'Represents a label. Labels live in the context of a given project.',
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the tag concept' }
       },
       { name: 'core/system',
         description: 'Endpoints for system maintenance during development and production',
-        externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
-      },
-      { name: 'journal/project',
-        description: 'Represents the default scope for permissions. Has users and a root-memo assigned.',
         externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
       },
       { name: 'journal/ticket',

@@ -1,5 +1,5 @@
 {
-  "name": "ifc-hive-api",
+  "name": "pacifico.projectjournal.api",
   "version": "0.0.5",
   "description": "API for ifc-hive plattform",
   "main": "src/server.js",

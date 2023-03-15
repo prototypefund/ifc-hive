@@ -10,6 +10,7 @@ export default [
     blocked: false,
     email_verified: true ,
     organization: 'orgaPacifico',
+    account: 'accountDefault',
   },
   {
     _id: 'userBerta',
@@ -22,6 +23,7 @@ export default [
     blocked: false,
     email_verified: true,
     organization: 'orgaPacifico',
+    account: 'accountDefault',
   },
   {
     _id: 'userCaesar',
@@ -34,5 +36,6 @@ export default [
     blocked: false,
     email_verified: true,
     organization: 'orgaAcme',
+    account: 'accountDefault',
   },
 ]

@@ -27,6 +27,7 @@ import routeReducers from './reducers/route.js'
 import userReducers from './reducers/user.js'
 import organizationReducers from './reducers/organization.js'
 import projectRedcuers from './reducers/project.js'
+import socketReducers from './reducers/socket.js'
 
 /* Apply different extensions depending on the environment */
 const extensions = getEnvVariable('NODE_ENV') === 'production'
@@ -79,6 +80,7 @@ export function createStore ($eventbus) {
     user: userReducers($eventbus),
     organization: organizationReducers($eventbus),
     project: projectRedcuers($eventbus),
+    socket: socketReducers($eventbus),
 
     queries: (state, action) => {
       let queries, items, query

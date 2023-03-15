@@ -39,7 +39,16 @@ function mapIds (objects, idLookup, fields = ['_id']) {
   if (!objects || !Array.isArray(objects) || objects.length < 1) return 
   // iterate over objects and replace the origina obj._id with the UUID from idLookup
   return objects.map((e) => { 
-    fields.forEach((f) => { if (e[f]) { e[f] = idLookup[e[f]] } })
+    fields.forEach((f) => { 
+      // map id if the field is a string value
+      if (e[f] && typeof e[f] === 'string') {
+        e[f] = idLookup[e[f]]
+      }
+      // map id if the field is an array
+      if (e[f] && Array.isArray(e[f])) {
+        e[f].forEach((v) => { v = idLookup[v] })
+      }
+    })
     return e
   })
 }
@@ -66,12 +75,18 @@ export default function (app) {
       await Organization.deleteMany()
       const newOrgas = mapIds(refOrgas, idMap)
       await Organization.insertMany(newOrgas)
+
+      /* import accounts */
+      const refAccounts = JSON.parse(JSON.stringify(accounts))
+      await Account.deleteMany()
+      const newAccounts = mapIds(refAccounts, idMap, ['_id', 'organization' ])
+      await Account.insertMany(newAccounts)
       
       /* import users */
       const createPromises = []
       const refUsers = JSON.parse(JSON.stringify(users)) // clone user fixtures
       await User.deleteMany({}) // truncate user collection
-      const newUsers = mapIds(refUsers, idMap, ['_id','organization']) // map _id fields
+      const newUsers = mapIds(refUsers, idMap, ['_id','organization', 'account']) // map _id fields
       // cretae users, note that inserMany does not call the preSave hook,
       // which we need when saving new users
       newUsers.forEach(async function (u) {
@@ -80,17 +95,12 @@ export default function (app) {
       // create all user documents
       await Promise.all(createPromises)
 
-      /* import accounts */
-      const refAccounts = JSON.parse(JSON.stringify(accounts))
-      await Account.deleteMany()
-      const newAccounts = mapIds(refAccounts, idMap, ['_id', 'owner', 'organization' ])
-      await Account.insertMany(newAccounts)
 
 
       /* import projects */
       const refProjects = JSON.parse(JSON.stringify(projects))
       await Project.deleteMany()
-      const newProjects = mapIds(refProjects, idMap, ['_id' ])
+      const newProjects = mapIds(refProjects, idMap, ['_id', 'account' ])
       await Project.insertMany(newProjects)
 
       /* import tags */
@@ -107,7 +117,7 @@ export default function (app) {
 
       
       const refTickets = JSON.parse(JSON.stringify(tickets))
-      const newTickets = mapIds(refTickets, idMap, ['_id', 'parent'])
+      const newTickets = mapIds(refTickets, idMap, ['_id', 'parent', 'project', 'owner'])
 
       try {
 
@@ -140,7 +150,8 @@ export default function (app) {
           tags: await Tag.countDocuments(),
           projects: await Project.countDocuments(),
           permissions: await Permission.countDocuments(),
-          // tickets: await Ticket.getChildrenTree({ rootDoc: t0 }),
+          tickets: await Ticket.countDocuments(),
+          ticketsTree: await Ticket.getChildrenTree({ rootDoc: t0 }),
         }
 
       } catch (error) {

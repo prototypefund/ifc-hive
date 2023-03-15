@@ -19,7 +19,7 @@ export default function (app) {
     handler,
     // onRequest: [app.authenticate],
     schema: {
-      summary: 'Get all tags',
+      summary: 'Get all or a subset of tags. Usally requested by project.',
       tags: ['core/tag'],
       // security: [ { apiKey: [] } ],
       // response: {

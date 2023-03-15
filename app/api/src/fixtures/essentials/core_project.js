@@ -5,7 +5,8 @@ export default [
     shorttitle: 'Client',
     code: 'CLIENT',
     tags: ['default', 'example', 'fixture'],
-    description: 'This is a sample project created via system data fixtures.'
+    description: 'This is a sample project created via system data fixtures.',
+    account: 'accountDefault',
   },
   {
     _id: 'projectFirst',
@@ -13,6 +14,7 @@ export default [
     shorttitle: 'First',
     code: 'FIRST',
     tags: ['default', 'example', 'fixture'],
-    description: 'This is a sample project created via system data fixtures.'
+    description: 'This is a sample project created via system data fixtures.',
+    account: 'accountDefault',
   }
 ]

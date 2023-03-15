@@ -36,6 +36,8 @@ const permissionSchema = new Schema({
   //
   // /* our permission value as integer, which we will use in a bit-wise fashion */
   value: { type: Number, default: 0 },
+
+  isDeleted: { type: Boolean, default: false },
     
 }, { timestamp: true })
 

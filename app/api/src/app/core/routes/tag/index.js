@@ -1,3 +1,6 @@
+/*
+ * tag routes index
+ */
 import model from './route.tag.model.js'
 import remove from './route.tag.remove.js'
 import get from './route.tag.get.js'

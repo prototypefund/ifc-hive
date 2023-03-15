@@ -1,9 +1,10 @@
 import { S } from 'fluent-json-schema'
+import { createDataPayload } from '#src/lib/dataObjectHelpers.js'
 
 /*
  * User Base Schema
  */
-export const userBaseSchema = S.object()
+const userSchema = S.object()
   .id('#user/base')
   .title('core/user')
   .prop('_id', S.string().format('uuid').examples(['18a0e5f5-6426-4ce3-8a87-29792eb129a5']))
@@ -18,11 +19,43 @@ export const userBaseSchema = S.object()
   .prop('password', S.string())
   .prop('organisation',S.string())
   .prop('tags', S.array().items(S.string()))
-  .prop('resetkey', S.string())
-  .prop('created', S.string().examples([new Date()]))
-  .prop('updated', S.string().examples([new Date()]))
+  .prop('createdAt', S.string().examples([new Date()]))
+  .prop('updatedAt', S.string().examples([new Date()]))
+  .prop('isDeleted', S.boolean())
   .required(['email', 'nickname'])
 
-export const userResponseSchema = userBaseSchema.without(['password', 'resetkey'])
+const userResponseSchema = userSchema.without(['password', 'resetkey'])
+const userLoginSchema = userSchema.only(['password'], 'email')
+const userSignUpSchema = userSchema.without(['active','blocked', 'createdAt', 'updatedAt', 'isDeleted', 'email_verified'] )
+
+const userObjectTemplate = {
+  _id: null,
+  nickname: null, 
+  email: null,
+  title: null,
+  firstname: null,
+  lastname: null, 
+  email_verified: null, 
+  active: null,
+  blocked: null, 
+  password: null, 
+  organization: null, 
+  account: null,
+  tags: [],
+}
+
+/* template */
+const userTemplate = createDataPayload({ _source: userObjectTemplate })
+
+/* Json schema */
+const userJsonSchema = userSchema.valueOf()
 
 
+export default userSchema 
+export {
+  userSchema,
+  userResponseSchema, 
+  userLoginSchema,
+  userTemplate, 
+  userJsonSchema,
+}

@@ -32,13 +32,13 @@ const userSchema = new Schema({
 
   organization: {
     type: Schema.Types.String,
-    ref: 'ifc_core_organization',
+    ref: 'pacifico_core_organization',
     default: null,
   },
 
-  organization: {
+  account: {
     type: Schema.Types.String,
-    ref: 'ifc_core_account',
+    ref: 'pacifico_core_account',
     default: null,
   },
 
@@ -61,7 +61,7 @@ const userSchema = new Schema({
   blocked: { type: Boolean, default: false },
 
   /* hashed password field */
-  password: { type: String, trim: true },
+  password: { type: String, trim: true, select: false },
 
   /* keep track of last password update */
   passwordUpdated: { type: Date, default: null },
@@ -75,6 +75,7 @@ const userSchema = new Schema({
     index: true,
     default: null,
     unique: true,
+    select: false,
   },
 
   /*
@@ -87,7 +88,7 @@ const userSchema = new Schema({
   tags: [String],
 
   /* soft delete */
-  isDeleted: { type: false },
+  isDeleted: { type: Boolean, default: false },
 
   /* settings */
   settings: {

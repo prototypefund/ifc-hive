@@ -22,6 +22,10 @@ export const applicationState = {
   data: {},
   uploader: {},
   queries: {},
+  socket: {
+    status: null, 
+    lastRequestId: null,
+  },
   user: {
     uuid: false,
     permissions: [],

@@ -1,43 +1,43 @@
 import { S } from 'fluent-json-schema'
-import { userBaseSchema } from '../../model/user/user.schema.js'
-
-const VERSIONS = ['1.0.0']
+import { userResponseSchema } from '../../model/user/user.schema.js'
+import User from '../../model/user/user.model.js'
 
 export default function (app) {
   /* handler */
   async function handler (request, response) {
-    return response.send({
-      message: 'objectDeleted',
-      requestId: '1235',
-      actionId: '234',
-    })
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: request.params.id }, 
+        { isDeleted: true },
+        { new: true })
+
+      if (!user) return app.httpErrors.notFound()
+      return  user 
+    } catch (err) {
+      app.httpErrors.internalServerError()
+    }
   }
 
   const params = S.object()
     .prop('id', S.string().required())
 
-  /* headers */
-  const headers = S.object()
-    .prop('Accept-Version',
-      S.string().enum(VERSIONS).default(VERSIONS[VERSIONS.length - 1]))
-    .required('Accept-Version')
-
   /*
    * route options
    */
   return {
-    // constraints: { version: '1.0.0' },
     handler: handler,
     onRequest: [app.authenticate],
     schema: {
-      summary: 'Delete a single user [admin, maintainer, owner]',
+      summary: 'Delete a single user by id.',
       description: `Notice that in order to ensure data integrity the systems
     interally handles a soft-delete concept. In order to adhere to the GDPR
     (auf Deutsch DSGVO) the user's attributes may be overwritten with
     pseudo-values.`,
       tags: ['core/user'],
-      // headers,
       params,
+      response: {
+        '2xx': userResponseSchema,
+      },
       security: [ { apiKey: [] } ],
     },
   }

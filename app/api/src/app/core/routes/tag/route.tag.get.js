@@ -23,7 +23,7 @@ export default function (app) {
     handler,
     onRequest: [app.authenticate],
     schema: {
-      summary: 'Get a tag by id',
+      summary: 'Get a tag by id.',
       tags: ['core/tag'],
       security: [ { apiKey: [] } ],
       params,

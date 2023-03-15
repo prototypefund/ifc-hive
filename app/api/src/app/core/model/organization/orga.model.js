@@ -37,7 +37,7 @@ const organizationSchema = new Schema({
   tags: [String],
 
   /* soft delete */
-  isDeleted: { type: false }
+  isDeleted: { type: Boolean, default: false },
     
 }, { timestamp: true })
 

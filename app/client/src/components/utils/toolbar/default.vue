@@ -1,8 +1,15 @@
 <template>
   <v-app-bar density="compact" flat color="grey-lighten-2" class="toolBar" id="appToolbar"
     data-test-container="utils/toolbar/default">
-    <v-toolbar-title class="d-none d-sm-none d-md-flex d-lg-flex d-xl-flex">{{ $t("widgets.tools.title") }}
-    </v-toolbar-title>
+    <!-- <v-toolbar-title class="d-none d-sm-none d-md-flex d-lg-flex d-xl-flex">{{ $t("widgets.tools.title") }} -->
+    <!-- </v-toolbar-title> -->
+
+  <v-toolbar-title>
+    <!-- <SocketStatus />  -->
+    <MyTemplate />
+  </v-toolbar-title>
+
+
     <v-spacer></v-spacer>
     <v-slide-x-transition>
       <v-progress-linear v-if="loading" class="loader" indeterminate color="primary"></v-progress-linear>
@@ -43,6 +50,9 @@
 <script>
 import { defineAsyncComponent } from "vue";
 import toolLoader from "@lib/toolLoader";
+// import SocketStatus from "../socketStatus.vue"
+import MyTemplate from './test.vue'
+
 export default {
   inject: ["$api", "$store"],
   data: () => ({

@@ -5,7 +5,7 @@
  * a JWT token. 
  */
 import { S } from 'fluent-json-schema'
-import { userBaseSchema } from '../..//model/user/user.schema.js'
+import { userSchema} from '../..//model/user/user.schema.js'
 import User from '../../model/user/user.model.js'
 import { defaultHeadersSchema } from '#src/lib/headersHelper.js'
 import { randomIdGenerator } from '#src/lib/helpers.js'
@@ -15,8 +15,6 @@ const randomId = randomIdGenerator(16)
  * POST user login
  */
 export default function (app) {
-  /* versions */
-  const VERSIONS = ['1.0.0']
 
   /* handler */
   async function handler (request, response) {
@@ -91,27 +89,22 @@ export default function (app) {
     .prop('email', S.string().required())
     .prop('password', S.string().required())
 
-  /* headers */
-  const headers = defaultHeadersSchema (VERSIONS, VERSIONS.length -1) 
-
   const response = S.object()
     .prop('token', S.string())
     .prop('decoded', S.default)
-    .prop('user', userBaseSchema.without(['password', 'resetToken', 'blocked', 'email_verified']))
+    .prop('user', userSchema.without(['password', 'resetToken', 'blocked', 'email_verified']))
 
   /*
    * route options
    */
   return {
-    // constraints: { version: '1.0.0' },
     handler: handler,
     schema: {
-      summary: 'Request an access token',
+      summary: 'Request an access token given valid email/password credentials. ',
       description: `Given a valid username and password this API endpoints
       returns a JWT token to access protected routes.`,
       tags: ['core/user'],
       body,
-      // headers,
       response: {
         '2xx': response
       }

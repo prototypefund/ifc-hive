@@ -15,12 +15,21 @@ format, be it primary objects or log objects.
 
 ```javascript
 const payload = {
-  _id: '23234',
+  _id: 'uuid',
   _type: 'objectType', // journal/ticket, core/user etc. note the namespace
   _disId: 'displayId', // generate by the server
-  _project: 'projectId' // so we can quickly check read and write permissions
+  _project: 'uuid' // so we can quickly check read and write permissions
   _title: 'single field or compose of multiple fields',
-  _path: 'id-1#id-2#', // optional, only relevant for memos and projects
-  _source: {  } // false or object
+  _path: 'uuid#uuid#uuid', // optional, only relevant for memos and projects
+  _requestId: 'uuid', 
+  _source: { /* ... the actual object */ } // false or object
 }
 ```
+
+
+## Request ID
+
+The request ID is handed through in the processing of a request. If the client
+provides a `x-request-rd` header the provided ID will be used. Otherwise an ID
+for request will be generated. The second case is mainly for logging and
+debugging purposes. 

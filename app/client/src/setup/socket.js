@@ -31,6 +31,11 @@ export function registerSocketEvents ($socket, $store, $eventbus) {
    */
   $socket.on('connect', (data) => {
     log.socket('connected', 'Socket connection established')
+
+    $store.dispatch({
+      type: 'socket/status',
+      payload: { status: 1 }
+    })
     // if we previously tried to connect stop that interval
     if (intervalId) {
       clearInterval(intervalId)

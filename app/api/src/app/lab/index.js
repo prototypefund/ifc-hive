@@ -55,7 +55,7 @@ export default async function (app) {
     // update modifed field
     updatedObject._modified = new Date()
     // make sure the object id exissts in _source
-    updatedObject._source._id = request.params.id
+    updatedObject._requestId = request.id
 
     /* Mock update depending on object type */
     switch (updatedObject._type) {

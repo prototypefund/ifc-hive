@@ -1,12 +1,12 @@
-import * as model from '#src/app/core/model/tag/tag.schema.js'
+import * as model from '#src/app/core/model/project/project.schema.js'
 import { S } from 'fluent-json-schema'
 
-export default function  handler (app) {
+export default function projectModelRoute (app) {
 
   async function handler (request, response) {
     return {
-      template: model.tagTemplate,
-      schema: model.tagJsonSchema,
+      template: model.projectTemplate,
+      schema: model.projectJsonSchema,
     }
   }
 
@@ -17,11 +17,12 @@ const response = S.object()
   return {
     handler: handler,
     schema: {
-      summary: 'Get tag template and schema.',
-      tags: ['core/tag'],
+      summary: 'Get project template and schema',
+      tags: ['core/project'],
       response: {
         '2xx': response
       }
     },
   }
+
 }

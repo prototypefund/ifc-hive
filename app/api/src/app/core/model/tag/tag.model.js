@@ -16,7 +16,7 @@ const tagSchema = new Schema({
   /* tags always belong to a project */
   project: {
     type: Schema.Types.String,
-    ref: 'ifc_core_project',
+    ref: 'pacifico_core_project',
     default: null,
   },
 

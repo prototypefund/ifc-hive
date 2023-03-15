@@ -45,14 +45,14 @@ const accountSchema = new Schema({
   /* is the user blocked? */
   owner: {
     type: Schema.Types.String,
-    ref: 'ifc_core_user',
+    ref: 'pacifico_core_user',
     default: null,
   },
 
   /* is the user blocked? */
   organization: {
     type: Schema.Types.String,
-    ref: 'ifc_core_organization',
+    ref: 'pacifico_core_organization',
     default: null,
   },
 
@@ -60,7 +60,7 @@ const accountSchema = new Schema({
   tags: [String],
 
   /* soft delete */
-  isDeleted: { type: false }
+  isDeleted: { type: Boolean, default: false },
     
 }, { timestamp: true })
 

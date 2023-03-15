@@ -15,6 +15,7 @@
       </v-list-item>
       <v-divider />
       <ConnectionBar v-if="$mobile && !navigationRail" />
+      <!-- <Socket-ConnectionBar v-if="!navigationRail" /> -->
       <v-divider />
     </template>
 
