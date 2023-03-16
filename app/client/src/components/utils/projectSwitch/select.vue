@@ -1,5 +1,6 @@
 <template>
-    <v-select v-model="currentProject" :label="project.lookup[project.id] || 'bitte wählen'" :items="project.list"
+    <v-select v-model="currentProject"
+        :label="project.lookup[project.id] ? project.lookup[project.id].shorttitle : 'bitte wählen'" :items="project.list"
         density="compact" class="projectSwitch">
     </v-select>
 </template>
@@ -7,7 +8,6 @@
 import { inject, ref, computed, onMounted, onUnmounted } from "vue";
 
 const $store = inject('$store')
-const $eventbus = inject('$eventbus')
 const project = ref({})
 
 const projectStatus$ = $store
@@ -23,16 +23,10 @@ const currentProject = computed({
     },
     // setter
     set(newValue) {
-        if (project.id && newValue) {
-            $eventbus.emit('socketLeaveRoom', project.id)
-        }
         $store.dispatch({
             type: "project/setId",
             payload: newValue,
         });
-        if (newValue) {
-            $eventbus.emit('socketJoinRoom', newValue)
-        }
     },
 });
 
