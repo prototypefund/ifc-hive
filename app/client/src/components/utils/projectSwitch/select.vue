@@ -1,6 +1,6 @@
 <template>
-    <v-select v-model="currentProject" :label="project.lookup[project.id].shorttitle || 'bitte wählen'"
-        :items="project.list" density="compact" class="projectSwitch">
+    <v-select v-model="currentProject" :label="project.lookup[project.id] || 'bitte wählen'" :items="project.list"
+        density="compact" class="projectSwitch">
     </v-select>
 </template>
 <script setup>
