@@ -63,13 +63,17 @@ export function registerSocketEvents($socket, $store, $eventbus) {
   $socket.on('projects/list', (data) => {
     log.socket('projects received', data)
     if (data.projects.length > 0) {
-      let projectList = []
+      const projectList = []
+      // TODO remove lookup once the slots in v-select work properly for direct referencation of data items from data store
+      const projectLookup = {}
       $store.dispatch({ type: 'data/push', payload: { data: data.projects } })
       data.projects.forEach(project => {
         projectList.push(project._id)
+        projectLookup[project._id] = project
       })
       // add project
       $store.dispatch({ type: 'project/addlist', payload: projectList })
+      $store.dispatch({ type: 'project/addlookup', payload: projectLookup })
     }
 
   })

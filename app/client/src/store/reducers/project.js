@@ -9,6 +9,10 @@ export default ($eventbus) => (state, action) => {
         return {
           ...state, ...{ list: action.payload }
         }
+      case 'project/addlookup':
+        return {
+          ...state, ...{ lookup: action.payload }
+        }
       case 'project/setId':
         return {
           ...state, ...{ id: action.payload }
