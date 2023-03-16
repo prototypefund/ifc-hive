@@ -1,18 +1,33 @@
 <template>
   <!-- Navigation Drawer -->
-  <v-navigation-drawer v-model="navigationDrawer" data-test-container="utils/navigation/sidebar" :rail="navigationRail"
-    id="navSideBar" permanent>
+  <v-navigation-drawer
+    v-model="navigationDrawer"
+    data-test-container="utils/navigation/sidebar"
+    :rail="navigationRail"
+    id="navSideBar"
+    permanent
+  >
     <!-- Title -->
     <template v-slot:prepend>
       <v-list-item density="comfortable" :title="$t('navigation')" :value="$t('navigation')">
-        <!-- Close icon -->
+        <!-- open/close icon -->
         <template v-slot:append>
-          <v-btn v-if="!navigationRail" density="comfortable" variant="plain" icon="mdi-chevron-left"
-            @click.stop="handleNavigation(true)" />
-          <v-btn v-if="navigationRail" density="comfortable" variant="plain" icon="mdi-chevron-right"
-            @click.stop="handleNavigation(false)" />
+          <v-btn
+            v-if="!navigationRail"
+            density="comfortable"
+            variant="plain"
+            icon="mdi-chevron-left"
+            @click.stop="handleNavigation(true)"
+          />
+          <v-btn v-else
+            density="comfortable"
+            variant="plain"
+            icon="mdi-chevron-right"
+            @click.stop="handleNavigation(false)"
+          />
         </template>
       </v-list-item>
+
       <v-divider />
       <ConnectionBar v-if="$mobile && !navigationRail" />
       <!-- <Socket-ConnectionBar v-if="!navigationRail" /> -->
@@ -21,30 +36,54 @@
 
     <!-- Navigation List -->
     <v-list density="compact" nav>
-      <v-list-item :disabled="currentRoute === item.route || !item.route" :active="currentRoute === item.route"
-        active-color="primary" v-for="item in navItems" link :key="item.route" :value="item.route || ''"
-        class="nav-link" :data-test-id="item.route ? 'sidebar_nav-' + item.route.replace('.', '-') : ''"
-        @click="navigate(item)">
+      <!-- item -->
+      <v-list-item
+        v-for="item in navItems"
+        :disabled="currentRoute === item.route || !item.route"
+        :active="currentRoute === item.route"
+        :key="item.route"
+        :value="item.route || ''"
+        :data-test-id="item.route ? 'sidebar_nav-' + item.route.replace('.', '-') : ''"
+        @click="navigate(item)"
+        active-color="primary"
+        link
+        class="nav-link"
+      >
+          <!-- item prepend icon -->
         <template v-if="item.icon" v-slot:prepend>
           <v-icon :icon="item.icon" />
         </template>
+
+          <!-- item title -->
         <v-list-item-title v-if="item.route">{{
-  $t("pages." + item.route.replace(".", "-"))
+          $t("pages." + item.route.replace(".", "-"))
         }}</v-list-item-title>
       </v-list-item>
     </v-list>
+
     <template v-slot:append>
       <v-list density="compact">
-        <v-list-item :disabled="currentRoute === item.route || !item.route" :active="currentRoute === item.route"
-          active-color="primary" v-for="item in footerItems" link :key="item.route" :value="item.route || ''"
-          class="nav-link" :data-test-id="item.route ? 'sidebar_nav-' + item.route.replace('.', '-') : ''"
-          @click="navigate(item)">
+        <v-list-item
+          v-for="item in footerItems"
+          :disabled="currentRoute === item.route || !item.route"
+          :active="currentRoute === item.route"
+          :data-test-id="item.route ? 'sidebar_nav-' + item.route.replace('.', '-') : ''"
+          :key="item.route"
+          :value="item.route || ''"
+          @click="navigate(item)"
+          active-color="primary"
+          link
+          class="nav-link"
+        >
+            <!-- item prepend icon -->
           <template v-if="item.icon" v-slot:prepend>
             <v-icon :icon="item.icon" />
           </template>
+
+            <!-- item title -->
           <v-list-item-title v-if="item.route">{{
-  $t("pages." + item.route.replace(".", "-"))
-          }}</v-list-item-title>
+            $t("pages." + item.route.replace(".", "-")) }}
+        </v-list-item-title>
         </v-list-item>
       </v-list>
     </template>

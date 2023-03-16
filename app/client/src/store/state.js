@@ -109,7 +109,9 @@ export const storePatterns = {
     // grid config for a page
     grid: configPatterns.grid,
     // the array containing the configs for the 1-n slots
-    slots: []
+    slots: [],
+
+    widget: false,
   },
   widget: {
     // should usually be a i18n key

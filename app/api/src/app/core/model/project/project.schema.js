@@ -12,10 +12,29 @@ const projectSchema = S.object()
   .prop('tags', S.array().items(S.string()))
   .prop('description', S.string())
   .prop('isDeleted', S.boolean())
+  .prop('config', S.object()
+    .prop('browser', S.array()
+      .items([S.object()])
+    )
+  )
 
 const projectResponseSchema = projectSchema
 
-const projectObjectTemplate = {}
+const projectObjectTemplate = {
+  _id: null,
+  account: null,
+  code: null,
+  config: {
+    browser: []
+  },
+  createdAt: null,
+  description: null,
+  isDeleted: false,
+  shorttitle: null,
+  tags: [], // striing separated
+  title: null,
+  updatedAt: null,
+}
 
 const projectTemplate = createDataPayload({ _source: projectObjectTemplate })
 

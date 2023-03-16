@@ -21,30 +21,12 @@ export async function registerSocketEvents (app) {
     const projects = await Project.find()
     wss.emit('projects/list', { projects } )
 
-      Ticket
-        .find({}, { _id: 1, title: 1, owner: 1, project: 1, tags: 1, disId: 1 })
-        // .limit(100)
-        // .cursor()
-        .on('data', (doc) => {
-          app.log.info({ msg: 'Send socket Package', doc })
-          const { _id, title, disId, project } = doc
-          doc.tags.push('tag-todo')
-          const payload = {
-            _id,
-            _title: title,
-            _disId: disId,
-            _project: project,
-            _source: doc,
-            _type: 'memo'
-          }
-          socket.emit('data', [payload] )
-        })
 
     /* send dummy data when project data are request by the client */
     socket.on('requestProjectData', async (projectId) => {
       Ticket
-        .find({}, { _id: 1, title: 1 })
-        .limit(100)
+        .find({})
+        // .limit(100)
         .cursor()
         .on('data', (doc) => {
           app.log.info({ msg: 'Send socket Package', doc })
@@ -58,16 +40,64 @@ export async function registerSocketEvents (app) {
     })
 
     /* on join */
-    socket.on('join', (room) => {
+    socket.on('join', async (room) => {
       socket.join(room.id)
-      socket.emit('joinConfirmation', room)
-      wss.sockets
-        .in(room.id)
-        .emit('memberJoined', { 
-          room: room.id,
-          msg: `member joined ${socket.id}`
-        })
-      app.log.info(`[Socket] socket ${socket.id} joined room ${room.id}`)
+      
+      // get project data
+      try {
+
+      // get project 
+      const project = await Project.findOne({ _id: room })
+
+        if (project) {
+          socket.emit('joinConfirmation', { room, project })
+          wss.sockets
+            .in(room.id)
+            .emit('room/new-member', { 
+              room: room.id,
+              msg: `member joined ${socket.id}`
+            })
+          app.log.info(`[Socket] socket ${socket.id} joined room ${room}`)
+        } else {
+          socket.emit('joinRejection', { 
+            error: {
+              status: 'roomDoesNotExistt',
+              msg: `There is no project with _id ${room}`
+            } 
+          })
+        }
+
+      } catch (err) {
+        app.log.error(err)
+      }
+
+      /* inform the client */
+      // const ticketCount = await Ticket.find({ isDeleted: false, project: room  }).count()
+      // socket.emit('batchDataStart', { expect: ticketCount })
+      //
+      // /* send ticket stream */
+      // await Ticket
+      //   .find({ project: room, isDeleted: false })
+      //   .cursor()
+      //   .on('data', (doc) => {
+      //     const { _id, title, disId, project } = doc
+      //     doc.tags.push('tag-todo')
+      //     const payload = {
+      //       _id,
+      //       _title: title,
+      //       _disId: disId,
+      //       _project: project,
+      //       _source: doc,
+      //       _type: 'memo'
+      //     }
+      //     /* emit data packages to client */
+      //     socket.emit('dataTest', payload )
+      //   })
+      //   /* let the client now that we are done */
+      //   .on('close', () => {
+      //     socket.emit('batchDataStop')
+      //   })
+
     })
 
     /* on leave */

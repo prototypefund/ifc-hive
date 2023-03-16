@@ -9,12 +9,13 @@ import createCustomRouter from './router/index.js'
 import filters from './setup/filters.js'
 import capacitor from './setup/capacitor'
 import VueApexCharts from "vue3-apexcharts";
-import { createSocket, registerSocketEvents } from './setup/socket.js'
+import { createSocket } from './setup/socket.js'
 import log from '@lib/logger.js'
-import httpClient, { configClient } from './lib/httpClient.js'
+import { httpClient, configClient, apiHealthcheck } from './lib/httpClient.js'
 import EventEmitter from '@lib/eventEmitter.js'
 import { registerApiHandlerEvents } from './setup/apiClient'
-import { registerSocketApi } from './setup/socketClient'
+import { registerSocketClient } from './setup/socketClient'
+import { registerSocketEvents } from './setup/socketEvents'
 
 /*
  * get env variables to configure the app
@@ -24,19 +25,8 @@ const SOCKET_URL = getEnvVariable('VITE_APP_SOCKET_URL')
 
 /* Set up http API client */
 configClient(httpClient, { baseURL: API_BASE_URL, })
-
-const apiHealthcheck = async () => {
-  try {
-    const healthcheckResponse = await httpClient.get(`${API_BASE_URL}/health`)
-    log.api('healthcheck', healthcheckResponse,)
-  } catch (err) {
-    console.error(`Can\'t connect to API ${API_BASE_URL}`)
-    console.error(err)
-  }
-}
+/* are we in good shape so far? */
 apiHealthcheck()
-
-
 /* set up socket client */
 const socket = createSocket(SOCKET_URL)
 /* create global event bus */
@@ -47,12 +37,14 @@ const store = createStore(eventbus)
 /* Create router */
 const router = createCustomRouter(store)
 
-/*
- * Now that we have all vital objects (store, socket, eventbus, httpclient)
- */
+/* We now have all vital objects (store, socket, eventbus, httpclient) */
+
+/* Listen to events from the socket server */
 registerSocketEvents(socket, store, eventbus)
+/* listen so eventbus and send messages to the socket server */
+registerSocketClient(socket, store, eventbus)
+/* listen to the eventbus and submit requests to the RestAPI */
 registerApiHandlerEvents(httpClient, store, eventbus)
-registerSocketApi(socket, store, eventbus)
 
 /*
  *  create app and pass dependencies 

@@ -9,11 +9,18 @@
           <v-col cols="auto"> <router-link :to="{ path: '/' }" id="breadcrumb-home">
               <v-icon icon="mdi-home" color="primary" />
             </router-link></v-col>
-          <v-col cols="3"> <project-switch /></v-col>
-          <v-col cols="auto"><v-icon color="grey" xsmall>mdi-chevron-right</v-icon></v-col>
+
+            <v-col cols="3">
+              <project-switch class="ml-10" />
+            </v-col>
+            <v-btn color="red darken-2" @click="saveLocalProjectConfig" class="ml-4">
+              <v-icon>mdi-upload-multiple</v-icon> Save local project config
+            </v-btn>
+
+          <!-- <v-col cols="auto"><v-icon color="grey" xsmall>mdi-chevron-right</v-icon></v-col> -->
           <v-col cols="auto">
             <v-fade-transition>
-              <span v-if="!loading">{{ $t("pages." + page.uuid) }}</span>
+              <!-- <span v-if="!loading">{{ $t("pages." + page.uuid) }}</span> -->
             </v-fade-transition>
             <v-fade-transition>
               <span v-if="loading"><v-progress-circular indeterminate :size="20" :width="2" color="primary" /></span>
@@ -84,7 +91,7 @@ export default {
     mobileStartup: defineAsyncComponent(() =>
       import("./components/utils/mobile/startup.vue")),
   },
-  inject: ["$api", "$store", "$mobile"],
+  inject: ["$api", "$store", "$mobile", "$eventbus"],
   props: {
     isInTest: {
       type: Number,
@@ -102,7 +109,7 @@ export default {
     footerItems: [
       {
         icon: "mdi-account-cog",
-        route: "app.accountSettings",
+        route: "app.accountSettings" ,
         params: {},
       },
       {
@@ -118,12 +125,6 @@ export default {
         params: {},
       },
       {
-        icon: "mdi-file-document-check",
-        route: "app.myTasks",
-        params: {},
-      },
-      { type: "divider" },
-      {
         icon: "mdi-file-document-multiple",
         route: "app.journal",
         params: {},
@@ -131,22 +132,6 @@ export default {
       {
         icon: "mdi-human-male-board-poll",
         route: "app.ticketboard",
-        params: {},
-      },
-      {
-        icon: "mdi-chart-gantt",
-        route: "app.timeline",
-        params: {},
-      },
-      { type: "divider" },
-      {
-        icon: "mdi-security",
-        route: "app.blockchain",
-        params: {},
-      },
-      {
-        icon: "mdi-folder-text",
-        route: "app.documents",
         params: {},
       },
     ],
@@ -196,6 +181,11 @@ export default {
         document.getElementById("appComponent").scrollTo(0, 0);
         this.hasScrolled = false;
       }
+
+    },
+
+    saveLocalProjectConfig: function () {
+      this.$eventbus.emit('saveLocalProjectConfig')
     },
 
     setDimensions: async function () {

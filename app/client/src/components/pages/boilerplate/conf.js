@@ -1,17 +1,29 @@
 export default {
   grid: {
-    type: 'default', // a type of vuetify component in which your rows/cols will be wrapped
-    items: 'card_flat', // a type of vuetify component which will wrap your col contents. Currently card/card_flat/default
-    columns: 1 // amount of columns per row
+    // a type of vuetify component in which your rows/cols will be wrapped
+    type: 'default',
+    // type of vuetify component which will wrap your col contents.
+    // Currently card/card_flat/default
+    items: 'card_flat',
+    // amount of colums per row
+    columns: 1
   },
-  title: 'funoFun', // title of the page
-  slots: [ // an array from 0-n containing configurations for widgets
-    {
-      class: 'nice', // a css class you want to have on the widget wrapper
-      column: 12, // the width of your widget. represents the flexbox grid numbers from 1-12
+  // title of page
+  title: 'funoFun',
+  // an array from 0-n containing configurations for widgets
+  slots: [
+    { 
+      // a css class you want to have on the widget wrapper
+      class: 'nice',
+      // the width of your widget. represents the flexbox grid numbers from 1-12
+      column: 12,
       widget: {
-        name: 'form', // the name of the widget, must correspond to the actual folder name the widget files are located in
-        props: { // and object which you can use to override the widgets default config in the context of this page
+        // the name of the widget, must correspond to the actual folder name the
+        // widget files are located in
+        name: 'form',
+        // and object which you can use to override the widgets default config in the
+        // context of this page
+        props: { 
           title: 'anderer Titel',
           query: {
             q: 'ich bin voll die andere query',

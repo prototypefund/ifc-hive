@@ -13,6 +13,7 @@ export default function (app) {
       return  { users }
     } catch (err) {
       app.httpErrors.internalServerError()
+      app.log.error(err)
     }
   }
 

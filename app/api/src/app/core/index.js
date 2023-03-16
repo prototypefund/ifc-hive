@@ -27,6 +27,7 @@ export default async function (app) {
   app.delete('/project/:id', project.remove(app))
   app.post('/project/search', { schema: { tags: ['core/project'] } }, aliveHandler)
   app.get('/project/model', project.model(app))
+  app.put('/project/:id/config', project.putConfig(app))
 
   /* User routes */
   app.post('/user/login', user.login(app))

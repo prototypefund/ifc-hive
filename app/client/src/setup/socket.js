@@ -23,13 +23,20 @@ export function createSocket(host, opts) {
  */
 export function registerSocketEvents($socket, $store, $eventbus) {
 
+  /* required for reconnection */
   let intervalId = false
+  // local container to collect incoming batch items before we push them to the store
+  let batchItems = []
+  // are we batch loading now?
+  let batchLoading = false
+
 
   /*
    * open event
    * fired every time we have a new connection established
    */
   $socket.on('connect', (data) => {
+
     log.socket('connected', 'Socket connection established')
 
     $store.dispatch({ type: 'socket/status', payload: { status: 1, message: 'Connected' } })
@@ -85,6 +92,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
 
   /* the server reports when we leave a room, be it in resonse a our own request or forcefully */
   $socket.on('leaveConfirmation', (data) => {
+    $store.dispatch({ type: 'ini' })
     log.socket('leaveConfirmation received', data)
   })
 
@@ -110,6 +118,18 @@ export function registerSocketEvents($socket, $store, $eventbus) {
     setTimeout($socket.reconnect(), 3000) // @TODO
   })
 
+  $socket.on('batchDataStart', (data) => {
+    batchLoading = true
+    batchItems = []
+    log.socket('start batch data', data)
+  })
+
+  $socket.on('batchDataStop', () => {
+    batchLoading = false
+    log.socket('stop batch data', { received: batchItems.length })
+    $store.dispatch({ type: 'data/push', payload: { data: batchItems } })
+  })
+
   /*
    * data event
    * We received a data object from the server
@@ -124,8 +144,13 @@ export function registerSocketEvents($socket, $store, $eventbus) {
    * Debugging data transfer
    */
   $socket.on('dataTest', (data) => {
-    log.socket('dataTest', data)
-    $store.dispatch({ type: 'data/push', payload: { data } })
+    if (batchLoading === true) {
+      batchItems.push(data)
+    } else {
+      log.socket('dataTest', data)
+      // $store.dispatch({ type: 'data/push', payload: { data } })
+    }
+
   })
 }
 

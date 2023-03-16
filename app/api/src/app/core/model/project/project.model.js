@@ -2,7 +2,6 @@ import mongoose from 'mongoose'
 const { Schema } = mongoose
 import { v4 as uuidv4 } from 'uuid'
 
-
 const projectSchema = new Schema({
   _id: { // note we do not need and also cannot specify the property unique: true
     type: String,
@@ -42,7 +41,13 @@ const projectSchema = new Schema({
   description: { type: String },
 
   /* soft delete */
-  isDeleted: { type: false }
+  isDeleted: { type: false },
+
+  /* Project configs, don't forget to use markedModified['configs'] when updating */
+  config: {
+    browser: { type: Schema.Types.Mixed, default: {} },
+    mobile: { type: Schema.Types.Mixed, default: {} },
+  }
     
 }, { timestamp: true })
 

@@ -4,7 +4,7 @@
 import axios from 'axios'
 
 /* Create the http client */
-export const httpClient = axios.create({
+const httpClient = axios.create({
   // set default headers
   headers: {
     'Accept-Version': '*'
@@ -24,10 +24,23 @@ export const httpClient = axios.create({
  *  baseURL: YOUR_BASE_URL
  * }
  */
-export function configClient (client, config) {
+function configClient (client, config) {
   // set base uslr
   client.defaults.baseURL = config.baseURL
   client.defaults.headers.common['Accept-Version'] = '*'
+}
+
+/*
+ * @param {object} client - axios instance
+ */
+async function apiHealthcheck(client) {
+  try {
+    const healthcheckResponse = await httpClient.get('/health')
+    log.api('healthcheck', healthcheckResponse,)
+  } catch (err) {
+    console.error(`Can\'t connect to API ${API_BASE_URL}`)
+    console.error(err)
+  }
 }
 
 
@@ -36,7 +49,7 @@ export function configClient (client, config) {
  * @param {object} client - axios instance
  * @param {string} token - the JWT token
  */
-export function setHttpToken (client, token) {
+function setHttpToken (client, token) {
   client.defaults.headers.common.Authorization = `Bearer ${token}`
   client.default.headers.Authorization = `Bearer ${token}`
 }
@@ -45,9 +58,16 @@ export function setHttpToken (client, token) {
  * Unset a previously set token 
  * @param {bject} client - axios instance
  */
-export function unsetHttpToken (client) {
+function unsetHttpToken (client) {
   client.defaults.headers.common.Authorization = null
   client.default.headers.Authorization = null
 }
 
 export default httpClient
+export { 
+  httpClient,
+  configClient,
+  apiHealthcheck,
+  setHttpToken,
+  unsetHttpToken,
+}
