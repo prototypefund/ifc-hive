@@ -1,11 +1,6 @@
 <template>
-    <v-select v-model="currentProject" :label="currentProject" :items="project.list" label="Compact" density="compact">
-        <template v-slot: prepend-inner-icon>
-            <router-link :to="{ path: '/' }" id="breadcrumb-home">
-                <v-icon icon="mdi-home" color="primary" />
-            </router-link>
-        </template>
-
+    <v-select v-model="currentProject" :label="project.id || 'bitte wählen'" :items="project.list" density="compact"
+        class="projectSwitch">
     </v-select>
 </template>
 <script setup>
@@ -13,14 +8,32 @@ import { inject, ref, computed, onMounted, onUnmounted } from "vue";
 
 const $store = inject('$store')
 const $eventbus = inject('$eventbus')
-
-
+let data = false
+const getDataItems = (list) => {
+    if (data) {
+        data.value.unsubscribe()
+        data = false
+    }
+    const identifier = []
+    list.forEach((uuid) => {
+        identifier.push('_id:' + uuid)
+    })
+    data = $store.$data.get("MY_PROJECTS", "ALL_PROJECTS", {
+        identifier
+    });
+}
 const project = ref({})
+
 const projectStatus$ = $store
     .select((state) => state.project)
     .subscribe((val) => {
+        if (project.value.list !== val.list) {
+            getDataItems(val.list)
+        }
         project.value = val;
+
     });
+
 const currentProject = computed({
     // getter
     get() {
@@ -40,6 +53,8 @@ const currentProject = computed({
         }
     },
 });
+
+
 onMounted(() => {
 });
 onUnmounted(() => {

@@ -4,14 +4,25 @@
     <v-app-bar density="compact" flat app color="grey-lighten-2" id="appAppbar">
       <v-app-bar-title>
         <!-- Breadcrumb -->
-        <project-switch />
-        <v-icon color="grey" xsmall>mdi-chevron-right</v-icon>
-        <v-fade-transition>
-          <span v-if="!loading">{{ $t("pages." + page.uuid) }}</span>
-        </v-fade-transition>
-        <v-fade-transition>
-          <span v-if="loading"><v-progress-circular indeterminate :size="20" :width="2" color="primary" /></span>
-        </v-fade-transition>
+        <br />
+        <v-row no-gutters>
+          <v-col cols="auto"> <router-link :to="{ path: '/' }" id="breadcrumb-home">
+              <v-icon icon="mdi-home" color="primary" />
+            </router-link></v-col>
+          <v-col cols="3"> <project-switch /></v-col>
+          <v-col cols="auto"><v-icon color="grey" xsmall>mdi-chevron-right</v-icon></v-col>
+          <v-col cols="auto">
+            <v-fade-transition>
+              <span v-if="!loading">{{ $t("pages." + page.uuid) }}</span>
+            </v-fade-transition>
+            <v-fade-transition>
+              <span v-if="loading"><v-progress-circular indeterminate :size="20" :width="2" color="primary" /></span>
+            </v-fade-transition>
+          </v-col>
+        </v-row>
+
+
+
       </v-app-bar-title>
       <!--v-text-field :loading="searching" density="compact" variant="solo" label="Search" append-inner-icon="mdi-magnify"
         single-line hide-details></!--v-text-field-->
