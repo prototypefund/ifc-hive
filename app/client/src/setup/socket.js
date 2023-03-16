@@ -59,6 +59,21 @@ export function registerSocketEvents ($socket, $store, $eventbus) {
     log.socket('close', 'socket connection lost')
   })
 
+  /* available projects list received */
+  $socket.on('projects/list', (data) => {
+    log.socket('projects received', data)
+  })
+
+  /* successfull join requests are confirmed by the server */
+  $socket.on('joinConfirmation', (data) => {
+    log.socket('joinConfirmation received', data)
+  })
+
+  /* the server reports when we leave a room, be it in resonse a our own request or forcefully */
+  $socket.on('leaveConfirmation', (data) => {
+    log.socket('leaveConfirmation received', data)
+  })
+
   /*
    * login event
    * the server has approved our token
@@ -86,9 +101,16 @@ export function registerSocketEvents ($socket, $store, $eventbus) {
    * We received a data object from the server
    */
   $socket.on('data', (data) => {
-    log.socket('update', data)
+    log.socket('data', data)
     // NOTE: always pass array into data/push payload
     $store.dispatch({ type: 'data/push', payload: { data: [data] } })
+  })
+
+  /*
+   * Debugging data transfer
+   */
+  $socket.on('dataTest', (data) => {
+    log.socket('dataTest', data)
   })
 }
 

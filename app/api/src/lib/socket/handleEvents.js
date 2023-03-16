@@ -1,39 +1,72 @@
-export function registerSocketEvents (app) {
+/*
+ * Socket events
+ */
+import Project from '#src/app/core/model/project/project.model.js'
+import Ticket from '#src/app/journal/model/ticket/ticket.model.js'
+import { createDataPayload } from '#src/lib/dataObjectHelpers.js'
+
+export async function registerSocketEvents (app) {
   const { wss } = app
 
-  wss.on('connection', (socket) => {
+  wss.on('connection', async (socket) => {
 
+
+    /* log connection and say hello */
+    app.log.warn(`[socket] connected ${socket.id}`)
+    wss.emit('hello', { id: socket.id })
+
+
+    const projects = await Project.find()
+    wss.emit('projects/list', { projects } )
+
+    const tickets = await Ticket.find().limit(10)
+    const data = tickets.map(t => {
+      const d = {}
+      d._source = t
+      d._id = t._id
+      d._title = t.title
+      d._path = null,
+      d._project = t.project
+      d._type = 'memo'
+      d._disId = t.disId
+      return d
+    })
+    wss.emit('dataTest', data)
+
+    /* on discconnect */
+    socket.on('disconnect', () => {
+      app.log.warn(`[Socket] disconnected ${socket.id}`)
+    })
+
+    /* on join */
     socket.on('join', (room) => {
-      app.log.info(`[Socket] room 7 entered by ${socket.id}`)
-      socket.join('7')
-      wss.sockets.in('7').emit('hello', {msg: `Hello ${socket.id}`})
-      wss.in('7').fetchSockets()
-        .then((sockets) => { 
-          app.log.info({ msg: 'members', socket: sockets.map(s => s.id) })
+      socket.join(room.id)
+      socket.emit('joinConfirmation', room)
+      wss.sockets
+        .in(room.id)
+        .emit('memberJoined', { 
+          room: room.id,
+          msg: `member joined ${socket.id}`
         })
-        .catch((err) => { console.log(err) })
+      app.log.info(`[Socket] socket ${socket.id} joined room ${room.id}`)
     })
 
+    /* on leave */
     socket.on('leave', (room) => {
-      socket.leave('7')
-      wss.sockets.in('7').emit('hello', {msg: `left room ${socket.id}`})
-      wss.in('7').fetchSockets()
-        .then((sockets) => { 
-          app.log.info({ msg: 'members', socket: sockets.map(s => s.id) })
+      socket.leave(room.id)
+      socket.emit('leaveConfirmation', room)
+      wss.sockets
+        .in(room.id)
+        .emit('memberLeft', {
+          room: room.id,
+          msg: `member left ${socket.id}`
         })
-        .catch((err) => { console.log(err) })
     })
 
+    /* on details  */
     socket.on('details', (args) => {
       app.log.info('[Socket] details received') 
       wss.emit('hello', { msg: 'we got your message' })
-    })
-
-    app.log.warn(`[socket] connected ${socket.id}`)
-    wss.emit('hello', { msg: 'some message to you' })
-
-    socket.on('disconnect', () => {
-      app.log.warn(`[socket] disconnected ${socket.id}`)
     })
   })
 

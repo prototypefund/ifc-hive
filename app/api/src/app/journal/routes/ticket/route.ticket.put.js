@@ -3,7 +3,6 @@ import { ticketSchema, ticketResponseSchema } from '../../model/ticket/ticket.sc
 import Ticket from '../../model/ticket/ticket.model.js'
 import { v4 as uuidv4 } from 'uuid'
 
-
 /*
  * Put ticket
  */
