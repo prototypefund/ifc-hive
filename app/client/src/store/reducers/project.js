@@ -5,8 +5,14 @@ export default ($eventbus) => (state, action) => {
     switch (action.type) {
       case 'init':
         return applicationState.project
-      case 'project/update':
-        return action.payload
+      case 'project/addlist':
+        return {
+          ...state, ...{ list: action.payload }
+        }
+      case 'project/setId':
+        return {
+          ...state, ...{ id: action.payload }
+        }
       default:
         return state
     }

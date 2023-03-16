@@ -2,10 +2,9 @@
   <v-app v-if="(page && page.uuid) || isInTest">
     <!-- Global Toolbar -->
     <v-app-bar density="compact" flat app color="grey-lighten-2" id="appAppbar">
-      <!-- Breadcrumb -->
       <v-app-bar-title>
-        <router-link :to="{ path: '/' }" id="breadcrumb-home"><v-icon icon="mdi-home" color="primary"></v-icon>
-        </router-link>
+        <!-- Breadcrumb -->
+        <project-switch />
         <v-icon color="grey" xsmall>mdi-chevron-right</v-icon>
         <v-fade-transition>
           <span v-if="!loading">{{ $t("pages." + page.uuid) }}</span>
@@ -14,8 +13,8 @@
           <span v-if="loading"><v-progress-circular indeterminate :size="20" :width="2" color="primary" /></span>
         </v-fade-transition>
       </v-app-bar-title>
-      <v-text-field :loading="searching" density="compact" variant="solo" label="Search" append-inner-icon="mdi-magnify"
-        single-line hide-details></v-text-field>
+      <!--v-text-field :loading="searching" density="compact" variant="solo" label="Search" append-inner-icon="mdi-magnify"
+        single-line hide-details></!--v-text-field-->
       <v-spacer />
       <p style="width: 15%">
         <status-bar />
@@ -59,6 +58,7 @@ import ProgressBar from "@u/uploader/progressBar.vue";
 import { globalTools } from "./setup/application";
 import mock from "./mock.vue";
 import socketStatus from "@u/socketStatus.vue"
+import projectSwitch from "@u/projectSwitch/select.vue"
 
 export default {
   components: {
@@ -69,9 +69,9 @@ export default {
     ProgressBar,
     mock,
     socketStatus,
+    projectSwitch,
     mobileStartup: defineAsyncComponent(() =>
-      import("./components/utils/mobile/startup.vue")
-                                       ),
+      import("./components/utils/mobile/startup.vue")),
   },
   inject: ["$api", "$store", "$mobile"],
   props: {
@@ -149,11 +149,11 @@ export default {
         this.page = val;
       });
 
-      this.$store
-        .select((state) => state.ui.loading)
-        .subscribe((val) => {
-          this.loading = val;
-        });
+    this.$store
+      .select((state) => state.ui.loading)
+      .subscribe((val) => {
+        this.loading = val;
+      });
   },
 
   mounted() {

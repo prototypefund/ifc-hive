@@ -3,7 +3,7 @@
  *
  * Listens to the event bus and emits accordingly messages to the socket server.
  */
-export function registerSocketApi ($socket, $store, $eventbus) {
+export function registerSocketApi($socket, $store, $eventbus) {
 
   $eventbus.on('socketJoinRoom', (roomId) => {
     $socket.emit('join', roomId)

@@ -23,7 +23,7 @@ export const applicationState = {
   uploader: {},
   queries: {},
   socket: {
-    status: null, 
+    status: null,
     message: null,
   },
   user: {
@@ -35,7 +35,8 @@ export const applicationState = {
     id: false,
   },
   project: {
-    id: false,
+    id: null,
+    list: []
   },
   ui: {
     // indicates the left navigation bar state

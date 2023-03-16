@@ -12,9 +12,9 @@ import VueApexCharts from "vue3-apexcharts";
 import { createSocket, registerSocketEvents } from './setup/socket.js'
 import log from '@lib/logger.js'
 import httpClient, { configClient } from './lib/httpClient.js'
-import EventEmitter  from '@lib/eventEmitter.js'
+import EventEmitter from '@lib/eventEmitter.js'
 import { registerApiHandlerEvents } from './setup/apiClient'
-
+import { registerSocketApi } from './setup/socketClient'
 
 /*
  * get env variables to configure the app
@@ -29,7 +29,7 @@ const apiHealthcheck = async () => {
   try {
     const healthcheckResponse = await httpClient.get(`${API_BASE_URL}/health`)
     log.api('healthcheck', healthcheckResponse,)
-  } catch(err) {
+  } catch (err) {
     console.error(`Can\'t connect to API ${API_BASE_URL}`)
     console.error(err)
   }
@@ -52,6 +52,7 @@ const router = createCustomRouter(store)
  */
 registerSocketEvents(socket, store, eventbus)
 registerApiHandlerEvents(httpClient, store, eventbus)
+registerSocketApi(socket, store, eventbus)
 
 /*
  *  create app and pass dependencies 

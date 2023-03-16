@@ -7,11 +7,11 @@ import log from '@lib/logger.js'
  * @param {string} host - our socket endpoint
  * @return {object} opts - socket.io options
  */
-export function createSocket (host, opts) {
+export function createSocket(host, opts) {
   const defaults = {
     // path: '/socket/',
   }
-  return io(host, {...defaults, ...opts})
+  return io(host, { ...defaults, ...opts })
 }
 
 /*
@@ -21,7 +21,7 @@ export function createSocket (host, opts) {
  * @param {object} $store - a minirx-store instance, so we can dispatch actions
  * @param {object} $eventbus - instance of our custom eventbus
  */
-export function registerSocketEvents ($socket, $store, $eventbus) {
+export function registerSocketEvents($socket, $store, $eventbus) {
 
   let intervalId = false
 
@@ -62,6 +62,16 @@ export function registerSocketEvents ($socket, $store, $eventbus) {
   /* available projects list received */
   $socket.on('projects/list', (data) => {
     log.socket('projects received', data)
+    if (data.projects.length > 0) {
+      let projectList = []
+      $store.dispatch({ type: 'data/push', payload: { data: data.projects } })
+      data.projects.forEach(project => {
+        projectList.push(project._id)
+      })
+      // add project
+      $store.dispatch({ type: 'project/addlist', payload: projectList })
+    }
+
   })
 
   /* successfull join requests are confirmed by the server */
@@ -82,14 +92,14 @@ export function registerSocketEvents ($socket, $store, $eventbus) {
     log.socket('login successful', 'Socket connection successfully authenticated')
   })
 
- /*
-  * timeout event
-  * Our continious healthcheck didn't get a response within the expected time from the server
-  */
+  /*
+   * timeout event
+   * Our continious healthcheck didn't get a response within the expected time from the server
+   */
   $socket.on('timeout', (data) => {
     $store.dispatch({ type: 'socket/status', payload: { status: 'Timeout' } })
 
-    log.error('Websocket didn\'t receive pong in expected resonse time', 
+    log.error('Websocket didn\'t receive pong in expected resonse time',
       'Socket timeout')
 
     // @TODO replace with implement of a sane reconnection routine
@@ -111,6 +121,7 @@ export function registerSocketEvents ($socket, $store, $eventbus) {
    */
   $socket.on('dataTest', (data) => {
     log.socket('dataTest', data)
+    $store.dispatch({ type: 'data/push', payload: { data } })
   })
 }
 
