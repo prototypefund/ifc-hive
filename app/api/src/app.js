@@ -63,6 +63,7 @@ global.__dirname = dirname(__filename)
 // lab routes for naive socket integration
 import lab from './app/lab/index.js' 
 import core from './app/core/index.js'
+import journal from './app/journal/index.js'
 
 /*
  * create app function
@@ -208,6 +209,7 @@ export default async function app (opts = {}) {
    */
   app.register(lab, { prefix: '/lab' })
   app.register(core, { prefix: '/core' })
+  app.register(journal, { prefix: '/journal' })
 
   /*
    * ---------------------------------------------------------------------

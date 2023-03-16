@@ -2,6 +2,9 @@ import { S } from 'fluent-json-schema'
 import { userSchema, userResponseSchema } from '../../model/user/user.schema.js'
 import User from '../../model/user/user.model.js'
 
+/*
+ * Put user
+ */
 export default function (app) {
 
   /* handler */

@@ -75,11 +75,11 @@ export const swaggerConfig = {
       },
       { name: 'core/system',
         description: 'Endpoints for system maintenance during development and production',
-        externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about system operations' }
       },
       { name: 'journal/ticket',
-        description: 'Represents the default scope for permissions. Has users and a root-memo assigned.',
-        externalDocs: { url: 'https://repo.karo.design', description: 'more about the user concept' }
+        description: 'The unified object in a project tree, represents a memo, documentation, ticket, milestone, approval request etc.',
+        externalDocs: { url: 'https://repo.karo.design', description: 'more about the ticket concept' }
       },
       { name: 'journal/register',
         description: 'Registers are the nodes and agents in the blockchain network.',

@@ -2,6 +2,9 @@ import { S } from 'fluent-json-schema'
 import { userResponseSchema } from '../../model/user/user.schema.js'
 import User from '../../model/user/user.model.js'
 
+/*
+ * Remove user
+ */
 export default function (app) {
   /* handler */
   async function handler (request, response) {

@@ -13,8 +13,7 @@ export default function (app) {
     }
   }
 
-  const params = S.object()
-    .prop('id', S.string().required())
+  const params = S.object().prop('id', S.string().required())
 
   /*
    * route options

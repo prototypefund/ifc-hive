@@ -121,6 +121,7 @@ export default function (app) {
         const dummyTicketsRaw = [...Array(5000)].map((_, i) => {
           const t = JSON.parse(JSON.stringify(tickets[0]))
           t._id= uuidv4()
+          t.disId = `${i}` 
           t.project = 'projectDummy'
           t.owner = 'userAnton',
           t.title = `${i} some random title with a prefix number`
@@ -135,15 +136,14 @@ export default function (app) {
          * send response with object counts
          */
         return {
-          // accounts: await Account.countDocuments(),
-          // organizations: await Organization.countDocuments(),
-          // permissions: await Permission.countDocuments(),
-          // projects: await Project.countDocuments(),
-          // tags: await Tag.countDocuments(),
+          accounts: await Account.countDocuments(),
+          organizations: await Organization.countDocuments(),
+          permissions: await Permission.countDocuments(),
+          projects: await Project.countDocuments(),
+          tags: await Tag.countDocuments(),
           tickets: await Ticket.countDocuments(),
           // ticketsTree: await Ticket.getChildrenTree({ rootDoc: t0 }),
-          // user: await User.countDocuments(),
-          // zDummy: dummyTickets
+          user: await User.countDocuments(),
         }
 
       } catch (error) {
