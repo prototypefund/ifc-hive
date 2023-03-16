@@ -2,6 +2,8 @@ import mongoose from 'mongoose'
 const { Schema } = mongoose
 import { v4 as uuidv4 } from 'uuid'
 import MpathPlugin from 'mongoose-mpath'
+import { randomIdGenerator } from '#src/lib/helpers.js'
+const randomId = randomIdGenerator(8)
 
 /*
  * Ticket schewma
@@ -25,7 +27,19 @@ const ticketSchema = new Schema({
    * we will need to keep track of some meta-data which is not considered part
    * of the document, e.g.
    */
-  _meta: { type: Schema.Types.Mixed, default: null },
+  meta: {
+    /* 
+    * keep track of doc size so we can compose reasonably sized socket packages
+    * Note that is a only approximate
+    */
+    doc_size: { type: Number, default: 0 },
+    /* in case we send the doc without the file field, we still want to know the file count */
+    file_count: { type: Number, default: 0 },
+    /* in case we send the doc without the approval field, we still want to know the count */
+    approval_count: { type: Number, default: 0 },
+    /* allow storage of additional meta information in a map */
+    extended: { type:Map }
+  },
 
   /* Ticket title */
   title: {
@@ -36,16 +50,18 @@ const ticketSchema = new Schema({
 
   /* Display ID, a human friendly, auto-incremented ID */
   disId: {
-    type: Number,
+    type: String,
     // immutable: true,
-    default: null,
+    default: randomId(),
+    index: true,
+    required: true,
   },
 
   /* user how owns the ticket, in first place the user who created the ticket */
   owner: {
     type: Schema.Types.String,
     ref: 'pacifico_core_user',
-    default: null,
+    // required: true,
   },
 
   /* assigend users */

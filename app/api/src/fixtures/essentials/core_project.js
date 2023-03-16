@@ -16,5 +16,14 @@ export default [
     tags: ['default', 'example', 'fixture'],
     description: 'This is a sample project created via system data fixtures.',
     account: 'accountDefault',
+  },
+  {
+    _id: 'projectDummy',
+    title: 'Dummy with lots of tickets',
+    shorttitle: 'Dummy',
+    code: 'DUMMY',
+    tags: ['default', 'debug'],
+    description: 'This is a sample project created via system data fixtures.',
+    account: 'accountDefault',
   }
 ]

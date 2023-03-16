@@ -116,7 +116,9 @@ function removeKeyFromObject(obj, attr = '_id') {
  */
 function mapIds (objects, idLookup, fields = ['_id']) {
   // early return if there is nothing to do
-  if (!objects || !Array.isArray(objects) || objects.length < 1) return 
+  if (!objects || !Array.isArray(objects) || objects.length < 1) {
+    return
+  }
   // iterate over objects and replace the origina obj._id with the UUID from idLookup
   return objects.map((e) => { 
     fields.forEach((f) => { 
@@ -133,6 +135,23 @@ function mapIds (objects, idLookup, fields = ['_id']) {
   })
 }
 
+/*
+ * get object size in bits
+ */
+function getObjectSizeInBytes (obj) {
+  let str = null
+  if (typeof obj === 'string') {
+    // If obj is a string, then use it
+    str = obj
+  } else {
+    // Else, make obj into a string
+    str = JSON.stringify(obj)
+  }
+  // Get the length of the Uint8Array
+  const bytes = new TextEncoder().encode(str).length
+  return bytes
+}
+
 export { 
   randomIdGenerator,
   updateDeepObjectByPath,
@@ -141,4 +160,5 @@ export {
   isObject,
   removeKeyFromObject,
   mapIds,
+  getObjectSizeInBytes,
 }

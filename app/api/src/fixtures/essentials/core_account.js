@@ -6,6 +6,15 @@ export default [
     code: 'DEFAULT',
     owner: 'userAnton',
     organization: 'orgaPacifico',
-    tags: ['default']
+    tags: ['default', 'fixture']
+  },
+  {
+    _id: 'accountDebug', 
+    name: 'Debug Account',
+    shortname: 'Debug',
+    code: 'DEBUG',
+    owner: 'userAnton',
+    organization: 'orgaPacifico',
+    tags: ['debug', 'fixture']
   }
 ]

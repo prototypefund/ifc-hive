@@ -3,12 +3,14 @@ export default [
     _id: 'ticket_0',
     title: 'LP-1',
     project: 'projectClient',
+    owner: 'userAnton',
     tags: ['tagMilestone'],
   },
   {
     _id: 'ticket_1',
     title: 'LP-2',
     project: 'projectClient',
+    owner: 'userAnton',
     tags: ['tagImportant', 'tagToDo'],
   },
   {
@@ -16,12 +18,14 @@ export default [
     title: 'Vorbereitung',
     parent: 'ticket_0',
     project: 'projectClient',
+    owner: 'userBerta',
     tags: ['tagDoing'],
   },
   {
     _id: 'ticket_3',
     title: 'Brainstorming',
     parent: 'ticket_2',
+    owner: 'userCaesar',
     project: 'projectClient',
     tags: ['tagMilestone', 'tagRequirement'],
   },
@@ -30,6 +34,7 @@ export default [
     title: 'Gesprächsprotokoll',
     parent: 'ticket_2',
     project: 'projectClient',
+    owner: 'userAnton',
     tags: ['tagDone', 'tagImportant'],
   },
   {
@@ -37,6 +42,7 @@ export default [
     title: 'Ideensammlung',
     parent: 'ticket_0',
     project: 'projectClient',
+    owner: 'userCaesar',
     tags: ['tagDoing', 'tagRequirement', 'tagImportant'],
   },
   {
@@ -44,6 +50,7 @@ export default [
     title: 'Konzeptentwurf',
     parent: 'ticket_5',
     project: 'projectClient',
+    owner: 'userBerta',
     tags: [],
   }
 ]

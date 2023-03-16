@@ -8,7 +8,10 @@ import { v4 as uuidv4 } from 'uuid'
 import idMapEssentials from '#src/fixtures/idMapEssentials.js'
 import idMapDevelopment from '#src/fixtures/idMapDevelopment.js'
 import { defaultHeadersSchema } from '#src/lib/headersHelper.js'
-import { mapIds } from '#src/lib/helpers.js'
+import { mapIds, getObjectSizeInBytes } from '#src/lib/helpers.js'
+
+import randomText from '#src/fixtures/randomText.js'
+
 import User from '../../model/user/user.model.js'
 import users from '#src/fixtures/essentials/core_user.js'
 import Account from '../../model/account/account.model.js'
@@ -41,7 +44,6 @@ export default function (app) {
   async function handler (request, response) {
     try { 
 
-      
       // create a fresh idMap
       const idMap = ids.reduce((acc,curr)=> (acc[curr] = uuidv4(), acc), {})
 
@@ -115,18 +117,33 @@ export default function (app) {
         const t6 = new Ticket(newTickets[6])
         await t6.save()
 
+        // create random tickets for dummy project
+        const dummyTicketsRaw = [...Array(5000)].map((_, i) => {
+          const t = JSON.parse(JSON.stringify(tickets[0]))
+          t._id= uuidv4()
+          t.project = 'projectDummy'
+          t.owner = 'userAnton',
+          t.title = `${i} some random title with a prefix number`
+          t.body = randomText
+          return t 
+        })
+
+        const dummyTickets = mapIds(dummyTicketsRaw, idMap, ['project', 'owner', 'tags'])
+        await Ticket.insertMany(dummyTickets)
+
         /*
          * send response with object counts
          */
         return {
-          organizations: await Organization.countDocuments(),
-          user: await User.countDocuments(),
-          accounts: await Account.countDocuments(),
-          tags: await Tag.countDocuments(),
-          projects: await Project.countDocuments(),
-          permissions: await Permission.countDocuments(),
+          // accounts: await Account.countDocuments(),
+          // organizations: await Organization.countDocuments(),
+          // permissions: await Permission.countDocuments(),
+          // projects: await Project.countDocuments(),
+          // tags: await Tag.countDocuments(),
           tickets: await Ticket.countDocuments(),
-          ticketsTree: await Ticket.getChildrenTree({ rootDoc: t0 }),
+          // ticketsTree: await Ticket.getChildrenTree({ rootDoc: t0 }),
+          // user: await User.countDocuments(),
+          // zDummy: dummyTickets
         }
 
       } catch (error) {

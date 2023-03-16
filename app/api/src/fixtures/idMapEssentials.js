@@ -31,6 +31,7 @@ export default [
   /* projects */
   'projectFirst',
   'projectClient',
+  'projectDummy',
 
   /* permissions */
   'permUserAntonProjectClient',
