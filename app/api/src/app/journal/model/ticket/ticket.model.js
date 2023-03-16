@@ -59,7 +59,6 @@ const ticketSchema = new Schema({
 
   /* tags, note that label and ticket have to belong to the same project */
   tags: [{ type: Schema.Types.String, ref: 'pacifico_core_tag'}],
-     tags: [Array],
 
   /* start date, e.g. for milestones */
   start: { type: Date, default: null },

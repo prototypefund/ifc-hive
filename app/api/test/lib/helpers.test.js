@@ -131,4 +131,21 @@ t.test('removeKeyFromObject', (t) => {
 
   t.end()
 })
-t.end()
+
+t.test('mapIds', (t) => {
+  const idMap = { 'a': 'x', 'b': 'y', 'c': 'z' }
+  const list = { t: 1, u: ['a', 'b', 'c']  }
+  const single = {t: 1, u: 'b'}
+
+  t.equal(
+    h.mapIds([single], idMap, ['u'])[0].u, 'y',
+    'maps a single string attributes in an object'
+  )
+
+  t.same(
+    h.mapIds([list], idMap, ['u'])[0],
+    { t: 1, u: ['x', 'y', 'z'] },
+    'maps and array of ids'
+  )
+  t.end()
+})

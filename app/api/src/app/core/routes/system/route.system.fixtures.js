@@ -4,9 +4,11 @@
  * This route drops the complete database, reads fixture-data from ./src/fixtures
  * and imports these fixtures as fresh state.
  */
+import { v4 as uuidv4 } from 'uuid'
 import idMapEssentials from '#src/fixtures/idMapEssentials.js'
 import idMapDevelopment from '#src/fixtures/idMapDevelopment.js'
 import { defaultHeadersSchema } from '#src/lib/headersHelper.js'
+import { mapIds } from '#src/lib/helpers.js'
 import User from '../../model/user/user.model.js'
 import users from '#src/fixtures/essentials/core_user.js'
 import Account from '../../model/account/account.model.js'
@@ -21,7 +23,6 @@ import Permission from '../../model/permission/permission.model.js'
 import permissions from '#src/fixtures/essentials/core_permission.js'
 import tickets from '#src/fixtures/essentials/journal_ticket.js'
 import Ticket from '../../../journal/model/ticket/ticket.model.js'
-import { v4 as uuidv4 } from 'uuid'
 
 /*
  * This is or Look-up-table to convert human readble ID's in the fixutres data
@@ -29,33 +30,7 @@ import { v4 as uuidv4 } from 'uuid'
  */
 const ids = idMapEssentials.concat(idMapDevelopment)
 
-/*
- * replace human-friendly placeholder IDs with actual UUID's
- * @param {array} objects - array of objectsw with human-friendly placeholder ID's
- * @param {object} id = the idMap with key value pairs for humand-friendly ID to UUIDv4
- */
-function mapIds (objects, idLookup, fields = ['_id']) {
-  // early return if there is nothing to do
-  if (!objects || !Array.isArray(objects) || objects.length < 1) return 
-  // iterate over objects and replace the origina obj._id with the UUID from idLookup
-  return objects.map((e) => { 
-    fields.forEach((f) => { 
-      // map id if the field is a string value
-      if (e[f] && typeof e[f] === 'string') {
-        e[f] = idLookup[e[f]]
-      }
-      // map id if the field is an array
-      if (e[f] && Array.isArray(e[f])) {
-        e[f].forEach((v) => { v = idLookup[v] })
-      }
-    })
-    return e
-  })
-}
-
-/*
- * Route definition 
- */
+/* Route definition */
 export default function (app) {
   
   const VERSIONS = ['1.0.0']
@@ -117,7 +92,7 @@ export default function (app) {
 
       
       const refTickets = JSON.parse(JSON.stringify(tickets))
-      const newTickets = mapIds(refTickets, idMap, ['_id', 'parent', 'project', 'owner'])
+      const newTickets = mapIds(refTickets, idMap, ['_id', 'parent', 'project', 'owner', 'tags'])
 
       try {
 

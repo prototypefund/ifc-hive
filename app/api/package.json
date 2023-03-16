@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node ./src/server",
     "dev": "npx nodemon ./src/server",
-    "test": "npx c8 tap --reporter=spec --100"
+    "test": "npx c8 tap --reporter=terse --100"
   },
   "dependencies": {
     "@fastify/cors": "^8.2.0",

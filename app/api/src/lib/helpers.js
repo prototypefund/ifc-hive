@@ -16,8 +16,7 @@ const customCyperAlphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNO
  * Use it for socket-id's, token-id's, reset-tokens etc. Everywhere wehere we
  * want ao unique, random string which doesn't have to be UUID.
  */
-
-export function randomIdGenerator (length = 16) {
+function randomIdGenerator (length = 16) {
   return customAlphabet(customCyperAlphabet, length )
 }
 
@@ -29,7 +28,7 @@ export function randomIdGenerator (length = 16) {
  * @value {mixed} value - the value to be set
  * @return {object} - a brand new object with the updated path
  */
-export function updateDeepObjectByPath (obj, path, value) {
+function updateDeepObjectByPath (obj, path, value) {
   const [head, ...rest] = path.split('.')
   return {
     ...obj,
@@ -49,7 +48,7 @@ export function updateDeepObjectByPath (obj, path, value) {
  * getNestedPropertyByPath(obj, 'first.deep.path', 'second[0]', 'second[2].a');
  * // => ['find me', 1, 'target']
  */
- export function getNestedPropertiesByPath (obj, ...selectors) {
+ function getNestedPropertiesByPath (obj, ...selectors) {
   return [...selectors].map(s =>
     s
     .replace(/\[([^\[\]]*)\]/g, '.$1.')
@@ -71,7 +70,7 @@ export function updateDeepObjectByPath (obj, path, value) {
  * extractId({ id: '1234', name: 'some name' }) // => '1234'
  * extractId({ ID: '1234', name: 'some name' }) // => '1234'
  */
-export function extractId (requestBodyAttr) {
+function extractId (requestBodyAttr) {
   if (!requestBodyAttr || requestBodyAttr === null || requestBodyAttr === undefined)
     return null
 
@@ -97,12 +96,49 @@ export function extractId (requestBodyAttr) {
  * is object check
  * @param {Object} value, value to check
  */
-export function isObject (value) {
+function isObject (value) {
   return !!(value && typeof value === 'object' && !Array.isArray(value))
 }
 
-export function removeKeyFromObject(obj, attr = '_id') {
+/*
+ * remove key from object
+ */
+function removeKeyFromObject(obj, attr = '_id') {
   if (typeof obj !== 'object' || Array.isArray(obj)) return obj
   const o = JSON.parse(JSON.stringify(obj))
   return deleteKey(o, { key: attr })
+}
+
+/*
+ * replace human-friendly placeholder IDs with actual UUID's
+ * @param {array} objects - array of objectsw with human-friendly placeholder ID's
+ * @param {object} id = the idMap with key value pairs for humand-friendly ID to UUIDv4
+ */
+function mapIds (objects, idLookup, fields = ['_id']) {
+  // early return if there is nothing to do
+  if (!objects || !Array.isArray(objects) || objects.length < 1) return 
+  // iterate over objects and replace the origina obj._id with the UUID from idLookup
+  return objects.map((e) => { 
+    fields.forEach((f) => { 
+      // map id if the field is a string value
+      if (e[f] && typeof e[f] === 'string') {
+        e[f] = idLookup[e[f]]
+      }
+      // map id if the field is an array
+      if (e[f] && Array.isArray(e[f])) {
+        e[f].forEach((v, i) => { e[f][i] = idLookup[e[f][i]] })
+      }
+    })
+    return e
+  })
+}
+
+export { 
+  randomIdGenerator,
+  updateDeepObjectByPath,
+  getNestedPropertiesByPath,
+  extractId,
+  isObject,
+  removeKeyFromObject,
+  mapIds,
 }
