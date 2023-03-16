@@ -1,0 +1,15 @@
+#!/bin/sh
+# Post the login form and 
+#
+
+BASE_URL=${1:-http://localhost:8082}
+EMAIL=${2:-admin@example.com}
+PASSWORD=${3:-administrator}
+
+curl -s -H 'Content-Type: application/json' \
+-d "{ \"email\": \"${EMAIL}\", \"password\": \"${PASSWORD}\"}" \
+-X POST \
+http://localhost:8082/core/user/login \
+| jq -r '.token'
+
+exit 0
