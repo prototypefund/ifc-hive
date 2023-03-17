@@ -6,6 +6,8 @@ export default ($eventbus, widgetsLookup) => (state, action) => {
     switch (action.type) {
       case 'init':
         return applicationState.toolbar
+      case 'projectInit':
+        return applicationState.toolbar
       case 'toolbar/add':
         tool = {}
         if (action.payload && action.payload.widget && action.payload.uuid) {

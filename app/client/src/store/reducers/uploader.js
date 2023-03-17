@@ -6,6 +6,8 @@ export default ($eventbus) => (state, action) => {
     switch (action.type) {
       case 'init':
         return applicationState.uploader
+      case 'projectInit':
+        return applicationState.uploader
       case 'uploader/add':
         return mergeDeepRight(state, action.payload)
       case 'uploader/remove':

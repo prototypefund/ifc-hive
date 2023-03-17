@@ -7,6 +7,8 @@ export default ($eventbus) => (state, action) => {
     switch (action.type) {
       case 'init':
         return applicationState.notifications
+      case 'projectInit':
+        return applicationState.notifications
       case 'notifications/add':
         items = JSON.parse(JSON.stringify(state.items))
         action.payload.time = Date.now()

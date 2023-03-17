@@ -1,4 +1,4 @@
-import { mergeDeepRight, clone} from 'ramda'
+import { mergeDeepRight, clone } from 'ramda'
 import { applicationState, storePatterns } from '../state'
 
 export default ($eventbus) => (state, action) => {
@@ -8,13 +8,14 @@ export default ($eventbus) => (state, action) => {
 
     switch (action.type) {
 
-        /* init */
+      /* init */
       case 'init':
         return applicationState.pages
-        // initially add a new preconfigured page store. Will be handled in
-        // routes files in beforeEnter hook
-
-        /* pages/add */
+      // initially add a new preconfigured page store. Will be handled in
+      // routes files in beforeEnter hook
+      case 'projectInit':
+        return applicationState.pages
+      /* pages/add */
       case 'pages/add':
         pageUUID = action.payload.uuid || action.routeName.replace('.', '-')
         if (state[pageUUID]) {
@@ -30,10 +31,10 @@ export default ($eventbus) => (state, action) => {
         newPage[page.uuid] = page
         return mergeDeepRight(state, newPage)
 
-        /*
-         * pages/update
-         * update a configured page State usually called when current page changes
-         */
+      /*
+       * pages/update
+       * update a configured page State usually called when current page changes
+       */
       case 'pages/update':
         if (state[action.stateName]) {
           newPage = {}
@@ -45,7 +46,7 @@ export default ($eventbus) => (state, action) => {
         }
         return mergeDeepRight(state, newPage)
 
-        /* default */
+      /* default */
       default:
         return state
     }

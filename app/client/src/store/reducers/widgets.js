@@ -10,7 +10,8 @@ export default ($eventbus) => (state, action) => {
       /* init */
       case 'init':
         return applicationState.widgets
-
+      case 'projectInit':
+        return applicationState.widgets
       /* widget/update */
       case 'widgets/update':
         configuredWidget = {}

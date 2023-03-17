@@ -45,17 +45,17 @@ export function registerSocketEvents($socket, $store, $eventbus) {
     $store.dispatch({ type: 'socket/status', payload: { status: 2, message: 'Reconnect' } })
   })
 
- /*
-  * hello
-  * const data = { id: 'you'session'id' }
-  */
+  /*
+   * hello
+   * const data = { id: 'you'session'id' }
+   */
   $socket.on('hello', (data) => {
     log.socket('hello', data)
   })
 
- /*
-  * close
-  */
+  /*
+   * close
+   */
   $socket.on('close', () => {
     log.socket('close', 'socket connection lost')
   })
@@ -67,25 +67,28 @@ export function registerSocketEvents($socket, $store, $eventbus) {
   $socket.on('projects/list', (data) => {
     // early return if there are no data for us
     if (!data.projects || data.projects.length < 1) return
-      log.socket('project/list', data)
-      // push received projects into data store
-      $store.dispatch({ type: 'data/push', payload: { data: data.projects } })
-      // handle projects for usage and save to store
-      const projectList = []
-      // TODO remove lookup once the slots in v-select work properly for direct
+    log.socket('project/list', data)
+    // push received projects into data store
+    $store.dispatch({ type: 'data/push', payload: { data: data.projects } })
+    // handle projects for usage and save to store
+    const projectList = []
+    // TODO remove lookup once the slots in v-select work properly for direct
     // referencation of data items from data store
-      const projectLookup = {}
-      data.projects.forEach(project => {
-        projectList.push(project._id)
-        projectLookup[project._id] = project
-      })
-      // add project
-      $store.dispatch({ type: 'project/addlist', payload: projectList })
-      $store.dispatch({ type: 'project/addlookup', payload: projectLookup })
+    const projectLookup = {}
+    data.projects.forEach(project => {
+      projectList.push(project._id)
+      projectLookup[project._id] = project
+    })
+    // add project
+    $store.dispatch({ type: 'project/addlist', payload: projectList })
+    $store.dispatch({ type: 'project/addlookup', payload: projectLookup })
   })
 
   /* successfull join requests are confirmed by the server */
   $socket.on('joinConfirmation', (data) => {
+    debugger
+    // Reset all store states which are project dependend. 
+    $store.dispatch({ type: 'projectInit' })
     log.socket('joinConfirmation received', data)
   })
 

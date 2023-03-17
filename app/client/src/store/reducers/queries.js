@@ -7,6 +7,8 @@ export default ($eventbus, dataLookup) => (state, action) => {
     switch (action.type) {
       case 'init':
         return applicationState.queries
+      case 'projectInit':
+        return applicationState.queries
       case 'queries/execute':
         queries = JSON.parse(JSON.stringify(state))
         if (action.actionId) {

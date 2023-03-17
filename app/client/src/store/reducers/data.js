@@ -7,6 +7,8 @@ export default ($eventbus) => (state, action) => {
     switch (action.type) {
       case 'init':
         return applicationState.data
+      case 'projectInit':
+        return applicationState.data
       case 'data/push':
         if (action.payload.data) {
           $eventbus.emit('store/dispatch', {
