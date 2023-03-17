@@ -78,6 +78,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
     data.projects.forEach(project => {
       projectList.push(project._id)
       projectLookup[project._id] = project
+      delete projectLookup[project._id].config
     })
     // add project
     $store.dispatch({ type: 'project/addlist', payload: projectList })
@@ -86,10 +87,49 @@ export function registerSocketEvents($socket, $store, $eventbus) {
 
   /* successfull join requests are confirmed by the server */
   $socket.on('joinConfirmation', (data) => {
+    $store.dispatch({
+      type: 'ui/update',
+      payload: { loading: true, projectSwitching: true }
+    })
     debugger
     // Reset all store states which are project dependend. 
-    $store.dispatch({ type: 'projectInit' })
+    if (data.project && data.project.config) {
+      $store.dispatch({ type: 'projectInit' })
+      // TODO add mobile switch
+      if (data.project.config.browser) {
+        if (data.project.config.browser.ui) {
+          $store.dispatch({
+            type: 'ui/update',
+            payload: data.project.config.browser.ui
+          })
+        }
+        if (data.project.config.browser.pages && Object.keys(data.project.config.browser.pages).length > 0) {
+          for (const [key, value] of Object.entries(data.project.config.browser.pages)) {
+            $store.dispatch({
+              type: "pages/add",
+              payload: value,
+            });
+          }
+        }
+        if (data.project.config.browser.tools && data.project.config.browser.tools.length > 0) {
+          data.project.config.browser.tools.forEach(tool => {
+            $store.dispatch({
+              type: "toolbar/add",
+              payload: tool,
+            });
+          })
+
+        }
+      }
+    }
+
+
     log.socket('joinConfirmation received', data)
+    // TODO possibly redirect to / route instead of just adding loading
+    $store.dispatch({
+      type: 'ui/update',
+      payload: { loading: false, projectSwitching: false }
+    })
   })
 
   /* 
@@ -98,7 +138,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
    * request or forcefully. 
    */
   $socket.on('leaveConfirmation', (data) => {
-    $store.dispatch({ type: 'ini' })
+    //TODO maybe add the projectInit call here
     log.socket('leaveConfirmation received', data)
   })
 
@@ -136,6 +176,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
    * We received a data object from the server
    */
   $socket.on('data', (data) => {
+    debugger
     log.socket('data', data)
     // NOTE: always pass array into data/push payload
     $store.dispatch({ type: 'data/push', payload: { data: [data] } })
@@ -147,6 +188,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
    * @TODO remove
    */
   $socket.on('dataTest', (data) => {
+    debugger
     if (batchLoading === true) {
       batchItems.push(data)
     } else {

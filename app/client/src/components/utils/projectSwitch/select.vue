@@ -1,5 +1,5 @@
 <template>
-    <v-select v-model="currentProject"
+    <v-select v-if="project.lookup" v-model="currentProject"
         :label="project.lookup[project.id] ? project.lookup[project.id].shorttitle : 'bitte wählen'" :items="project.list"
         density="compact" class="projectSwitch">
     </v-select>

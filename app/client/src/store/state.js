@@ -53,7 +53,8 @@ export const applicationState = {
     // indicates if the page is in loading state
     loading: true,
     theme: 'dark',
-    mobile: false
+    mobile: false,
+    projectSwitching: false
   },
   // will contain tools. Logic behind that is the same as with pages
   toolbar: {},
@@ -110,8 +111,8 @@ export const storePatterns = {
     grid: configPatterns.grid,
     // the array containing the configs for the 1-n slots
     slots: [],
-
-    widget: false,
+    tools: false,
+    widgets: false,
   },
   widget: {
     // should usually be a i18n key

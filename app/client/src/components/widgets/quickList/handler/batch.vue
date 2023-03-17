@@ -23,7 +23,10 @@ const stateSubscriber$ = $store
   .select((state) => state.widgets[props.uuid])
   .subscribe((val) => {
     state.value = val;
-    isSelected.value = findIndex(propEq("uuid", props.docUUID))(state.value.entries) >= 0 ? true : false
+    if (state.value) {
+      isSelected.value = findIndex(propEq("uuid", props.docUUID))(state.value.entries) >= 0 ? true : false
+    }
+
   });
 const currentToolSubscriber$ = $store
   .select((state) => state.ui.currentTool)

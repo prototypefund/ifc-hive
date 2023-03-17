@@ -1,5 +1,5 @@
 <template>
-  <v-app v-if="(page && page.uuid) || isInTest">
+  <v-app v-if="(page && page.uuid)">
     <!-- Global Toolbar -->
     <v-app-bar density="compact" flat app color="grey-lighten-2" id="appAppbar">
       <v-app-bar-title>
@@ -10,12 +10,12 @@
               <v-icon icon="mdi-home" color="primary" />
             </router-link></v-col>
 
-            <v-col cols="3">
-              <project-switch class="ml-10" />
-            </v-col>
-            <v-btn color="red darken-2" @click="saveLocalProjectConfig" class="ml-4">
-              <v-icon>mdi-upload-multiple</v-icon> Save local project config
-            </v-btn>
+          <v-col cols="3">
+            <project-switch class="ml-10" />
+          </v-col>
+          <v-btn color="red darken-2" @click="saveLocalProjectConfig" class="ml-4">
+            <v-icon>mdi-upload-multiple</v-icon> Save local project config
+          </v-btn>
 
           <!-- <v-col cols="auto"><v-icon color="grey" xsmall>mdi-chevron-right</v-icon></v-col> -->
           <v-col cols="auto">
@@ -35,19 +35,19 @@
         single-line hide-details></!--v-text-field-->
       <v-spacer />
       <p style="width: 15%">
-        <status-bar />
+        <status-bar v-if="!projectSwitching" />
       </p>
 
       <socket-status />
       <!-- notifications -->
-      <Notifications />
+      <Notifications v-if="!projectSwitching" />
     </v-app-bar>
 
     <!-- Navigation Drawer -->
-    <NavigationSideBar :nav-items="navItems" :footer-items="footerItems" />
-    <ToolBar />
+    <NavigationSideBar v-if="!projectSwitching" :nav-items="navItems" :footer-items="footerItems" />
+    <ToolBar v-if="!projectSwitching" />
     <!-- Main content -->
-    <mock />
+    <mock v-if="!projectSwitching" />
     <v-main id="appMain">
       <v-btn class="backToTop" v-if="hasScrolled" @click="scrollTop" icon="mdi-chevron-up" color="primary" />
       <template v-if="isInTest">
@@ -55,7 +55,7 @@
       </template>
       <template v-else>
         <router-view v-slot="{ Component }">
-          <component :is="Component" :class="{ isLoading: loading }" id="appComponent"
+          <component v-if="!projectSwitching" :is="Component" :class="{ isLoading: loading }" id="appComponent"
             :style="{ height: viewPortHeight + 'px' }" @scroll.passive="setScroll($event)" />
         </router-view>
       </template>
@@ -106,10 +106,11 @@ export default {
     loading: false,
     searching: false,
     hasScrolled: false,
+    projectSwitching: false,
     footerItems: [
       {
         icon: "mdi-account-cog",
-        route: "app.accountSettings" ,
+        route: "app.accountSettings",
         params: {},
       },
       {
@@ -149,6 +150,14 @@ export default {
       .select((state) => state.ui.loading)
       .subscribe((val) => {
         this.loading = val;
+      });
+    this.$store
+      .select((state) => state.ui.projectSwitching)
+      .subscribe((val) => {
+        this.$nextTick(() => {
+          this.projectSwitching = val;
+        })
+
       });
   },
 

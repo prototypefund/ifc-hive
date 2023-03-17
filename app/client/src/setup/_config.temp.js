@@ -20,6 +20,7 @@ export default {
       iconActive: "mdi-text-box-search",
       uuid: "quickList",
       widget: {
+        version: '1',
         name: "quickList",
         face: 'expansionVertical'
       }
@@ -33,6 +34,7 @@ export default {
       iconActive: "mdi-upload-network",
       uuid: "fileUploader_global",
       widget: {
+        version: '1',
         name: "fileUploader",
       }
     }
@@ -54,6 +56,7 @@ export default {
           'class': 'nice',
           column: 12,
           widget: {
+            version: '1',
             name: 'debug',
             props: {
               title: 'anderer Titel'
@@ -62,7 +65,6 @@ export default {
           }
         }
       ],
-      widget: false,
       title: 'funoFun',
       uuid: 'app-dashboard',
       routeName: 'app.dashboard',
@@ -72,10 +74,9 @@ export default {
     },
     'app-ticketboard': {
       scrollTop: false,
-      grid: false,
-      slots: false,
-      widget: {
+      widgets: [{
         uuid: 'ticketBoardWidget',
+        version: '1',
         name: 'ticketboard',
         face: 'default',
         props: {
@@ -116,14 +117,15 @@ export default {
             ]
           }
         }
-      },
-      tool: {
+      }],
+      tools: [{
         title: 'ticketsByTag',
         page: 'app.ticketboard',
         icon: 'mdi-chart-donut',
         iconActive: 'mdi-chart-donut-variant',
         uuid: 'chart_ticketsByTag',
         widget: {
+          version: '1',
           name: 'ticketboard',
           type: 'chart',
           face: 'ticketsByTag',
@@ -137,7 +139,7 @@ export default {
             ]
           }
         }
-      },
+      }],
       uuid: 'app-ticketboard',
       routeName: 'app.ticketboard',
       locale: 'de',
@@ -156,12 +158,12 @@ export default {
           column: 12,
           widget: {
             uuid: 'journalWidget',
+            version: '1',
             name: 'journal'
           }
         }
       ],
-      widget: false,
-      tool: {
+      tools: [{
         title: 'chartJournal',
         page: 'app.journal',
         icon: 'mdi-chart-donut',
@@ -169,10 +171,11 @@ export default {
         uuid: 'journal_chart',
         widget: {
           name: 'journal',
+          version: '1',
           type: 'chart',
           face: 'example'
         }
-      },
+      }],
       uuid: 'app-journal',
       routeName: 'app.journal',
       locale: 'de',
@@ -187,7 +190,6 @@ export default {
         columns: 2
       },
       slots: [],
-      widget: false,
       title: 'the rolfness of life',
       uuid: 'app-settings',
       routeName: 'app.settings',
@@ -207,6 +209,7 @@ export default {
           column: 12,
           widget: {
             name: 'boilerplate',
+            version: '1',
             props: {
               title: 'Boilerplate default config',
               iLike: 'trains'
@@ -215,7 +218,6 @@ export default {
           }
         }
       ],
-      widget: false,
       title: 'funoFun',
       uuid: 'app-accountSettings',
       routeName: 'app.accountSettings',

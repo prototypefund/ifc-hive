@@ -13,7 +13,7 @@
       action="add">
       <v-btn>New Tag</v-btn>
     </QuickListHandler>
-    <component v-if="ticketBoard && state.widget" :is="ticketBoard" :uuid="state.widget.uuid" />
+    <component v-if="ticketBoard && state.widgets" :is="ticketBoard" :uuid="state.widgets[0].uuid" />
   </v-container>
 </template>
 
@@ -40,9 +40,9 @@ const stateSubscriber$ = $store
 
 const ticketBoard = shallowRef(false);
 onMounted(() => {
-  if (state.value.widget) {
+  if (state.value.widgets) {
     ticketBoard.value = defineAsyncComponent(() => {
-      return widgetLoader(state.value.widget.name, state.value.widget.face);
+      return widgetLoader(state.value.widgets[0].name, state.value.widgets[0].face);
     });
   }
 });
