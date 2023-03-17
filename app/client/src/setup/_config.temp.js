@@ -3,12 +3,11 @@ export default {
   /*
    * expec for pages and tools all config keys go into the root level
    */
-  defaultMode: 'dark',
-  theme: 'default',
-  colors: {},
-
-  displayTitle: 'Projektjournal',
-
+  ui: {
+    theme: 'dark',
+    colors: {},
+    displayTitle: 'Projektjournal',
+  },
   /*
    * Global Tools 
    */
