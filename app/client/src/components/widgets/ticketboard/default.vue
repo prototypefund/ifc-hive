@@ -91,7 +91,7 @@ const state = ref({});
 const tagLookup = $store.$data.get(props.actionId + "_ALL_TAGS", "ALL_TAGS");
 const userLookup = $store.$data.get(props.actionId + "_ALL_USER", "ALL_USER");
 // we could get the all lookup from the data of each board but I'm lazy as fuck and its late already!
-const allLookup = $store.$data.get(props.actionId + "_ALL", "ALL");
+const allLookup = $store.$data.get(props.actionId + "_ALL", "ALL_MEMOS");
 const boards = ref({
   generics: {
     open: false,
@@ -201,7 +201,7 @@ const getRelevantData = (filter) => {
     items.value[boardId] = {
       tickets: $store.$data.get(
         props.actionId + "_" + boardId,
-        "ALL",
+        "ALL_MEMOS",
         {
           identifier: board.identifier,
           excluded: board.excluded,
@@ -227,7 +227,7 @@ const getRelevantData = (filter) => {
     items.value[boardId] = {
       tickets: $store.$data.get(
         props.actionId + "_" + boardId,
-        "ALL",
+        "ALL_MEMOS",
         {
           identifier: board.identifier,
           excluded: board.excluded,

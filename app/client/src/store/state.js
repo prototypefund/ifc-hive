@@ -54,7 +54,6 @@ export const applicationState = {
     loading: true,
     theme: 'dark',
     mobile: false,
-    projectSwitching: false
   },
   // will contain tools. Logic behind that is the same as with pages
   toolbar: {},

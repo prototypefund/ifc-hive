@@ -89,7 +89,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
   $socket.on('joinConfirmation', (data) => {
     $store.dispatch({
       type: 'ui/update',
-      payload: { loading: true, projectSwitching: true }
+      payload: { loading: true }
     })
     // Reset all store states which are project dependend. 
     if (data.project && data.project.config) {
@@ -127,7 +127,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
     // TODO possibly redirect to / route instead of just adding loading
     $store.dispatch({
       type: 'ui/update',
-      payload: { loading: false, projectSwitching: false }
+      payload: { loading: false }
     })
   })
 

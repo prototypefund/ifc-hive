@@ -35,19 +35,19 @@
         single-line hide-details></!--v-text-field-->
       <v-spacer />
       <p style="width: 15%">
-        <status-bar v-if="!projectSwitching" />
+        <status-bar />
       </p>
 
       <socket-status />
       <!-- notifications -->
-      <Notifications v-if="!projectSwitching" />
+      <Notifications />
     </v-app-bar>
 
     <!-- Navigation Drawer -->
-    <NavigationSideBar v-if="!projectSwitching" :nav-items="navItems" :footer-items="footerItems" />
-    <ToolBar v-if="!projectSwitching" />
+    <NavigationSideBar :nav-items="navItems" :footer-items="footerItems" />
+    <ToolBar />
     <!-- Main content -->
-    <mock v-if="!projectSwitching" />
+    <mock />
     <v-main id="appMain">
       <v-btn class="backToTop" v-if="hasScrolled" @click="scrollTop" icon="mdi-chevron-up" color="primary" />
       <template v-if="isInTest">
@@ -55,7 +55,7 @@
       </template>
       <template v-else>
         <router-view v-slot="{ Component }">
-          <component v-if="!projectSwitching" :is="Component" :class="{ isLoading: loading }" id="appComponent"
+          <component :is="Component" :class="{ isLoading: loading }" id="appComponent"
             :style="{ height: viewPortHeight + 'px' }" @scroll.passive="setScroll($event)" />
         </router-view>
       </template>
@@ -106,7 +106,6 @@ export default {
     loading: false,
     searching: false,
     hasScrolled: false,
-    projectSwitching: false,
     footerItems: [
       {
         icon: "mdi-account-cog",
@@ -151,14 +150,7 @@ export default {
       .subscribe((val) => {
         this.loading = val;
       });
-    this.$store
-      .select((state) => state.ui.projectSwitching)
-      .subscribe((val) => {
-        this.$nextTick(() => {
-          this.projectSwitching = val;
-        })
 
-      });
   },
 
   mounted() {
