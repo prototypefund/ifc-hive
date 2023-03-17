@@ -9,7 +9,7 @@ export default ($eventbus) => [(reducer) => {
       page = action.payload
       pageUUID = action.payload.uuid || action.routeName.replace('.', '-')
       // if we have a widget config for this page we need to setup the widget states
-      if ((page.slots || page.widget) && !state.pages[pageUUID]) {
+      if ((page.slots || page.widgets) && !state.pages[pageUUID]) {
         widgets = []
         const makeWidget = (widget) => {
           if (!widget.uuid) {
@@ -33,7 +33,11 @@ export default ($eventbus) => [(reducer) => {
             }
           })
         } else {
-          makeWidget(page.widget)
+          page.widgets.forEach(widget => {
+            if (widget) {
+              makeWidget(widget)
+            }
+          })
         }
 
         // add page specific widget configs to state
@@ -42,12 +46,6 @@ export default ($eventbus) => [(reducer) => {
           $eventbus.emit('store/dispatch', {
             type: 'widgets/add',
             payload: widgets
-          })
-        }
-        if (page.tool) {
-          $eventbus.emit('store/dispatch', {
-            type: 'toolbar/add',
-            payload: page.tool
           })
         }
         if (page.tools) {

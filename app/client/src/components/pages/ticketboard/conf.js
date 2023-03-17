@@ -1,7 +1,7 @@
 export default {
   grid: false,
   slots: false,
-  widget: {
+  widgets: [{
     uuid: "ticketBoardWidget",
     name: 'ticketboard', // the name of the widget, must correspond to the actual folder name the widget files are located in
     face: 'default',
@@ -33,8 +33,8 @@ export default {
         ]
       }
     }
-  },
-  tool: {
+  }],
+  tools: [{
     title: "ticketsByTag",
     page: "app.ticketboard",
     icon: "mdi-chart-donut",
@@ -54,5 +54,5 @@ export default {
         ],
       },
     },
-  }
+  }]
 }

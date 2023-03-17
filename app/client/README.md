@@ -129,21 +129,18 @@ page you can set you config like so
 {
   grid: false,
   slots: false,
-  tool: { 
-    // you can also define a tool to be used when loading this page. The config follow the tool config
-  },
   tools:[
     {
       //list of tools
     }
   ],
-  widget: { // you can also bypass the grid or use widgets directly in the page via the pageloader. This is fully optional
+  widgets: [{ // you can also bypass the grid or use widgets directly in the page via the pageloader. This is fully optional
     uuid: "mySpecialPageWidget"
     name: "myCategory",
     props: {
       title: "widget title"
     }  
-  },
+  }],
 }
 ```
 

@@ -13,7 +13,7 @@ export default {
       }
     }
   ],
-  tool: {
+  tools: [{
     title: "chartJournal",
     page: "app.journal",
     icon: "mdi-chart-donut",
@@ -24,5 +24,5 @@ export default {
       type: "chart",
       face: "example",
     },
-  }
+  }]
 }
