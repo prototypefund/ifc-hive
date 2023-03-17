@@ -91,7 +91,6 @@ export function registerSocketEvents($socket, $store, $eventbus) {
       type: 'ui/update',
       payload: { loading: true, projectSwitching: true }
     })
-    debugger
     // Reset all store states which are project dependend. 
     if (data.project && data.project.config) {
       $store.dispatch({ type: 'projectInit' })
@@ -176,7 +175,6 @@ export function registerSocketEvents($socket, $store, $eventbus) {
    * We received a data object from the server
    */
   $socket.on('data', (data) => {
-    debugger
     log.socket('data', data)
     // NOTE: always pass array into data/push payload
     $store.dispatch({ type: 'data/push', payload: { data: [data] } })
@@ -188,7 +186,6 @@ export function registerSocketEvents($socket, $store, $eventbus) {
    * @TODO remove
    */
   $socket.on('dataTest', (data) => {
-    debugger
     if (batchLoading === true) {
       batchItems.push(data)
     } else {
