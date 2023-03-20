@@ -74,6 +74,12 @@ try {
   // provide a global eventbus
   app.provide('$eventbus', eventbus)
 
+  //TODO move this into a setup file
+  eventbus.on('routerPush', (target) => {
+    router.push(target)
+  })
+
+
   // TODO find out if this is a brainfart or not. I need $t in the components
   // functions but I don't have this in compose API. Is there another way to
   // get $t in compose api components script part?

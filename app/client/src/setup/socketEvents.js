@@ -124,11 +124,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
 
 
     log.socket('joinConfirmation received', data)
-    // TODO possibly redirect to / route instead of just adding loading
-    $store.dispatch({
-      type: 'ui/update',
-      payload: { loading: false }
-    })
+    $eventbus.emit('routerPush', '/')
   })
 
   /* 
