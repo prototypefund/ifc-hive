@@ -16,7 +16,7 @@
         <v-divider />
       </div>
     </v-expand-transition>
-    <v-expansion-panels v-model="openItem" variant="popout" class="my-4" v-if="state.entries.length > 0">
+    <v-expansion-panels v-model="openItem" variant="popout" class="my-4" v-if="state.entries && state.entries.length > 0">
       <v-expansion-panel v-for="(item, index) in state.entries" :key="index">
         <v-expansion-panel-title>
           <template v-slot:default="{ expanded }">
@@ -26,7 +26,6 @@
         <v-expansion-panel-text>
           <component v-if="component" :props="item.props" :widgetUUID="props.uuid" :docUUID="item.uuid" />
         </v-expansion-panel-text>
-
       </v-expansion-panel>
     </v-expansion-panels>
     <no-results-yet v-else />

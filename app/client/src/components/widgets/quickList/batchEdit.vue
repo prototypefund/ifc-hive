@@ -1,6 +1,6 @@
 <template>
-    <v-card flat v-if="state.length > 0 && allLookup.data[state[0].uuid]" data-test-container="widgets/quickList/batchEdit"
-        :data-test-container-uuid="props.uuid">
+    <v-card flat v-if="state && state.length > 0 && allLookup.data[state[0].uuid]"
+        data-test-container="widgets/quickList/batchEdit" :data-test-container-uuid="props.uuid">
         <v-card-text>
             <v-row v-for="attribute in Object.keys(allLookup.data[state[0].uuid]._source)">
                 {{ attribute }}

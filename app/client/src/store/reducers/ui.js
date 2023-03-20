@@ -2,12 +2,17 @@ import { applicationState } from '../state'
 
 export default ($eventbus) => (state, action) => {
   if (state) {
+    let uiState
     switch (action.type) {
 
       /* init */
       case 'init':
         return applicationState.ui
-
+      case 'projectInit':
+        uiState = {
+          currentTool: false
+        }
+        return { ...state, ...uiState }
       /* currentPage/set */
       case 'currentPage/set':
         return {

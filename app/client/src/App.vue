@@ -182,7 +182,6 @@ export default {
         document.getElementById("appComponent").scrollTo(0, 0);
         this.hasScrolled = false;
       }
-
     },
 
     saveLocalProjectConfig: function () {
@@ -190,7 +189,6 @@ export default {
     },
 
     setDimensions: async function () {
-
       await this.$nextTick(function () {
         //TODO find out why we can't properly use the $refs for size read here.
         const appBarHeight = document.getElementById("appAppbar").offsetHeight;
