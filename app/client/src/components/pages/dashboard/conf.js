@@ -7,10 +7,10 @@ export default {
     title: "funoFun",
     slots: [
         {
-            class: "nice",
             column: 12,
             widget: {
-                name: "debug",
+                name: "itemBoard",
+                uuid: "itemBoard",
                 props: {
                     title: "anderer Titel",
                 }
