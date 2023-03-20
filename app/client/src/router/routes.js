@@ -94,7 +94,7 @@ export default function (store) {
       component: ticketboardComp,
       props: true,
       beforeEnter: (to, from) => {
-        if (!confCache.testboard) {
+        if (!confCache.ticketboard) {
           loadConf('ticketboard').then(conf => {
             confCache.ticketboard = conf.default
             store.dispatch({
