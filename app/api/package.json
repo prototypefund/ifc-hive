@@ -13,6 +13,7 @@
     "test": "npx c8 tap --reporter=terse --100"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "8.x",
     "@fastify/cors": "^8.2.0",
     "@fastify/jwt": "^6.7.0",
     "@fastify/sensible": "^5.2.0",

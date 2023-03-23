@@ -7,24 +7,6 @@
 # docker-compose up
 version: "3.7"
 services:
-  # Docs Service
-  ifc-hive-docs:
-    container_name: ifc-dev-docs
-    build:
-      context: ./app/docs
-      target: build
-      args:
-        NODE_ENV: development
-    ports:
-      - "8089:8089"
-    volumes:
-      - ./app/docs:/app
-      - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - PORT=8089
-    command: yarn run dev
-
   # API Service
   ifc-hive-api:
     container_name: ifc-dev-api
@@ -65,6 +47,7 @@ services:
     command: yarn run dev
     ports:
       - "8083:3000"
+
   ifc-hive-reg1:
     container_name: ifc-dev-reg1
     build:
@@ -82,6 +65,7 @@ services:
     command: yarn run dev
     ports:
       - "8084:3000"
+
   ifc-hive-reg2:
     container_name: ifc-dev-reg2
     build:
@@ -120,6 +104,46 @@ services:
       - "8081:8081"
     command: yarn run dev
 
-  # MongoDB
+  # Docs Service
+  ifc-hive-docs:
+    container_name: ifc-dev-docs
+    build:
+      context: ./app/docs
+      target: build
+      args:
+        NODE_ENV: development
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./app/docs:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=8089
+    command: yarn run dev
+
+  # elasticsearch service
+  elasticsearch:
+    container_name: ifc-dev-es
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.0
+    volumes:
+      - ifc-hive-es:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    restart: always
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  # MongoDB service
   mongo:
     container_name: ifc-dev-mongo
+
+# volumes
+volumes:
+  ifc-hive-es:
+    driver: local

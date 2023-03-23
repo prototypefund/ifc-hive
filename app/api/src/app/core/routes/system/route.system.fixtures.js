@@ -142,7 +142,7 @@ export default function (app) {
           projects: await Project.countDocuments(),
           tags: await Tag.countDocuments(),
           tickets: await Ticket.countDocuments(),
-          // ticketsTree: await Ticket.getChildrenTree({ rootDoc: t0 }),
+          ticketsTree: await Ticket.getChildrenTree({ rootDoc: t0 }),
           user: await User.countDocuments(),
         }
 

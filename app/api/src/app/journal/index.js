@@ -1,4 +1,4 @@
-// import { aliveHandler } from '#src/lib/aliveHandler.js'
+import { aliveHandler } from '#src/lib/aliveHandler.js'
 
 import * as ticket from './routes/ticket/index.js'
 
