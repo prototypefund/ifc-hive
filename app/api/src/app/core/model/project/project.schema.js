@@ -17,6 +17,7 @@ const projectSchema = S.object()
       .items([S.object()])
     )
   )
+  .prop('journal', S.string().format('uuid'))
 
 const projectResponseSchema = projectSchema
 
@@ -34,6 +35,8 @@ const projectObjectTemplate = {
   tags: [], // striing separated
   title: null,
   updatedAt: null,
+  journal: null,
+  config: { browser: [] }
 }
 
 const projectTemplate = createDataPayload({ _source: projectObjectTemplate })

@@ -118,16 +118,16 @@ export default function (app) {
         await t6.save()
 
         // create random tickets for dummy project
-        const dummyTicketsRaw = [...Array(5000)].map((_, i) => {
-          const t = JSON.parse(JSON.stringify(tickets[0]))
-          t._id= uuidv4()
-          t.disId = `${i}` 
-          t.project = 'projectDummy'
-          t.owner = 'userAnton',
-          t.title = `${i} some random title with a prefix number`
-          t.body = randomText
-          return t 
-        })
+        // const dummyTicketsRaw = [...Array(5000)].map((_, i) => {
+        //   const t = JSON.parse(JSON.stringify(tickets[0]))
+        //   t._id= uuidv4()
+        //   t.disId = `${i}` 
+        //   t.project = 'projectDummy'
+        //   t.owner = 'userAnton',
+        //   t.title = `${i} some random title with a prefix number`
+        //   t.body = randomText
+        //   return t 
+        // })
 
         const dummyTickets = mapIds(dummyTicketsRaw, idMap, ['project', 'owner', 'tags'])
         await Ticket.insertMany(dummyTickets)

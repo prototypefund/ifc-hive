@@ -47,6 +47,12 @@ const projectSchema = new Schema({
   config: {
     browser: { type: Schema.Types.Mixed, default: {} },
     mobile: { type: Schema.Types.Mixed, default: {} },
+  },
+
+  journal: {
+    type: Schema.Types.String,
+    ref: 'pacifico_journal_ticket',
+    default:null,
   }
     
 }, { timestamp: true })

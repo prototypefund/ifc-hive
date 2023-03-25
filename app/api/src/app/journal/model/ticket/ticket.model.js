@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import MpathPlugin from 'mongoose-mpath'
 import { randomIdGenerator } from '#src/lib/helpers.js'
 const randomId = randomIdGenerator(8)
+import { fileSchema } from './file.schema.js'
 
 /*
  * Ticket schewma
@@ -20,7 +21,6 @@ const ticketSchema = new Schema({
   project: {
     type: Schema.Types.String,
     ref: 'pacifico_core_project',
-    required: true,
   },
 
   /*
@@ -89,7 +89,7 @@ const ticketSchema = new Schema({
   approvals: { type: Array },
 
   /* @TODO add file schema */
-  files: { type: Array },
+  files: [fileSchema],
 
   /* Qualified links, e.g. depends-on, for gantt chart */
   links: { type: Array },

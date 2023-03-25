@@ -2,6 +2,9 @@ import { S } from 'fluent-json-schema'
 // import { projectSchema, projectResponseSchema } from '../../model/project/project.schema.js'
 import Project from '../../model/project/project.model.js'
 
+/*
+ * Put project 
+ */
 export default function (app) {
 
 /*
@@ -10,13 +13,13 @@ export default function (app) {
  */
 
   /* handler */
-  async function handler (request, response) {
+  async function handler (req, response) {
     // load all projects
     
     try {
 
       // get projectss
-        await Project.updateMany({}, { $set: { 'config.browser': request.body } }) 
+        await Project.updateMany({}, { $set: { 'config.browser': req.body } }) 
         const project = await Project.find().limit(1)
 
         return response.send({
@@ -38,13 +41,13 @@ export default function (app) {
    */
   return  {
     handler: handler,
-    // onRequest: [app.authenticate],
+    onRequest: [app.authenticate],
     schema: {
       summary: 'Update the configuration of a project.',
       description: ``,
       tags: ['core/project'],
       params,
-      // security: [ { apiKey: [] } ],
+      security: [ { apiKey: [] } ],
     }
   }
 }

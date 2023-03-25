@@ -7,6 +7,7 @@ import fastifySensible from '@fastify/sensible'
 // import mongoose from 'mongoose'
 import fastifySwagger from '@fastify/swagger' // api documentation
 import fastifySwaggerUI from '@fastify/swagger-ui'
+import fastifyMultipart from '@fastify/multipart'
 import { swaggerConfig, swaggerUiConfig } from './lib/swaggerConfig.js' // swagger api documentation configuration
 import healthcheck from 'fastify-custom-healthcheck' // simple health check utility
 import { fileURLToPath } from 'url' // required to emulate __filename
@@ -115,6 +116,8 @@ export default async function app (opts = {}) {
   app.register(fastifySwagger, swaggerConfig)
   /* register swagger UI component, which is now its own thing */
   app.register(fastifySwaggerUI, swaggerUiConfig)
+  /* register @fastify/multipart for file uploads */
+  app.register(fastifyMultipart, {})
 
   /* register CORS plugins */
   app.register(fastifyCors, {

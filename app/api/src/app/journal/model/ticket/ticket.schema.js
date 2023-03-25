@@ -21,7 +21,7 @@ const ticketSchema = S.object()
   .prop('files', S.array().items(S.object()))
   .prop('links', S.array().items(S.object()))
   .prop('isDeleted', S.boolean())
-  .required(['owner', 'project', 'title'])
+  .required(['title'])
 
 const ticketResponseSchema = ticketSchema
 

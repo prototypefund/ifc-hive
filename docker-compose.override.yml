@@ -17,6 +17,7 @@ services:
     volumes:
       - ./app/api:/app
       - /app/node_modules
+      - ./app/api/data:/opt/pacifico
     environment:
       - NODE_ENV=development
       - API_TOKEN_SECRET=mysecret

@@ -11,6 +11,11 @@ export default function (app) {
   /* handler */
   async function handler (request, response) {
     try {
+
+      const checkTicket = await Ticket.findOne({ _id: request.params.id })
+      if (!checkTicket) return response.notFound()
+
+     
       // make sure nobody can overwrite the ID
       delete request.body._id
       let ticket = await Ticket.findOneAndUpdate({ _id: request.params.id },  request.body, { new: true })
@@ -36,8 +41,8 @@ export default function (app) {
     handler: handler,
     onRequest: [app.authenticate],
     schema: {
-      summary: 'Crate or update a ticket.',
-      description: `create a ticket.`,
+      summary: 'Update an existing ticket.',
+      description: `This is the default route to change any data in a ticket, including meta data of files.`,
       tags: ['journal/ticket'],
       body: ticketSchema,
       params,

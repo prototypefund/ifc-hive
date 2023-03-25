@@ -1,6 +1,6 @@
 {
   "name": "pacifico.projectjournal.api",
-  "version": "0.0.5",
+  "version": "0.7.3",
   "description": "API for ifc-hive plattform",
   "main": "src/server.js",
   "repository": "https://repo.karo.design/daniel/ifc-hive",
@@ -16,6 +16,7 @@
     "@elastic/elasticsearch": "8.x",
     "@fastify/cors": "^8.2.0",
     "@fastify/jwt": "^6.7.0",
+    "@fastify/multipart": "^7.5.0",
     "@fastify/sensible": "^5.2.0",
     "@fastify/swagger": "^8.3.1",
     "@fastify/swagger-ui": "^1.4.0",
