@@ -25,3 +25,5 @@ id_rsa.pub
 
 node_modules
 **/node_modules
+.directory
+**/.directory
