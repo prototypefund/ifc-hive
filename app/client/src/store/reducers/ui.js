@@ -23,11 +23,16 @@ export default ($eventbus) => (state, action) => {
         if (action.payload.list) {
           action.payload.list.forEach(field => {
             if (state.hasOwnProperty(field)) {
-              if (state[field] === true || state[field] === false) {
-                uiState[field] = !state[field]
-              } else {
+              if (state[field]) {
                 uiState[field] = false
               }
+              if (!state[field]) {
+                uiState[field] = true
+              }
+              if (state[field] === true || state[field] === false) {
+                uiState[field] = !state[field]
+              }
+
             }
           })
           return { ...state, ...uiState }

@@ -1,17 +1,17 @@
 <template>
   <v-navigation-drawer data-test-container="utils/inspectorToolsSidebar/default" id="navigationToolsSidebar"
-    :rail="openTool === false" permanent location="right">
+    :rail="currentTool === false" permanent location="right">
     <template v-slot:prepend>
-      <v-list-item density="comfortable">
+      <v-list-item density="comfortable" v-if="currentTool === false">
         <!-- open/close icon -->
         <template v-slot:append>
           <v-btn density="compact" variant="plain" icon="mdi-dock-right" @click.stop="handleToolSidebar()" />
         </template>
       </v-list-item>
     </template>
-    <template v-if="openTool !== false">
+    <template v-if="currentTool !== false">
       <v-slide-x-transition>
-        <v-tabs v-model="currentTool" fixed-tabs>
+        <v-tabs density="comfortable" v-model="currentTool" fixed-tabs>
           <!-- iterate over page widget tools and display a button for each widget -->
           <template v-for="(tool, key) in state">
             <v-tab :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key" :key="tool">
@@ -21,6 +21,9 @@
               <v-icon>{{ tool.icon }}</v-icon>
             </v-tab>
           </template>
+          <v-tab class="closeBtnWrapper active" :class="{ hidden: currentTool === false }" :value="false">
+            <v-btn variant="plain" icon="mdi-dock-right" @click.stop="currentTool = false" />
+          </v-tab>
         </v-tabs>
       </v-slide-x-transition>
     </template>
