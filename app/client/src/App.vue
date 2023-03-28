@@ -44,7 +44,7 @@
     </v-app-bar>
 
     <!-- Navigation Drawer -->
-    <NavigationSideBar :nav-items="navItems" :footer-items="footerItems" />
+    <PageNavigation :nav-items="navItems" :footer-items="footerItems" />
     <ToolBar />
     <!-- Main content -->
     <mock />
@@ -69,7 +69,7 @@
 
 import { defineAsyncComponent } from "vue";
 import Notifications from "@u/notifications/default.vue";
-import NavigationSideBar from "@u/navigation/sidebar.vue";
+import PageNavigation from "@u/pageNavigationSidebar/default.vue";
 import ToolBar from "@u/toolbar/default.vue";
 import StatusBar from "@u/uploader/statusBar.vue";
 import ProgressBar from "@u/uploader/progressBar.vue";
@@ -81,7 +81,7 @@ import projectSwitch from "@u/projectSwitch/select.vue"
 export default {
   components: {
     Notifications,
-    NavigationSideBar,
+    PageNavigation,
     ToolBar,
     StatusBar,
     ProgressBar,
@@ -192,13 +192,11 @@ export default {
       await this.$nextTick(function () {
         //TODO find out why we can't properly use the $refs for size read here.
         const appBarHeight = document.getElementById("appAppbar").offsetHeight;
-        const toolBarHeight = document.getElementById("appToolbar").offsetHeight;
         const HackyShit =
           document.getElementById("appMain").offsetWidth -
           document.getElementById("navSideBar").offsetWidth;
-        const topBarHeight = appBarHeight + toolBarHeight;
         const windowWidth = window.innerWidth;
-        this.viewPortHeight = window.innerHeight - topBarHeight;
+        this.viewPortHeight = window.innerHeight - appBarHeight;
         this.viewPortWidth = HackyShit;
         this.$store.dispatch({
           type: "ui/update",
