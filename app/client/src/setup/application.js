@@ -26,7 +26,7 @@ export const globalTools = ($store) => {
     payload: {
       pages: false,
       icon: "mdi-history",
-      uuid: "projectHistory",
+      uuid: "mostRecentlyUsed",
       widget: {
         name: "projectHistory",
       },

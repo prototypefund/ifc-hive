@@ -13,6 +13,7 @@ export default {
       }
     }
   ],
+  hasInspector: true,
   inspectorTools: [{
     title: "chartJournal",
     pages: ["app.journal"],

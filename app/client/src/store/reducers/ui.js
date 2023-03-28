@@ -25,6 +25,8 @@ export default ($eventbus) => (state, action) => {
             if (state.hasOwnProperty(field)) {
               if (state[field] === true || state[field] === false) {
                 uiState[field] = !state[field]
+              } else {
+                uiState[field] = false
               }
             }
           })
