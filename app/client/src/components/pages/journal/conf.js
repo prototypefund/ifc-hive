@@ -13,11 +13,10 @@ export default {
       }
     }
   ],
-  tools: [{
+  inspectorTools: [{
     title: "chartJournal",
-    page: "app.journal",
+    pages: ["app.journal"],
     icon: "mdi-chart-donut",
-    iconActive: "mdi-chart-donut-variant",
     uuid: "journal_chart",
     widget: {
       name: "journal",

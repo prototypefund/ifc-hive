@@ -56,6 +56,22 @@ export default ($eventbus) => [(reducer) => {
             })
           })
         }
+        if (page.navigationTools) {
+          page.navigationTools.forEach(tool => {
+            $eventbus.emit('store/dispatch', {
+              type: 'navigationTools/add',
+              payload: tool
+            })
+          })
+        }
+        if (page.inspectorTools) {
+          page.inspectorTools.forEach(tool => {
+            $eventbus.emit('store/dispatch', {
+              type: 'inspectorTools/add',
+              payload: tool
+            })
+          })
+        }
       }
     }
     return reducer(state, action)

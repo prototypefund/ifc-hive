@@ -34,11 +34,10 @@ export default {
       }
     }
   }],
-  tools: [{
+  inspectorTools: [{
     title: "ticketsByTag",
-    page: "app.ticketboard",
+    pages: ["app.ticketboard"],
     icon: "mdi-chart-donut",
-    iconActive: "mdi-chart-donut-variant",
     uuid: "chart_ticketsByTag",
     widget: {
       name: "ticketboard",

@@ -45,6 +45,7 @@
 
     <!-- Navigation Drawer -->
     <PageNavigation :nav-items="navItems" :footer-items="footerItems" />
+    <navigation-tools-sidebar v-if="currentNavigationTool" />
     <!-- Main content -->
     <mock />
     <v-main id="appMain">
@@ -59,6 +60,7 @@
         </router-view>
       </template>
     </v-main>
+    <inspector-tools-sidebar v-if="page.hasInspector" />
     <mobile-startup v-if="$mobile" />
     <!-- quicklist Drawer -->
   </v-app>
@@ -69,7 +71,8 @@
 import { defineAsyncComponent } from "vue";
 import Notifications from "@u/notifications/default.vue";
 import PageNavigation from "@u/pageNavigationSidebar/default.vue";
-import ToolBar from "@u/toolbar/default.vue";
+import navigationToolsSidebar from "@u/navigationToolsSidebar/default.vue";
+import inspectorToolsSidebar from "@u/inspectorToolsSidebar/default.vue";
 import StatusBar from "@u/uploader/statusBar.vue";
 import ProgressBar from "@u/uploader/progressBar.vue";
 import { globalTools } from "./setup/application";
@@ -81,7 +84,8 @@ export default {
   components: {
     Notifications,
     PageNavigation,
-    ToolBar,
+    navigationToolsSidebar,
+    inspectorToolsSidebar,
     StatusBar,
     ProgressBar,
     mock,
@@ -103,6 +107,8 @@ export default {
     viewPortHeight: false,
     viewPortWidth: false,
     loading: false,
+    currentNavigationTool: false,
+    currentInspectorTool: false,
     searching: false,
     hasScrolled: false,
     footerItems: [
@@ -148,6 +154,16 @@ export default {
       .select((state) => state.ui.loading)
       .subscribe((val) => {
         this.loading = val;
+      });
+    this.$store
+      .select((state) => state.ui.currentNavigationTool)
+      .subscribe((val) => {
+        this.currentNavigationTool = val;
+      });
+    this.$store
+      .select((state) => state.ui.currentInspectorTool)
+      .subscribe((val) => {
+        this.currentInspectorTool = val;
       });
 
   },
@@ -200,7 +216,6 @@ export default {
         this.$store.dispatch({
           type: "ui/update",
           payload: {
-            topBarHeight,
             viewPortHeight: this.viewPortHeight,
             viewPortWidth: this.viewPortWidth,
             windowWidth,

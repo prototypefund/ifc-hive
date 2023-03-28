@@ -4,16 +4,14 @@ export default {
         items: "card_flat",
         columns: 1
     },
+    hasInspector: true,
     title: "funoFun",
     slots: [
         {
             column: 12,
             widget: {
-                name: "itemBoard",
-                uuid: "itemBoard",
-                props: {
-                    title: "anderer Titel",
-                }
+                name: "debug",
+                uuid: "debug",
             }
         }
     ]

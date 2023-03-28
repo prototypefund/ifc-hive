@@ -18,7 +18,19 @@ export default ($eventbus) => (state, action) => {
         return {
           ...state, navigationOpen: false
         }
-
+      case 'ui/toggle':
+        uiState = {}
+        if (action.payload.list) {
+          action.payload.list.forEach(field => {
+            if (state.hasOwnProperty(field)) {
+              if (state[field] === true || state[field] === false) {
+                uiState[field] = !state[field]
+              }
+            }
+          })
+          return { ...state, ...uiState }
+        }
+        return state
       /* ui/update */
       case 'ui/update':
         if (state.mobile && (action.payload.navigationOpen || action.payload.currentTool)) {

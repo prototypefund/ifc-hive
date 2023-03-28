@@ -1,16 +1,21 @@
 <template>
   <!-- Navigation Drawer -->
-  <v-navigation-drawer v-model="navigationDrawer" data-test-container="utils/navigation/pageNavigation"
+  <v-navigation-drawer v-model="navigationDrawer" data-test-container="utils/pageNavigationSidebar/default"
     :rail="navigationRail" id="navSideBar" permanent>
     <!-- Title -->
     <template v-slot:prepend>
+      <v-list-item density="comfortable">
+        <!-- open/close icon -->
+        <template v-slot:append>
+          <v-btn density="compact" variant="plain" icon="mdi-dock-left" @click.stop="handleNavigationToolsSidebar()" />
+        </template>
+      </v-list-item>
       <v-list-item density="comfortable" :title="$t('navigation')" :value="$t('navigation')">
         <!-- open/close icon -->
         <template v-slot:append>
           <v-btn v-if="!navigationRail" density="comfortable" variant="plain" icon="mdi-chevron-left"
             @click.stop="handleNavigation(true)" />
-          <v-btn v-else density="comfortable" variant="plain" icon="mdi-chevron-right"
-            @click.stop="handleNavigation(false)" />
+          <v-btn v-else density="compact" variant="plain" icon="mdi-menu" @click.stop="handleNavigation(false)" />
         </template>
       </v-list-item>
 
@@ -98,6 +103,14 @@ export default {
     this.navigationRailSubscriber$.unsubscribe();
   },
   methods: {
+    handleNavigationToolsSidebar() {
+      this.$store.dispatch({
+        type: "ui/toggle",
+        payload: {
+          list: ['currentNavigationTool'],
+        },
+      });
+    },
     handleNavigation(val) {
       if (val !== this.navigationRail) {
         this.$store.dispatch({
@@ -117,3 +130,8 @@ export default {
   },
 };
 </script>
+<style lang="css" scoped>
+.toggleButtons>.v-list-item__append {
+  flex-direction: column;
+}
+</style>

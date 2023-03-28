@@ -117,7 +117,22 @@ export function registerSocketEvents($socket, $store, $eventbus) {
               payload: tool,
             });
           })
-
+        }
+        if (data.project.config.browser.navigationTools && data.project.config.browser.navigationTools.length > 0) {
+          data.project.config.browser.navigationTools.forEach(tool => {
+            $store.dispatch({
+              type: "navigationTools/add",
+              payload: tool,
+            });
+          })
+        }
+        if (data.project.config.browser.inspectorTools && data.project.config.browser.inspectorTools.length > 0) {
+          data.project.config.browser.inspectorTools.forEach(tool => {
+            $store.dispatch({
+              type: "inspectorTools/add",
+              payload: tool,
+            });
+          })
         }
       }
     }

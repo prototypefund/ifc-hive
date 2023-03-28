@@ -102,6 +102,8 @@ You can define what kind of grid you need with Grid Key.
 		items: "card",
    		columns: 2
 	},
+  // this is by default false and will result in you not having the 2nd tool section called inspectorTools
+  hasInspector: true,
   // this will determine if we always scroll to the last page position or to the top whenever we enter this page
   scrollTop: false,
 	// title defines the title of the page
