@@ -1,9 +1,9 @@
 import {
-    configureStore,
-    LoggerExtension,
-    ReduxDevtoolsExtension,
-    UndoExtension,
-    ImmutableStateExtension
+  configureStore,
+  LoggerExtension,
+  ReduxDevtoolsExtension,
+  UndoExtension,
+  ImmutableStateExtension
 } from 'mini-rx-store'
 
 import getEnvVariable from '../lib/getEnvVariable'
@@ -20,14 +20,17 @@ import widgetsReducers from './reducers/widgets.js'
 import pagesReducers from './reducers/pages.js'
 import uiReducers from './reducers/ui.js'
 import notificationsReducers from './reducers/notifications.js'
-import toolbarReducers from './reducers/toolbar.js'
 import dataReducers from './reducers/data.js'
 import uploaderReducers from './reducers/uploader.js'
 import routeReducers from './reducers/route.js'
 import userReducers from './reducers/user.js'
 import organizationReducers from './reducers/organization.js'
-import projectRedcuers from './reducers/project.js'
+import projectReducers from './reducers/project.js'
 import socketReducers from './reducers/socket.js'
+import navigationToolsReducers from './reducers/navigationTools.js'
+import inspectorToolsReducers from './reducers/inspectorTools.js'
+// TODO REMOVE
+import toolbarReducers from './reducers/toolbar.js'
 
 /* Apply different extensions depending on the environment */
 const extensions = getEnvVariable('NODE_ENV') === 'production'
@@ -46,7 +49,7 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
  *
  * @param {object} $eventbus - a global eventbus which is also available in all vue components
  */
-export function createStore ($eventbus) {
+export function createStore($eventbus) {
 
   // TODO move this stup to seperate config and helper files
   // helper functions and lookup maps
@@ -73,13 +76,15 @@ export function createStore ($eventbus) {
     widgets: widgetsReducers($eventbus),
     ui: uiReducers($eventbus),
     notifications: notificationsReducers($eventbus),
-    toolbar: toolbarReducers($eventbus, widgetsLookup),
+    toolbar: toolbarReducers($eventbus, widgetsLookup), // TODO REMOVE
+    navigationTools: navigationToolsReducers($eventbus, widgetsLookup),
+    inspectorTools: inspectorToolsReducers($eventbus, widgetsLookup),
     data: dataReducers($eventbus),
     uploader: uploaderReducers($eventbus),
     route: routeReducers($eventbus),
     user: userReducers($eventbus),
     organization: organizationReducers($eventbus),
-    project: projectRedcuers($eventbus),
+    project: projectReducers($eventbus),
     socket: socketReducers($eventbus),
 
     queries: (state, action) => {
@@ -134,7 +139,7 @@ export function createStore ($eventbus) {
         switch (action.type) {
           case 'init':
             return applicationState.currentPage
-            // used in beforeResolve router hook, will trigger before each route change including param changes
+          // used in beforeResolve router hook, will trigger before each route change including param changes
           case 'currentPage/set':
             if (!action.routeName) return state
             // create our json friendly uuid
@@ -193,7 +198,7 @@ export function createStore ($eventbus) {
             }, loadingHold * 2)
 
             return currPage
-            // simply let us update the state of the current page
+          // simply let us update the state of the current page
           case 'currentPage/update':
             return mergeDeepRight(state, action.payload)
           default:

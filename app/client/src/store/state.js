@@ -42,7 +42,9 @@ export const applicationState = {
     // indicates the left navigation bar state
     navigationOpen: false,
     // indicates the currently selected Tool for the toolbar
-    currentTool: false,
+    currentTool: false, // TODO REMOVE
+    currentNavigationTool: false,
+    currentInspectorTool: false,
     // indicates if the widget toolbar and other ui edit stuff is displayed
     editMode: false,
     // some dimension values for convenience
@@ -56,7 +58,9 @@ export const applicationState = {
     mobile: false,
   },
   // will contain tools. Logic behind that is the same as with pages
-  toolbar: {},
+  toolbar: {},// TODO REMOVE
+  navigationTools: {},
+  inspectorTools: {},
   notifications: {
     unreadCount: 0,
     toggled: false,

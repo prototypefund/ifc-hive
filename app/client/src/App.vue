@@ -45,7 +45,6 @@
 
     <!-- Navigation Drawer -->
     <PageNavigation :nav-items="navItems" :footer-items="footerItems" />
-    <ToolBar />
     <!-- Main content -->
     <mock />
     <v-main id="appMain">
