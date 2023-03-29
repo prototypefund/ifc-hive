@@ -1,6 +1,6 @@
 <template>
     <div data-test-container="templates/files/avatar" :data-test-container-uuid="props.uuid">
-        <v-avatar start color="indigo" size="250">
+        <v-avatar start color="indigo" size="100">
             <v-img v-if="item" :src="item.file" />
             <span justify="space-around" v-else></span>
         </v-avatar>

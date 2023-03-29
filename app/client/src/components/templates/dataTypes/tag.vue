@@ -1,9 +1,9 @@
 <template>
   <v-card flat v-if="item" data-test-container="templates/dataTypes/tag" :data-test-container-uuid="props.uuid">
     <v-card-title>
+      <v-row><v-col align-self="start" cols="12"> {{ item._title }}</v-col></v-row>
       <v-row no-gutters>
-        <v-col align-self="start" cols="9"> {{ item._title }}</v-col>
-        <v-col align-self="end" cols="3" v-if="item._disId">
+        <v-col align-self="end" cols="12" v-if="item._disId">
           <v-switch v-model="editMode" hide-details true-value="edit" false-value="view"
             :label="$t('generics.mode') + ': ' + $t('generics.' + editMode)"></v-switch>
         </v-col>

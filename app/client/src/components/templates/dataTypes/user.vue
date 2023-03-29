@@ -1,9 +1,9 @@
 <template>
   <v-card flat v-if="item" data-test-container="templates/dataTypes/user" :data-test-container-uuid="props.uuid">
     <v-card-title>
+      <v-row><v-col align-self="start" cols="12"> {{ item._title }}</v-col></v-row>
       <v-row no-gutters>
-        <v-col align-self="start" cols="9"> {{ item._title }}</v-col>
-        <v-col align-self="end" cols="3" v-if="item._disId">
+        <v-col align-self="end" cols="12" v-if="item._disId">
           <v-switch v-model="editMode" hide-details true-value="edit" false-value="view"
             :label="$t('generics.mode') + ': ' + $t('generics.' + editMode)"></v-switch>
         </v-col>
@@ -12,7 +12,9 @@
     <v-card-text>
       <div v-if="editMode === 'edit'">
         <v-row>
-          <v-col cols="9">
+          <v-col cols="12">
+            <files-avatar v-if="item._disId" mode="edit" :widgetUUID="props.widgetUUID" :docUUID="item._id" /></v-col>
+          <v-col cols="12">
             <v-row>
               <v-col cols="12">
                 <v-text-field v-model="firstname" :label="$t('generics.firstname')" variant="underlined"></v-text-field>
@@ -28,8 +30,6 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col cols="3">
-            <files-avatar v-if="item._disId" mode="edit" :widgetUUID="props.widgetUUID" :docUUID="item._id" /></v-col>
         </v-row>
         <v-row>
           <v-col cols="12">
@@ -44,7 +44,10 @@
       </div>
       <div v-else>
         <v-row>
-          <v-col cols="9">
+          <v-col cols="12">
+            <files-avatar v-if="item._disId" mode="view" :widgetUUID="props.widgetUUID" :docUUID="item._id" />
+          </v-col>
+          <v-col cols="12">
             <v-row>
               <v-col cols="12">
                 <v-label>{{ $t("generics.firstname") }}</v-label>
@@ -60,9 +63,6 @@
                 <p>{{ email }}</p>
               </v-col>
             </v-row>
-          </v-col>
-          <v-col cols="3">
-            <files-avatar v-if="item._disId" mode="view" :widgetUUID="props.widgetUUID" :docUUID="item._id" />
           </v-col>
         </v-row>
         <v-row>

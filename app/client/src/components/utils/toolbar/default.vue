@@ -10,42 +10,22 @@
       <v-spacer></v-spacer>
 
       <v-slide-x-transition>
-        <v-progress-linear v-if="loading" class="loader" indeterminate color="primary"/>
+        <v-progress-linear v-if="loading" class="loader" indeterminate color="primary" />
       </v-slide-x-transition>
 
       <!-- tabs and content pane for page tools -->
       <v-slide-x-transition>
-        <v-tabs
-          v-if="!loading"
-          :density="!currentTool ? 'compact' : 'default'"
-          v-model="currentTool"
-          fixed-tabs
-        >
+        <v-tabs v-if="!loading" :density="!currentTool ? 'compact' : 'default'" v-model="currentTool" fixed-tabs>
 
           <!-- tab with close button tools pane is open  -->
-          <v-tab
-            class="closeBtnWrapper active"
-            :class="{ hidden: currentTool === false }"
-            :value="false"
-          >
-            <v-btn variant="plain" 
-              icon="mdi-chevron-right"
-              @click.stop="currentTool = false"
-            />
+          <v-tab class="closeBtnWrapper active" :class="{ hidden: currentTool === false }" :value="false">
+            <v-btn variant="plain" icon="mdi-chevron-right" @click.stop="currentTool = false" />
           </v-tab>
 
           <!-- iterate over page widget tools and display a button for each widget -->
           <template v-for="(tool, key) in state">
-            <v-tab
-              :class="{ active: currentTool === key }"
-              v-if="checkVisibility(tool)"
-              :value="key"
-              :key="tool"
-            >
-              <a v-if="currentTool === key"
-                class="closeOverlay"
-                @click.stop="currentTool = false"
-              />
+            <v-tab :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key" :key="tool">
+              <a v-if="currentTool === key" class="closeOverlay" @click.stop="currentTool = false" />
               <!-- widget title -->
               <span class="d-none d-sm-flex d-md-flex d-lg-flex d-xl-flex">
                 {{ $t("widgets.tools." + tool.title) }}
@@ -64,17 +44,17 @@
       :style="{
         height: viewPortHeight + 'px',
         width: viewPortWidth < 800 ? viewPortWidth + 'px' : '60%',
-        }">
-        <hr class="contentLine" />
-        <v-slide-x-reverse-transition>
-          <v-card flat>
-            <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}"
-              class="toolComponentWrapper">
-            </component>
-          </v-card>
-        </v-slide-x-reverse-transition>
-      </v-container>
-      </v-container>
+      }">
+      <hr class="contentLine" />
+      <v-slide-x-reverse-transition>
+        <v-card flat>
+          <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}"
+            class="toolComponentWrapper">
+          </component>
+        </v-card>
+      </v-slide-x-reverse-transition>
+    </v-container>
+  </v-container>
 </template>
 
 <script>

@@ -23,7 +23,7 @@
             {{ item.type }} - {{ item.title }}
           </template>
         </v-expansion-panel-title>
-        <v-expansion-panel-text>
+        <v-expansion-panel-text class="expandContent">
           <component v-if="component" :props="item.props" :widgetUUID="props.uuid" :docUUID="item.uuid" />
         </v-expansion-panel-text>
       </v-expansion-panel>
@@ -86,7 +86,8 @@ const props = defineProps({
   uuid: {
     type: String,
     default: "default param",
-  },
+    required: true
+  }
 });
 function removeEntry(index) {
   const entries = JSON.parse(JSON.stringify(state.value.entries));
@@ -123,26 +124,31 @@ onUnmounted(() => {
   stateSubscriber$.unsubscribe();
 });
 </script>
-<style lang="css" scoped>
-.quickListTab:hover .tabHandler {
+<style lang="css">
+.quickListWrapper .quickListTab:hover .tabHandler {
   display: block !important;
 }
 
-.tabTitle {
+.quickListWrapper .tabTitle {
   max-width: 250px;
   padding: 0 20px;
 }
 
-.v-tabs {
+.quickListWrapper .v-tabs {
   background-color: #9e9e9e;
 }
 
-.tabHandler {
+.quickListWrapper .tabHandler {
   display: none !important;
   position: absolute !important;
   color: black;
   top: 0px !important;
   cursor: pointer;
   right: 0px;
+}
+
+.quickListWrapper .expandContent>.v-expansion-panel-text__wrapper {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 </style>

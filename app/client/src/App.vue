@@ -1,6 +1,5 @@
 <template>
-  <v-app v-if="(page && page.uuid)" dark="true">
-
+  <v-app v-if="(page && page.uuid)">
     <!-- Global Toolbar -->
     <v-app-bar density="compact" flat id="appAppbar" app>
       <v-app-bar-title>

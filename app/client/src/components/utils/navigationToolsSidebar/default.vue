@@ -1,5 +1,6 @@
 <template>
-  <v-navigation-drawer data-test-container="utils/navigationToolsSidebar/default" id="navigationToolsSidebar" permanent>
+  <v-navigation-drawer data-test-container="utils/navigationToolsSidebar/default" id="navigationToolsSidebar" permanent
+    v-if="state">
     <v-slide-x-transition>
       <v-tabs v-model="currentTool" density="comfortable" center-active class="border-bottom">
         <!-- iterate over page widget tools and display a button for each widget -->
@@ -14,7 +15,8 @@
         </template>
       </v-tabs>
     </v-slide-x-transition>
-    <v-container v-if="currentTool && currentComponent" fluid :class="{ hidden: loading }" class="toolContent primary">
+    <v-container v-if="currentTool && currentComponent && currentTool !== true" fluid :class="{ hidden: loading }"
+      class="toolContent primary">
       <v-slide-x-reverse-transition>
         <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}"
           class="toolComponentWrapper">
@@ -107,9 +109,13 @@ export default {
     this.loadingSuibscriber$.unsubscribe();
     this.stateSubscriber$.unsubscribe();
     this.openToolSubscriber$.unsubscribe();
+    this.stateSubscriber$.unsubscribe();
   },
   methods: {
     checkVisibility(tool) {
+      if (!tool) {
+        return false
+      }
       // if we have no page set to this tool or page set matches current route name we are good to go!
       if (!tool.pages || tool.pages.indexOf(this.route.name) > -1) {
         return true;
@@ -132,15 +138,15 @@ export default {
   left: 0;
 }
 
+.v-tab.v-tab {
+  min-width: 30px
+}
+
 .toolContent {
-  height: 100%
+  padding: 0
 }
 
 .hidden {
   display: none;
-}
-
-.toolComponentWrapper {
-  height: 100%
 }
 </style>

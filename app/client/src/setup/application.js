@@ -32,6 +32,19 @@ export const globalTools = ($store) => {
       },
     },
   });
+  $store.dispatch({
+    type: "navigationTools/add",
+    payload: {
+      page: false,
+      title: "quickList",
+      icon: "mdi-list-status",
+      uuid: "quickList",
+      widget: {
+        name: "quickList",
+        face: 'expansionVertical'
+      },
+    },
+  });
   /* $store.dispatch({
      type: "toolbar/add",
      payload: {

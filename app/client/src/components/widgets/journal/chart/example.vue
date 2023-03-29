@@ -1,11 +1,6 @@
 <template>
-  <div>
-    <apexchart
-      height="80%"
-      :type="data.type"
-      :options="data.options"
-      :series="data.series"
-    ></apexchart>
+  <div data-test-container="widgets/journal/chart/example" :data-test-container-uuid="props.uuid">
+    <apexchart height="80%" :type="data.type" :options="data.options" :series="data.series"></apexchart>
   </div>
 </template>
 <script setup>
@@ -15,12 +10,6 @@ const props = defineProps({
     type: Object,
   },
   uuid: {
-    type: String,
-    default(rawProps) {
-      return rawProps.widgetUUID + "_chart";
-    },
-  },
-  widgetUUID: {
     type: String,
     required: true,
   },
@@ -53,6 +42,6 @@ const data = ref({
 
 const $store = inject("$store");
 const state = ref({});
-onMounted(() => {});
-onUnmounted(() => {});
+onMounted(() => { });
+onUnmounted(() => { });
 </script>

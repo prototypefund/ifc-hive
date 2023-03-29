@@ -102,7 +102,7 @@ const handleQuickListItem = () => {
       $store.dispatch({
         type: "ui/update",
         payload: {
-          currentTool: "quickList",
+          currentNavigationTool: "quickList",
         },
       });
     }

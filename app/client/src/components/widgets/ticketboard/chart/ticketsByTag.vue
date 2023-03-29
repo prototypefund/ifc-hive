@@ -1,6 +1,7 @@
 <template>
-  <div v-if="props.uuid">
-    <apexchart width="100%" :type="data.type" :options="data.options" :series="data.series"></apexchart>
+  <div v-if="props.uuid" data-test-container="widgets/ticketboard/chart/ticketsByTag"
+    :data-test-container-uuid="props.uuid">
+    <apexchart height="80%" :type="data.type" :options="data.options" :series="data.series"></apexchart>
   </div>
 </template>
 <script setup>
@@ -11,13 +12,6 @@ const props = defineProps({
     type: Object,
   },
   uuid: {
-    type: String,
-    required: true,
-    default(rawProps) {
-      return rawProps.widgetUUID + "_chart";
-    },
-  },
-  widgetUUID: {
     type: String,
     required: true,
   },

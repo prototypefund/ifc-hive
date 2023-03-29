@@ -1,25 +1,29 @@
 <template>
-  <v-navigation-drawer data-test-container="utils/inspectorToolsSidebar/default" id="navigationToolsSidebar"
-    :rail="currentTool === false" permanent location="right">
+  <v-navigation-drawer data-test-container="utils/inspectorToolsSidebar/default" id="inspectorToolsSidebar"
+    :rail="currentTool === false" permanent location="right" v-if="state">
     <template v-slot:prepend>
-      <v-list-item density="compact" v-if="currentTool === false">
-        <template v-slot:append>
-          <v-btn density="compact" flat icon="mdi-dock-right" @click.stop="handleToolSidebar()" />
+      <template v-if="currentTool === false">
+        <v-list-item density="compact">
+          <template v-slot:append>
+            <v-btn density="compact" flat icon="mdi-dock-right" @click.stop="handleToolSidebar()" />
+          </template>
+        </v-list-item>
+        <template v-for="(tool, key) in state">
+          <v-list-item density="compact" v-if="checkVisibility(tool)">
+            <template v-slot:append>
+              <v-btn density="compact" flat :icon="tool.icon" :value="key" :key="tool" @click.stop="currentTool = key" />
+            </template>
+          </v-list-item>
         </template>
-      </v-list-item>
-      <v-list-item v-for="(tool, key) in state" density="compact" v-if="currentTool === false">
-        <template v-slot:append>
-          <v-btn density="compact" flat :icon="tool.icon" :value="key" :key="tool" @click.stop="currentTool = key" />
-        </template>
-      </v-list-item>
-
+      </template>
     </template>
     <template v-if="currentTool !== false">
       <v-slide-x-transition>
         <v-tabs density="comfortable" v-model="currentTool" center-active>
           <!-- iterate over page widget tools and display a button for each widget -->
           <template v-for="(tool, key) in state">
-            <v-tab :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key" :key="tool">
+            <v-tab class="text-caption" :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key"
+              :key="tool">
               <a v-if="currentTool === key" class="closeOverlay" @click.stop="currentTool = false" />
 
               <!-- widget icon for currently opened and other tools -->
@@ -32,10 +36,11 @@
         </v-tabs>
       </v-slide-x-transition>
     </template>
-    <v-container v-if="currentTool && currentComponent" fluid :class="{ hidden: loading }" class="toolContent primary">
+    <v-container v-if="currentTool && currentComponent && currentTool !== true" fluid :class="{ hidden: loading }"
+      class="toolContent primary">
       <v-slide-x-reverse-transition>
-        <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}"
-          class="toolComponentWrapper">
+        <component v-if="currentTool" :is="currentComponent" :uuid="currentTool"
+          :props="state[currentTool].widget.props || {}" class="toolComponentWrapper">
         </component>
       </v-slide-x-reverse-transition>
     </v-container>
@@ -59,6 +64,9 @@ export default {
   computed: {
     currentComponent: {
       get() {
+        if (!this.currentTool) {
+          return false
+        }
         const currWidget = this.state[this.currentTool].widget
         return defineAsyncComponent(function () {
           return toolLoader(
@@ -125,9 +133,13 @@ export default {
     this.loadingSuibscriber$.unsubscribe();
     this.stateSubscriber$.unsubscribe();
     this.openToolSubscriber$.unsubscribe();
+    this.stateSubscriber$.unsubscribe();
   },
   methods: {
     checkVisibility(tool) {
+      if (!tool) {
+        return false
+      }
       // if we have no page set to this tool or page set matches current route name we are good to go!
       if (!tool.pages || tool.pages.indexOf(this.route.name) > -1) {
         return true;
@@ -159,15 +171,15 @@ export default {
   top: 0;
 }
 
+.v-tab.v-tab {
+  min-width: 30px
+}
+
 .toolContent {
-  height: 100%
+  padding: 0
 }
 
 .hidden {
   display: none;
-}
-
-.toolComponentWrapper {
-  height: 100%
 }
 </style>
