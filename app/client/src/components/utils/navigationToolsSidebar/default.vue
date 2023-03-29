@@ -15,7 +15,6 @@
       </v-tabs>
     </v-slide-x-transition>
     <v-container v-if="currentTool" fluid :class="{ hidden: loading }" class="toolContent primary">
-      <hr class="contentLine" />
       <v-slide-x-reverse-transition>
         <v-card flat>
           <pre>{{ state }}</pre>
