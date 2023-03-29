@@ -1,16 +1,13 @@
 <template>
   <v-container v-if="state" data-test-container="pages/ticketboard/page" fluid pa-0 ma-0>
     <h1>{{ $t("pages.app-ticketboard") }}</h1>
-    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="memo"
-      action="add">
+    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="memo">
       <v-btn>New Memo</v-btn>
     </QuickListHandler>
-    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="user"
-      action="add">
+    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="user">
       <v-btn>New User</v-btn>
     </QuickListHandler>
-    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="tag"
-      action="add">
+    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="tag">
       <v-btn>New Tag</v-btn>
     </QuickListHandler>
     <component v-if="ticketBoard && state.widgets" :is="ticketBoard" :uuid="state.widgets[0].uuid" />
@@ -27,7 +24,7 @@ import {
   onUnmounted,
 } from "vue";
 import { widgetLoader } from "@lib/widgetLoader";
-import QuickListHandler from "@w/quickList/handler/click.vue";
+import QuickListHandler from "@w/quickList/handler/click_add.vue";
 import { v4 as uuidv4 } from "uuid";
 const $store = inject("$store");
 const state = ref({});

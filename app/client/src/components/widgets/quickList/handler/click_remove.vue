@@ -1,6 +1,6 @@
 <template>
-  <a @click="handleQuickListItem" class="quickListHandler" v-if="state && props.uuid"
-    data-test-container="widgets/quickList/handler/click" :data-test-container-uuid="props.uuid">
+  <a @click="removeFromQuicklist" class="quickListHandler" v-if="state && props.uuid"
+    data-test-container="widgets/quickList/handler/click_remove" :data-test-container-uuid="props.uuid">
     <slot></slot>
   </a>
 </template>
@@ -10,39 +10,18 @@ import { propEq, findIndex } from "ramda";
 const $store = inject("$store");
 const state = ref({});
 const currentTool = shallowRef(false);
+const currentNavigationTool = shallowRef(false);
 const stateSubscriber$ = $store
   .select((state) => state.widgets[props.uuid])
   .subscribe((val) => {
     state.value = val;
   });
 const currentToolSubscriber$ = $store
-  .select((state) => state.ui.currentTool)
+  .select((state) => state.ui.currentNavigationTool)
   .subscribe((val) => {
     currentTool.value = val;
   });
 const props = defineProps({
-  type: {
-    // type like  detail, memo, tags, user, batch, and stuff I don't know yet
-    type: String,
-    default: "list",
-    required: true,
-  },
-  dataTitle: {
-    // the title for the entry we display in the quicklist
-    type: String,
-    required: true,
-  },
-  template: {
-    // the location under components/widgets from where to get a file to be shown for the item in quicklist
-    type: String,
-    required: false,
-  },
-  action: {
-    // add, delete, clear for elements in quicklist
-    type: String,
-    default: "add",
-    required: true,
-  },
   docUUID: {
     // the uuid of the actual api data item
     type: String,
@@ -53,39 +32,33 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  props: {
-    // whatever props we want to use for the tab
-    type: Object,
-    default: () => ({}),
-  },
+  action: {
+    type: String,
+    default: 'remove'
+  }
 });
-const handleQuickListItem = () => {
+const removeFromQuicklist = () => {
   if (props.uuid && props.docUUID) {
-    // make sure that we only have on tab per display type and docUUID
-    let openItem = findIndex(propEq("uuid", props.docUUID))(state.value.entries);
-    // open the quicklist bar
-    if (currentTool.value !== "quickList") {
+    if (props.action === 'remove_all') {
       $store.dispatch({
-        type: "ui/update",
+        type: "widgets/update",
+        uuid: props.uuid,
         payload: {
-          currentNavigationTool: "quickList",
+          entries: [],
+          openItem: 0,
         },
       });
+      return true
     }
-
+    // make sure that we only have on tab per display type and docUUID
+    let openItem = findIndex(propEq("uuid", props.docUUID))(state.value.entries);
     const entries = JSON.parse(JSON.stringify(state.value.entries));
     if (openItem > -1) {
       // as we can have several modes in the quicklist items and different display Types per item, we will simply remove any quicklist entry of the current UUID and create a new one with the proper props from now
       entries.splice(openItem, 1);
     }
-    entries.unshift({
-      uuid: props.docUUID,
-      type: props.type,
-      template: props.template || false,
-      title: props.dataTitle,
-      props: props.props,
-    });
     openItem = 0;
+
     $store.dispatch({
       type: "widgets/update",
       uuid: props.uuid,
@@ -95,7 +68,8 @@ const handleQuickListItem = () => {
       },
     });
   }
-};
+}
+
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
   currentToolSubscriber$.unsubscribe();

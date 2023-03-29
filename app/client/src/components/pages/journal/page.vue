@@ -1,16 +1,13 @@
 <template>
   <v-container data-test-container="pages/journal" fluid pa-0>
     <h1>{{ $t("pages.app-journal") }}</h1>
-    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="memo"
-      action="add">
+    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="memo">
       <v-btn>New Memo</v-btn>
     </QuickListHandler>
-    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="user"
-      action="add">
+    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="user">
       <v-btn>New User</v-btn>
     </QuickListHandler>
-    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="tag"
-      action="add">
+    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="tag">
       <v-btn>New Tag</v-btn>
     </QuickListHandler>
     <Grid></Grid>
@@ -19,7 +16,7 @@
 
 <script setup>
 import { inject, shallowRef, onMounted, onUnmounted } from "vue";
-import QuickListHandler from "@w/quickList/handler/click.vue";
+import QuickListHandler from "@w/quickList/handler/click_add.vue";
 import { v4 as uuidv4 } from "uuid";
 import Grid from "@u/grid/loader.vue";
 const $store = inject("$store");

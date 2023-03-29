@@ -2,8 +2,7 @@
   <v-card variant="outlined" v-if="memo" data-test-container="templates/cards/memo"
     :data-test-container-uuid="props.uuid">
     <v-card-title>
-      <QuickListHandler uuid="quickList" :docUUID="memo._id" :dataTitle="memo._source.title" :type="memo._type"
-        action="add">
+      <QuickListHandler uuid="quickList" :docUUID="memo._id" :dataTitle="memo._source.title" :type="memo._type">
         {{ memo._source.title }}
       </QuickListHandler>
     </v-card-title>
@@ -62,8 +61,7 @@
           {{ $t("generics.author") }}
         </v-col>
         <v-col cols="9">
-          <QuickListHandler uuid="quickList" :docUUID="memo._source.owner" :dataTitle="memo._source.owner" type="user"
-            action="add">
+          <QuickListHandler uuid="quickList" :docUUID="memo._source.owner" :dataTitle="memo._source.owner" type="user">
             <user-list-item :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :docUUID="memo._source.owner" />
           </QuickListHandler>
         </v-col>
@@ -74,7 +72,7 @@
         </v-col>
         <v-col cols="9">
           <QuickListHandler uuid="quickList" :docUUID="memo._source.assigned" :dataTitle="memo._source.assigned"
-            type="user" action="add">
+            type="user">
             <user-list-item :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :docUUID="memo._source.assigned" />
           </QuickListHandler>
         </v-col>

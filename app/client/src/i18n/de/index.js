@@ -11,6 +11,8 @@ export default {
   navigation: 'Navigation',
   themeDark: 'dunkles Thema',
   themeLight: 'helles Thema',
+  remove_from_list: 'Aus Liste entfernen',
+  remove_all_from_list: 'Alle von der Liste entfernen',
   generics: {
     title: 'Titel',
     open: 'Offen',

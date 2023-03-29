@@ -1,7 +1,6 @@
 <template>
   <v-card flat class="quickListWrapper" v-if="state" data-test-container="widgets/quicklist/expansionVertical"
     :data-test-container-uuid="props.uuid">
-
     <v-card-actions>
       <v-btn size="x-small" :append-icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'" @click="show = !show">
         Batch edit
@@ -16,6 +15,12 @@
         <v-divider />
       </div>
     </v-expand-transition>
+    <QuickListHandler :uuid="props.widgetUUID" :docUUID="props.docUUID">
+      <v-icon icon="mdi-close-box" color="error" />
+    </QuickListHandler>
+    <QuickListHandler :uuid="props.uuid" :docUUID="props.docUUID" action="remove_all" v-if="state.entries.length > 1">
+      <v-icon icon="mdi-close-box-multiple" color="error" />
+    </QuickListHandler>
     <v-expansion-panels v-model="openItem" variant="popout" class="my-4" v-if="state.entries && state.entries.length > 0">
       <v-expansion-panel v-for="(item, index) in state.entries" :key="index">
         <v-expansion-panel-title>
@@ -35,6 +40,7 @@
 import { inject, ref, shallowRef, onMounted, onUnmounted, computed, defineAsyncComponent } from "vue";
 import noResultsYet from "@t/noResultsYet.vue";
 import batchEdit from "./batchEdit.vue"
+import QuickListHandler from "@w/quickList/handler/click_remove.vue";
 const $store = inject("$store");
 const state = ref({});
 const show = shallowRef(false);

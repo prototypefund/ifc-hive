@@ -8,6 +8,8 @@ export default {
   save: 'Save',
   yes: 'yes',
   no: 'no',
+  remove_from_list: 'Remove from list',
+  remove_all_from_list: 'Remove all from list',
   navigation: 'Navigation',
   themeDark: 'dark theme',
   themeLight: 'light theme',
