@@ -5,10 +5,6 @@
 
       <!-- Tabs -->
       <v-tabs class="pl-0 border-bottom" align="left" slider-color="primary">
-        <!-- tools -->
-        <v-btn variant="text" style="height: 52px">
-          <v-icon>mdi-dock-left</v-icon>
-        </v-btn>
 
         <!-- tab 1 -->
         <v-tab>
@@ -42,11 +38,6 @@
         </v-tab>
 
         <v-spacer />
-
-        <!-- tools -->
-        <v-btn variant="text" style="height: 52px">
-          <v-icon>mdi-dock-right</v-icon>
-        </v-btn>
       </v-tabs>
 
       <v-container>
@@ -156,7 +147,6 @@
               amet. Lorem ipsum dol
             </p>
 
-
           </v-col>
         </v-row>
       </v-container>
@@ -164,12 +154,7 @@
     </v-main>
 
     <v-navigation-drawer permanent with="400">
-      <v-toolbar density="compact">
-        <v-toolbar-title class="text-body-1">
-          Navigation
-        </v-toolbar-title>
-      </v-toolbar>
-      <v-tabs height="38" class="border-bottom" density="compact">
+      <v-tabs class="border-bottom">
         <v-tab class="text-caption">
           <v-icon>mdi-file-tree</v-icon>
         </v-tab>
@@ -186,12 +171,7 @@
     </v-navigation-drawer>
 
     <v-navigation-drawer permanent with="400" location="right">
-      <v-toolbar density="compact">
-        <v-toolbar-title class="text-body-1">
-          Inspector
-        </v-toolbar-title>
-      </v-toolbar>
-      <v-tabs height="38" class="border-bottom" density="compact">
+      <v-tabs class="border-bottom">
         <v-tab class="text-caption">
           <v-icon>mdi-checkbox-multiple-marked-outline</v-icon>
         </v-tab>

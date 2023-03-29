@@ -14,7 +14,11 @@ const vuetify = createVuetify({
   components,
   directives,
   theme: {
-    defaultTheme: 'light'
+    defaultTheme: 'light',
+    themes: {
+      light,
+      dark
+    }
   },
   icons: {
     defaultSet: 'mdi',

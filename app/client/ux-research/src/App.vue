@@ -6,13 +6,14 @@
         <!-- toolbar -->
         <app-bar />
 
-        <v-navigation-drawer permanent rail >
+        <v-navigation-drawer permanent rail color="page-nav-bg" >
           <v-list density="compact">
             <v-list-item class="mb-6" prepend-icon="mdi-menu" > </v-list-item>
 
-            <v-list-item active-color="primary" :to="{ name: 'edit' }" prepend-icon="mdi-pencil"></v-list-item>
-            <v-list-item active-color="primary" :to="{ name: 'page1' }" prepend-icon="mdi-chart-gantt"></v-list-item>
-            <v-list-item active-color="primary" :to="{ name: 'page2' }" prepend-icon="mdi-lock"></v-list-item>
+            <v-list-item active-color="page-nav-active" :to="{ name: 'edit' }" prepend-icon="mdi-pencil"></v-list-item>
+            <v-list-item active-color="page-nav-active" :to="{ name: 'page1' }" prepend-icon="mdi-chart-gantt"></v-list-item>
+            <v-list-item active-color="page-nav-active" :to="{ name: 'page2' }" prepend-icon="mdi-lock"></v-list-item>
+
             <v-list-item prepend-icon="mdi-magnify"></v-list-item>
             <v-list-item prepend-icon="mdi-timeline-clock"></v-list-item>
             <v-list-item active-color="primary" prepend-icon="mdi-human-male-board-poll"></v-list-item>
