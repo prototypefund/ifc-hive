@@ -28,7 +28,7 @@ export const globalTools = ($store) => {
       icon: "mdi-history",
       uuid: "mostRecentlyUsed",
       widget: {
-        name: "projectHistory",
+        name: "mostRecentlyUsed",
       },
     },
   });

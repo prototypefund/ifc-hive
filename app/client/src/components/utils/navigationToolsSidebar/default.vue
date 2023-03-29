@@ -14,10 +14,12 @@
         </template>
       </v-tabs>
     </v-slide-x-transition>
-    <v-container v-if="currentTool" fluid :class="{ hidden: loading }" class="toolContent primary">
+    <v-container v-if="currentTool && currentComponent" fluid :class="{ hidden: loading }" class="toolContent primary">
       <v-slide-x-reverse-transition>
         <v-card flat>
-          <pre>{{ state }}</pre>
+          <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}"
+            class="toolComponentWrapper">
+          </component>
         </v-card>
       </v-slide-x-reverse-transition>
     </v-container>
@@ -25,6 +27,7 @@
 </template>
 <script>
 import { defineAsyncComponent } from "vue";
+import toolLoader from "@lib/toolLoader";
 export default {
   inject: ["$api", "$store"],
   components: {
@@ -38,9 +41,35 @@ export default {
     loading: true,
   }),
   computed: {
+    currentComponent: {
+      get() {
+        const currWidget = this.state[this.currentTool].widget
+        return defineAsyncComponent(function () {
+          return toolLoader(
+            currWidget.name,
+            currWidget.type,
+            currWidget.face
+          );
+        })
+      },
+      set(newValue) {
+        if (this.openTool !== newValue) {
+          this.$store.dispatch({
+            type: "ui/update",
+            payload: {
+              currentInspectorTool: newValue,
+            },
+          });
+        }
+      },
+    },
     currentTool: {
       get() {
-        return this.openTool;
+        let currTool = this.openTool
+        if (currTool === true) {
+          currTool = Object.keys(this.state)[0]
+        }
+        return currTool;
       },
       set(newValue) {
         if (this.openTool !== newValue) {
