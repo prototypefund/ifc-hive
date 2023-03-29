@@ -20,9 +20,6 @@
           <!-- <v-col cols="auto"><v-icon color="grey" xsmall>mdi-chevron-right</v-icon></v-col> -->
           <v-col cols="auto">
             <v-fade-transition>
-              <!-- <span v-if="!loading">{{ $t("pages." + page.uuid) }}</span> -->
-            </v-fade-transition>
-            <v-fade-transition>
               <span v-if="loading"><v-progress-circular indeterminate :size="20" :width="2" color="primary" /></span>
             </v-fade-transition>
           </v-col>
@@ -43,6 +40,14 @@
       <Notifications />
       <v-btn @click="toggleTheme" icon="mdi-theme-light-dark"></v-btn>
     </v-app-bar>
+    <v-toolbar density="compact" flat class="loadingBar" v-if="loading">
+      <v-row class="loaderBar_wrapper">
+        <v-slide-x-transition>
+          <v-progress-linear class="loaderBar" indeterminate color="primary" />
+        </v-slide-x-transition>
+      </v-row>
+    </v-toolbar>
+
     <v-divider />
     <!-- Navigation Drawer -->
     <PageNavigation :nav-items="navItems" :footer-items="footerItems" />
@@ -279,6 +284,17 @@ html {
 #app .isLoading,
 #app .isLoading * {
   visibility: hidden !important;
+}
+
+#app .loadingBar {
+  height: 2px !important;
+  top: 49px;
+}
+
+#app .loaderBar_wrapper .loaderBar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }
 
 #app .mdi-drag {
