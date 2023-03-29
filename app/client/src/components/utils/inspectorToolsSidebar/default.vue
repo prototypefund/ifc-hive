@@ -18,21 +18,28 @@
     </template>
     <template v-if="currentTool !== false">
       <v-slide-x-transition>
-        <v-tabs density="comfortable" v-model="currentTool" center-active class="border-bottom">
-          <!-- iterate over page widget tools and display a button for each widget -->
-          <template v-for="(tool, key) in state">
-            <v-tab class="text-caption" :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key"
-              :key="tool">
-              <a v-if="currentTool === key" class="closeOverlay" @click.stop="currentTool = false" />
-
-              <!-- widget icon for currently opened and other tools -->
-              <v-icon>{{ tool.icon }}</v-icon>
+        <v-row no-gutters class="border-bottom">
+          <v-tabs density="comfortable">
+            <v-tab class="fakeTab" />
+            <v-tab class="closeBtnWrapper" @click.stop="currentTool = false">
+              <v-icon>mdi-dock-right</v-icon>
             </v-tab>
-          </template>
-          <v-tab class="closeBtnWrapper active" :class="{ hidden: currentTool === false }" :value="false">
-            <v-btn variant="plain" icon="mdi-dock-right" @click.stop="currentTool = false" />
-          </v-tab>
-        </v-tabs>
+          </v-tabs>
+          <v-tabs density="comfortable" v-model="currentTool" center-active>
+            <!-- iterate over page widget tools and display a button for each widget -->
+            <template v-for="(tool, key) in state">
+              <v-tab class="text-caption" :class="{ active: currentTool === key }" v-if="checkVisibility(tool)"
+                :value="key" :key="tool">
+                <a v-if="currentTool === key" class="closeOverlay" @click.stop="currentTool = false" />
+
+                <!-- widget icon for currently opened and other tools -->
+                <v-icon>{{ tool.icon }}</v-icon>
+              </v-tab>
+            </template>
+          </v-tabs>
+
+        </v-row>
+
       </v-slide-x-transition>
     </template>
     <v-container v-if="currentTool && currentComponent && currentTool !== true" fluid :class="{ hidden: loading }"
@@ -185,5 +192,9 @@ export default {
 .sideBarToggle {
   padding-top: 10px;
   padding-bottom: 8px
+}
+
+.fakeTab {
+  display: none
 }
 </style>

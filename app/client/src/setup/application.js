@@ -35,13 +35,50 @@ export const globalTools = ($store) => {
   $store.dispatch({
     type: "navigationTools/add",
     payload: {
-      page: false,
+      pages: false,
       title: "quickList",
       icon: "mdi-list-status",
       uuid: "quickList",
       widget: {
         name: "quickList",
         face: 'expansionVertical'
+      },
+    },
+  });
+  $store.dispatch({
+    type: "inspectorTools/add",
+    payload: {
+      title: "ticketsByTag",
+      pages: false,
+      icon: "mdi-chart-donut",
+      uuid: "chart_ticketsByTag",
+      widget: {
+        name: "ticketboard",
+        type: "chart",
+        face: "ticketsByTag",
+        props: {
+          categories: [
+            "tags:tag-todo",
+            "tags:tag-doing",
+            "tags:tag-test",
+            "tags:tag-qa",
+            "tags:tag-done",
+          ],
+        },
+      },
+    },
+  });
+  $store.dispatch({
+    type: "inspectorTools/add",
+    payload: {
+      title: "chartJournal",
+      pages: false,
+      icon: "mdi-chart-pie",
+      uuid: "journal_chart",
+      widget: {
+        name: "journal",
+        type: "chart",
+        face: "example",
       },
     },
   });

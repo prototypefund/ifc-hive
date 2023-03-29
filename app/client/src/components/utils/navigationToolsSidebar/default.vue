@@ -2,25 +2,25 @@
   <v-navigation-drawer width="400" data-test-container="utils/navigationToolsSidebar/default" id="navigationToolsSidebar"
     permanent v-if="state">
     <v-slide-x-transition>
-      <v-tabs v-model="currentTool" density="comfortable" center-active class="border-bottom">
-        <!-- iterate over page widget tools and display a button for each widget -->
-        <template v-for="(tool, key) in state">
-          <v-tab class="text-caption" :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key"
-            :key="tool">
-            <a v-if="currentTool === key" class="closeOverlay" @click.stop="currentTool = false" />
+      <v-row no-gutters class="border-bottom">
+        <v-tabs v-model="currentTool" density="comfortable" center-active>
+          <!-- iterate over page widget tools and display a button for each widget -->
+          <template v-for="(tool, key) in state">
+            <v-tab class="text-caption" :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key"
+              :key="tool">
+              <a v-if="currentTool === key" class="closeOverlay" @click.stop="currentTool = false" />
 
-            <!-- widget icon for currently opened and other tools -->
-            <v-icon>{{ tool.icon }}</v-icon>
-          </v-tab>
-        </template>
-      </v-tabs>
+              <!-- widget icon for currently opened and other tools -->
+              <v-icon>{{ tool.icon }}</v-icon>
+            </v-tab>
+          </template>
+        </v-tabs>
+      </v-row>
     </v-slide-x-transition>
     <v-container v-if="currentTool && currentComponent && currentTool !== true" fluid class="toolContent primary">
-      <v-slide-x-reverse-transition>
-        <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}"
-          class="toolComponentWrapper">
-        </component>
-      </v-slide-x-reverse-transition>
+      <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}"
+        class="toolComponentWrapper">
+      </component>
     </v-container>
   </v-navigation-drawer>
 </template>

@@ -35,24 +35,5 @@ export default {
       }
     }
   }],
-  inspectorTools: [{
-    title: "ticketsByTag",
-    pages: ["app.ticketboard"],
-    icon: "mdi-chart-donut",
-    uuid: "chart_ticketsByTag",
-    widget: {
-      name: "ticketboard",
-      type: "chart",
-      face: "ticketsByTag",
-      props: {
-        categories: [
-          "tags:tag-todo",
-          "tags:tag-doing",
-          "tags:tag-test",
-          "tags:tag-qa",
-          "tags:tag-done",
-        ],
-      },
-    },
-  }]
+
 }

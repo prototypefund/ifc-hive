@@ -14,10 +14,12 @@
             @click.stop="handleNavigationToolsSidebar()" />
         </template>
       </!--v-list-item-->
-      <v-list-item density="compact" v-if="navigationRail" @click.stop="handleNavigationToolsSidebar()"
-        class="sideBarToggle border-bottom">
-        <v-icon icon="mdi-dock-left"></v-icon>
-      </v-list-item>
+      <v-row no-gutters class="border-bottom">
+        <v-list-item density="compact" v-if="navigationRail" @click.stop="handleNavigationToolsSidebar()"
+          class="sideBarToggle">
+          <v-icon icon="mdi-dock-left"></v-icon>
+        </v-list-item>
+      </v-row>
       <v-divider v-if="$mobile && !navigationRail" />
       <ConnectionBar v-if="$mobile && !navigationRail" />
       <!-- <Socket-ConnectionBar v-if="!navigationRail" /> -->
@@ -140,6 +142,6 @@ export default {
 
 .sideBarToggle {
   padding-top: 10px;
-  padding-bottom: 8px
+  padding-bottom: 9px
 }
 </style>

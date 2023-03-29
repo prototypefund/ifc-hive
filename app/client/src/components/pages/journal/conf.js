@@ -14,15 +14,4 @@ export default {
     }
   ],
   hasInspector: true,
-  inspectorTools: [{
-    title: "chartJournal",
-    pages: ["app.journal"],
-    icon: "mdi-chart-donut",
-    uuid: "journal_chart",
-    widget: {
-      name: "journal",
-      type: "chart",
-      face: "example",
-    },
-  }]
 }
