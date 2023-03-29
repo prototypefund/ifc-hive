@@ -139,9 +139,4 @@ export default {
 .hidden {
   display: none
 }
-
-.sideBarToggle {
-  padding-top: 6px;
-  padding-bottom: 5px
-}
 </style>

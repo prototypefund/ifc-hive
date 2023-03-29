@@ -294,4 +294,9 @@ html {
 .v-toolbar.v-theme--dark {
   border-bottom: 1px solid #444
 }
+
+#app .sideBarToggle {
+  padding-top: 6px;
+  padding-bottom: 5px
+}
 </style>

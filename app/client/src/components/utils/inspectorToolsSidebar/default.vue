@@ -189,11 +189,6 @@ export default {
   visibility: hidden !important
 }
 
-.sideBarToggle {
-  padding-top: 10px;
-  padding-bottom: 8px
-}
-
 .fakeTab {
   display: none
 }
