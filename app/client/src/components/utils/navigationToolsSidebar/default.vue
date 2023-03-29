@@ -15,8 +15,7 @@
         </template>
       </v-tabs>
     </v-slide-x-transition>
-    <v-container v-if="currentTool && currentComponent && currentTool !== true" fluid :class="{ hidden: loading }"
-      class="toolContent primary">
+    <v-container v-if="currentTool && currentComponent && currentTool !== true" fluid class="toolContent primary">
       <v-slide-x-reverse-transition>
         <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}"
           class="toolComponentWrapper">
@@ -38,12 +37,6 @@ export default {
     state: false,
     route: false,
     navigationRailSubscriber$: false,
-    loading: true,
-    navigation: {
-      shown: false,
-      width: 200,
-      borderSize: 3
-    }
   }),
   computed: {
     currentComponent: {
@@ -89,11 +82,6 @@ export default {
     },
   },
   created() {
-    this.loadingSubscriber$ = this.$store
-      .select((state) => state.ui.loading)
-      .subscribe((val) => {
-        this.loading = val;
-      });
     this.openToolSubscriber$ = this.$store
       .select((state) => state.ui.currentNavigationTool)
       .subscribe((val) => {
@@ -111,7 +99,6 @@ export default {
       });
   },
   destroyed() {
-    this.loadingSubscriber$.unsubscribe();
     this.stateSubscriber$.unsubscribe();
     this.openToolSubscriber$.unsubscribe();
     this.stateSubscriber$.unsubscribe();

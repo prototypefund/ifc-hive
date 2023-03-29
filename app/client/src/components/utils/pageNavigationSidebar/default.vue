@@ -21,10 +21,10 @@
         </template>
       </!--v-list-item-->
 
-      <v-divider />
+      <v-divider v-if="$mobile && !navigationRail" />
       <ConnectionBar v-if="$mobile && !navigationRail" />
       <!-- <Socket-ConnectionBar v-if="!navigationRail" /> -->
-      <v-divider />
+      <v-divider v-if="$mobile && !navigationRail" />
     </template>
 
     <!-- Navigation List -->
