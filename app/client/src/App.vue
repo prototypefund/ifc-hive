@@ -1,7 +1,8 @@
 <template>
-  <v-app v-if="(page && page.uuid)">
+  <v-app v-if="(page && page.uuid)" dark="true">
+
     <!-- Global Toolbar -->
-    <v-app-bar density="compact" flat app color="grey-lighten-2" id="appAppbar">
+    <v-app-bar density="compact" flat id="appAppbar" app>
       <v-app-bar-title>
         <!-- Breadcrumb -->
         <br />
@@ -41,8 +42,9 @@
       <socket-status />
       <!-- notifications -->
       <Notifications />
+      <v-btn @click="toggleTheme" icon="mdi-theme-light-dark"></v-btn>
     </v-app-bar>
-
+    <v-divider />
     <!-- Navigation Drawer -->
     <PageNavigation :nav-items="navItems" :footer-items="footerItems" />
     <navigation-tools-sidebar v-if="currentNavigationTool" />
@@ -62,7 +64,7 @@
     </v-main>
     <inspector-tools-sidebar v-if="page.hasInspector" />
     <mobile-startup v-if="$mobile" />
-    <!-- quicklist Drawer -->
+
   </v-app>
 </template>
 <script>
@@ -79,6 +81,7 @@ import { globalTools } from "./setup/application";
 import mock from "./mock.vue";
 import socketStatus from "@u/socketStatus.vue"
 import projectSwitch from "@u/projectSwitch/select.vue"
+import { useTheme } from 'vuetify'
 
 export default {
   components: {
@@ -111,6 +114,7 @@ export default {
     currentInspectorTool: false,
     searching: false,
     hasScrolled: false,
+    theme: useTheme(),
     footerItems: [
       {
         icon: "mdi-account-cog",
@@ -141,7 +145,6 @@ export default {
       },
     ],
   }),
-
   created() {
     this.$store
       .select((state) => state.currentPage)
@@ -184,6 +187,9 @@ export default {
   },
 
   methods: {
+    toggleTheme: function () {
+      this.theme.global.name = this.theme.global.current.dark ? 'light' : 'dark';
+    },
     setScroll: async function (e) {
       if (e.currentTarget.scrollTop > 0) {
         this.hasScrolled = true;
@@ -204,6 +210,7 @@ export default {
     },
 
     setDimensions: async function () {
+      // TODO REPLACE THIS WITH PROPER VUETIFY LOGIC OR REMOVE FROM HERE
       await this.$nextTick(function () {
         //TODO find out why we can't properly use the $refs for size read here.
         const appBarHeight = document.getElementById("appAppbar").offsetHeight;
@@ -277,5 +284,15 @@ html {
 
 #app .mdi-drag {
   cursor: pointer;
+}
+
+.v-theme--light .border-bottom,
+.v-toolbar.v-theme--light {
+  border-bottom: 1px solid #CCC
+}
+
+.v-theme--dark .border-bottom,
+.v-toolbar.v-theme--dark {
+  border-bottom: 1px solid #444
 }
 </style>

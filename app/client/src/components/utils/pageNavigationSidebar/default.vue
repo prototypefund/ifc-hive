@@ -1,7 +1,7 @@
 <template>
   <!-- Navigation Drawer -->
   <v-navigation-drawer v-model="navigationDrawer" data-test-container="utils/pageNavigationSidebar/default"
-    :rail="navigationRail" id="navSideBar" permanent>
+    :rail="navigationRail" id="navSideBar" permanent color="page-nav-bg">
     <!-- Title -->
     <template v-slot:prepend>
       <v-list-item density="compact" v-if="navigationRail">

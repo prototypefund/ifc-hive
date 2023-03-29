@@ -1,10 +1,11 @@
 <template>
   <v-navigation-drawer data-test-container="utils/navigationToolsSidebar/default" id="navigationToolsSidebar" permanent>
     <v-slide-x-transition>
-      <v-tabs v-model="currentTool" density="comfortable" center-active>
+      <v-tabs v-model="currentTool" density="comfortable" center-active class="border-bottom">
         <!-- iterate over page widget tools and display a button for each widget -->
         <template v-for="(tool, key) in state">
-          <v-tab :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key" :key="tool">
+          <v-tab class="text-caption" :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key"
+            :key="tool">
             <a v-if="currentTool === key" class="closeOverlay" @click.stop="currentTool = false" />
 
             <!-- widget icon for currently opened and other tools -->
