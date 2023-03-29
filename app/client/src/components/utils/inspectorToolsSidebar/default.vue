@@ -2,20 +2,24 @@
   <v-navigation-drawer data-test-container="utils/inspectorToolsSidebar/default" id="navigationToolsSidebar"
     :rail="currentTool === false" permanent location="right">
     <template v-slot:prepend>
-      <v-list-item density="comfortable" v-if="currentTool === false">
-        <!-- open/close icon -->
+      <v-list-item density="compact" v-if="currentTool === false">
         <template v-slot:append>
-          <v-btn density="compact" variant="plain" icon="mdi-dock-right" @click.stop="handleToolSidebar()" />
+          <v-btn density="compact" flat icon="mdi-dock-right" @click.stop="handleToolSidebar()" />
         </template>
       </v-list-item>
+      <v-list-item v-for="(tool, key) in state" density="compact" v-if="currentTool === false">
+        <template v-slot:append>
+          <v-btn density="compact" flat :icon="tool.icon" :value="key" :key="tool" @click.stop="currentTool = key" />
+        </template>
+      </v-list-item>
+
     </template>
     <template v-if="currentTool !== false">
       <v-slide-x-transition>
-        <v-tabs density="comfortable" v-model="currentTool" center-active class="border-bottom">
+        <v-tabs density="comfortable" v-model="currentTool" center-active>
           <!-- iterate over page widget tools and display a button for each widget -->
           <template v-for="(tool, key) in state">
-            <v-tab class="text-caption" :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key"
-              :key="tool">
+            <v-tab :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key" :key="tool">
               <a v-if="currentTool === key" class="closeOverlay" @click.stop="currentTool = false" />
 
               <!-- widget icon for currently opened and other tools -->
@@ -29,6 +33,7 @@
       </v-slide-x-transition>
     </template>
     <v-container v-if="currentTool" fluid :class="{ hidden: loading }" class="toolContent primary">
+      <hr class="contentLine" />
       <v-slide-x-reverse-transition>
         <v-card flat>
           <pre>{{ state }}</pre>

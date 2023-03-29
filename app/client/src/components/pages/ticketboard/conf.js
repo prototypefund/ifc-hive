@@ -1,6 +1,7 @@
 export default {
   grid: false,
   slots: false,
+  hasInspector: true,
   widgets: [{
     uuid: "ticketBoardWidget",
     name: 'ticketboard', // the name of the widget, must correspond to the actual folder name the widget files are located in
