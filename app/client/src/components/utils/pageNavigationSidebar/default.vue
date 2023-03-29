@@ -141,7 +141,7 @@ export default {
 }
 
 .sideBarToggle {
-  padding-top: 10px;
-  padding-bottom: 9px
+  padding-top: 6px;
+  padding-bottom: 5px
 }
 </style>

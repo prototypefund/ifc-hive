@@ -3,7 +3,7 @@
     permanent v-if="state">
     <v-slide-x-transition>
       <v-row no-gutters class="border-bottom">
-        <v-tabs v-model="currentTool" density="comfortable" center-active>
+        <v-tabs v-model="currentTool" density="compact" center-active>
           <!-- iterate over page widget tools and display a button for each widget -->
           <template v-for="(tool, key) in state">
             <v-tab class="text-caption" :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key"
