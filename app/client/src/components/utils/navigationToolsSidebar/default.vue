@@ -16,11 +16,9 @@
     </v-slide-x-transition>
     <v-container v-if="currentTool && currentComponent" fluid :class="{ hidden: loading }" class="toolContent primary">
       <v-slide-x-reverse-transition>
-        <v-card flat>
-          <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}"
-            class="toolComponentWrapper">
-          </component>
-        </v-card>
+        <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}"
+          class="toolComponentWrapper">
+        </component>
       </v-slide-x-reverse-transition>
     </v-container>
   </v-navigation-drawer>
@@ -132,10 +130,17 @@ export default {
   width: 100%;
   height: 100%;
   left: 0;
-  top: 0;
+}
+
+.toolContent {
+  height: 100%
 }
 
 .hidden {
   display: none;
+}
+
+.toolComponentWrapper {
+  height: 100%
 }
 </style>

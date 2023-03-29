@@ -1,11 +1,6 @@
 <template>
   <div v-if="props.uuid">
-    <apexchart
-      height="80%"
-      :type="data.type"
-      :options="data.options"
-      :series="data.series"
-    ></apexchart>
+    <apexchart width="100%" :type="data.type" :options="data.options" :series="data.series"></apexchart>
   </div>
 </template>
 <script setup>
@@ -67,7 +62,7 @@ const dataSubscriber$ = $store
   .subscribe((val) => {
     makeCategories(val);
   });
-onMounted(() => {});
+onMounted(() => { });
 onUnmounted(() => {
   dataSubscriber$.unsubscribe();
 });
