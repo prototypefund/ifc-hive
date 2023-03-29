@@ -1,11 +1,11 @@
 <template>
-  <div v-if="props.uuid" data-test-container="widgets/ticketboard/chart/ticketsByTag"
+  <div v-if="props.uuid && isReady" data-test-container="widgets/ticketboard/chart/ticketsByTag"
     :data-test-container-uuid="props.uuid">
-    <apexchart height="80%" :type="data.type" :options="data.options" :series="data.series"></apexchart>
+    <apexchart width="100%" :type="data.type" :options="data.options" :series="data.series"></apexchart>
   </div>
 </template>
 <script setup>
-import { inject, ref, onMounted, onUnmounted } from "vue";
+import { inject, ref, shallowRef, onMounted, onUnmounted } from "vue";
 import { splitIdentifier, filterData } from "../lib/helper.js";
 const props = defineProps({
   props: {
@@ -34,7 +34,7 @@ const data = ref({
   },
   series: [],
 });
-
+const isReady = shallowRef(false)
 const $store = inject("$store");
 const makeCategories = function (items) {
   if (props.props.categories.length > 0) {
@@ -56,7 +56,11 @@ const dataSubscriber$ = $store
   .subscribe((val) => {
     makeCategories(val);
   });
-onMounted(() => { });
+onMounted(() => {
+  window.setTimeout(() => {
+    isReady.value = true
+  }, 400)
+});
 onUnmounted(() => {
   dataSubscriber$.unsubscribe();
 });

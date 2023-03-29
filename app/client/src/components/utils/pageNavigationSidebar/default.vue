@@ -7,19 +7,19 @@
       <v-list-item density="compact" v-if="navigationRail">
         <!-- open/close icon -->
         <template v-slot:append>
-          <v-btn density="compact" variant="plain" icon="mdi-dock-left" @click.stop="handleNavigationToolsSidebar()" />
-        </template>
-      </v-list-item>
-      <v-list-item density="comfortable" :title="$t('navigation')" :value="$t('navigation')">
-        <!-- open/close icon -->
-        <template v-slot:append>
-          <v-btn v-if="!navigationRail" density="comfortable" variant="plain" icon="mdi-chevron-left"
-            @click.stop="handleNavigation(true)" />
-          <v-btn v-else density="compact" variant="plain" icon="mdi-menu" @click.stop="handleNavigation(false)" />
-          <v-btn v-if="!navigationRail" density="compact" variant="plain" icon="mdi-dock-left"
+          <v-btn density="comfortable" variant="plain" flat icon="mdi-dock-left"
             @click.stop="handleNavigationToolsSidebar()" />
         </template>
       </v-list-item>
+      <!--v-list-item density="comfortable" :title="$t('navigation')" :value="$t('navigation')">
+        <template v-slot:append>
+          <v-btn v-if="!navigationRail" density="comfortable" variant="plain" flat icon="mdi-chevron-left"
+            @click.stop="handleNavigation(true)" />
+          <v-btn v-else density="compact" variant="plain" flat icon="mdi-menu" @click.stop="handleNavigation(false)" />
+          <v-btn v-if="!navigationRail" density="compact" variant="plain" flat icon="mdi-dock-left"
+            @click.stop="handleNavigationToolsSidebar()" />
+        </template>
+      </!--v-list-item-->
 
       <v-divider />
       <ConnectionBar v-if="$mobile && !navigationRail" />
@@ -113,7 +113,7 @@ export default {
         },
       });
     },
-    handleNavigation(val) {
+    handleNavigation(val) {/*
       if (val !== this.navigationRail) {
         this.$store.dispatch({
           type: "ui/update",
@@ -121,7 +121,7 @@ export default {
             navigationOpen: !val,
           },
         });
-      }
+      }*/
     },
     navigate(item) {
       this.$router.push({

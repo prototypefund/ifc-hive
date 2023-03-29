@@ -1,6 +1,6 @@
 <template>
-  <v-navigation-drawer data-test-container="utils/navigationToolsSidebar/default" id="navigationToolsSidebar" permanent
-    v-if="state">
+  <v-navigation-drawer width="400" data-test-container="utils/navigationToolsSidebar/default" id="navigationToolsSidebar"
+    permanent v-if="state">
     <v-slide-x-transition>
       <v-tabs v-model="currentTool" density="comfortable" center-active class="border-bottom">
         <!-- iterate over page widget tools and display a button for each widget -->
@@ -39,6 +39,11 @@ export default {
     route: false,
     navigationRailSubscriber$: false,
     loading: true,
+    navigation: {
+      shown: false,
+      width: 200,
+      borderSize: 3
+    }
   }),
   computed: {
     currentComponent: {
@@ -84,7 +89,7 @@ export default {
     },
   },
   created() {
-    this.loadingSuibscriber$ = this.$store
+    this.loadingSubscriber$ = this.$store
       .select((state) => state.ui.loading)
       .subscribe((val) => {
         this.loading = val;
@@ -106,7 +111,7 @@ export default {
       });
   },
   destroyed() {
-    this.loadingSuibscriber$.unsubscribe();
+    this.loadingSubscriber$.unsubscribe();
     this.stateSubscriber$.unsubscribe();
     this.openToolSubscriber$.unsubscribe();
     this.stateSubscriber$.unsubscribe();

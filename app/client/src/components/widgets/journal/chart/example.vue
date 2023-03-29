@@ -1,10 +1,11 @@
 <template>
-  <div data-test-container="widgets/journal/chart/example" :data-test-container-uuid="props.uuid">
-    <apexchart height="80%" :type="data.type" :options="data.options" :series="data.series"></apexchart>
+  <div v-if="props.uuid && isReady" data-test-container="widgets/journal/chart/example"
+    :data-test-container-uuid="props.uuid">
+    <apexchart width="100%" :type="data.type" :options="data.options" :series="data.series"></apexchart>
   </div>
 </template>
 <script setup>
-import { inject, ref, onMounted, onUnmounted } from "vue";
+import { inject, ref, onMounted, shallowRef, onUnmounted } from "vue";
 const props = defineProps({
   props: {
     type: Object,
@@ -40,8 +41,13 @@ const data = ref({
   series: [14, 23, 21, 17, 15, 10, 12, 17, 21],
 });
 
+const isReady = shallowRef(false)
 const $store = inject("$store");
 const state = ref({});
-onMounted(() => { });
+onMounted(() => {
+  window.setTimeout(() => {
+    isReady.value = true
+  }, 400)
+});
 onUnmounted(() => { });
 </script>
