@@ -15,9 +15,6 @@
         <v-divider />
       </div>
     </v-expand-transition>
-    <QuickListHandler :uuid="props.widgetUUID" :docUUID="props.docUUID">
-      <v-icon icon="mdi-close-box" color="error" />
-    </QuickListHandler>
     <QuickListHandler :uuid="props.uuid" :docUUID="props.docUUID" action="remove_all" v-if="state.entries.length > 1">
       <v-icon icon="mdi-close-box-multiple" color="error" />
     </QuickListHandler>
