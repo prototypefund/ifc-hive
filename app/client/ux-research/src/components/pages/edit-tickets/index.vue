@@ -42,6 +42,29 @@
 
       <v-container>
         <v-row justify="center">
+          <v-col cols="6">
+            <v-alert color="surface-4" class="text-center" icon="mdi-alert">
+              <h1 class="text-h5">Olaf, your approval ist requested until 23th April 2023!</h1>
+              <v-row>
+                <v-col class="text-body-1">
+                  Please confirm this construction site documentation.
+                </v-col>
+              </v-row>
+              <v-row class="mt-5">
+                <v-col class="text-center">
+                  <v-btn color="error" class="mr-4">No</v-btn>
+                  <v-btn color="success">Yes</v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="text-body-1">
+                  Please remembe that you signed a contract in which you...
+                </v-col>
+              </v-row>
+            </v-alert>
+          </v-col>
+        </v-row>
+        <v-row justify="center">
           <v-col cols="6" class="pt-6">
             <v-breadcrumbs :items="['LP3', 'Sprint 2', 'Dokumentation', '']" class="pl-0">
               <template v-slot:prepend>
@@ -58,11 +81,7 @@
                   <div class="mb-4">
                     <v-chip label class="bg-blue mr-1 mb-1">milestone</v-chip>
                     <v-chip label class="bg-yellow-darken-1 mr-1 mb-1">doing</v-chip>
-                    <v-chip label class="bg-red-lighten-1 mr-1 mb-1">design document</v-chip>
-                  </div>
-                  <div class="text-body-2">
-                    Weitere Meta information<br />
-                    Verdichtet oder ausführlich auf mehreren Zeilen
+                    <v-chip label class="bg-purple-lighten-1 mr-1 mb-1">design document</v-chip>
                   </div>
                 </div>
               </v-col>
@@ -89,31 +108,21 @@
               Hans Mustermann (Faul & Träge GmbH)
             </h2>
 
-            <div class="mt-4">
-              <v-avatar size="30">
-                <v-img
-                  src="https://cdn.vuetifyjs.com/images/john.jpg"
-                  alt="John"
-                ></v-img>
-              </v-avatar>
-              Hans Mustermann (Faul & Träge GmbH)
-              <v-icon color="success">mdi-check-circle</v-icon> 
-            </div>
-
-            <div class="mt-4">
-              <v-avatar size="30">
-                <v-img
-                  src="https://cdn.vuetifyjs.com/images/john.jpg"
-                  alt="John"
-                ></v-img>
-              </v-avatar>
-              Hans Mustermann (Faul & Träge GmbH)
-              <v-icon color="warning">mdi-help-circle</v-icon> 
-            </div>
-
-
-
             <p class="text-body-1 mt-6">
+              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+              erat, sed diaor sit amet, consetetur sadipscing elitr, sed diam
+              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+              erat, sed diam voluptua. At vero eos et accusam et justo duo
+              dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+              sanctus est Lorem ipsum dolor sit amet.m voluptua. At vero eos et
+              accusam et justo duo dolores et ea rebum. Stet clita kasd
+              gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+              amet. Lorem ipsum dol
+            </p>
+
+
+            <p class="text-body-1 mt-4">
               Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
               nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
               erat, sed diaor sit amet, consetetur sadipscing elitr, sed diam
@@ -133,19 +142,6 @@
               src="https://www.agcs.allianz.com/content/onemarketing/agcs/agcs/en_GB/news-and-insights/expert-risk-articles/construction-claims-trends.thumb.1280.1280.png?ck=1674229805"
             ></v-img>
             <div class="text-caption mt-1">Baustelle am 30.3.2023</div>
-
-            <p class="text-body-1 mt-4">
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diaor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. At vero eos et accusam et justo duo
-              dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-              sanctus est Lorem ipsum dolor sit amet.m voluptua. At vero eos et
-              accusam et justo duo dolores et ea rebum. Stet clita kasd
-              gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-              amet. Lorem ipsum dol
-            </p>
 
           </v-col>
         </v-row>
