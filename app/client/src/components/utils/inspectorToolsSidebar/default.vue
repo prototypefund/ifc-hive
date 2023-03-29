@@ -11,7 +11,7 @@
     </template>
     <template v-if="currentTool !== false">
       <v-slide-x-transition>
-        <v-tabs density="comfortable" v-model="currentTool" fixed-tabs>
+        <v-tabs density="comfortable" v-model="currentTool" center-active>
           <!-- iterate over page widget tools and display a button for each widget -->
           <template v-for="(tool, key) in state">
             <v-tab :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key" :key="tool">
@@ -27,10 +27,15 @@
         </v-tabs>
       </v-slide-x-transition>
     </template>
+    <v-container v-if="currentTool" fluid :class="{ hidden: loading }" class="toolContent primary">
+      <hr class="contentLine" />
+      <v-slide-x-reverse-transition>
+        <v-card flat>
+          <pre>{{ state }}</pre>
+        </v-card>
+      </v-slide-x-reverse-transition>
+    </v-container>
 
-    <v-divider />
-    <v-divider />
-    <pre>{{ state }}</pre>
   </v-navigation-drawer>
 </template>
 <script>
@@ -45,6 +50,7 @@ export default {
     state: false,
     route: false,
     navigationRailSubscriber$: false,
+    loading: true,
   }),
   computed: {
     currentTool: {
@@ -64,6 +70,11 @@ export default {
     },
   },
   created() {
+    this.loadingSuibscriber$ = this.$store
+      .select((state) => state.ui.loading)
+      .subscribe((val) => {
+        this.loading = val;
+      });
     this.openToolSubscriber$ = this.$store
       .select((state) => state.ui.currentInspectorTool)
       .subscribe((val) => {
@@ -81,6 +92,7 @@ export default {
       });
   },
   destroyed() {
+    this.loadingSuibscriber$.unsubscribe();
     this.stateSubscriber$.unsubscribe();
     this.openToolSubscriber$.unsubscribe();
   },
@@ -107,4 +119,17 @@ export default {
   },
 };
 </script>
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+.closeOverlay {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+.hidden {
+  display: none;
+}
+</style>

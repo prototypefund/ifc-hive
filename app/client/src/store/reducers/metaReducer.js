@@ -18,9 +18,11 @@ export default ($eventbus) => [(reducer) => {
 
           if (!state.widgets[widget.uuid]) {
             // make a generic widget state map
+            // TODO remove either the ...props or props
             widgets.push({
               uuid: widget.uuid,
               name: widget.name,
+              props: widget.props,
               ...widget.props
             })
           }

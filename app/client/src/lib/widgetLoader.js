@@ -23,7 +23,6 @@ export const widgetConfLoader = function (store) {
     return import(`../components/widgets/${widget.name || 'debug'}/conf.js`).then(conf => {
       const widgetConf = conf[widget.face] || conf.default
       const mergedConf = mergeDeepRight(mergeDeepRight(widgetConf, widget), widget.props || {})
-      mergedConf.props = false
       store.dispatch({
         type: 'widgets/update',
         uuid: widget.uuid,
@@ -47,7 +46,6 @@ export const widgetTypeConfLoader = function (store) {
       .then(conf => {
         const widgetConf = conf[widget.face] || conf.default
         const mergedConf = mergeDeepRight(mergeDeepRight(widgetConf, widget), widget.props || {})
-        mergedConf.props = false
         store.dispatch({
           type: 'widgets/update',
           uuid: widget.uuid,

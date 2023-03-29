@@ -4,7 +4,6 @@ export default {
         items: "card_flat",
         columns: 1
     },
-    hasInspector: true,
     title: "funoFun",
     slots: [
         {

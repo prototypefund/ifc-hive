@@ -238,6 +238,10 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+#app #appMain {
+  position: relative
+}
+
 #app #appComponent {
   overflow-y: auto !important;
   overflow-x: hidden !important;
@@ -246,7 +250,7 @@ html {
 #app .backToTop {
   position: fixed !important;
   z-index: 100;
-  right: 30px;
+  right: 70px;
   bottom: 30px;
 }
 

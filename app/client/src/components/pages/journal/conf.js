@@ -9,7 +9,10 @@ export default {
       column: 12,
       widget: {
         uuid: "journalWidget",
-        name: "journal"
+        name: "journal",
+        props: {
+          test: "huhu"
+        }
       }
     }
   ],
