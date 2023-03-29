@@ -212,10 +212,6 @@ export default {
   bottom: 0;
 }
 
-.hidden {
-  visibility: hidden !important;
-}
-
 .hidden * {
   visibility: hidden !important;
 }

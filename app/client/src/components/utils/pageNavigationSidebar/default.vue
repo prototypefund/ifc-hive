@@ -4,13 +4,7 @@
     :rail="navigationRail" id="navSideBar" permanent color="page-nav-bg">
     <!-- Title -->
     <template v-slot:prepend>
-      <v-list-item density="compact" v-if="navigationRail">
-        <!-- open/close icon -->
-        <template v-slot:append>
-          <v-btn density="comfortable" variant="plain" flat icon="mdi-dock-left"
-            @click.stop="handleNavigationToolsSidebar()" />
-        </template>
-      </v-list-item>
+
       <!--v-list-item density="comfortable" :title="$t('navigation')" :value="$t('navigation')">
         <template v-slot:append>
           <v-btn v-if="!navigationRail" density="comfortable" variant="plain" flat icon="mdi-chevron-left"
@@ -20,7 +14,10 @@
             @click.stop="handleNavigationToolsSidebar()" />
         </template>
       </!--v-list-item-->
-
+      <v-list-item density="compact" v-if="navigationRail" @click.stop="handleNavigationToolsSidebar()"
+        class="sideBarToggle border-bottom">
+        <v-icon icon="mdi-dock-left"></v-icon>
+      </v-list-item>
       <v-divider v-if="$mobile && !navigationRail" />
       <ConnectionBar v-if="$mobile && !navigationRail" />
       <!-- <Socket-ConnectionBar v-if="!navigationRail" /> -->
@@ -135,5 +132,14 @@ export default {
 <style lang="css" scoped>
 .toggleButtons>.v-list-item__append {
   flex-direction: column;
+}
+
+.hidden {
+  display: none
+}
+
+.sideBarToggle {
+  padding-top: 10px;
+  padding-bottom: 8px
 }
 </style>

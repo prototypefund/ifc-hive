@@ -3,10 +3,8 @@
     :rail="currentTool === false" permanent location="right" v-if="state">
     <template v-slot:prepend>
       <template v-if="currentTool === false">
-        <v-list-item density="compact">
-          <template v-slot:append>
-            <v-btn density="compact" flat variant="plain" icon="mdi-dock-right" @click.stop="handleToolSidebar()" />
-          </template>
+        <v-list-item density="compact" @click.stop="handleToolSidebar()" class="sideBarToggle border-bottom">
+          <v-icon icon="mdi-dock-right"></v-icon>
         </v-list-item>
         <template v-for="(tool, key) in state">
           <v-list-item density="compact" v-if="checkVisibility(tool)">
@@ -180,7 +178,12 @@ export default {
   padding: 0
 }
 
-.hidden {
-  display: none;
+.hidden * {
+  visibility: hidden !important
+}
+
+.sideBarToggle {
+  padding-top: 10px;
+  padding-bottom: 8px
 }
 </style>
