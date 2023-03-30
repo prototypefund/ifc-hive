@@ -145,9 +145,14 @@ export default function (app) {
           projects: await Project.countDocuments(),
           tags: await Tag.countDocuments(),
           tickets: await Ticket.countDocuments(),
-          ticketsTree: await Ticket.getChildrenTree({
+          firstProject: await Ticket.getChildrenTree({
             fields: '_id, title',
             rootDoc: f0,
+            options: { sort: { title: 'asc' } },
+          }),
+          clientProject: await Ticket.getChildrenTree({
+            fields: '_id, title',
+            rootDoc: t0,
             options: { sort: { title: 'asc' } },
           }),
           user: await User.countDocuments(),
