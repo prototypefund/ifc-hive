@@ -117,20 +117,23 @@ export default function (app) {
         const t6 = new Ticket(newTickets[6])
         await t6.save()
 
-        // create random tickets for dummy project
-        // const dummyTicketsRaw = [...Array(5000)].map((_, i) => {
-        //   const t = JSON.parse(JSON.stringify(tickets[0]))
-        //   t._id= uuidv4()
-        //   t.disId = `${i}` 
-        //   t.project = 'projectDummy'
-        //   t.owner = 'userAnton',
-        //   t.title = `${i} some random title with a prefix number`
-        //   t.body = randomText
-        //   return t 
-        // })
-
-        const dummyTickets = mapIds(dummyTicketsRaw, idMap, ['project', 'owner', 'tags'])
-        await Ticket.insertMany(dummyTickets)
+        // second project
+        const f0 = new Ticket(newTickets[7])
+        await f0.save()
+        const f1 = new Ticket(newTickets[8])
+        await f1.save()
+        const f2 = new Ticket(newTickets[9])
+        await f2.save()
+        const f3 = new Ticket(newTickets[10])
+        await f3.save()
+        const f4 = new Ticket(newTickets[11])
+        await f4.save()
+        const f5 = new Ticket(newTickets[12])
+        await f5.save()
+        const f6 = new Ticket(newTickets[13])
+        await f6.save()
+        const f7 = new Ticket(newTickets[14])
+        await f7.save()
 
         /*
          * send response with object counts
@@ -142,7 +145,11 @@ export default function (app) {
           projects: await Project.countDocuments(),
           tags: await Tag.countDocuments(),
           tickets: await Ticket.countDocuments(),
-          ticketsTree: await Ticket.getChildrenTree({ rootDoc: t0 }),
+          ticketsTree: await Ticket.getChildrenTree({
+            fields: '_id, title',
+            rootDoc: f0,
+            options: { sort: { title: 'asc' } },
+          }),
           user: await User.countDocuments(),
         }
 

@@ -45,4 +45,13 @@ export default [
   'ticket_4',
   'ticket_5',
   'ticket_6',
+
+  'ticket_f_0',
+  'ticket_f_1',
+  'ticket_f_2',
+  'ticket_f_3',
+  'ticket_f_4',
+  'ticket_f_5',
+  'ticket_f_6',
+  'ticket_f_7',
 ] 
