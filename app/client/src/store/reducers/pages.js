@@ -1,6 +1,6 @@
 import { mergeDeepRight, clone } from 'ramda'
 import { applicationState, storePatterns } from '../state'
-
+import { globalPages } from '@_/setup/application.js'
 export default ($eventbus) => (state, action) => {
 
   if (state) {

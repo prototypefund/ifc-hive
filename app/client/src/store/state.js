@@ -27,9 +27,10 @@ export const applicationState = {
     message: null,
   },
   user: {
-    uuid: false,
-    permissions: [],
-    token: false,
+    nickname: false,
+    email: false,
+    firstname: false,
+    lastname: false,
   },
   organization: {
     id: false,

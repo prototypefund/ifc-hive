@@ -1,6 +1,7 @@
 <template>
-    Public
-    <router-view />
+    <div>
+        <router-view />
+    </div>
 </template>
 <script>
 import { globalPages } from "./setup/application";

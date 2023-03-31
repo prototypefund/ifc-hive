@@ -1,16 +1,14 @@
 <template>
   <v-container>
-    <h1>Login</h1>
     <v-sheet width="300" class="mx-auto">
-
       <v-form ref="form">
-        <v-text-field v-model="name" :counter="10" :rules="nameRules" clearable label="Name" required></v-text-field>
-        <v-text-field v-model="password" :counter="10" :rules="passwordRules" clearable type="password" label="Password"
+        <v-text-field v-model="email" :counter="50" :rules="emailRules" clearable label="EMail" required></v-text-field>
+        <v-text-field v-model="password" :counter="50" :rules="passwordRules" clearable type="password" label="Password"
           required></v-text-field>
         <!--v-select v-model="select" :items="items" :rules="[v => !!v || 'Item is required']" label="Item"
           required></!--v-select-->
 
-        <v-checkbox v-model="checkbox" label="Sign in to last active Project?"></v-checkbox>
+        <v-checkbox v-model="singIntoLast" label="Sign in to last active Project?"></v-checkbox>
 
         <div class="d-flex flex-column">
           <v-btn color="success" class="mt-4" block @click="validate">
@@ -26,40 +24,74 @@
   </v-container>
 </template>
 <script>
+import { setHttpToken } from '../lib/httpClient.js'
+
 export default {
+  inject: ["$api", "$store"],
   data: () => ({
     valid: true,
     name: '',
     password: '',
-    nameRules: [
-      v => !!v || 'Name is required',
-      v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+    emailRules: [
+      v => !!v || 'email is required',
+      v => (v && v.length <= 50) || 'email must be less than 10 characters',
     ],
     passwordRules: [
       v => !!v || 'Password is required',
-      v => (v && v.length <= 10) || 'Password must be less than 10 characters',
+      v => (v && v.length <= 50) || 'Password must be less than 10 characters',
     ],
-    checkbox: false,
+    singIntoLast: false,
   }),
-
+  mounted() {
+    const token = localStorage.getItem("USER_TOKEN")
+    if (token) {
+      setHttpToken(this.$api, token)
+      this.$router.push({
+        name: 'app.project.select'
+      });
+    }
+  },
   methods: {
     async validate() {
       const { valid } = await this.$refs.form.validate()
-      let projectId = false;
       if (valid) {
-        if (this.checkbox) {
-          this.$router.push({
-            name: 'app.project.index',
-            params: {
-              id: 21564846453498
-            },
-          });
-        } else {
-          this.$router.push({
-            name: 'app.project.select'
-          });
-        }
-
+        this.$api.post(
+          '/core/user/login',
+          {
+            email: this.email,
+            password: this.password
+          }).then((user) => {
+            if (user && user.data) {
+              if (user.data.user) {
+                this.$store.dispatch({
+                  type: 'user/udpate',
+                  payload: user.data.user
+                })
+                setHttpToken(this.$api, user.data.token)
+                localStorage.setItem("USER_TOKEN", user.data.token);
+                if (user.data.config) {
+                  if (this.singIntoLast && (user.data.config.lastProjectId)) {
+                    this.$router.push({
+                      name: 'app.project.index',
+                      params: {
+                        id: user.data.config.lastProjectId
+                      },
+                    });
+                  } else {
+                    this.$router.push({
+                      name: 'app.project.select'
+                    });
+                  }
+                } else {
+                  this.$router.push({
+                    name: 'app.project.select'
+                  });
+                }
+              }
+            } else {
+              debugger
+            }
+          })
       }
     },
     reset() {

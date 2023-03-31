@@ -49,26 +49,30 @@
     </v-toolbar>
 
     <v-divider />
-    <!-- Navigation Drawer -->
-    <PageNavigation :nav-items="navItems" :footer-items="footerItems" />
-    <navigation-tools-sidebar v-if="currentNavigationTool" />
-    <!-- Main content -->
-    <mock />
-    <v-main id="appMain">
-      <v-btn class="backToTop" v-if="hasScrolled" @click="scrollTop" icon="mdi-chevron-up" color="primary" />
-      <template v-if="isInTest">
-        <slot />
-      </template>
-      <template v-else>
-        <router-view v-slot="{ Component }">
-          <component :is="Component" :class="{ isLoading: loading }" id="appComponent"
-            :style="{ height: viewPortHeight + 'px' }" @scroll.passive="setScroll($event)" />
-        </router-view>
-      </template>
-    </v-main>
-    <inspector-tools-sidebar v-if="page.hasInspector" />
-    <mobile-startup v-if="$mobile" />
+    <template v-if="batchLoading">
+      moin
+    </template>
+    <template v-else>
+      <!-- Navigation Drawer -->
+      <PageNavigation :nav-items="navItems" :footer-items="footerItems" />
+      <navigation-tools-sidebar v-if="currentNavigationTool" />
+      <!-- Main content -->
+      <v-main id="appMain">
+        <v-btn class="backToTop" v-if="hasScrolled" @click="scrollTop" icon="mdi-chevron-up" color="primary" />
+        <template v-if="isInTest">
+          <slot />
+        </template>
+        <template v-else>
+          <router-view v-slot="{ Component }">
+            <component :is="Component" :class="{ isLoading: loading }" id="appComponent"
+              :style="{ height: viewPortHeight + 'px' }" @scroll.passive="setScroll($event)" />
+          </router-view>
+        </template>
+      </v-main>
+      <inspector-tools-sidebar v-if="page.hasInspector" />
 
+    </template>
+    <mobile-startup v-if="$mobile" />
   </v-app>
 </template>
 <script>
@@ -81,8 +85,6 @@ import navigationToolsSidebar from "@u/navigationToolsSidebar/default.vue";
 import inspectorToolsSidebar from "@u/inspectorToolsSidebar/default.vue";
 import StatusBar from "@u/uploader/statusBar.vue";
 import ProgressBar from "@u/uploader/progressBar.vue";
-import { globalTools } from "../setup/application";
-import mock from "./mock.vue";
 import socketStatus from "@u/socketStatus.vue"
 import projectSwitch from "@u/projectSwitch/select.vue"
 import { useTheme } from 'vuetify'
@@ -95,7 +97,6 @@ export default {
     inspectorToolsSidebar,
     StatusBar,
     ProgressBar,
-    mock,
     socketStatus,
     projectSwitch,
     mobileStartup: defineAsyncComponent(() =>
@@ -110,6 +111,7 @@ export default {
   },
   data: () => ({
     page: false,
+    batchLoading: true,
     editMode: false,
     viewPortHeight: false,
     viewPortWidth: false,
@@ -176,8 +178,8 @@ export default {
   },
 
   mounted() {
+    // this.$eventbus.emit('socketJoinRoom', this.$route.params.id)
 
-    globalTools(this.$store);
     //window.addEventListener("resize", this.setDimensions, { passive: true });
     // TODO find a better way instead of this ugly timeOutBullshit
     //setTimeout(() => this.setDimensions(), 800);

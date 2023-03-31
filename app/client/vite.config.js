@@ -23,6 +23,7 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
+            '@_': path.resolve(__dirname, './src'),
             '@': path.resolve(__dirname, './src/app/components'),
             '@w': path.resolve(__dirname, './src/app/components/widgets'),
             '@p': path.resolve(__dirname, './src/app/components/pages'),

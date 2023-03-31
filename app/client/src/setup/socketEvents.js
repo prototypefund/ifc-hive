@@ -6,7 +6,7 @@
  * @param {object} $eventbus - instance of our custom eventbus
  */
 import log from '@lib/logger.js'
-
+import { globalPages } from '@_/setup/application.js'
 export function registerSocketEvents($socket, $store, $eventbus) {
 
   /* required for reconnection */
@@ -82,6 +82,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
     })
     // add project
     $store.dispatch({ type: 'project/addlist', payload: projectList })
+    // TODO REMOVE LOOKUP
     $store.dispatch({ type: 'project/addlookup', payload: projectLookup })
   })
 
@@ -94,6 +95,8 @@ export function registerSocketEvents($socket, $store, $eventbus) {
     // Reset all store states which are project dependend. 
     if (data.project && data.project.config) {
       $store.dispatch({ type: 'projectInit' })
+      globalPages($store)
+
       // TODO add mobile switch
       if (data.project.config.browser) {
         if (data.project.config.browser.ui) {
