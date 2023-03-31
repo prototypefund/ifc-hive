@@ -1,4 +1,5 @@
 <template>
+    Public
     <router-view />
 </template>
 <script>

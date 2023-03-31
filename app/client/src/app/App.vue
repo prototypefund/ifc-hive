@@ -122,29 +122,29 @@ export default {
     footerItems: [
       {
         icon: "mdi-account-cog",
-        route: "app.accountSettings",
+        route: "app.project.account.settings",
         params: {},
       },
       {
         icon: "mdi-cog",
-        route: "app.settings",
+        route: "app.project.settings",
         params: {},
       },
     ],
     navItems: [
       {
         icon: "mdi-home",
-        route: "app.dashboard",
+        route: "app.project.dashboard",
         params: {},
       },
       {
         icon: "mdi-file-document-multiple",
-        route: "app.journal",
+        route: "app.project.journal",
         params: {},
       },
       {
         icon: "mdi-human-male-board-poll",
-        route: "app.ticketboard",
+        route: "app.project.ticketboard",
         params: {},
       },
     ],

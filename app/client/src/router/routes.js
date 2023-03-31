@@ -29,10 +29,12 @@ export default function (store) {
       name: 'app.index',
       props: true,
       component: Index,
+      redirect: { name: 'app.project.select' },
       children: [
         {
           path: 'projects',
           name: 'app.project.select',
+          props: true,
           component: app_project_select,
         },
         {
