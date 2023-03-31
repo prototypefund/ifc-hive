@@ -31,7 +31,7 @@
       <!-- item -->
       <v-list-item v-for="item in navItems" :disabled="currentRoute === item.route || !item.route"
         :active="currentRoute === item.route" :key="item.route" :value="item.route || ''"
-        :data-test-id="item.route ? 'sidebar_nav-' + item.route.replace('.', '-') : ''" @click="navigate(item)"
+        :data-test-id="item.route ? 'sidebar_nav-' + item.route.replaceAll('.', '-') : ''" @click="navigate(item)"
         active-color="primary" link class="nav-link">
         <!-- item prepend icon -->
         <template v-if="item.icon" v-slot:prepend>
@@ -49,7 +49,7 @@
       <v-list density="compact">
         <v-list-item v-for="item in footerItems" :disabled="currentRoute === item.route || !item.route"
           :active="currentRoute === item.route"
-          :data-test-id="item.route ? 'sidebar_nav-' + item.route.replace('.', '-') : ''" :key="item.route"
+          :data-test-id="item.route ? 'sidebar_nav-' + item.route.replaceAll('.', '-') : ''" :key="item.route"
           :value="item.route || ''" @click="navigate(item)" active-color="primary" link class="nav-link">
           <!-- item prepend icon -->
           <template v-if="item.icon" v-slot:prepend>

@@ -1,5 +1,5 @@
 import { createApp, h } from 'vue'
-import App from './App.vue'
+import App from './Index.vue'
 import Markdown from 'vue3-markdown-it'
 import getEnvVariable from './lib/getEnvVariable'
 import createStore from './store/index.js'

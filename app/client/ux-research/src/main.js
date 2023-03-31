@@ -19,7 +19,6 @@ const routes = [
 
   { path: '/', redirect: { name: 'login' } },
   { path: '/login', name: 'login', component: login },
-  { path: '/test', name: 'test', component: selectProject },
 
   // app chrome
   {
@@ -29,18 +28,22 @@ const routes = [
     component: App,
     children: [
       {
+        path: 'project',
+        name: 'app.project.select',
+        component: selectProject,
+      },
+      {
         path: 'project/:id',
-        name: 'project',
+        name: 'app.project',
         component: projectRouter,
         props: true,
         children: [
-          { path: 'splash', name: 'splash', component: splash },
-          { path: '1', name: 'page1', component: page1 },
-          { path: '2', name: 'page2', component: page2 },
-          { path: 'edit', name: 'edit', component: edit },
-        ]  
-      },
-      { path: 'select', name: 'select', component: selectProject, props: false },
+          { path: 'splash', name: 'app.splash', component: splash },
+          { path: '1', name: 'app.page1', component: page1 },
+          { path: '2', name: 'app.page2', component: page2 },
+          { path: 'edit', name: 'app.edit', component: edit },
+        ]
+      }
     ]
   },
 

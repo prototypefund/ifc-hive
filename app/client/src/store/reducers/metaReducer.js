@@ -7,7 +7,7 @@ export default ($eventbus) => [(reducer) => {
     // meta "effect like" reducer for widget add before page add
     if (action.type == "pages/add") {
       page = action.payload
-      pageUUID = action.payload.uuid || action.routeName.replace('.', '-')
+      pageUUID = action.payload.uuid || action.routeName.replaceAll('.', '-')
       // if we have a widget config for this page we need to setup the widget states
       if ((page.slots || page.widgets) && !state.pages[pageUUID]) {
         widgets = []

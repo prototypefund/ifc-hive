@@ -6,7 +6,7 @@ export default ($eventbus, pagesLookup) => (state, action) => {
     switch (action.type) {
       case 'init':
         return applicationState.currentPage
-        // used in beforeResolve router hook, will trigger before each route change including param changes
+      // used in beforeResolve router hook, will trigger before each route change including param changes
       case 'currentPage/set':
         if (!action.routeName) return state
         // create our json friendly uuid
@@ -14,7 +14,7 @@ export default ($eventbus, pagesLookup) => (state, action) => {
         let scrollY = false
         // get current scroll position to apply it to the memory of page
 
-        const uuid = action.routeName.replace('.', '-')
+        const uuid = action.routeName.replaceAll('.', '-')
         // check if that requested page has already been preconfigured (should always be the case)
         if (pagesLookup && pagesLookup[uuid] && pagesLookup[uuid].uuid) {
           // create a new currentPage object based on the url params merged ontop of the default page config
@@ -65,7 +65,7 @@ export default ($eventbus, pagesLookup) => (state, action) => {
         }, loadingHold * 2)
 
         return currPage
-        // simply let us update the state of the current page
+      // simply let us update the state of the current page
       case 'currentPage/update':
         return mergeDeepRight(state, action.payload)
       default:

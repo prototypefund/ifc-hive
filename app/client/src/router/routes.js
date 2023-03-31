@@ -1,111 +1,79 @@
 // import routes from modules
 
-const dashboardComp = () => import('../components/pages/dashboard/page.vue')
-const settingsComp = () => import('../components/pages/settings/page.vue')
-const journalComp = () => import('../components/pages/journal/page.vue')
-const ticketboardComp = () => import('../components/pages/ticketboard/page.vue')
-const accountComp = () => import('../components/pages/account/page.vue')
-const loadConf = (page) => import(`../components/pages/${page}/conf.js`)
-const confCache = {}
+import App from '../app/App.vue'
+import Index from '../app/Index.vue'
+import app_project_select from '../app/selectProject.vue'
+
+import app_dashboard from '../app/components/pages/dashboard/page.vue'
+import app_journal from '../app/components/pages/journal/page.vue'
+import app_ticketboard from '../app/components/pages/ticketboard/page.vue'
+
+
+
+
+import app_settings from '../app/components/pages/settings/page.vue'
+import app_account from '../app/components/pages/account/page.vue'
+
+import public_login from '../public/login.vue'
+import public_terms from '../public/terms.vue'
+
 
 export default function (store) {
   return [
     /* Root */
+    { path: '/', redirect: { name: 'public.login' } },
+    { path: '/login', name: 'public.login', component: public_login },
+    { path: '/terms', name: 'public.terms', component: public_terms },
     {
-      path: '/',
-      name: 'app',
-      redirect: { name: 'app.dashboard' },
-    },
-    {
-      path: '/dashboard',
-      name: 'app.dashboard',
-      component: dashboardComp,
+      path: '/app',
+      name: 'app.index',
       props: true,
-      beforeEnter: async (to, from) => {
-        if (!confCache.dashboard) {
-          loadConf('dashboard').then(conf => {
-            confCache.dashboard = conf.default
-            store.dispatch({
-              type: 'pages/add',
-              routeName: to.name,
-              payload: conf.default
-            });
-          })
-        }
-      }
+      component: Index,
+      children: [
+        {
+          path: 'projects',
+          name: 'app.project.select',
+          component: app_project_select,
+        },
+        {
+          path: 'project/:id',
+          name: 'app.project.index',
+          component: App,
+          props: true,
+          children: [
+            {
+              path: 'dashboard',
+              name: 'app.dashboard',
+              component: app_dashboard,
+              props: true,
+            },
+            {
+              path: 'journal',
+              name: 'app.project.journal',
+              component: app_journal,
+              props: true,
+            },
+            {
+              path: 'ticketboard',
+              name: 'app.project.ticketboard',
+              component: app_ticketboard,
+              props: true,
+            },
+            {
+              path: 'account',
+              name: 'app.project.account.settings',
+              component: app_account,
+              props: true,
+            },
+            {
+              path: 'settings',
+              name: 'app.project.settings',
+              component: app_settings,
+              props: true,
+            },
+          ]
+        },
+      ]
     },
-    {
-      path: '/account',
-      name: 'app.accountSettings',
-      component: accountComp,
-      props: true,
-      beforeEnter: (to, from) => {
-        if (!confCache.accountSettings) {
-          loadConf('account').then(conf => {
-            confCache.accountSettings = conf.default
-            store.dispatch({
-              type: 'pages/add',
-              routeName: to.name,
-              payload: conf.default
-            });
-          })
-        }
-      }
-    },
-    {
-      path: '/settings',
-      name: 'app.settings',
-      component: settingsComp,
-      props: true,
-      beforeEnter: (to, from) => {
-        if (!confCache.settings) {
-          loadConf('settings').then(conf => {
-            confCache.settings = conf.default
-            store.dispatch({
-              type: 'pages/add',
-              routeName: to.name,
-              payload: conf.default
-            });
-          })
-        }
-      }
-    },
-    {
-      path: '/journal',
-      name: 'app.journal',
-      component: journalComp,
-      props: true,
-      beforeEnter: (to, from) => {
-        if (!confCache.journal) {
-          loadConf('journal').then(conf => {
-            confCache.journal = conf.default
-            store.dispatch({
-              type: 'pages/add',
-              routeName: to.name,
-              payload: conf.default
-            });
-          })
-        }
-      }
-    },
-    {
-      path: '/ticketboard',
-      name: 'app.ticketboard',
-      component: ticketboardComp,
-      props: true,
-      beforeEnter: (to, from) => {
-        if (!confCache.ticketboard) {
-          loadConf('ticketboard').then(conf => {
-            confCache.ticketboard = conf.default
-            store.dispatch({
-              type: 'pages/add',
-              routeName: to.name,
-              payload: conf.default
-            });
-          })
-        }
-      }
-    },
-
   ]
 } 

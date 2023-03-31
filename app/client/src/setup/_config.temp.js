@@ -9,42 +9,17 @@ export default {
     displayTitle: 'Projektjournal',
   },
   /*
-   * Global Tools 
+   * Global NavigationTools
    */
-  tools: [
-    // quicklist (global tool)
-    {
-      page: false,
-      title: "quickList",
-      icon: "mdi-text-box-search-outline",
-      iconActive: "mdi-text-box-search",
-      uuid: "quickList",
-      widget: {
-        version: '1',
-        name: "quickList",
-        face: 'expansionVertical'
-      }
-    },
+  navigationTools: {
 
-    // file uploader (global tool)
-    {
-      title: "fileUploader",
-      page: false,
-      icon: "mdi-upload-network-outline",
-      iconActive: "mdi-upload-network",
-      uuid: "fileUploader_global",
-      widget: {
-        version: '1',
-        name: "fileUploader",
-      }
-    }
-  ],
-
+  },
   /*
-   * Pages
-   */
+ * Pages
+ */
   pages: {
-    'app-dashboard': {
+    'app-project-dashboard': {
+      icon: 'mdi-home',
       scrollTop: false,
       grid: {
         type: 'default',
@@ -66,14 +41,15 @@ export default {
         }
       ],
       title: 'funoFun',
-      uuid: 'app-dashboard',
-      routeName: 'app.dashboard',
+      uuid: 'app-project-dashboard',
+      routeName: 'app.project.dashboard',
       locale: 'de',
       query: {},
       scrollY: 0
     },
-    'app-ticketboard': {
+    'app-project-ticketboard': {
       scrollTop: false,
+      icon: 'mdi-human-male-board-poll',
       widgets: [{
         uuid: 'ticketBoardWidget',
         version: '1',
@@ -118,35 +94,14 @@ export default {
           }
         }
       }],
-      tools: [{
-        title: 'ticketsByTag',
-        page: 'app.ticketboard',
-        icon: 'mdi-chart-donut',
-        iconActive: 'mdi-chart-donut-variant',
-        uuid: 'chart_ticketsByTag',
-        widget: {
-          version: '1',
-          name: 'ticketboard',
-          type: 'chart',
-          face: 'ticketsByTag',
-          props: {
-            categories: [
-              'tags:tag-todo',
-              'tags:tag-doing',
-              'tags:tag-test',
-              'tags:tag-qa',
-              'tags:tag-done'
-            ]
-          }
-        }
-      }],
-      uuid: 'app-ticketboard',
-      routeName: 'app.ticketboard',
+      uuid: 'app-project-ticketboard',
+      routeName: 'app.project.ticketboard',
       locale: 'de',
       query: {},
       scrollY: 0
     },
-    'app-journal': {
+    'app-project-journal': {
+      icon: "mdi-file-document-multiple",
       scrollTop: false,
       grid: {
         type: 'default',
@@ -163,26 +118,14 @@ export default {
           }
         }
       ],
-      tools: [{
-        title: 'chartJournal',
-        page: 'app.journal',
-        icon: 'mdi-chart-donut',
-        iconActive: 'mdi-chart-donut-variant',
-        uuid: 'journal_chart',
-        widget: {
-          name: 'journal',
-          version: '1',
-          type: 'chart',
-          face: 'example'
-        }
-      }],
-      uuid: 'app-journal',
-      routeName: 'app.journal',
+      uuid: 'app-project-journal',
+      routeName: 'app.project.journal',
       locale: 'de',
       query: {},
       scrollY: 0
     },
-    'app-settings': {
+    'app-project-settings': {
+      icon: "mdi-cog",
       scrollTop: false,
       grid: {
         type: 'default',
@@ -191,13 +134,14 @@ export default {
       },
       slots: [],
       title: 'the rolfness of life',
-      uuid: 'app-settings',
-      routeName: 'app.settings',
+      uuid: 'app-project-settings',
+      routeName: 'app.project.settings',
       locale: 'de',
       query: {},
       scrollY: 0
     },
-    'app-accountSettings': {
+    'app-project-account-settings': {
+      icon: "mdi-account-cog",
       scrollTop: false,
       grid: {
         type: 'default',
@@ -219,8 +163,8 @@ export default {
         }
       ],
       title: 'funoFun',
-      uuid: 'app-accountSettings',
-      routeName: 'app.accountSettings',
+      uuid: 'app-project-account-settings',
+      routeName: 'app.project.account.settings',
       locale: 'de',
       query: {},
       scrollY: 0

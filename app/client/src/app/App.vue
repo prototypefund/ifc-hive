@@ -81,7 +81,7 @@ import navigationToolsSidebar from "@u/navigationToolsSidebar/default.vue";
 import inspectorToolsSidebar from "@u/inspectorToolsSidebar/default.vue";
 import StatusBar from "@u/uploader/statusBar.vue";
 import ProgressBar from "@u/uploader/progressBar.vue";
-import { globalTools } from "./setup/application";
+import { globalTools } from "../setup/application";
 import mock from "./mock.vue";
 import socketStatus from "@u/socketStatus.vue"
 import projectSwitch from "@u/projectSwitch/select.vue"
@@ -176,10 +176,11 @@ export default {
   },
 
   mounted() {
+
     globalTools(this.$store);
-    window.addEventListener("resize", this.setDimensions, { passive: true });
+    //window.addEventListener("resize", this.setDimensions, { passive: true });
     // TODO find a better way instead of this ugly timeOutBullshit
-    setTimeout(() => this.setDimensions(), 800);
+    //setTimeout(() => this.setDimensions(), 800);
     if (this.$mobile !== false) {
       this.$store.dispatch({
         type: "ui/update",

@@ -17,7 +17,7 @@ export default ($eventbus) => (state, action) => {
         return applicationState.pages
       /* pages/add */
       case 'pages/add':
-        pageUUID = action.payload.uuid || action.routeName.replace('.', '-')
+        pageUUID = action.payload.uuid || action.routeName.replaceAll('.', '-')
         if (state[pageUUID]) {
           // if the page already exists do nothing
           return state

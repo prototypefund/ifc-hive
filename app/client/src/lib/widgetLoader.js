@@ -8,8 +8,8 @@ import { mergeDeepRight } from 'ramda'
  * Load a given widget vue file
  */
 export const widgetLoader = function (widgetName = 'debug', face = 'default') {
-  return import(`../components/widgets/${widgetName}/${face}.vue`).catch(e => {
-    return import('../components/widgets/error/default.vue')
+  return import(`../app/components/widgets/${widgetName}/${face}.vue`).catch(e => {
+    return import('../app/components/widgets/error/default.vue')
   })
 }
 /*
@@ -20,7 +20,7 @@ export const widgetLoader = function (widgetName = 'debug', face = 'default') {
  */
 export const widgetConfLoader = function (store) {
   return (widget) => {
-    return import(`../components/widgets/${widget.name || 'debug'}/conf.js`).then(conf => {
+    return import(`../app/components/widgets/${widget.name || 'debug'}/conf.js`).then(conf => {
       const widgetConf = conf[widget.face] || conf.default
       const mergedConf = mergeDeepRight(mergeDeepRight(widgetConf, widget), widget.props || {})
       store.dispatch({
@@ -42,7 +42,7 @@ export const widgetConfLoader = function (store) {
  */
 export const widgetTypeConfLoader = function (store) {
   return (widget) => {
-    return import(`../components/widgets/${widget.name || 'debug'}/${widget.type || 'default'}/conf.js`)
+    return import(`../app/components/widgets/${widget.name || 'debug'}/${widget.type || 'default'}/conf.js`)
       .then(conf => {
         const widgetConf = conf[widget.face] || conf.default
         const mergedConf = mergeDeepRight(mergeDeepRight(widgetConf, widget), widget.props || {})
