@@ -22,7 +22,6 @@ export default function (app) {
     try {
 
       let user = false
-      console.log(process.env.API_ROOT_PASSWORD)
 
       if (request.body.email === process.env.API_ROOT_EMAIL
         && request.body.password === process.env.API_ROOT_PASSWORD
@@ -39,6 +38,7 @@ export default function (app) {
       } else {
         // attempt to login user against the user collection
         user = await User.findOne({ email: request.body.email })
+        console.log(user.password)
         // send 401 if we didn't find any user with this email
         if (!user) return app.httpErrors.unauthorized()
 
@@ -50,8 +50,13 @@ export default function (app) {
         // if (user.reset_token) ...
 
         // check password
-        const isCorrectPassword = await user.checkPassword(request.body.password)
-        if (!isCorrectPassword) return app.httpErrors.unauthorized()
+        try {
+          const isCorrectPassword = await user.checkPassword(request.body.password)
+          if (!isCorrectPassword) return app.httpErrors.unauthorized()
+        } catch (err) {
+          app.httpErrors.forbidden()
+          app.log.error(err)
+        }
       }
 
       // create token

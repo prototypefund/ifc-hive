@@ -61,7 +61,7 @@ const userSchema = new Schema({
   blocked: { type: Boolean, default: false },
 
   /* hashed password field */
-  password: { type: String, trim: true, select: false },
+  password: { type: String, trim: true },
 
   /* keep track of last password update */
   passwordUpdated: { type: Date, default: null },
@@ -75,7 +75,6 @@ const userSchema = new Schema({
     index: true,
     default: null,
     unique: true,
-    select: false,
   },
 
   /*
