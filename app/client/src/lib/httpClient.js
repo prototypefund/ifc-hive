@@ -46,14 +46,12 @@ async function apiHealthcheck(client) {
   }
 }
 
-
 /*
  * Set JWT token in http client so we don't have to care about it
  * @param {object} client - axios instance
  * @param {string} token - the JWT token
  */
 function setHttpToken(client, token) {
-  log.api('setHttpToken', token,)
   client.defaults.headers.common.Authorization = `Bearer ${token}`
   client.defaults.headers.Authorization = `Bearer ${token}`
 }
@@ -63,7 +61,6 @@ function setHttpToken(client, token) {
  * @param {bject} client - axios instance
  */
 function unsetHttpToken(client) {
-  log.api('unsetHttpToken', token,)
   client.defaults.headers.common.Authorization = null
   client.defaults.headers.Authorization = null
 }

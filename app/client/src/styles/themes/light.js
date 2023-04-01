@@ -2,7 +2,7 @@
  * light theme
  */
 export default {
-  background: '#FFFFFF',
+  background: '#F4F4F4',
   surface: '#FFFFFF',
   primary: '#148dbc',
   'primary-darken-1': '#13678A',

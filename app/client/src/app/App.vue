@@ -13,11 +13,7 @@
           <v-col cols="3">
             <project-switch class="ml-10" />
           </v-col>
-          <v-btn color="red darken-2" @click="saveLocalProjectConfig" class="ml-4">
-            <v-icon>mdi-upload-multiple</v-icon> Save project config
-          </v-btn>
 
-          <!-- <v-col cols="auto"><v-icon color="grey" xsmall>mdi-chevron-right</v-icon></v-col> -->
           <v-col cols="auto">
             <v-fade-transition>
               <span v-if="loading"><v-progress-circular indeterminate :size="20" :width="2" color="primary" /></span>
@@ -37,7 +33,6 @@
       <socket-status />
       <!-- notifications -->
       <Notifications />
-      <v-btn @click="toggleTheme" icon="mdi-theme-light-dark"></v-btn>
 
       <!-- User menu -->
       <v-menu>
@@ -50,12 +45,22 @@
             <v-icon>mdi-chevron-down</v-icon>
           </v-btn>
         </template>
-        <v-list style="min-width: 200px" class="pb-0">
+        <v-list class="pb-0">
+          <v-list-item @click="toggleTheme">
+            <template v-slot:prepend> <v-icon>mdi-theme-light-dark</v-icon> </template>
+            <v-list-item-title>Toggle light / dark</v-list-item-title>
+          </v-list-item>
           <v-list-item>
+            <template v-slot:prepend> <v-icon>mdi-account-circle</v-icon> </template>
             <v-list-item-title>Profile</v-list-item-title>
           </v-list-item>
           <v-list-item>
+            <template v-slot:prepend> <v-icon>mdi-cog</v-icon> </template>
             <v-list-item-title>Settings</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="saveLocalProjectConfig ">
+            <template v-slot:prepend> <v-icon>mdi-content-save-cog</v-icon> </template>
+            <v-list-item-title>Save Project config</v-list-item-title>
           </v-list-item>
           <v-list-item class="bg-error" @click="logout">
             <v-list-item-title>Logout</v-list-item-title>
@@ -134,7 +139,7 @@ export default {
   },
   data: () => ({
     page: false,
-    batchLoading: true,
+    batchLoading: false,
     editMode: false,
     viewPortHeight: false,
     viewPortWidth: false,
@@ -249,7 +254,7 @@ export default {
       //   - remove token from axios client
       //   - logout from socket connection, remove token from socket client
 
-      localStorage.setItem('USER_TOKEN', false)  
+      localStorage.removeItem('USER_TOKEN')  
       this.$router.push({ name: 'public.login' })
     },
 

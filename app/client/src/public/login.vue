@@ -1,28 +1,63 @@
 <template>
-  <v-container>
-    <v-sheet width="300" class="mx-auto">
-      <v-form ref="form">
-        <v-text-field v-model="email" :counter="50" :rules="emailRules" clearable label="EMail" required></v-text-field>
-        <v-text-field v-model="password" :counter="50" :rules="passwordRules" clearable type="password" label="Password"
-          required></v-text-field>
-        <!--v-select v-model="select" :items="items" :rules="[v => !!v || 'Item is required']" label="Item"
-          required></!--v-select-->
+  <v-container fluid
+    :style="{ height: $vuetify.display.height + 'px' } "
+  >
+    <!-- center login form vertically with a 20% negative offset -->
+    <v-row justify="center" align="center" 
+      :style="{
+        height: $vuetify.display.height + 'px',
+        marginTop: (-1) * $vuetify.display.height * 0.2 + 'px'
+        }">
+        <v-col col="12" md="6" lg="3">
 
-        <v-checkbox v-model="singIntoLast" label="Sign in to last active Project?"></v-checkbox>
+          <!-- login form -->
+          <v-form ref="form">
+            <!-- Email -->
+            <v-text-field
+              v-model="email"
+              :counter="50"
+              :rules="emailRules"
+              clearable
+              label="E-Mail"
+              required>
+            </v-text-field>
 
-        <div class="d-flex flex-column">
-          <v-btn color="success" class="mt-4" block @click="validate">
-            Login
-          </v-btn>
+            <!-- Password -->
+            <v-text-field
+              v-model="password"
+              :counter="50"
+              :rules="passwordRules"
+              clearable
+              type="password"
+              label="Password"
+              @keyup.enter="validate"
+              required>
+            </v-text-field>
 
-          <v-btn color="error" class="mt-4" block @click="reset">
-            Reset Form
-          </v-btn>
-        </div>
-      </v-form>
-    </v-sheet>
-  </v-container>
+            <!-- sign into last active project -->
+            <v-checkbox v-model="singIntoLast" label="Sign in to last active Project?"></v-checkbox>
+
+            <!-- buttons -->
+            <div class="text-center">
+              <!-- login -->
+              <v-btn color="success" block class="mb-6"  @click="validate">
+                Login
+              </v-btn>
+              <!-- reset -->
+              <v-btn variant="text" class="mt-4" @click="reset">
+                Reset Form
+              </v-btn>
+              <!-- password forgotten -->
+              <v-btn variant="text" class="mt-4" @click="reset">
+                Password forgotten
+              </v-btn>
+            </div>
+          </v-form>
+        </v-col>
+      </v-row>
+    </v-container>
 </template>
+
 <script>
 import { setHttpToken } from '../lib/httpClient.js'
 
@@ -42,8 +77,11 @@ export default {
     ],
     singIntoLast: false,
   }),
+
   mounted() {
+    // check if we have a token in localStorage
     const token = localStorage.getItem("USER_TOKEN")
+    // if we have a token redirect to project selection
     if (token) {
       setHttpToken(this.$api, token)
       this.$router.push({
@@ -51,52 +89,61 @@ export default {
       });
     }
   },
+
   methods: {
+    /* validate and send login form */
     async validate() {
       const { valid } = await this.$refs.form.validate()
-      if (valid) {
-        this.$api.post(
-          '/core/user/login',
-          {
-            email: this.email,
-            password: this.password
-          }).then((user) => {
-            if (user && user.data) {
-              if (user.data.user) {
-                this.$store.dispatch({
-                  type: 'user/udpate',
-                  payload: user.data.user
-                })
-                setHttpToken(this.$api, user.data.token)
-                localStorage.setItem("USER_TOKEN", user.data.token);
-                if (user.data.config) {
-                  if (this.singIntoLast && (user.data.config.lastProjectId)) {
-                    this.$router.push({
-                      name: 'app.project.index',
-                      params: {
-                        id: user.data.config.lastProjectId
-                      },
-                    });
-                  } else {
-                    this.$router.push({
-                      name: 'app.project.select'
-                    });
-                  }
-                } else {
-                  this.$router.push({
-                    name: 'app.project.select'
-                  });
-                }
-              }
-            } else {
-              debugger
-            }
-          })
-      }
+      // early return if invalid login formula
+      if (!valid) return false
+      // request login token and user object
+      const user = await this.postLogin()
+      // set user object in store
+      this.$store.dispatch({
+        type: 'user/udpate',
+        payload: user.data.user
+      })
+      // set token in http client
+      setHttpToken(this.$api, user.data.token)
+      // save token to local storage
+      localStorage.setItem("USER_TOKEN", user.data.token);
+      // redirect after login
+      this.redirectAfterLogin(user)
     },
+
+    /* redirect after login depending on user config and login form checkbox */
+    redirectAfterLogin (user) {
+      // if applicable redirect to last project
+      if (this.singIntoLast && (user.data?.config?.lastProjectId)) {
+        return this.$router.push({
+          name: 'app.project.index',
+          params: {
+            id: user.data.config.lastProjectId
+          },
+        });
+      }
+      // otherweise redirect to project selection
+      return this.$router.push({
+        name: 'app.project.select'
+      });
+    },
+
+    /* post login form */
+    async postLogin () {
+      const user = await this.$api.post(
+        '/core/user/login', {
+          email: this.email,
+          password: this.password
+        })
+        return user ?  user : false
+    },
+
+    /* reset login form */
     reset() {
       this.$refs.form.reset()
     },
+
+    /* reset login form validation */
     resetValidation() {
       this.$refs.form.resetValidation()
     },
