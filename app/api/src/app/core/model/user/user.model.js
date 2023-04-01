@@ -94,6 +94,11 @@ const userSchema = new Schema({
     emailSignature: { type: String, default: null },
   },
 
+  ux: {
+    lastProjectId: false,
+    browser: { type: Schema.Types.Mixed, default: {}}
+  }
+
 }, { timestamps: true })
 
 /*

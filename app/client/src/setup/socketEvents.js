@@ -88,61 +88,61 @@ export function registerSocketEvents($socket, $store, $eventbus) {
 
   /* successfull join requests are confirmed by the server */
   $socket.on('joinConfirmation', (data) => {
-    $store.dispatch({
-      type: 'ui/update',
-      payload: { loading: true }
-    })
-    // Reset all store states which are project dependend. 
-    if (data.project && data.project.config) {
-      $store.dispatch({ type: 'projectInit' })
-      globalPages($store)
-
-      // TODO add mobile switch
-      if (data.project.config.browser) {
-        if (data.project.config.browser.ui) {
-          $store.dispatch({
-            type: 'ui/update',
-            payload: data.project.config.browser.ui
-          })
-        }
-        if (data.project.config.browser.pages && Object.keys(data.project.config.browser.pages).length > 0) {
-          for (const [key, value] of Object.entries(data.project.config.browser.pages)) {
-            $store.dispatch({
-              type: "pages/add",
-              payload: value,
-            });
-          }
-        }
-        if (data.project.config.browser.tools && data.project.config.browser.tools.length > 0) {
-          data.project.config.browser.tools.forEach(tool => {
-            $store.dispatch({
-              type: "toolbar/add",
-              payload: tool,
-            });
-          })
-        }
-        if (data.project.config.browser.navigationTools && data.project.config.browser.navigationTools.length > 0) {
-          data.project.config.browser.navigationTools.forEach(tool => {
-            $store.dispatch({
-              type: "navigationTools/add",
-              payload: tool,
-            });
-          })
-        }
-        if (data.project.config.browser.inspectorTools && data.project.config.browser.inspectorTools.length > 0) {
-          data.project.config.browser.inspectorTools.forEach(tool => {
-            $store.dispatch({
-              type: "inspectorTools/add",
-              payload: tool,
-            });
-          })
-        }
-      }
-    }
-
-
+    // $store.dispatch({
+    //   type: 'ui/update',
+    //   payload: { loading: true }
+    // })
+    // // Reset all store states which are project dependend. 
+    // if (data.project && data.project.config) {
+    //   $store.dispatch({ type: 'projectInit' })
+    //   globalPages($store)
+    //
+    //   // TODO add mobile switch
+    //   if (data.project.config.browser) {
+    //     if (data.project.config.browser.ui) {
+    //       $store.dispatch({
+    //         type: 'ui/update',
+    //         payload: data.project.config.browser.ui
+    //       })
+    //     }
+    //     if (data.project.config.browser.pages && Object.keys(data.project.config.browser.pages).length > 0) {
+    //       for (const [key, value] of Object.entries(data.project.config.browser.pages)) {
+    //         $store.dispatch({
+    //           type: "pages/add",
+    //           payload: value,
+    //         });
+    //       }
+    //     }
+    //     if (data.project.config.browser.tools && data.project.config.browser.tools.length > 0) {
+    //       data.project.config.browser.tools.forEach(tool => {
+    //         $store.dispatch({
+    //           type: "toolbar/add",
+    //           payload: tool,
+    //         });
+    //       })
+    //     }
+    //     if (data.project.config.browser.navigationTools && data.project.config.browser.navigationTools.length > 0) {
+    //       data.project.config.browser.navigationTools.forEach(tool => {
+    //         $store.dispatch({
+    //           type: "navigationTools/add",
+    //           payload: tool,
+    //         });
+    //       })
+    //     }
+    //     if (data.project.config.browser.inspectorTools && data.project.config.browser.inspectorTools.length > 0) {
+    //       data.project.config.browser.inspectorTools.forEach(tool => {
+    //         $store.dispatch({
+    //           type: "inspectorTools/add",
+    //           payload: tool,
+    //         });
+    //       })
+    //     }
+    //   }
+    // }
+    //
+    //
     log.socket('joinConfirmation received', data)
-    $eventbus.emit('routerPush', '/')
+    // $eventbus.emit('routerPush', '/')
   })
 
   /* 

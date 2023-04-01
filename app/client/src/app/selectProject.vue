@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    moin
     <v-sheet width="300" class="mx-auto" v-if="projects.length > 0">
       <v-form ref="form">
         <v-list>
@@ -36,6 +35,7 @@ export default {
         },
       })
     },
+
     async loadProjectData() {
       this.$api.get('/core/projects').then((res) => {
         // early return if there are no data for us

@@ -14,6 +14,6 @@ export function registerSocketClient($socket, $store, $eventbus) {
   })
 
   $eventbus.on('socketGetProjectData', (projectId) => {
-    $socket.emit('requestProjectData', { project: projectId })
+    $socket.emit('getProjectData', { project: projectId })
   })
 }

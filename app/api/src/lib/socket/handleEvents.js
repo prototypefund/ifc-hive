@@ -3,6 +3,8 @@
  */
 import Project from '#src/app/core/model/project/project.model.js'
 import Ticket from '#src/app/journal/model/ticket/ticket.model.js'
+import Tag from '#src/app/core/model/tag/tag.model.js '
+import User from '#src/app/core/model/user/user.model.js'
 import { createDataPayload } from '#src/lib/dataObjectHelpers.js'
 
 
@@ -23,7 +25,7 @@ export async function registerSocketEvents (app) {
 
 
     /* send dummy data when project data are request by the client */
-    socket.on('requestProjectData', async (projectId) => {
+    socket.on('getProjectData', async (projectId) => {
       Ticket
         .find({})
         // .limit(100)
@@ -72,31 +74,76 @@ export async function registerSocketEvents (app) {
       }
 
       /* inform the client */
-      // const ticketCount = await Ticket.find({ isDeleted: false, project: room  }).count()
-      // socket.emit('batchDataStart', { expect: ticketCount })
-      //
-      // /* send ticket stream */
-      // await Ticket
-      //   .find({ project: room, isDeleted: false })
-      //   .cursor()
-      //   .on('data', (doc) => {
-      //     const { _id, title, disId, project } = doc
-      //     doc.tags.push('tag-todo')
-      //     const payload = {
-      //       _id,
-      //       _title: title,
-      //       _disId: disId,
-      //       _project: project,
-      //       _source: doc,
-      //       _type: 'memo'
-      //     }
-      //     /* emit data packages to client */
-      //     socket.emit('dataTest', payload )
-      //   })
-      //   /* let the client now that we are done */
-      //   .on('close', () => {
-      //     socket.emit('batchDataStop')
-      //   })
+      const ticketCount = await Ticket.find({ isDeleted: false, project: room  }).count()
+      const userCount = await User.find({ isDeleted: false  }).count()
+      const tagCount = await Tag.find({ project: room }).count()
+      const expect = ticketCount + userCount + tagCount
+      let loadingCount = 0
+      socket.emit('batchDataStart', { expect, ticketCount, userCount, tagCount })
+
+      const checkLoadingCount = (doc) => {
+        loadingCount += 1
+        if (loadingCount == expect ) {
+          socket.emit('batchDataStop')
+        }
+      }
+
+      /* send ticket stream */
+      const projectData = [
+      Ticket
+        .find({ project: room })
+        .cursor()
+        .on('data', (doc) => {
+          const { _id, title, disId, project } = doc
+          const payload = {
+            _id,
+            _title: title,
+            _disId: disId,
+            _project: project,
+            _source: doc,
+            _type: 'memo'
+          }
+          /* emit data packages to client */
+          socket.emit('dataTest', payload )
+          checkLoadingCount(doc)
+        }),
+      User
+        .find({ isDeleted: false })
+        .populate('organization account')
+        .cursor()
+        .on('data', (doc) => {
+          const payload = {
+            _id: doc._id,
+            _title: `${doc.firstname} ${doc.lastname}`,
+            _disId: doc.nickname,
+            _project: null,
+            _source: doc,
+            _type: 'user'
+          }
+          /* emit data packages to client */
+          socket.emit('dataTest', payload )
+          checkLoadingCount(doc)
+        }),
+
+        Tag
+        .find({ project: room })
+        .cursor()
+        .on('data', (doc) => {
+          const payload = {
+            _id: doc._id,
+            _title: doc.title,
+            _disId: doc.title,
+            _project: doc.project,
+            _source: doc,
+            _type: 'tag'
+          }
+          /* emit data packages to client */
+          socket.emit('dataTest', payload )
+          checkLoadingCount(doc)
+        })
+      ]
+
+        // let the client now that we are done
 
     })
 

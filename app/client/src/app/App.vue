@@ -49,9 +49,7 @@
     </v-toolbar>
 
     <v-divider />
-    <template v-if="batchLoading">
-      moin
-    </template>
+    <template v-if="batchLoading"></template>
     <template v-else>
       <!-- Navigation Drawer -->
       <PageNavigation :nav-items="navItems" :footer-items="footerItems" />
@@ -152,6 +150,10 @@ export default {
     ],
   }),
   created() {
+
+    // request project data by project id via the socket
+    this.$eventbus.emit('socketJoinRoom', this.$route.params.id)
+
     this.$store
       .select((state) => state.currentPage)
       .subscribe((val) => {

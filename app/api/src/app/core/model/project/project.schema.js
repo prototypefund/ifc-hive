@@ -32,7 +32,7 @@ const projectObjectTemplate = {
   description: null,
   isDeleted: false,
   shorttitle: null,
-  tags: [], // striing separated
+  tags: [], // simple strings, no project tags
   title: null,
   updatedAt: null,
   journal: null,
