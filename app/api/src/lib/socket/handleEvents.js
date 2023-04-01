@@ -109,6 +109,7 @@ export async function registerSocketEvents (app) {
         }),
       User
         .find({ isDeleted: false })
+        .select('title firstname lastname nickname email _id')
         .populate('organization account')
         .cursor()
         .on('data', (doc) => {

@@ -72,12 +72,10 @@ export default function (app) {
       // create all user documents
       await Promise.all(createPromises)
 
-
-
       /* import projects */
       const refProjects = JSON.parse(JSON.stringify(projects))
       await Project.deleteMany()
-      const newProjects = mapIds(refProjects, idMap, ['_id', 'account' ])
+      const newProjects = mapIds(refProjects, idMap, ['_id', 'account', 'journal' ])
       await Project.insertMany(newProjects)
 
       /* import tags */
@@ -91,13 +89,11 @@ export default function (app) {
       await Permission.deleteMany()
       const newPermissions = mapIds(refPermissions, idMap, ['_id', 'subjectId', 'objectId'])
       Permission.insertMany(newPermissions)
-
       
       const refTickets = JSON.parse(JSON.stringify(tickets))
       const newTickets = mapIds(refTickets, idMap, ['_id', 'parent', 'project', 'owner', 'tags'])
 
       try {
-
         await Ticket.deleteMany()
 
         // @TODO write function to iterate over promises and force sequential resolution as
@@ -145,16 +141,6 @@ export default function (app) {
           projects: await Project.countDocuments(),
           tags: await Tag.countDocuments(),
           tickets: await Ticket.countDocuments(),
-          firstProject: await Ticket.getChildrenTree({
-            fields: '_id, title',
-            rootDoc: f0,
-            options: { sort: { title: 'asc' } },
-          }),
-          clientProject: await Ticket.getChildrenTree({
-            fields: '_id, title',
-            rootDoc: t0,
-            options: { sort: { title: 'asc' } },
-          }),
           user: await User.countDocuments(),
         }
 

@@ -7,6 +7,7 @@ export default [
     tags: ['default', 'example', 'fixture'],
     description: 'This is a sample project created via system data fixtures.',
     account: 'accountDefault',
+    journal: 'ticket_0',
   },
   {
     _id: 'projectFirst',
@@ -16,6 +17,7 @@ export default [
     tags: ['default', 'example', 'fixture'],
     description: 'This is a sample project created via system data fixtures.',
     account: 'accountDefault',
+    journal: 'ticket_f_0',
   },
   {
     _id: 'projectDummy',
