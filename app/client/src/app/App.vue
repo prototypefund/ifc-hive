@@ -14,7 +14,7 @@
             <project-switch class="ml-10" />
           </v-col>
           <v-btn color="red darken-2" @click="saveLocalProjectConfig" class="ml-4">
-            <v-icon>mdi-upload-multiple</v-icon> Save local project config
+            <v-icon>mdi-upload-multiple</v-icon> Save project config
           </v-btn>
 
           <!-- <v-col cols="auto"><v-icon color="grey" xsmall>mdi-chevron-right</v-icon></v-col> -->
@@ -24,7 +24,6 @@
             </v-fade-transition>
           </v-col>
         </v-row>
-
 
 
       </v-app-bar-title>
@@ -39,7 +38,33 @@
       <!-- notifications -->
       <Notifications />
       <v-btn @click="toggleTheme" icon="mdi-theme-light-dark"></v-btn>
+
+      <!-- User menu -->
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn
+            color="primary"
+            v-bind="props"
+          >
+            <v-avatar image="https://randomuser.me/api/portraits/men/34.jpg" class="mr-2"></v-avatar>
+            <v-icon>mdi-chevron-down</v-icon>
+          </v-btn>
+        </template>
+        <v-list style="min-width: 200px" class="pb-0">
+          <v-list-item>
+            <v-list-item-title>Profile</v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>Settings</v-list-item-title>
+          </v-list-item>
+          <v-list-item class="bg-error" @click="logout">
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
     </v-app-bar>
+
     <v-toolbar density="compact" flat class="loadingBar" v-if="loading">
       <v-row class="loaderBar_wrapper">
         <v-slide-x-transition>
@@ -216,6 +241,16 @@ export default {
 
     saveLocalProjectConfig: function () {
       this.$eventbus.emit('saveLocalProjectConfig')
+    },
+
+    logout: async function () {
+      // @TODO wrap all logout stuff into function. 
+      //   - remove token from local storage
+      //   - remove token from axios client
+      //   - logout from socket connection, remove token from socket client
+
+      localStorage.setItem('USER_TOKEN', false)  
+      this.$router.push({ name: 'public.login' })
     },
 
     setDimensions: async function () {
