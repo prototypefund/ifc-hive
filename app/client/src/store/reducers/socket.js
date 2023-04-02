@@ -13,7 +13,7 @@ export default ($eventbus) => (state, action) => {
         return applicationState.socket
       case 'socket/status':
         socketState = JSON.parse(JSON.stringify(state))
-        socketState.status = action.payload.status
+        socketState = {...socketState, ...action.payload}
         return socketState
       default:
         return state

@@ -27,6 +27,7 @@ export const applicationState = {
     message: null,
   },
   user: {
+    _id: false,
     nickname: false,
     email: false,
     firstname: false,

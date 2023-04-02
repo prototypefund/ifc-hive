@@ -95,7 +95,7 @@ export default {
       // request login token and user object
       const user = await this.postLogin()
       // set user object in store
-      this.$store.dispatch({ type: 'user/udpate', payload: user.data.user })
+      this.$store.dispatch({ type: 'user/update', payload: user.data.user })
       // set token in http client
       setHttpToken(this.$api, user.data.token)
       // save token to local storage
@@ -141,7 +141,7 @@ export default {
       // early return if no result
       if (!res) return false
       // save received user object to store
-      this.$store.dispatch({ type: 'user/udpate', payload: res.data })
+      this.$store.dispatch({ type: 'user/update', payload: res.data })
       // redirect to project selection 
       this.$router.push({ name: 'app.project.select' });
     },
