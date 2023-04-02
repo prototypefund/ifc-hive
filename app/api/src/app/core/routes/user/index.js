@@ -6,6 +6,7 @@ import post from './route.user.post.js'
 import put from './route.user.put.js'
 import remove from './route.user.remove.js'
 import search from './route.user.search.js'
+import checkToken from './route.user.checkToken.js'
 
 export {
   get,
@@ -15,5 +16,6 @@ export {
   post,
   put,
   remove,
-  search
+  search,
+  checkToken,
 }

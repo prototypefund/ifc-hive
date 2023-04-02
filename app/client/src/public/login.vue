@@ -6,10 +6,10 @@
     <v-row justify="center" align="center" 
       :style="{
         height: $vuetify.display.height + 'px',
-        marginTop: (-1) * $vuetify.display.height * 0.2 + 'px'
-        }">
-        <v-col col="12" md="6" lg="3">
+        marginTop: (-1) * $vuetify.display.height * 0.2 + 'px' }"
+      >
 
+        <v-col col="12" md="6" lg="3">
           <!-- login form -->
           <v-form ref="form">
             <!-- Email -->
@@ -79,15 +79,11 @@ export default {
   }),
 
   mounted() {
-    // check if we have a token in localStorage
-    const token = localStorage.getItem("USER_TOKEN")
-    // if we have a token redirect to project selection
-    if (token) {
-      setHttpToken(this.$api, token)
-      this.$router.push({
-        name: 'app.project.select'
-      });
-    }
+    // @TODO actually this should happen in main.js since users might come via
+    // deep link. so on any route we would need to check, if there is a user
+    // token in local storage if it is still valid, get the user object and
+    // move on the requested route or the project selection page.
+    this.checkToken(localStorage.getItem("USER_TOKEN"))
   },
 
   methods: {
@@ -99,10 +95,7 @@ export default {
       // request login token and user object
       const user = await this.postLogin()
       // set user object in store
-      this.$store.dispatch({
-        type: 'user/udpate',
-        payload: user.data.user
-      })
+      this.$store.dispatch({ type: 'user/udpate', payload: user.data.user })
       // set token in http client
       setHttpToken(this.$api, user.data.token)
       // save token to local storage
@@ -136,6 +129,21 @@ export default {
           password: this.password
         })
         return user ?  user : false
+    },
+
+    /* check token and receive user object if valid */
+    async checkToken (token) {
+      if (!token) return false
+      // set token in client
+      setHttpToken(this.$api, token)
+      // check if token is valid
+      const res = await this.$api.get('/core/user/check-token')
+      // early return if no result
+      if (!res) return false
+      // save received user object to store
+      this.$store.dispatch({ type: 'user/udpate', payload: res.data })
+      // redirect to project selection 
+      this.$router.push({ name: 'app.project.select' });
     },
 
     /* reset login form */
