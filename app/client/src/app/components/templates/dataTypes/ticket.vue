@@ -53,7 +53,7 @@
           <v-col cols="12">
             <v-label>{{ $t("generics.assigned") }}</v-label>
             <user-chips :widgetUUID="props.widgetUUID" :user-lookup="userLookup" :docUUID="item._id"
-              :selectedUser="[item._source.assigned]" /></v-col>
+              :selectedUser="item._source.assigned" /></v-col>
           <v-col cols="12">
             <v-switch v-model="closed" hide-details :label="closed ? $t('generics.closed') : $t('generics.open')"
               disabled /></v-col>
@@ -135,7 +135,7 @@ const tags = computed({
 });
 const assigned = computed({
   get() {
-    return item.value._source.assigned || "";
+    return item.value._source.assigned || []
   },
   set(newValue) {
     itemUpdater({ assigned: newValue });

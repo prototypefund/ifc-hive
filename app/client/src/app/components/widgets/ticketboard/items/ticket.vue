@@ -32,14 +32,14 @@
             </v-tooltip>
           </v-chip>
         </v-col>
-        <v-col cols="2" v-if="ticketItem._source.assigned">
+        <v-col cols="2" v-if="ticketItem._source.assigned && ticketItem._source.assigned.length > 0"
+          v-for="assigned in ticketItem._source.assigned">
           <v-avatar width="10" end color="indigo">
             <v-img
-              v-if="props.userLookup.data[ticketItem._source.assigned]._source.avatar && props.userLookup.data[ticketItem._source.assigned]._source.avatar.file"
-              :src="props.userLookup.data[ticketItem._source.assigned]._source.avatar.file" />
-            <span justify="space-around"
-              v-else>{{ props.userLookup.data[ticketItem._source.assigned]._source.firstname.substring(0, 1) }}
-              {{ props.userLookup.data[ticketItem._source.assigned]._source.lastname.substring(0, 1) }}</span>
+              v-if="props.userLookup.data[assigned]._source.avatar && props.userLookup.data[assigned]._source.avatar.file"
+              :src="props.userLookup.data[assigned]._source.avatar.file" />
+            <span justify="space-around" v-else>{{ props.userLookup.data[assigned]._source.firstname.substring(0, 1) }}
+              {{ props.userLookup.data[assigned]._source.lastname.substring(0, 1) }}</span>
           </v-avatar>
         </v-col>
       </v-row>
