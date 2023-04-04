@@ -7,6 +7,7 @@ import put from './route.user.put.js'
 import remove from './route.user.remove.js'
 import search from './route.user.search.js'
 import checkToken from './route.user.checkToken.js'
+import patchLastProject from './route.user.patchLastProject.js'
 
 export {
   get,
@@ -18,4 +19,5 @@ export {
   remove,
   search,
   checkToken,
+  patchLastProject,
 }

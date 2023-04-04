@@ -39,6 +39,7 @@ export default async function (app) {
   app.put('/user/:id', user.put(app))
   app.delete('/user/:id', user.remove(app))
   app.get('/user/check-token', user.checkToken(app))
+  app.patch('/user/last-project/:projectId', user.patchLastProject(app))
   // app.post('/user/:id/avatar', { schema: { tags: ['core/user'] } } ,aliveHandler)
   // app.delete('/user/:id/avatar', { schema: { tags: ['core/user'] } } ,aliveHandler)
   app.post('/user/model', user.model(app))
