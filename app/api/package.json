@@ -10,7 +10,8 @@
   "scripts": {
     "start": "node ./src/server",
     "dev": "npx nodemon ./src/server",
-    "test": "npx c8 tap --reporter=terse --100"
+    "test": "npx c8 tap --reporter=terse --100 --test-ignore=/apitest.js/",
+    "test:api": "npx tap --reporter=terse ./test/api/*.js"
   },
   "dependencies": {
     "@elastic/elasticsearch": "8.x",

@@ -116,6 +116,7 @@ import ProgressBar from "@u/uploader/progressBar.vue";
 import socketStatus from "@u/socketStatus.vue"
 import projectSwitch from "@u/projectSwitch/select.vue"
 import { useTheme } from 'vuetify'
+import { globalTools } from '@_/setup/application.js'
 
 export default {
   components: {
@@ -215,6 +216,8 @@ export default {
     //window.addEventListener("resize", this.setDimensions, { passive: true });
     // TODO find a better way instead of this ugly timeOutBullshit
     //setTimeout(() => this.setDimensions(), 800);
+    // globalTools(this.$store)
+
     if (this.$mobile !== false) {
       this.$store.dispatch({
         type: "ui/update",

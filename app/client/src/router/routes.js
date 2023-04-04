@@ -7,9 +7,7 @@ import app_project_select from '../app/selectProject.vue'
 import app_dashboard from '../app/components/pages/dashboard/page.vue'
 import app_journal from '../app/components/pages/journal/page.vue'
 import app_ticketboard from '../app/components/pages/ticketboard/page.vue'
-
-
-
+import app_test from '../app/components/pages/test/page.vue'
 
 import app_settings from '../app/components/pages/settings/page.vue'
 import app_account from '../app/components/pages/account/page.vue'
@@ -45,7 +43,7 @@ export default function (store) {
           children: [
             {
               path: 'dashboard',
-              name: 'app.dashboard',
+              name: 'app.project.dashboard',
               component: app_dashboard,
               props: true,
             },
@@ -71,6 +69,12 @@ export default function (store) {
               path: 'settings',
               name: 'app.project.settings',
               component: app_settings,
+              props: true,
+            },
+            {
+              path: 'my-new-page',
+              name: 'app.project.mynewpage',
+              component: app_test,
               props: true,
             },
           ]

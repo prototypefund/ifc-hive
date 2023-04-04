@@ -2,7 +2,7 @@ export default [
   {
     _id: 'userAnton',
     nickname: 'Anton',
-    firstnam: 'Anton',
+    firstname: 'Anton',
     lastname: 'Example',
     email: 'anton@example.com',
     password: 'administrator',

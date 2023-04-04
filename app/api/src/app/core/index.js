@@ -4,6 +4,7 @@ import * as system from './routes/system/index.js'
 import * as tag from './routes/tag/index.js'
 import * as user from './routes/user/index.js'
 import * as project from './routes/project/index.js'
+import * as account from './routes/account/index.js'
 
 /*
  * Core service export all routes
@@ -12,8 +13,8 @@ export default async function (app) {
 
 
   /* account */
-  app.post('/accounts/', { schema: { tags: ['core/account'] } } ,aliveHandler)
-  app.get('/accounts/', { schema: { tags: ['core/account'] } } ,aliveHandler)
+  app.post('/accounts', { schema: { tags: ['core/account'] } } ,aliveHandler)
+  app.get('/accounts', account.getAll(app) )
   app.post('/accounts/search', { schema: { tags: ['core/account'] } } ,aliveHandler)
   app.post('/account/schema', { schema: { tags: ['core/account'] } } ,aliveHandler)
   app.get('/account/:id', { schema: { tags: ['core/account'] } } ,aliveHandler)

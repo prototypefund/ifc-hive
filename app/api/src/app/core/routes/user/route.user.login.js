@@ -66,8 +66,9 @@ export default function (app) {
         name: `${user.firstname} ${user.lastname}`,
         nickname: user.nickname,
         sub: user._id,
+        account: user.account,
+        organization: user.organization,
       }
-
       // add token id to payload
       payload.tokenId = randomId()
 

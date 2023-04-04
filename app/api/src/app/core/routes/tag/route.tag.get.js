@@ -8,7 +8,7 @@ export default function (app) {
     try {
       const tag = await Tag.findOne({ _id: request.params.id })
       if (!tag) return app.httpErrors.notFound()
-      return { tag }
+      return tag
     } catch (err) {
       app.httpErrors.internalServerError()
     }
