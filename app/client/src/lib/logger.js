@@ -16,7 +16,7 @@
  *
  * 2. Or use short cuts for types with message/data and title as paramaters
  *
- *    log.api('GET memo', data)
+ *    log.api('GET ticket', data)
  *    log.store(data, 'My custom log event')
  *    log.socket('subject line', { msg: 'some message', data: {} })
  *    log.info('Simple message')
@@ -50,7 +50,7 @@ class Logger {
   /*
    * Constructor
    */
-  constructor ()  {
+  constructor () {
     this.level = 1 // 0: no logging: 0 development 1, verbose 2
   }
 
@@ -62,7 +62,7 @@ class Logger {
    * @param {string} title - 
    * @param {number} level = log level 0 - 2 
    */
-  log (message, type, title, level = 1) {
+  log(message, type, title, level = 1) {
     // return if the message level is higher than the current log level
     if (level > this.level) return false
     // specify the format
@@ -88,33 +88,33 @@ class Logger {
    */
 
   /* socket */
-  socket (title, message, level) {
+  socket(title, message, level) {
     this.log(message, 'socket', title, level)
   }
 
   /* store */
-  store (title, message, level) {
+  store(title, message, level) {
     this.log(message, 'store', title, level)
   }
 
   /* api */
-  api (title, message, level) {
+  api(title, message, level) {
     this.log(message, 'api', title, level)
   }
 
   /* error - better use default console.error */
-  error (title, message, level) {
+  error(title, message, level) {
     this.log(message, 'error', title, 0)
   }
 
   /* warning */
-  warning (title, message, level) {
+  warning(title, message, level) {
     this.log(message, 'warning', title, level)
   }
 
   /* info  */
-  info (title, message, level) {
-    this.log(message, 'default', title, level )
+  info(title, message, level) {
+    this.log(message, 'default', title, level)
   }
 }
 

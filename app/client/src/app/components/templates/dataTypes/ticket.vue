@@ -1,5 +1,5 @@
 <template>
-  <v-card flat v-if="item" data-test-container="templates/dataTypes/memo" :data-test-container-uuid="props.uuid">
+  <v-card flat v-if="item" data-test-container="templates/dataTypes/ticket" :data-test-container-uuid="props.uuid">
     <v-card-title>
       <v-row><v-col align-self="start" cols="12"> {{ item._title }}</v-col></v-row>
       <v-row no-gutters>
@@ -81,7 +81,7 @@ import {
   onUnmounted,
   defineAsyncComponent,
 } from "vue";
-import objectTemplate from "../dbItems/memo";
+import objectTemplate from "../dbItems/ticket";
 const $store = inject("$store");
 const debugDump = shallowRef(false);
 const tagCombobox = defineAsyncComponent(() => import("@t/combobox/tags.vue"));
@@ -178,7 +178,7 @@ const props = defineProps({
   uuid: {
     type: String,
     default(rawProps) {
-      return rawProps.widgetUUID + "_dataTypes_memo_" + rawProps.docUUID;
+      return rawProps.widgetUUID + "_dataTypes_ticket_" + rawProps.docUUID;
     },
   },
   widgetUUID: {
@@ -209,9 +209,9 @@ const dataItemSubscriber$ = $store
   .subscribe((val) => {
     if (typeof val === "undefined") {
       // if the val is undefined, we are creating a new item which means we have to take the itemDefinition as a base for our forms
-      const plainMemo = JSON.parse(JSON.stringify(props.itemDefinition));
-      plainMemo._id = props.docUUID;
-      item.value = plainMemo;
+      const plainTicket = JSON.parse(JSON.stringify(props.itemDefinition));
+      plainTicket._id = props.docUUID;
+      item.value = plainTicket;
     } else if (item.value != val) {
       item.value = JSON.parse(JSON.stringify(val));
     }

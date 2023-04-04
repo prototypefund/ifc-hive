@@ -1,43 +1,43 @@
 <template>
-  <v-card variant="outlined" v-if="memo" data-test-container="templates/cards/memo"
+  <v-card variant="outlined" v-if="ticket" data-test-container="templates/cards/ticket"
     :data-test-container-uuid="props.uuid">
     <v-card-title>
-      <QuickListHandler uuid="quickList" :docUUID="memo._id" :dataTitle="memo._source.title" :type="memo._type">
-        {{ memo._source.title }}
+      <QuickListHandler uuid="quickList" :docUUID="ticket._id" :dataTitle="ticket._source.title" :type="ticket._type">
+        {{ ticket._source.title }}
       </QuickListHandler>
     </v-card-title>
     <v-card-subtitle>
-      <v-chip label color="primary" size="small" class="mr-4"># {{ memo._disId }}
+      <v-chip label color="primary" size="small" class="mr-4"># {{ ticket._disId }}
         <v-tooltip activator="parent" location="bottom">
-          {{ memo._disId }}
+          {{ ticket._disId }}
         </v-tooltip>
       </v-chip>
     </v-card-subtitle>
 
     <v-card-subtitle>
-      <v-row v-if="memo._created" no-gutters>
+      <v-row v-if="ticket._created" no-gutters>
         <v-col cols="2"> {{ $t("generics.created") }}: </v-col>
         <v-col cols="auto">
-          {{ $filters.dateFormat(memo._created) }}
+          {{ $filters.dateFormat(ticket._created) }}
         </v-col>
       </v-row>
 
-      <v-row v-if="memo._modified" no-gutters>
+      <v-row v-if="ticket._modified" no-gutters>
         <v-col cols="2"> {{ $t("generics.modified") }}: </v-col>
         <v-col cols="auto">
-          {{ $filters.dateFormat(memo._modified) }}
+          {{ $filters.dateFormat(ticket._modified) }}
         </v-col>
       </v-row>
-      <v-row v-if="memo._source.due" no-gutters>
+      <v-row v-if="ticket._source.due" no-gutters>
         <v-col cols="2"> {{ $t("generics.due") }}: </v-col>
         <v-col cols="auto">
-          {{ $filters.dateFormat(memo._source.due) }}
+          {{ $filters.dateFormat(ticket._source.due) }}
         </v-col>
       </v-row>
     </v-card-subtitle>
     <v-card-subtitle>
-      <tag-chips v-if="memo._source.tags && memo._source.tags.length > 0" :widgetUUID="props.widgetUUID"
-        :docUUID="memo._id" :tags="memo._source.tags" :tag-lookup="tagLookup" />
+      <tag-chips v-if="ticket._source.tags && ticket._source.tags.length > 0" :widgetUUID="props.widgetUUID"
+        :docUUID="ticket._id" :tags="ticket._source.tags" :tag-lookup="tagLookup" />
     </v-card-subtitle>
     <v-card-text> </v-card-text>
     <v-card-actions>
@@ -50,30 +50,31 @@
         <v-divider></v-divider>
 
         <v-card-text>
-          <pre>{{ memo }}</pre>
+          <pre>{{ ticket }}</pre>
         </v-card-text>
       </div>
     </v-expand-transition>
 
     <v-card-subtitle>
-      <v-row v-if="memo._source.owner">
+      <v-row v-if="ticket._source.owner">
         <v-col cols="3">
           {{ $t("generics.author") }}
         </v-col>
         <v-col cols="9">
-          <QuickListHandler uuid="quickList" :docUUID="memo._source.owner" :dataTitle="memo._source.owner" type="user">
-            <user-list-item :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :docUUID="memo._source.owner" />
+          <QuickListHandler uuid="quickList" :docUUID="ticket._source.owner" :dataTitle="ticket._source.owner"
+            type="user">
+            <user-list-item :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :docUUID="ticket._source.owner" />
           </QuickListHandler>
         </v-col>
       </v-row>
-      <v-row v-if="memo._source.assigned">
+      <v-row v-if="ticket._source.assigned">
         <v-col cols="3">
           {{ $t("generics.assignee") }}
         </v-col>
         <v-col cols="9">
-          <QuickListHandler uuid="quickList" :docUUID="memo._source.assigned" :dataTitle="memo._source.assigned"
+          <QuickListHandler uuid="quickList" :docUUID="ticket._source.assigned" :dataTitle="ticket._source.assigned"
             type="user">
-            <user-list-item :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :docUUID="memo._source.assigned" />
+            <user-list-item :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :docUUID="ticket._source.assigned" />
           </QuickListHandler>
         </v-col>
       </v-row>
@@ -104,7 +105,7 @@ const props = defineProps({
   uuid: {
     type: String,
     default(rawProps) {
-      return rawProps.widgetUUID + "_cards_memo_" + rawProps.docUUID;
+      return rawProps.widgetUUID + "_cards_ticket_" + rawProps.docUUID;
     },
   },
   widgetUUID: {
@@ -133,11 +134,11 @@ const shortenId = (uuid) => {
     return uuid.substring(0, 10) + "...";
   }
 };
-const memo = ref({});
+const ticket = ref({});
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
-    memo.value = val;
+    ticket.value = val;
   });
 onMounted(() => { });
 onUnmounted(() => {

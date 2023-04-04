@@ -7,20 +7,20 @@
     </v-col>
   </v-row>
   <v-row no-gutters>
-    <memo v-bind="props.props" :uuid="props.uuid" :widgetUUID="props.widgetUUID" :docUUID="props.docUUID || false"
-      data-test-container="widgets/quicklist/types/memo" :data-test-container-uuid="props.uuid" />
+    <ticket v-bind="props.props" :uuid="props.uuid" :widgetUUID="props.widgetUUID" :docUUID="props.docUUID || false"
+      data-test-container="widgets/quicklist/types/ticket" :data-test-container-uuid="props.uuid" />
   </v-row>
 </template>
 
 <script setup>
-import memo from "@t/dataTypes/memo.vue";
+import ticket from "@t/dataTypes/ticket.vue";
 import QuickListHandler from "@w/quickList/handler/click_remove.vue";
 const onList = true
 const props = defineProps({
   uuid: {
     type: String,
     default(rawProps) {
-      return rawProps.widgetUUID + "_types_memo_" + rawProps.docUUID;
+      return rawProps.widgetUUID + "_types_ticket_" + rawProps.docUUID;
     },
   },
   widgetUUID: {

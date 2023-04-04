@@ -145,7 +145,7 @@ export function createStore($eventbus) {
             // create our json friendly uuid
             let currPage = {}
             let scrollY = false
-            // get current scroll position to apply it to the memory of page
+            // get current scroll position to apply it to the ticketry of page
 
             const uuid = action.routeName.replaceAll('.', '-')
             // check if that requested page has already been preconfigured (should always be the case)
@@ -175,7 +175,7 @@ export function createStore($eventbus) {
               scrollY = document.getElementById("appComponent") ? document.getElementById("appComponent").scrollTop : 0
             }
             if (state.routeName) {
-              // update our memorized preconfigured page with the new version which includes url params and user data
+              // update our ticketrized preconfigured page with the new version which includes url params and user data
               store.dispatch({
                 type: 'pages/update',
                 stateName: state.uuid,

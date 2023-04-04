@@ -3,7 +3,7 @@ export default function (props = {}) {
     _id: props._id || "", // UUID
     _path: props._path || "",
     _project: props._project || "",
-    _type: "memo",
+    _type: "ticket",
     _title: props._title || "",
     _created: props._created || "",
     _modified: props._modified || "",

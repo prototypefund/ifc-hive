@@ -35,7 +35,7 @@ export const basicStoreFilters = (query, params, _data) => {
   let identifier = false
   if (query === "ALL_MEMOS") {
     data = filter((item) => {
-      return item._type === 'memo'
+      return item._type === 'ticket'
     }, data)
   }
   if (query === "ALL_TAGS") {

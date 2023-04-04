@@ -3,7 +3,7 @@
     :data-test-container-uuid="props.uuid">
     <v-timeline align="start" :density="viewPortWidth < 1110 ? 'compact' : 'default'">
       <v-timeline-item v-for="uuid in data.uuids" :key="uuid" max-width="600px">
-        <memo-card-item :widgetUUID="props.uuid" :tag-lookup="tags" :docUUID="uuid" />
+        <ticket-card-item :widgetUUID="props.uuid" :tag-lookup="tags" :docUUID="uuid" />
       </v-timeline-item>
     </v-timeline>
   </v-container>
@@ -11,7 +11,7 @@
 
 <script setup>
 import { inject, ref, onMounted, shallowRef, onUnmounted } from "vue";
-import memoCardItem from "@t/cards/memo.vue";
+import ticketCardItem from "@t/cards/ticket.vue";
 
 const $store = inject("$store");
 const state = ref({});

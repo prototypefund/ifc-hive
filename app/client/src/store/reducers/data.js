@@ -58,8 +58,8 @@ export default ($eventbus) => (state, action) => {
            * request new object from server
            */
           switch (item._type) {
-            // TODO send partial to type specific API endpoints: memo, user, tag etc. 
-            case 'memo':
+            // TODO send partial to type specific API endpoints: ticket, user, tag etc. 
+            case 'ticket':
 
               break
             default:

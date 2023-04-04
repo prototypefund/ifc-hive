@@ -1,8 +1,8 @@
 <template>
   <v-container v-if="state" data-test-container="pages/ticketboard/page" fluid pa-0 ma-0>
     <h1>{{ $t("pages.app-ticketboard") }}</h1>
-    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="memo">
-      <v-btn>New Memo</v-btn>
+    <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="ticket">
+      <v-btn>New Ticket</v-btn>
     </QuickListHandler>
     <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="user">
       <v-btn>New User</v-btn>

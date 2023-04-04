@@ -5,7 +5,7 @@
       <v-virtual-scroll :items="data.uuids">
         <template v-slot:default="{ item }">
           <v-timeline-item :key="item" max-width="600px">
-            <memo-card-item :widgetUUID="props.uuid" :tag-lookup="tags" :docUUID="item" />
+            <ticket-card-item :widgetUUID="props.uuid" :tag-lookup="tags" :docUUID="item" />
           </v-timeline-item>
         </template>
       </v-virtual-scroll>
@@ -15,7 +15,7 @@
 
 <script setup>
 import { inject, ref, onMounted, shallowRef, onUnmounted } from "vue";
-import memoCardItem from "@t/cards/memo.vue";
+import ticketCardItem from "@t/cards/ticket.vue";
 
 const $store = inject("$store");
 const state = ref({});

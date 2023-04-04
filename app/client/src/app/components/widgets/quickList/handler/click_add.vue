@@ -23,7 +23,7 @@ const currentToolSubscriber$ = $store
   });
 const props = defineProps({
   type: {
-    // type like  detail, memo, tags, user, batch, and stuff I don't know yet
+    // type like  detail, ticket, tags, user, batch, and stuff I don't know yet
     type: String,
     default: "list",
     required: true,

@@ -42,110 +42,110 @@
 </template>
 
 <script setup>
-  import { useTheme } from "vuetify";
-  import { inject, shallowRef, onMounted, onUnmounted, computed } from "vue";
-  import Grid from "@u/grid/loader.vue";
-  const $store = inject("$store");
-  const state = shallowRef({});
-  const uiState = shallowRef({});
-  const $vuetifyTheme = useTheme();
-  const stateSubscriber$ = $store
-    .select((state) => state.currentPage)
-    .subscribe((val) => {
-      state.value = val;
-    });
-  const uiStateSubscriber$ = $store
-    .select((state) => state.ui)
-    .subscribe((val) => {
-      uiState.value = val;
-    });
+import { useTheme } from "vuetify";
+import { inject, shallowRef, onMounted, onUnmounted, computed } from "vue";
+import Grid from "@u/grid/loader.vue";
+const $store = inject("$store");
+const state = shallowRef({});
+const uiState = shallowRef({});
+const $vuetifyTheme = useTheme();
+const stateSubscriber$ = $store
+  .select((state) => state.currentPage)
+  .subscribe((val) => {
+    state.value = val;
+  });
+const uiStateSubscriber$ = $store
+  .select((state) => state.ui)
+  .subscribe((val) => {
+    uiState.value = val;
+  });
 
-  const editMode = computed({
-    get() {
-      return uiState.value.editMode;
-    },
-    set(val) {
-      $store.dispatch({
-        type: "ui/update",
-        payload: {
-          editMode: val,
-        },
-      });
-    },
-  });
-  const dark = computed({
-    get() {
-      return uiState.value.theme === "light" ? false : true;
-    },
-    set(newValue) {
-      const theme = newValue === false ? "light" : "dark";
-      $store.dispatch({
-        type: "ui/update",
-        payload: {
-          theme,
-        },
-      });
-      $vuetifyTheme.global.name.value = theme;
-    },
-  });
-  const props = defineProps({
-    urlParams: {
-      type: String,
-      default: "default param",
-    },
-  });
-  const addData = () => {
+const editMode = computed({
+  get() {
+    return uiState.value.editMode;
+  },
+  set(val) {
     $store.dispatch({
-      type: "data/push",
-      uuid: props.uuid,
+      type: "ui/update",
       payload: {
-        data: [
-          {
-            _id: "test",
-            _type: "tag",
-            _title: "testTag mit Name",
-            _disId: "sören",
-            _source: {
-              title: "testTag mit Name",
-              color: "#90A4AE",
-            },
-          },
-          {
-            _id: "rolf",
-            _type: "memo",
-            _project: false,
-            _disId: "seinMudder",
-            _title: "testMemo",
-            _source: {
-              title: "testMemo",
-              path: "", // materialized path
-              project: "",
-              body: {}, // block
-              closed: false, // default false
-              tags: [], // Type Tag
-              created: "",
-              modified: "",
-              due: "",
-              owner: "", // User object
-              assigned: "", // User object
-              approvals: "",
-            },
-          },
-        ],
+        editMode: val,
       },
     });
-  };
-  onMounted(() => {});
-  onUnmounted(() => {
-    stateSubscriber$.unsubscribe();
-    uiStateSubscriber$.unsubscribe();
-  });
-  function counter() {
+  },
+});
+const dark = computed({
+  get() {
+    return uiState.value.theme === "light" ? false : true;
+  },
+  set(newValue) {
+    const theme = newValue === false ? "light" : "dark";
     $store.dispatch({
-      type: "currentPage/update",
+      type: "ui/update",
       payload: {
-        count: state.value.count + 1 || 0,
+        theme,
       },
     });
-  }
+    $vuetifyTheme.global.name.value = theme;
+  },
+});
+const props = defineProps({
+  urlParams: {
+    type: String,
+    default: "default param",
+  },
+});
+const addData = () => {
+  $store.dispatch({
+    type: "data/push",
+    uuid: props.uuid,
+    payload: {
+      data: [
+        {
+          _id: "test",
+          _type: "tag",
+          _title: "testTag mit Name",
+          _disId: "sören",
+          _source: {
+            title: "testTag mit Name",
+            color: "#90A4AE",
+          },
+        },
+        {
+          _id: "rolf",
+          _type: "ticket",
+          _project: false,
+          _disId: "seinMudder",
+          _title: "testTicket",
+          _source: {
+            title: "testTicket",
+            path: "", // materialized path
+            project: "",
+            body: {}, // block
+            closed: false, // default false
+            tags: [], // Type Tag
+            created: "",
+            modified: "",
+            due: "",
+            owner: "", // User object
+            assigned: "", // User object
+            approvals: "",
+          },
+        },
+      ],
+    },
+  });
+};
+onMounted(() => { });
+onUnmounted(() => {
+  stateSubscriber$.unsubscribe();
+  uiStateSubscriber$.unsubscribe();
+});
+function counter() {
+  $store.dispatch({
+    type: "currentPage/update",
+    payload: {
+      count: state.value.count + 1 || 0,
+    },
+  });
+}
 </script>
