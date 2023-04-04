@@ -6,7 +6,7 @@
  * @param {object} $eventbus - instance of our custom eventbus
  */
 import log from '@lib/logger.js'
-import { globalPages } from '@_/setup/application.js'
+import { globalPages, globalTags } from '@_/setup/application.js'
 export function registerSocketEvents($socket, $store, $eventbus) {
 
   /* required for reconnection */
@@ -95,7 +95,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
       $store.dispatch({ type: 'projectInit' })
       //readd the global pages (public.login etc.)
       globalPages($store)
-
+      globalTags($store);
       // TODO add mobile switch
       if (data.project.config.browser) {
         if (data.project.config.browser.ui) {

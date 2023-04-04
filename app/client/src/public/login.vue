@@ -63,6 +63,7 @@ export default {
   }),
 
   mounted() {
+    // TODO WHY DON'T WE GET THE REQUESTURI Param which se set in sessionHandler before redirect here?
     this.$session.checkToken().then(user => {
       if (!user) return
       this.redirectAfterLogin(user.data?.ux?.lastProjectId)

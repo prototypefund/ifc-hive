@@ -131,7 +131,6 @@ import ProgressBar from "@u/uploader/progressBar.vue";
 import socketStatus from "@u/socketStatus.vue"
 import projectSwitch from "@u/projectSwitch/select.vue"
 import { useTheme } from 'vuetify'
-
 export default {
   components: {
     Notifications,
@@ -249,6 +248,7 @@ export default {
 
   methods: {
     setupProject: function () {
+
       this.batchLoading = true
       this.$store.dispatch({
         type: "project/setId",

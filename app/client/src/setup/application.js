@@ -56,6 +56,92 @@ export const globalPages = ($store) => {
     }
   });
 }
+
+
+export const globalTags = ($store) => {
+  $store.dispatch({
+    type: "data/push",
+    payload: {
+      data: [{
+        _id: "tag-todo",
+        _type: "tag",
+        _disId: '12',
+        _project: false,
+        _title: 'TODO',
+        _source: {
+          _id: "tag-todo",
+          title: "Todo",
+          type: "status",
+          color: "red",
+          tags: [],
+          locked: 0,
+        },
+      }, {
+        _id: "tag-qa",
+        _type: "tag",
+        _disId: '12',
+        _project: false,
+        _title: 'QA',
+        _source: {
+          _id: "tag-qa",
+          title: "QA",
+          type: "status",
+          color: "orange",
+          tags: [],
+          locked: 0,
+        },
+      },
+      {
+        _id: "tag-doing",
+        _type: "tag",
+        _disId: '98e',
+        _project: false,
+        _title: 'Doing',
+        _source: {
+          _id: "tag-doing",
+          title: "Doing",
+          type: "status",
+          color: "green",
+          tags: [],
+          locked: 0,
+        },
+      },
+      {
+        _id: "tag-test",
+        _type: "tag",
+        _disId: '98d4f9e',
+        _project: false,
+        _title: 'Test',
+        _source: {
+          _id: "tag-test",
+          title: "Test",
+          type: "status",
+          color: "yellow",
+          tags: [],
+          locked: 0,
+        },
+      },
+      {
+        _id: "tag-done",
+        _type: "tag",
+        _disId: '984f9e',
+        _project: false,
+        _title: 'done',
+        _source: {
+          _id: "tag-done",
+          title: "Done",
+          type: "status",
+          color: "orange",
+          tags: [],
+          locked: 0,
+        },
+      }
+
+      ]
+    }
+  }
+  )
+}
 export const globalTools = ($store) => {
   $store.dispatch({
     type: "navigationTools/add",
