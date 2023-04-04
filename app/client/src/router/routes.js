@@ -19,9 +19,9 @@ import public_terms from '../public/terms.vue'
 export default function (store) {
   return [
     /* Root */
-    { path: '/', redirect: { name: 'public.login' } },
-    { path: '/login', name: 'public.login', component: public_login },
-    { path: '/terms', name: 'public.terms', component: public_terms },
+    { path: '/', props: true, redirect: { name: 'public.login' } },
+    { path: '/login', props: true, name: 'public.login', component: public_login },
+    { path: '/terms', props: true, name: 'public.terms', component: public_terms },
     {
       path: '/app',
       name: 'app.index',

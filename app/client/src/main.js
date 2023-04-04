@@ -35,7 +35,7 @@ const eventbus = new EventEmitter()
 // remove the socket and httpClient from the store, we communicate via the eventbus
 const store = createStore(eventbus)
 /* Create router */
-const router = createCustomRouter(store)
+const router = createCustomRouter(eventbus, store, httpClient)
 
 /* We now have all vital objects (store, socket, eventbus, httpclient) */
 

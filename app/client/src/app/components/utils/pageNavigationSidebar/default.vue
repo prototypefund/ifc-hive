@@ -40,7 +40,7 @@
 
         <!-- item title -->
         <v-list-item-title v-if="item.route">{{
-          $t("pages." + item.route.replace(".", "-"))
+          $t("pages." + item.route.replaceAll(".", "-"))
         }}</v-list-item-title>
       </v-list-item>
     </v-list>
@@ -58,7 +58,7 @@
 
           <!-- item title -->
           <v-list-item-title v-if="item.route">{{
-            $t("pages." + item.route.replace(".", "-")) }}
+            $t("pages." + item.route.replaceAll(".", "-")) }}
           </v-list-item-title>
         </v-list-item>
       </v-list>

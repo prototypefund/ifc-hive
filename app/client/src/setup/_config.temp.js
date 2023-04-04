@@ -12,7 +12,75 @@ export default {
    * Global NavigationTools
    */
   navigationTools: {
-
+    'projectTree': {
+      pages: false,
+      icon: "mdi-file-tree",
+      uuid: "projectTree",
+      widget: {
+        name: "projectTree",
+      },
+    },
+    'projectSearch': {
+      pages: false,
+      icon: "mdi-magnify",
+      uuid: "projectSearch",
+      widget: {
+        name: "projectSearch",
+      },
+    },
+    'mostRecentlyUsed': {
+      pages: false,
+      icon: "mdi-history",
+      uuid: "mostRecentlyUsed",
+      widget: {
+        name: "mostRecentlyUsed",
+      },
+    },
+    'quickList': {
+      pages: false,
+      icon: "mdi-list-status",
+      uuid: "quickList",
+      widget: {
+        name: "quickList",
+        face: 'expansionVertical'
+      },
+    }
+  },
+  /*
+* inspectorTools
+*/
+  inspectorTools: {
+    'chart_ticketsByTag': {
+      title: "ticketsByTag",
+      pages: false,
+      icon: "mdi-chart-donut",
+      uuid: "chart_ticketsByTag",
+      widget: {
+        name: "ticketboard",
+        type: "chart",
+        face: "ticketsByTag",
+        props: {
+          categories: [
+            "tags:tag-todo",
+            "tags:tag-doing",
+            "tags:tag-test",
+            "tags:tag-qa",
+            "tags:tag-done",
+          ],
+        },
+      },
+    },
+    'journal_chart': {
+      title: "chartJournal",
+      pages: false,
+      icon: "mdi-chart-pie",
+      uuid: "journal_chart",
+      widget: {
+        name: "journal",
+        type: "chart",
+        face: "example",
+      },
+    },
   },
   /*
  * Pages

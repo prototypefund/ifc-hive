@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
-import { forEachHook, beforeResolveHook, afterEachHook } from './routerHooks.js'
+import { beforeEachHook, beforeResolveHook, afterEachHook } from './routerHooks.js'
 
-export function createCustomRouter (store) {
+export function createCustomRouter(store, $api) {
 
   // create router instance
   const router = createRouter({
@@ -11,9 +11,9 @@ export function createCustomRouter (store) {
   })
 
   /* Rooter hooks */
-  router.beforeEach(forEachHook(store))
-  router.beforeResolve(beforeResolveHook(store))
-  router.afterEach(afterEachHook(store))
+  router.beforeEach(beforeEachHook(store, $api))
+  router.beforeResolve(beforeResolveHook(store, $api))
+  router.afterEach(afterEachHook(store, $api))
 
   return router
 }

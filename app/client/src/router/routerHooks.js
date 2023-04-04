@@ -15,7 +15,7 @@ import { loadingHold } from '../store/state'
  * forEachHook
  * @param { object } store, mini-rx store instance
  */
-export function forEachHook(store) {
+export function beforeEachHook(eventbus, store, $api) {
   return (to, from) => {
     if (to !== from) {
       store.dispatch({
@@ -39,7 +39,7 @@ export function forEachHook(store) {
  *
  * removeLoading Animation
  */
-export function afterEachHook(store) {
+export function afterEachHook(eventbus, store, $api) {
   return (to, from) => {
     // change the currentPage, might often be just a change in url params
     if (to !== from) {
@@ -61,7 +61,7 @@ export function afterEachHook(store) {
  *
  * Pass route params and query data to the current page state
  */
-export function beforeResolveHook(store) {
+export function beforeResolveHook(eventbus, store, $api) {
   return (to, from) => {
     // change the currentPage, might often be just a change in url params
     if (to !== from) {
