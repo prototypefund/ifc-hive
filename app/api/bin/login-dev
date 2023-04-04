@@ -12,6 +12,6 @@ jwt_token=$(curl -s -H 'Content-Type: application/json' \
   http://localhost:8082/core/user/login \
   | jq -r '.token')
 
-echo -e "Authorization: Bearer $jwt_token"
+echo "Authorization: Bearer $jwt_token"
 
 exit 0
