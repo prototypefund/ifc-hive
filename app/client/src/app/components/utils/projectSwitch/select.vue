@@ -31,7 +31,6 @@ const currentProject = computed({
             }
         })
         setTimeout(() => {
-            debugger
             $eventbus.emit("switchProject", newValue)
         }, 200);
 

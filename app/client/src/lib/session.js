@@ -24,7 +24,6 @@ export default (store, api, eventbus, router) => {
         if (user && user.data.ux.lastProjectId) {
 
         }
-        debugger
     })
 
 
