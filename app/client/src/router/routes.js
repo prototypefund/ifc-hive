@@ -20,26 +20,26 @@ export default function (store) {
   return [
     /* Root */
     { path: '/', props: true, redirect: { name: 'public.login' } },
-    { path: '/login', props: true, name: 'public.login', component: public_login },
-    { path: '/terms', props: true, name: 'public.terms', component: public_terms },
+    { path: '/login', name: 'public.login', component: public_login, props: { redirectURL: null, redirectProps: null } },
+    { path: '/terms', name: 'public.terms', component: public_terms, props: { redirectURL: null, redirectProps: null } },
     {
       path: '/app',
       name: 'app.index',
-      props: true,
+      props: { redirectURL: null, redirectProps: null },
       component: Index,
       redirect: { name: 'app.project.select' },
       children: [
         {
           path: 'projects',
           name: 'app.project.select',
-          props: true,
+          props: { redirectURL: null, redirectProps: null },
           component: app_project_select,
         },
         {
           path: 'project/:id',
           name: 'app.project.index',
           component: App,
-          props: true,
+          props: { redirectURL: null, redirectProps: null },
           children: [
             {
               path: 'dashboard',

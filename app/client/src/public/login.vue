@@ -63,6 +63,7 @@ export default {
   }),
 
   mounted() {
+
   },
 
   methods: {
@@ -74,7 +75,7 @@ export default {
       // request login token and user object
       const user = await this.postLogin()
       // set user object in store
-      this.$store.dispatch({ type: 'user/update', payload: user.data.user })
+      this.$store.dispatch({ type: 'user/set', payload: user.data.user })
       // set token in http client
       setHttpToken(this.$api, user.data.token)
       // save token to local storage
@@ -109,6 +110,7 @@ export default {
       })
       return user ? user : false
     },
+
 
     /* reset login form */
     reset() {

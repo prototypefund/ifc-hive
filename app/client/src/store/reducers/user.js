@@ -6,6 +6,9 @@ export default ($eventbus) => (state, action) => {
     switch (action.type) {
       case 'init':
         return applicationState.user
+      case 'user/set':
+        if (state._id) return state
+        return action.payload
       case 'user/update':
         userState = JSON.parse(JSON.stringify(state))
         return { ...userState, ...action.payload }

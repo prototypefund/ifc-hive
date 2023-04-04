@@ -14,11 +14,11 @@
             <project-switch class="ml-10" />
           </v-col>
 
-          <v-col cols="auto">
+          <!--v-col cols="auto">
             <v-fade-transition>
               <span v-if="loading"><v-progress-circular indeterminate :size="20" :width="2" color="primary" /></span>
             </v-fade-transition>
-          </v-col>
+          </!--v-col-->
         </v-row>
 
 
@@ -37,10 +37,7 @@
       <!-- User menu -->
       <v-menu>
         <template v-slot:activator="{ props }">
-          <v-btn
-            color="primary"
-            v-bind="props"
-          >
+          <v-btn color="primary" v-bind="props">
             <v-avatar image="https://randomuser.me/api/portraits/men/34.jpg" class="mr-2"></v-avatar>
             <v-icon>mdi-chevron-down</v-icon>
           </v-btn>
@@ -58,7 +55,7 @@
             <template v-slot:prepend> <v-icon>mdi-cog</v-icon> </template>
             <v-list-item-title>Settings</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="saveLocalProjectConfig ">
+          <v-list-item @click="saveLocalProjectConfig">
             <template v-slot:prepend> <v-icon>mdi-content-save-cog</v-icon> </template>
             <v-list-item-title>Save Project config</v-list-item-title>
           </v-list-item>
@@ -79,7 +76,25 @@
     </v-toolbar>
 
     <v-divider />
-    <template v-if="batchLoading"></template>
+    <template v-if="batchLoading">
+      <v-main id="appMain">
+        <v-container>
+          <v-row class="fill-height" align-content="center" justify="center">
+            <v-col class="text-subtitle-1 text-center" cols="12">
+              Getting your files
+            </v-col>
+            <v-col cols="6">
+              <v-progress-linear color="primary" v-model="batchProgress" indeterminate rounded height="20">
+                <template v-slot:default="{ value }">
+                  <strong>{{ Math.ceil(value) }}%</strong>
+                </template>
+              </v-progress-linear>
+              {{ batchCurrent }}/{{ batchCount }}
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-main>
+    </template>
     <template v-else>
       <!-- Navigation Drawer -->
       <PageNavigation :nav-items="navItems" :footer-items="footerItems" />
@@ -116,7 +131,6 @@ import ProgressBar from "@u/uploader/progressBar.vue";
 import socketStatus from "@u/socketStatus.vue"
 import projectSwitch from "@u/projectSwitch/select.vue"
 import { useTheme } from 'vuetify'
-import { globalTools } from '@_/setup/application.js'
 
 export default {
   components: {
@@ -131,7 +145,7 @@ export default {
     mobileStartup: defineAsyncComponent(() =>
       import("./components/utils/mobile/startup.vue")),
   },
-  inject: ["$api", "$store", "$mobile", "$eventbus"],
+  inject: ["$api", "$store", "$mobile", "$eventbus", "$session"],
   props: {
     isInTest: {
       type: Number,
@@ -141,6 +155,8 @@ export default {
   data: () => ({
     page: false,
     batchLoading: false,
+    batchCount: 0,
+    batchCurrent: 0,
     editMode: false,
     viewPortHeight: false,
     viewPortWidth: false,
@@ -180,11 +196,14 @@ export default {
       },
     ],
   }),
+  computed: {
+    batchProgress() {
+      return this.batchCurrent * 100 / this.batchCount
+    }
+  },
   created() {
-
     // request project data by project id via the socket
     this.$eventbus.emit('socketJoinRoom', this.$route.params.id)
-
     this.$store
       .select((state) => state.currentPage)
       .subscribe((val) => {
@@ -211,12 +230,25 @@ export default {
   },
 
   mounted() {
-    // this.$eventbus.emit('socketJoinRoom', this.$route.params.id)
+    this.batchLoading = true
 
-    //window.addEventListener("resize", this.setDimensions, { passive: true });
-    // TODO find a better way instead of this ugly timeOutBullshit
-    //setTimeout(() => this.setDimensions(), 800);
-    // globalTools(this.$store)
+    this.$store.dispatch({
+      type: "project/setId",
+      payload: this.$route.params.id,
+    });
+    this.$eventbus.on('batchDataStart', (data) => {
+      this.batchCount = data.expect
+    })
+    this.$eventbus.on('batchDataItemPush', (currentCount) => {
+      this.batchCurrent = currentCount
+    })
+    this.$eventbus.on('batchDataStop', (data) => {
+      this.batchLoading = false
+      this.$eventbus.emit('setLastProjectId', this.$route.params.id)
+      this.$router.push({ name: 'app.project.dashboard' })
+    })
+
+    //this.$eventbus.emit('socketGetProjectData', this.$route.params.id)
 
     if (this.$mobile !== false) {
       this.$store.dispatch({
@@ -252,13 +284,7 @@ export default {
     },
 
     logout: async function () {
-      // @TODO wrap all logout stuff into function. 
-      //   - remove token from local storage
-      //   - remove token from axios client
-      //   - logout from socket connection, remove token from socket client
-
-      localStorage.removeItem('USER_TOKEN')  
-      this.$router.push({ name: 'public.login' })
+      this.$session.logout()
     },
 
     setDimensions: async function () {

@@ -68,8 +68,6 @@ export function registerSocketEvents($socket, $store, $eventbus) {
     // early return if there are no data for us
     if (!data.projects || data.projects.length < 1) return
     log.socket('project/list', data)
-    // push received projects into data store
-    $store.dispatch({ type: 'data/push', payload: { data: data.projects } })
     // handle projects for usage and save to store
     const projectList = []
     // TODO remove lookup once the slots in v-select work properly for direct
@@ -95,6 +93,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
     // Reset all store states which are project dependend. 
     if (data.project && data.project.config) {
       $store.dispatch({ type: 'projectInit' })
+      //readd the global pages (public.login etc.)
       globalPages($store)
 
       // TODO add mobile switch
@@ -170,6 +169,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
   $socket.on('batchDataStart', (data) => {
     batchLoading = true
     batchItems = []
+    $eventbus.emit('batchDataStart', data)
     log.socket('start batch data', data)
   })
 
@@ -181,6 +181,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
   $socket.on('batchDataStop', () => {
     batchLoading = false
     log.socket('stop batch data', { received: batchItems.length })
+    $eventbus.emit('batchDataStop', batchItems.length)
     $store.dispatch({ type: 'data/push', payload: { data: batchItems } })
   })
 
@@ -202,9 +203,10 @@ export function registerSocketEvents($socket, $store, $eventbus) {
   $socket.on('dataTest', (data) => {
     if (batchLoading === true) {
       batchItems.push(data)
+      $eventbus.emit('batchDataItemPush', batchItems.length)
     } else {
       log.socket('dataTest', data)
-      // $store.dispatch({ type: 'data/push', payload: { data } })
+      //$store.dispatch({ type: 'data/push', payload: { data } })
     }
 
   })

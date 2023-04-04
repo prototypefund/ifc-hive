@@ -16,7 +16,7 @@ import EventEmitter from '@lib/eventEmitter.js'
 import { registerApiHandlerEvents } from './setup/apiClient'
 import { registerSocketClient } from './setup/socketClient'
 import { registerSocketEvents } from './setup/socketEvents'
-
+import sessionHandler from './setup/sessionHandler'
 /*
  * get env variables to configure the app
  */
@@ -35,7 +35,7 @@ const eventbus = new EventEmitter()
 // remove the socket and httpClient from the store, we communicate via the eventbus
 const store = createStore(eventbus)
 /* Create router */
-const router = createCustomRouter(eventbus, store, httpClient)
+const router = createCustomRouter(store)
 
 /* We now have all vital objects (store, socket, eventbus, httpclient) */
 
@@ -45,6 +45,8 @@ registerSocketEvents(socket, store, eventbus)
 registerSocketClient(socket, store, eventbus)
 /* listen to the eventbus and submit requests to the RestAPI */
 registerApiHandlerEvents(httpClient, store, eventbus)
+
+const sessionHandlerInstance = sessionHandler(store, httpClient, socket, eventbus, router)
 
 /*
  *  create app and pass dependencies 
@@ -73,13 +75,15 @@ try {
   app.provide('$log', log)
   // provide a global eventbus
   app.provide('$eventbus', eventbus)
+  app.provide('$session', sessionHandlerInstance)
 
   //TODO move this into a setup file
   eventbus.on('routerPush', (target) => {
     router.push(target)
   })
-
-
+  eventbus.on('setLastProjectId', (projectId) => {
+    httpClient.patch(`/core/user/last-project/${projectId}`)
+  })
   // TODO find out if this is a brainfart or not. I need $t in the components
   // functions but I don't have this in compose API. Is there another way to
   // get $t in compose api components script part?
