@@ -6,10 +6,12 @@
 </template>
 <script setup>
 import { inject, ref, computed, onMounted, onUnmounted } from "vue";
-
+import { useRouter, useRoute } from 'vue-router'
 const $store = inject('$store')
+const $eventbus = inject('$eventbus')
 const project = ref({})
-
+const router = useRouter()
+const route = useRoute()
 const projectStatus$ = $store
     .select((state) => state.project)
     .subscribe((val) => {
@@ -23,10 +25,13 @@ const currentProject = computed({
     },
     // setter
     set(newValue) {
-        $store.dispatch({
-            type: "project/setId",
-            payload: newValue,
-        });
+        $eventbus.emit("switchProject", newValue)
+        router.push({
+            name: 'app.project.index',
+            params: {
+                id: newValue
+            }
+        })
     },
 });
 

@@ -230,26 +230,13 @@ export default {
   },
 
   mounted() {
-    this.batchLoading = true
-
-    this.$store.dispatch({
-      type: "project/setId",
-      payload: this.$route.params.id,
-    });
-    this.$eventbus.on('batchDataStart', (data) => {
-      this.batchCount = data.expect
-    })
-    this.$eventbus.on('batchDataItemPush', (currentCount) => {
-      this.batchCurrent = currentCount
-    })
-    this.$eventbus.on('batchDataStop', (data) => {
-      this.batchLoading = false
-      this.$eventbus.emit('setLastProjectId', this.$route.params.id)
-      this.$router.push({ name: 'app.project.dashboard' })
-    })
-
     //this.$eventbus.emit('socketGetProjectData', this.$route.params.id)
 
+    this.$eventbus.on('switchProject', (data) => {
+      this.$eventbus.emit('socketJoinRoom', this.$route.params.id)
+      this.setupProject()
+    })
+    this.setupProject()
     if (this.$mobile !== false) {
       this.$store.dispatch({
         type: "ui/update",
@@ -261,6 +248,24 @@ export default {
   },
 
   methods: {
+    setupProject: function () {
+      this.batchLoading = true
+      this.$store.dispatch({
+        type: "project/setId",
+        payload: this.$route.params.id,
+      });
+      this.$eventbus.on('batchDataStart', (data) => {
+        this.batchCount = data.expect
+      })
+      this.$eventbus.on('batchDataItemPush', (currentCount) => {
+        this.batchCurrent = currentCount
+      })
+      this.$eventbus.on('batchDataStop', (data) => {
+        this.batchLoading = false
+        this.$eventbus.emit('setLastProjectId', this.$route.params.id)
+        this.$router.push({ name: 'app.project.dashboard' })
+      })
+    },
     toggleTheme: function () {
       this.theme.global.name = this.theme.global.current.dark ? 'light' : 'dark';
     },

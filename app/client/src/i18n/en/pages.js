@@ -5,7 +5,7 @@ export default {
     'app-project-timeline': 'Timeline',
     'app-project-blockchain': 'Approvals',
     'app-project-documents': 'Documents',
-    'app-project-accountSettings': 'Account Settings',
+    'app-project-account-settings': 'Account Settings',
     'app-project-journal': 'Journal',
     'app-project-ticketboard': 'Ticket Board',
 }

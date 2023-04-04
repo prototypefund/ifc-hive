@@ -46,7 +46,7 @@
 import { setHttpToken } from '../lib/httpClient.js'
 
 export default {
-  inject: ["$api", "$store"],
+  inject: ["$api", "$store", "$session"],
   data: () => ({
     valid: true,
     email: '',
@@ -59,11 +59,14 @@ export default {
       v => !!v || 'Password is required',
       v => (v && v.length <= 50) || 'Password must be less than 10 characters',
     ],
-    singIntoLast: false,
+    singIntoLast: true,
   }),
 
   mounted() {
-
+    this.$session.checkToken().then(user => {
+      if (!user) return
+      this.redirectAfterLogin(user.data?.ux?.lastProjectId)
+    })
   },
 
   methods: {
@@ -81,17 +84,19 @@ export default {
       // save token to local storage
       localStorage.setItem("USER_TOKEN", user.data.token);
       // redirect after login
-      this.redirectAfterLogin(user)
+      this.redirectAfterLogin(user.data?.user?.ux?.lastProjectId)
     },
 
     /* redirect after login depending on user config and login form checkbox */
-    redirectAfterLogin(user) {
+    redirectAfterLogin(lastProjectId) {
       // if applicable redirect to last project
-      if (this.singIntoLast && (user.data?.config?.lastProjectId)) {
+
+      if (this.singIntoLast && lastProjectId) {
+
         return this.$router.push({
           name: 'app.project.index',
           params: {
-            id: user.data.config.lastProjectId
+            id: lastProjectId
           },
         });
       }
