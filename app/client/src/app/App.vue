@@ -318,25 +318,6 @@ export default {
 </script>
 
 <style>
-body,
-html {
-  overflow: hidden !important;
-}
-
-#app {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#app #appMain {
-  position: relative
-}
-
-#app #appComponent {
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-}
-
 #app .backToTop {
   position: fixed !important;
   z-index: 100;

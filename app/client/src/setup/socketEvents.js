@@ -112,29 +112,30 @@ export function registerSocketEvents($socket, $store, $eventbus) {
             });
           }
         }
-        if (data.project.config.browser.tools && data.project.config.browser.tools.length > 0) {
-          data.project.config.browser.tools.forEach(tool => {
+        if (data.project.config.browser.tools && Object.keys(data.project.config.browser.tools).length > 0) {
+          for (const [key, value] of Object.entries(data.project.config.browser.tools)) {
             $store.dispatch({
               type: "toolbar/add",
-              payload: tool,
+              payload: value,
             });
-          })
+          }
+
         }
-        if (data.project.config.browser.navigationTools && data.project.config.browser.navigationTools.length > 0) {
-          data.project.config.browser.navigationTools.forEach(tool => {
+        if (data.project.config.browser.navigationTools && Object.keys(data.project.config.browser.navigationTools).length > 0) {
+          for (const [key, value] of Object.entries(data.project.config.browser.navigationTools)) {
             $store.dispatch({
               type: "navigationTools/add",
-              payload: tool,
+              payload: value,
             });
-          })
+          }
         }
-        if (data.project.config.browser.inspectorTools && data.project.config.browser.inspectorTools.length > 0) {
-          data.project.config.browser.inspectorTools.forEach(tool => {
+        if (data.project.config.browser.inspectorTools && Object.keys(data.project.config.browser.inspectorTools).length > 0) {
+          for (const [key, value] of Object.entries(data.project.config.browser.inspectorTools)) {
             $store.dispatch({
               type: "inspectorTools/add",
-              payload: tool,
+              payload: value,
             });
-          })
+          }
         }
       }
     }

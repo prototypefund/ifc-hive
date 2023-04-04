@@ -110,6 +110,7 @@ export default {
       ],
       title: 'funoFun',
       uuid: 'app-project-dashboard',
+      hasInspector: true,
       routeName: 'app.project.dashboard',
       locale: 'de',
       query: {},
