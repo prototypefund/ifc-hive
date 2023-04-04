@@ -101,7 +101,7 @@ export async function registerSocketEvents (app) {
             _disId: disId,
             _project: project,
             _source: doc,
-            _type: 'memo'
+            _type: 'ticket'
           }
           /* emit data packages to client */
           socket.emit('dataTest', payload )
