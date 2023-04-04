@@ -7,7 +7,7 @@ export default function (app) {
     try {
       const { id } = req.user
       const user = await User.findOne({ _id: id }).select('-password -resetKey').populate('organization account')
-      if (!user) return res.notFound()
+      if (!user) return res.notFound('This token is not valid or the user encoded in the token does not exist.')
 
       return user
     } catch (err) {

@@ -95,7 +95,7 @@ const userSchema = new Schema({
   },
 
   ux: {
-    lastProjectId: false,
+    lastProjectId: { type: String, default: null },
     browser: { type: Schema.Types.Mixed, default: {}}
   }
 
