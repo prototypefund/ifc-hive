@@ -4,6 +4,7 @@
  * This route drops the complete database, reads fixture-data from ./src/fixtures
  * and imports these fixtures as fresh state.
  */
+import { S } from 'fluent-json-schema'
 import { v4 as uuidv4 } from 'uuid'
 import idMapEssentials from '#src/fixtures/idMapEssentials.js'
 import idMapDevelopment from '#src/fixtures/idMapDevelopment.js'
@@ -44,7 +45,7 @@ export default function (app) {
   async function handler (request, response) {
     try { 
 
-      const dummyTicketsCount = request.query.dummyTicketsCount || 100
+      const dummyTicketsCount = request.query.dummyTicketsCount || 1000
 
       // create a fresh idMap
       const idMap = ids.reduce((acc,curr)=> (acc[curr] = uuidv4(), acc), {})
