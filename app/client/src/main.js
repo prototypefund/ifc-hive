@@ -46,7 +46,7 @@ registerSocketClient(socket, store, eventbus)
 /* listen to the eventbus and submit requests to the RestAPI */
 registerApiHandlerEvents(httpClient, store, eventbus)
 
-const sessionHandlerInstance = sessionHandler(store, httpClient, eventbus, router)
+const sessionHandlerInstance = sessionHandler(store, httpClient, socket, eventbus, router)
 
 /*
  *  create app and pass dependencies 

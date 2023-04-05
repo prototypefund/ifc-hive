@@ -2,6 +2,7 @@
 import { setHttpToken } from '@lib/httpClient.js'
 
 export default (store, api, socket, eventbus, router) => {
+
     const checkToken = async () => {
         const token = localStorage.getItem("USER_TOKEN")
         if (!token) {
@@ -18,6 +19,7 @@ export default (store, api, socket, eventbus, router) => {
         store.dispatch({ type: 'user/set', payload: res.data })
         return res
     }
+
     const logout = async () => {
         localStorage.removeItem('USER_TOKEN')
         router.push({ name: 'public.login' })
