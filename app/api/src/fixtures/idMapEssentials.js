@@ -54,4 +54,6 @@ export default [
   'ticket_f_5',
   'ticket_f_6',
   'ticket_f_7',
+
+  'ticket_d_0',
 ] 

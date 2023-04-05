@@ -27,5 +27,6 @@ export default [
     tags: ['default', 'debug'],
     description: 'This is a sample project created via system data fixtures.',
     account: 'accountDefault',
+    journal: 'ticket_d_0',
   }
 ]

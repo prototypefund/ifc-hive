@@ -44,6 +44,8 @@ export default function (app) {
   async function handler (request, response) {
     try { 
 
+      const dummyTicketsCount = request.query.dummyTicketsCount || 100
+
       // create a fresh idMap
       const idMap = ids.reduce((acc,curr)=> (acc[curr] = uuidv4(), acc), {})
 
@@ -130,6 +132,29 @@ export default function (app) {
         await f6.save()
         const f7 = new Ticket(newTickets[14])
         await f7.save()
+
+
+        // third project with massiv amounts of tickets
+        // (1) root ticket
+        const d0 = new Ticket(newTickets[15])
+        await d0.save()
+
+        // child tickets
+        const dummyTicketsRaw = [...Array(dummyTicketsCount)].map((_, i) => {
+          const t = JSON.parse(JSON.stringify(tickets[0]))
+          t._id= uuidv4()
+          t.disId = `${i}` 
+          t.project = 'projectDummy'
+          t.owner = 'userAnton',
+          t.title = `${i} some random title with a prefix number`
+          t.body = randomText
+          t.parent = d0._id
+          t.path = `${d0._id}#${t._id}`
+          return t 
+        })
+
+        const dummyTickets = mapIds(dummyTicketsRaw, idMap, ['project', 'owner', 'tags'])
+        await Ticket.insertMany(dummyTickets)
 
         /*
          * send response with object counts

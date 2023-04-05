@@ -121,4 +121,14 @@ export default [
     owner: 'userAnton',
     tags: ['tagMilestone'],
   },
+
+  // dummy project
+  {
+    _id: 'ticket_d_0',
+    title: 'Dummy Project Root',
+    parent: null,
+    project: 'projectDummy',
+    owner: 'userAnton',
+    tags: ['tagMilestone'],
+  }
 ]
