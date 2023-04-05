@@ -104,7 +104,7 @@ export async function registerSocketEvents (app) {
             _type: 'ticket'
           }
           /* emit data packages to client */
-          socket.emit('dataTest', payload )
+          socket.emit('data', payload )
           checkLoadingCount(doc)
         }),
       User
@@ -122,7 +122,7 @@ export async function registerSocketEvents (app) {
             _type: 'user'
           }
           /* emit data packages to client */
-          socket.emit('dataTest', payload )
+          socket.emit('data', payload )
           checkLoadingCount(doc)
         }),
 
@@ -139,7 +139,7 @@ export async function registerSocketEvents (app) {
             _type: 'tag'
           }
           /* emit data packages to client */
-          socket.emit('dataTest', payload )
+          socket.emit('data', payload )
           checkLoadingCount(doc)
         })
       ]

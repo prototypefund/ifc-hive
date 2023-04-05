@@ -263,7 +263,7 @@ export default {
       this.$eventbus.on('batchDataStop', (data) => {
         this.batchLoading = false
         this.$eventbus.emit('setLastProjectId', this.$route.params.id)
-        this.$router.push('account')
+        this.$router.push({ name: 'app.project.dashboard', params: this.$route.params })
       })
     },
     toggleTheme: function () {

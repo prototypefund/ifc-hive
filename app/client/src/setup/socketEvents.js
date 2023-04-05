@@ -191,24 +191,12 @@ export function registerSocketEvents($socket, $store, $eventbus) {
    * We received a data object from the server
    */
   $socket.on('data', (data) => {
-    log.socket('data', data)
-    // NOTE: always pass array into data/push payload
-    $store.dispatch({ type: 'data/push', payload: { data: [data] } })
-  })
-
-  /*
-   * dataTest
-   * Debugging data transfer
-   * @TODO remove
-   */
-  $socket.on('dataTest', (data) => {
     if (batchLoading === true) {
       batchItems.push(data)
       $eventbus.emit('batchDataItemPush', batchItems.length)
     } else {
       log.socket('dataTest', data)
-      //$store.dispatch({ type: 'data/push', payload: { data } })
+      $store.dispatch({ type: 'data/push', payload: { data } })
     }
-
   })
 }
