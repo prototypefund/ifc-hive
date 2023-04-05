@@ -1,3 +1,5 @@
+import config from './projectDefaultConfig.js'
+
 export default [
   {
     _id: 'projectClient',
@@ -8,6 +10,9 @@ export default [
     description: 'This is a sample project created via system data fixtures.',
     account: 'accountDefault',
     journal: 'ticket_0',
+    config:{
+      browser: config
+    }
   },
   {
     _id: 'projectFirst',
@@ -18,6 +23,9 @@ export default [
     description: 'This is a sample project created via system data fixtures.',
     account: 'accountDefault',
     journal: 'ticket_f_0',
+    config:{
+      browser: config
+    }
   },
   {
     _id: 'projectDummy',
@@ -28,5 +36,8 @@ export default [
     description: 'This is a sample project created via system data fixtures.',
     account: 'accountDefault',
     journal: 'ticket_d_0',
+    config:{
+      browser: config
+    }
   }
 ]

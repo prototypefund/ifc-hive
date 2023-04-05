@@ -28,6 +28,7 @@ import permissions from '#src/fixtures/essentials/core_permission.js'
 import tickets from '#src/fixtures/essentials/journal_ticket.js'
 import Ticket from '../../../journal/model/ticket/ticket.model.js'
 
+
 /*
  * This is or Look-up-table to convert human readble ID's in the fixutres data
  * to UUID's the database expects them.
@@ -173,8 +174,6 @@ export default function (app) {
       } catch (error) {
         console.log(err)
       }
-
-
 
     } catch (err) {
       app.httpErrors.internalServerError(err)
