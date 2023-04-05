@@ -10,6 +10,15 @@ export const globalPages = ($store) => {
   });
   $store.dispatch({
     type: 'pages/add',
+    routeName: 'public.logout',
+    payload: {
+      grid: false,
+      slots: false,
+      widgets: [],
+    }
+  });
+  $store.dispatch({
+    type: 'pages/add',
     routeName: 'public.terms',
     payload: {
       grid: false,

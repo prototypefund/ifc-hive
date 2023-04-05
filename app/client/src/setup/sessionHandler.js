@@ -1,7 +1,7 @@
 
 import { setHttpToken } from '@lib/httpClient.js'
 
-export default (store, api, socket, eventbus, router) => {
+export default (store, api, eventbus, router) => {
 
     const checkToken = async () => {
         const token = localStorage.getItem("USER_TOKEN")
@@ -29,17 +29,17 @@ export default (store, api, socket, eventbus, router) => {
     checkToken().then(user => {
         if (!user) {
             if (window.location.pathname === '/login') return
-            router.push({ path: '/login', params: { requestURL: window.location.pathname } });
+            router.push({ path: '/login' });
             return
         }
         if (user && (user.data.ux.lastProjectId || router.currentRoute.value.params.id)) {
             if (router.currentRoute.value.name === 'app.project.index') return
-            router.push({ name: 'app.project.index', params: { requestURI: router.currentRoute.value.name } });
+            router.push({ name: 'app.project.index' });
             return
         }
         if (user && !user.data.ux.lastProjectId && !router.currentRoute.value.params.id) {
             if (router.currentRoute.value.name === 'app.project.select') return
-            router.push({ name: 'app.project.select', params: { requestURI: router.currentRoute.value.name } });
+            router.push({ name: 'app.project.select' });
             return
         }
     })

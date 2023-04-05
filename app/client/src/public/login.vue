@@ -69,7 +69,13 @@ export default {
       this.redirectAfterLogin(user.data?.ux?.lastProjectId)
     })
   },
-
+  props: {
+    redirectURL: {
+      type: String,
+      required: false,
+      default: null
+    }
+  },
   methods: {
     /* validate and send login form */
     async validate() {
@@ -90,10 +96,12 @@ export default {
 
     /* redirect after login depending on user config and login form checkbox */
     redirectAfterLogin(lastProjectId) {
+      console.dir(this.redirectURL)
       // if applicable redirect to last project
-
+      debugger
+      console.dir(this.$route)
+      console.dir(this.$router)
       if (this.singIntoLast && lastProjectId) {
-
         return this.$router.push({
           name: 'app.project.index',
           params: {

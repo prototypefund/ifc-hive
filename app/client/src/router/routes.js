@@ -14,14 +14,16 @@ import app_account from '../app/components/pages/account/page.vue'
 
 import public_login from '../public/login.vue'
 import public_terms from '../public/terms.vue'
+import public_logout from '../public/logout.vue'
 
 
 export default function (store) {
   return [
     /* Root */
     { path: '/', props: true, redirect: { name: 'public.login' } },
-    { path: '/login', name: 'public.login', component: public_login, props: { redirectURL: null, redirectProps: null } },
-    { path: '/terms', name: 'public.terms', component: public_terms, props: { redirectURL: null, redirectProps: null } },
+    { path: '/login', name: 'public.login', component: public_login, props: true },
+    { path: '/login', name: 'public.login', component: public_login, props: true },
+    { path: '/logout', name: 'public.logout', component: public_logout, props: true },
     {
       path: '/app',
       name: 'app.index',

@@ -144,7 +144,7 @@ export default {
     mobileStartup: defineAsyncComponent(() =>
       import("./components/utils/mobile/startup.vue")),
   },
-  inject: ["$api", "$store", "$mobile", "$eventbus", "$session"],
+  inject: ["$api", "$store", "$mobile", "$eventbus"],
   props: {
     isInTest: {
       type: Number,
@@ -248,7 +248,6 @@ export default {
 
   methods: {
     setupProject: function () {
-
       this.batchLoading = true
       this.$store.dispatch({
         type: "project/setId",
@@ -289,7 +288,7 @@ export default {
     },
 
     logout: async function () {
-      this.$session.logout()
+      this.$router.push({ name: 'public.logout', params: this.$route.params })
     },
 
     setDimensions: async function () {
