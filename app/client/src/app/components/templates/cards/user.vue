@@ -1,5 +1,5 @@
 <template>
-  <v-card :color="user._source.color || stringToColour(user._title)" class="mx-auto" rounded="0" v-if="user"
+  <v-card :color="user._source.color || stringToColour(user._title)" class="mx-auto" rounded="0" v-if="user._source"
     data-test-container="template/cards/user" :data-test-container-uuid="'userCard_' + props.uuid">
     <div class="d-flex justify-between">
       <v-card-title class="flex-grow-1 flex-column align-start" :style="{ 'max-width': '80%' }">
@@ -66,6 +66,7 @@ const user = ref({});
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
+    if (!val) return
     const fullDocument = {
       ...val,
       _source: getSource(val._id)

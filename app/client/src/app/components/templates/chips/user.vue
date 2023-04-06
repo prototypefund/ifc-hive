@@ -1,22 +1,14 @@
 <template>
   <v-row data-test-container="templates/chips/user" :data-test-container-uuid="props.uuid">
-    <v-col cols="auto" v-for="usr in props.selectedUser">
-      <v-chip v-if="usr" size="small" :color="
-      userLookup.data[usr] ? userLookup.data[usr]._source.color || 'grey' : 'grey'
-        ">
-        <v-avatar start color="indigo">
-          <v-img v-if="userLookup.data[usr]._source.avatar" :src="userLookup.data[usr]._source.avatar.file" />
-          <span justify="space-around" v-else>{{ userLookup.data[usr]._source.firstname.substring(0, 1) }}
-            {{ userLookup.data[usr]._source.lastname.substring(0, 1) }}</span>
-        </v-avatar>
-        {{ userLookup.data[usr] ? userLookup.data[usr]._title || usr : usr }}
-      </v-chip>
+    <v-col cols="auto" v-for="usr in props.selectedUser" :key="usr">
+      <user-chip v-if="usr" :widgetUUID="props.widgetUUID" :docUUID="usr" />
     </v-col>
   </v-row>
 </template>
 
 <script setup>
-import { inject, ref, onMounted, onUnmounted } from "vue";
+import { inject, onMounted, onUnmounted } from "vue";
+import userChip from "@t/chip/user.vue";
 const $store = inject("$store");
 
 const props = defineProps({
@@ -49,19 +41,8 @@ const props = defineProps({
     type: Object,
     default: {},
   },
-  userLookup: {
-    type: Object,
-    required: false,
-  },
 });
-const userLookup = props.userLookup
-  ? props.userLookup
-  : $store.$data.get(props.actionId, "meta/users");
 onMounted(() => { });
 onUnmounted(() => {
-  // if .value is set, it means that our lookup came from our store $date.get
-  if (userLookup.value) {
-    userLookup.value.unsubscribe();
-  }
 });
 </script>

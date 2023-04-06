@@ -10,8 +10,8 @@
     </template>
 
     <v-card-subtitle>
-      <tag-chips v-if="ticketItem._source.tags && ticketItem._source.tags.length > 0" :tag-lookup="props.tagLookup"
-        :widgetUUID="props.widgetUUID" :docUUID="ticketItem._id" :tags="ticketItem._source.tags" />
+      <tag-chips v-if="ticketItem._source.tags && ticketItem._source.tags.length > 0" :widgetUUID="props.widgetUUID"
+        :docUUID="ticketItem._id" :tags="ticketItem._source.tags" />
     </v-card-subtitle>
 
     <v-card-text> short description</v-card-text>

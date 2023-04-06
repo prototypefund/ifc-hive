@@ -1,20 +1,20 @@
 <template>
   <v-card flat class="quickListWrapper" v-if="state" data-test-container="widgets/quicklist/expansionVertical"
     :data-test-container-uuid="props.uuid">
-    <v-card-actions>
+    <!--v-card-actions>
       <v-btn size="x-small" :append-icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'" @click="show = !show">
         Batch edit
       </v-btn>
-    </v-card-actions>
-    <v-expand-transition>
-      <div v-show="show">
-        <v-divider />
-        <v-card-text>
-          <batch-edit :widgetUUID="props.uuid" />
-        </v-card-text>
-        <v-divider />
-      </div>
-    </v-expand-transition>
+    </!--v-card-actions>
+    <v-expand-transition-->
+    <!--div v-show="show">
+      <v-divider />
+      <v-card-text>
+        <batch-edit :widgetUUID="props.uuid" />
+      </v-card-text>
+      <v-divider />
+    </!--div>
+    </v-expand-transition-->
     <QuickListHandler :uuid="props.uuid" :docUUID="props.docUUID" action="remove_all" v-if="state.entries.length > 1">
       <v-icon icon="mdi-close-box-multiple" color="error" />
     </QuickListHandler>

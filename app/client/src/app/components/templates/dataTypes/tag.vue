@@ -1,5 +1,5 @@
 <template>
-  <v-card flat v-if="item" data-test-container="templates/dataTypes/tag" :data-test-container-uuid="props.uuid">
+  <v-card flat v-if="item._source" data-test-container="templates/dataTypes/tag" :data-test-container-uuid="props.uuid">
     <v-card-title>
       <v-row><v-col align-self="start" cols="12"> {{ item._title }}</v-col></v-row>
       <v-row no-gutters>
@@ -187,15 +187,17 @@ const item = ref(false);
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
-    const fullDocument = {
-      ...val,
-      _source: getSource(val._id)
-    }
     if (typeof val === "undefined") {
       // if the val is undefined, we are creating a new item which means we have to take the itemDefinition as a base for our forms
       item.value = JSON.parse(JSON.stringify(props.itemDefinition));
       item.value._id = props.docUUID;
-    } else if (item.value != fullDocument) {
+      return
+    }
+    const fullDocument = {
+      ...val,
+      _source: getSource(val._id)
+    }
+    if (item.value != fullDocument) {
       if (user.value !== fullDocument) {
         item.value = fullDocument || {};
       }

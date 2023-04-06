@@ -54,6 +54,7 @@ const item = ref(false);
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
+    if (!val) return
     const fullDocument = {
       ...val,
       _source: getSource(val._id)

@@ -1,5 +1,5 @@
 <template>
-  <v-card variant="outlined" v-if="ticket" data-test-container="templates/cards/ticket"
+  <v-card variant="outlined" v-if="ticket._source" data-test-container="templates/cards/ticket"
     :data-test-container-uuid="props.uuid">
     <v-card-title>
       <QuickListHandler uuid="quickList" :docUUID="ticket._id" :dataTitle="ticket._source.title" :type="ticket._type">
@@ -37,7 +37,7 @@
     </v-card-subtitle>
     <v-card-subtitle>
       <tag-chips v-if="ticket._source.tags && ticket._source.tags.length > 0" :widgetUUID="props.widgetUUID"
-        :docUUID="ticket._id" :tags="ticket._source.tags" :tag-lookup="tagLookup" />
+        :docUUID="ticket._id" :tags="ticket._source.tags" />
     </v-card-subtitle>
     <v-card-text> </v-card-text>
     <v-card-actions>
@@ -139,6 +139,7 @@ const ticket = ref({});
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
+    if (!val) return
     const fullDocument = {
       ...val,
       _source: getSource(val._id)

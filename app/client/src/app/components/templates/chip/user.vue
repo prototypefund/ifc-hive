@@ -1,5 +1,5 @@
 <template>
-  <v-chip v-if="user" size="small" :color="user ? user._source.color || 'grey' : 'grey'"
+  <v-chip v-if="user._source" size="small" :color="user ? user._source.color || 'grey' : 'grey'"
     data-test-container="templates/chip/user" :data-test-container-uuid="props.uuid">
     <QuickListHandler uuid="quickList" :docUUID="user._id" :dataTitle="user._title" :type="user._type">
       <v-avatar start color="indigo">
@@ -42,6 +42,7 @@ const props = defineProps({
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
+    if (!val) return
     const fullDocument = {
       ...val,
       _source: getSource(val._id)

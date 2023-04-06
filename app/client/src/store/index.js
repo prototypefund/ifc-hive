@@ -57,7 +57,7 @@ export function createStore($eventbus) {
   let pagesLookup = false
   let widgetsLookup = false
   let uiLookup = false
-
+  let dataLookup = false
   /*
    * register meta reducer
    * 
@@ -92,20 +92,21 @@ export function createStore($eventbus) {
           case 'init':
             return applicationState.queries
           case 'queries/execute':
+            if (Object.keys(state).length === 0) return state
             queries = JSON.parse(JSON.stringify(state))
             if (action.actionId) {
               query = JSON.parse(JSON.stringify(queries[action.actionId]))
-              items = searchHandler(query.query, query.params || false)
+              items = searchHandler(action.actionId, query.query, query.params || false, dataLookup)
               // remember the former state of uuids for later evaluation in dataAPI
-              if (query.uuids) query.old_uuids = query.uuids
+              query.old_uuids = query.uuids || []
               query.uuids = items
               queries[action.actionId] = query
               return queries
             } else {
               Object.values(queries).forEach(query => {
-                items = searchHandler(query.query, query.params || false)
+                items = searchHandler(action.actionId, query.query, query.params || false, dataLookup)
                 // remember the former state of uuids for later evaluation in dataAPI
-                if (query.uuids) query.old_uuids = query.uuids
+                query.old_uuids = query.uuids || []
                 query.uuids = items
               })
             }
@@ -123,7 +124,6 @@ export function createStore($eventbus) {
               store.dispatch({
                 type: 'queries/execute',
                 actionId: action.payload.actionId,
-
               })
             }
             return { ...state, ...queries }
@@ -254,7 +254,11 @@ export function createStore($eventbus) {
       uiLookup = val
     })
   }
-
+  if (dataLookup === false) {
+    store.select(state => state.data).subscribe(val => {
+      dataLookup = val
+    })
+  }
 
   /*
    * Temporary Data API

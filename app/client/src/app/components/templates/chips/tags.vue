@@ -1,18 +1,14 @@
 <template>
   <v-row data-test-container="templates/chips/tags" no-gutters :data-test-container-uuid="props.uuid">
-    <v-col cols="auto" v-for="tag in props.tags">
-      <v-chip size="small" :color="
-      tagLookup.data[tag] ? tagLookup.data[tag]._source.color || 'grey' : 'grey'
-        ">{{
-    tagLookup.data[tag] ? tagLookup.data[tag]._source.title || tag : tag
-  }}</v-chip>
+    <v-col cols="auto" v-for="tag in props.tags" :key="tag">
+      <tag-chip v-if="tag" :widgetUUID="props.widgetUUID" :docUUID="tag" />
     </v-col>
-    <v-col cols="auto" />
   </v-row>
 </template>
 
 <script setup>
-import { inject, ref, onMounted, onUnmounted } from "vue";
+import { inject, onMounted, onUnmounted } from "vue";
+import tagChip from "@t/chip/tag.vue";
 const $store = inject("$store");
 
 const props = defineProps({

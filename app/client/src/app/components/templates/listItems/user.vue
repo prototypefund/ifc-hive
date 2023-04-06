@@ -1,5 +1,5 @@
 <template>
-  <v-list-item data-test-container="template/listItems/user" :data-test-container-uuid="props.uuid"
+  <v-list-item v-if="user._source" data-test-container="template/listItems/user" :data-test-container-uuid="props.uuid"
     class="ticketMemberMouseOver">
     <template v-slot:prepend>
       <v-avatar start color="indigo">
