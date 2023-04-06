@@ -9,7 +9,7 @@ import {
 import getEnvVariable from '../lib/getEnvVariable'
 import { mergeDeepRight } from 'ramda'
 import { applicationState, loadingHold } from './state'
-import { basicStoreFilters } from '@lib/dataHelper.js'
+import { searchHandler } from '@lib/dataHelper.js'
 import createEvents from './events.js'  // we can specify event handler here
 import createTempDataApi from './tempDataApi.js'
 /* import feature reducers */
@@ -57,8 +57,6 @@ export function createStore($eventbus) {
   let pagesLookup = false
   let widgetsLookup = false
   let uiLookup = false
-  // TODO remove dataLookup once the api is ready
-  let dataLookup = false
 
   /*
    * register meta reducer
@@ -88,7 +86,7 @@ export function createStore($eventbus) {
     socket: socketReducers($eventbus),
 
     queries: (state, action) => {
-      let queries, items, query
+      let queries, items, query, params
       if (state) {
         switch (action.type) {
           case 'init':
@@ -97,21 +95,27 @@ export function createStore($eventbus) {
             queries = JSON.parse(JSON.stringify(state))
             if (action.actionId) {
               query = JSON.parse(JSON.stringify(queries[action.actionId]))
-              query.data = basicStoreFilters(query.query, query.params || false, dataLookup)
-
-              query.uuids = Object.keys(query.data)
+              items = searchHandler(query.query, query.params || false)
+              // remember the former state of uuids for later evaluation in dataAPI
+              if (query.uuids) query.old_uuids = query.uuids
+              query.uuids = items
               queries[action.actionId] = query
               return queries
             } else {
               Object.values(queries).forEach(query => {
-                query.data = basicStoreFilters(query.query, query.params || false, dataLookup)
-                query.uuids = Object.keys(query.data)
+                items = searchHandler(query.query, query.params || false)
+                // remember the former state of uuids for later evaluation in dataAPI
+                if (query.uuids) query.old_uuids = query.uuids
+                query.uuids = items
               })
             }
             return queries
           case 'queries/add':
             if (action.payload.actionId) {
               queries = {}
+              params = JSON.parse(JSON.stringify(action.payload.params))
+              if (!params.offset) params.offset = 0
+              if (!params.limit) params.limit = 100
               queries[action.payload.actionId] = {
                 query: action.payload.query,
                 params: action.payload.params || false
@@ -251,19 +255,13 @@ export function createStore($eventbus) {
     })
   }
 
-  // TODO remove dataLookup once the api is ready
-  if (dataLookup === false) {
-    store.select(state => state.data).subscribe(val => {
-      dataLookup = val
-    })
-  }
 
   /*
    * Temporary Data API
    * @TODO remove temporary data API once we have the real API
    * @TODO check after update on ticketboard.  
    * */
-  store.$data = createTempDataApi(store, dataLookup)
+  store.$data = createTempDataApi(store)
 
   return store
 }

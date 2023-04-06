@@ -1,8 +1,8 @@
 <template>
-    <v-card flat v-if="state && state.length > 0 && allLookup.data[state[0].uuid]"
-        data-test-container="widgets/quickList/batchEdit" :data-test-container-uuid="props.uuid">
+    <v-card flat v-if="state && state.length > 0 && rootItem" data-test-container="widgets/quickList/batchEdit"
+        :data-test-container-uuid="props.uuid">
         <v-card-text>
-            <v-row v-for="attribute in Object.keys(allLookup.data[state[0].uuid]._source)">
+            <v-row v-for="attribute in Object.keys(rootItem._source)">
                 {{ attribute }}
             </v-row>
             <!--v-row>
@@ -35,14 +35,23 @@
 
 <script setup>
 import { inject, ref, onMounted, onUnmounted } from "vue";
+import { getSource } from "@lib/dataHelper.js";
 
 const $store = inject("$store");
 const state = ref({});
-const allLookup = $store.$data.get(props.actionId, "ALL");
+const rootItem = ref(false);
 const stateSubscriber$ = $store
     .select((state) => state.widgets[props.widgetUUID].entries)
     .subscribe((val) => {
         state.value = val;
+    });
+const dataItemSubscriber$ = $store
+    .select((state) => state.data[state.value[0].uuid])
+    .subscribe((val) => {
+        debugger
+        rootItem.value = val
+        rootItem.value._source = getSource(val._id)
+
     });
 const props = defineProps({
     widgetUUID: {
@@ -70,6 +79,6 @@ const props = defineProps({
 onMounted(() => { });
 onUnmounted(() => {
     stateSubscriber$.unsubscribe();
-    allLookup.value.unsubscribe();
+    dataItemSubscriber$.unsubscribe();
 });
 </script>

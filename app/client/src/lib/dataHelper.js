@@ -27,38 +27,59 @@ export const isTrue = (value) => {
 export const isFalse = (value) => {
   return value === false || value === 'false'
 }
+export const getFullItem = (docUUID) => {
+  return window.$pacificoData[docUUID] || {}
+}
+export const getSource = (docUUID) => {
+  return getFullItem(docUUID)?._source || {}
+}
+
+export const searchHandler = (query, params = { offset: 0, limit: 100 }) => {
+  let data = JSON.parse(JSON.stringify(window.$pacificoData))
+  if (query.indexOf('/search') > -1) {
+    //es
+    return data
+  }
+  if (query.indexOf('/meta') > -1) {
+    debugger
+    if (query === "meta/tickets") {
+      data = filter((item) => {
+        return item._type === 'ticket'
+      }, data)
+    }
+    if (query === "meta/tags") {
+      data = filter((item) => {
+        return item._type === 'tag'
+      }, data)
+    }
+    if (query === "meta/users") {
+      data = filter((item) => {
+        return item._type === 'user'
+      }, data)
+    }
+    if (query === "meta/projects") {
+      data = filter((item) => {
+        return item._type === 'project'
+      }, data)
+    }
+    if (query === "meta/organizations") {
+      data = filter((item) => {
+        return item._type === 'organization'
+      }, data)
+    }
+    if (params?.offset && params?.limit) {
+      if (Object.keys(data).length < params.offset) {
+
+      }
+    }
+    if (params?.limit) {
+
+    }
+  }
 
 
-export const basicStoreFilters = (query, params, _data) => {
-  let data = JSON.parse(JSON.stringify(_data))
-  let matchingData = {}
-  let identifier = false
-  if (query === "ALL_MEMOS") {
-    data = filter((item) => {
-      return item._type === 'ticket'
-    }, data)
-  }
-  if (query === "ALL_TAGS") {
-    data = filter((item) => {
-      return item._type === 'tag'
-    }, data)
-  }
-  if (query === "ALL_USER") {
-    data = filter((item) => {
-      return item._type === 'user'
-    }, data)
-  }
-  if (query === "ALL_PROJECTS") {
-    data = filter((item) => {
-      return item._type === 'project'
-    }, data)
-  }
-  if (query === "ALL_ORGANIZATIONS") {
-    data = filter((item) => {
-      return item._type === 'organization'
-    }, data)
-  }
-  if (params) {
+  if (params == "ElasticSearchübernimmt hier") {
+    //TODO THIS NEEDS TO BE REPLACED BY AN ES CALL
     if (params.identifier) {
       identifier = splitIdentifier(params.identifier)
       // iterate each dataItem to find  out if it fits our selectors
@@ -140,5 +161,6 @@ export const basicStoreFilters = (query, params, _data) => {
       matchingData = data
     }
   }
-  return matchingData
+
+  return Object.keys(data)
 }

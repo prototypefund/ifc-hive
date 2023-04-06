@@ -82,6 +82,7 @@ import {
   defineAsyncComponent,
 } from "vue";
 import objectTemplate from "../dbItems/ticket";
+import { getSource } from "@lib/dataHelper.js";
 const $store = inject("$store");
 const debugDump = shallowRef(false);
 const tagCombobox = defineAsyncComponent(() => import("@t/combobox/tags.vue"));
@@ -202,18 +203,23 @@ const props = defineProps({
     required: true,
   },
 });
-const tagLookup = $store.$data.get(props.actionId + "_ALL_TAGS", "ALL_TAGS");
-const userLookup = $store.$data.get(props.actionId + "_ALL_USER", "ALL_USER");
+const tagLookup = $store.$data.get(props.actionId + "_meta/tags", "meta/tags");
+const userLookup = $store.$data.get(props.actionId + "_meta/users", "meta/users");
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
+    const fullDocument = {
+      ...val,
+      _source: getSource(val._id)
+    }
     if (typeof val === "undefined") {
       // if the val is undefined, we are creating a new item which means we have to take the itemDefinition as a base for our forms
-      const plainTicket = JSON.parse(JSON.stringify(props.itemDefinition));
-      plainTicket._id = props.docUUID;
-      item.value = plainTicket;
-    } else if (item.value != val) {
-      item.value = JSON.parse(JSON.stringify(val));
+      item.value = JSON.parse(JSON.stringify(props.itemDefinition));
+      item.value._id = props.docUUID;
+    } else if (item.value != fullDocument) {
+      if (item.value !== fullDocument) {
+        item.value = fullDocument || {};
+      }
     }
   });
 

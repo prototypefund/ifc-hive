@@ -8,6 +8,7 @@
 
 <script setup>
 import { inject, ref, onMounted, computed, onUnmounted } from "vue";
+import { getSource } from "@lib/dataHelper.js";
 const $store = inject("$store");
 
 const props = defineProps({
@@ -47,14 +48,18 @@ const props = defineProps({
 // get all tags from the store, or the props
 const tagLookup = props.tagLookup
   ? props.tagLookup
-  : $store.$data.get(props.actionId, "ALL_TAGS");
+  : $store.$data.get(props.actionId, "meta/tags");
 // get the document we want to show and edit the tags for. This will be reactive
 const item = ref(false);
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
-    if (item.value !== val) {
-      item.value = val || {};
+    const fullDocument = {
+      ...val,
+      _source: getSource(val._id)
+    }
+    if (item.value !== fullDocument) {
+      item.value = fullDocument || {};
     }
   });
 const selectedTags = computed({

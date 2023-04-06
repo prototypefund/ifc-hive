@@ -15,6 +15,7 @@
 <script setup>
 import { inject, ref, onMounted, onUnmounted } from "vue";
 import QuickListHandler from "@w/quickList/handler/click.vue";
+import { getSource } from "@lib/dataHelper.js";
 const $store = inject("$store");
 const user = ref(false);
 
@@ -41,7 +42,13 @@ const props = defineProps({
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
-    user.value = val;
+    const fullDocument = {
+      ...val,
+      _source: getSource(val._id)
+    }
+    if (user.value !== fullDocument) {
+      user.value = fullDocument || {};
+    }
   });
 onMounted(() => { });
 onUnmounted(() => {

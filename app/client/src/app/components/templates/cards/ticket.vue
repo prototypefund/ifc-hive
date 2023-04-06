@@ -93,6 +93,7 @@ import {
   onUnmounted,
 } from "vue";
 import QuickListHandler from "@w/quickList/handler/batch.vue";
+import { getSource } from "@lib/dataHelper.js";
 const $store = inject("$store");
 const userListItem = computed(() => {
   return defineAsyncComponent(() => import("@t/listItems/user.vue"));
@@ -138,7 +139,13 @@ const ticket = ref({});
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
-    ticket.value = val;
+    const fullDocument = {
+      ...val,
+      _source: getSource(val._id)
+    }
+    if (ticket.value !== fullDocument) {
+      ticket.value = fullDocument || {};
+    }
   });
 onMounted(() => { });
 onUnmounted(() => {

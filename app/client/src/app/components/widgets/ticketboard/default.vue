@@ -12,11 +12,12 @@
                 <template v-slot:tickets="{ boardId }">
                   <draggable item-key="id" v-model="customSorting.tickets[boardId]" class="list-group" ghost-class="ghost"
                     @start="dragging = true" @end="dragging = false"
-                    handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend" :group="{
+                    handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend"
+                    :group="{
                       name: 'ticketSort',
-                      pull: ['ticketSort'],
-                      put: ['ticketSort'],
-                    }">
+                        pull: ['ticketSort'],
+                          put: ['ticketSort'],
+                                                                                                                                                                                    }">
                     <template #item="{ element }">
                       <ticket-item :tag-lookup="tagLookup" :user-lookup="userLookup" :widgetUUID="props.uuid"
                         :boardId="boardId" :ticketItem="items[boardId].tickets.data[element]" />
@@ -28,9 +29,10 @@
             <draggable item-key="id" :list="customSorting.boards" class="list-group" ghost-class="ghost"
               @start="dragging = true" handle=".v-card>.v-card-item>.v-card-item__prepend" :group="{
                 name: 'ticketBoardSort',
-                pull: ['ticketBoardSort'],
-                put: ['ticketBoardSort'],
-              }" @end="dragging = false">
+                  pull: ['ticketBoardSort'],
+                    put: ['ticketBoardSort'],
+                                                                                                                              }"
+              @end="dragging = false">
               <template #item="{ element }">
                 <td>
                   <board-item :widgetUUID="props.uuid" :boardId="element" :generic="false" :width="colWidth"
@@ -38,11 +40,12 @@
                     <template v-slot:tickets="{ boardId }">
                       <draggable item-key="id" v-model="customSorting.tickets[boardId]" class="list-group"
                         ghost-class="ghost" @start="dragging = true" @end="dragging = false"
-                        handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend" :group="{
+                        handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend"
+                        :group="{
                           name: 'ticketSort',
-                          pull: ['ticketSort'],
-                          put: ['ticketSort'],
-                        }">
+                            pull: ['ticketSort'],
+                              put: ['ticketSort'],
+                                                                                                                                                                                                                        }">
                         <template #item="{ element }">
                           <ticket-item :tag-lookup="tagLookup" :user-lookup="userLookup" :widgetUUID="props.uuid"
                             :boardId="boardId" :ticketItem="items[boardId].tickets.data[element]" />
@@ -60,11 +63,12 @@
                 <template v-slot:tickets="{ boardId }">
                   <draggable item-key="id" v-model="customSorting.tickets[boardId]" class="list-group" ghost-class="ghost"
                     @start="dragging = true" @end="dragging = false"
-                    handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend" :group="{
+                    handle=".ticketItem.v-card>.v-card-item>.v-card-item__prepend"
+                    :group="{
                       name: 'ticketSort',
-                      pull: ['ticketSort'],
-                      put: ['ticketSort'],
-                    }">
+                        pull: ['ticketSort'],
+                          put: ['ticketSort'],
+                                                                                                                                                                                    }">
                     <template #item="{ element }">
                       <ticket-item :tag-lookup="tagLookup" :user-lookup="userLookup" :widgetUUID="props.uuid"
                         :boardId="boardId" :ticketItem="items[boardId].tickets.data[element]" />
@@ -88,10 +92,10 @@ import boardItem from "./items/board.vue";
 import ticketItem from "./items/ticket.vue";
 const $store = inject("$store");
 const state = ref({});
-const tagLookup = $store.$data.get(props.actionId + "_ALL_TAGS", "ALL_TAGS");
-const userLookup = $store.$data.get(props.actionId + "_ALL_USER", "ALL_USER");
+const tagLookup = $store.$data.get(props.actionId + "_meta/tags", "meta/tags");
+const userLookup = $store.$data.get(props.actionId + "_meta/users", "meta/users");
 // we could get the all lookup from the data of each board but I'm lazy as fuck and its late already!
-const allLookup = $store.$data.get(props.actionId + "_ALL", "ALL_MEMOS");
+const allLookup = $store.$data.get(props.actionId + "_meta/tickets", "meta/tickets");
 const boards = ref({
   generics: {
     open: false,
@@ -198,19 +202,9 @@ const getRelevantData = (filter) => {
     const board = boards.value.generics[boardId];
     // create a new query for each configured board, we will handle sorting in the hook
     // create a unique action id corresponding with the component and the board identifier
-    items.value[boardId] = {
-      tickets: $store.$data.get(
-        props.actionId + "_" + boardId,
-        "ALL_MEMOS",
-        {
-          identifier: board.identifier,
-          excluded: board.excluded,
-          receiver: boardId,
-        },
-        queryNewDataHook,
-        "count"
-      ),
-    };
+    //TODO ADD CALL TO ES HERE
+    console.error('we have to implement the elastic search here for', board)
+    items.value[boardId] = { tickets: {} }
     // TODO make this configurable and storable
     items.value[boardId].ticketSort = items.value[boardId].tickets.uuids;
     customSorting.value.tickets[boardId] = computed({
@@ -224,19 +218,9 @@ const getRelevantData = (filter) => {
   });
   Object.keys(boards.value.custom).forEach((boardId) => {
     const board = boards.value.custom[boardId];
-    items.value[boardId] = {
-      tickets: $store.$data.get(
-        props.actionId + "_" + boardId,
-        "ALL_MEMOS",
-        {
-          identifier: board.identifier,
-          excluded: board.excluded,
-          receiver: boardId,
-        },
-        queryNewDataHook,
-        "count"
-      ),
-    };
+    //TODO ADD CALL TO ES HERE
+    console.error('we have to implement the elastic search here for', board)
+    items.value[boardId] = { tickets: {} }
     // TODO make this configurable and storable
     items.value[boardId].ticketSort = items.value[boardId].tickets.uuids;
     // create a computed var for our sorting

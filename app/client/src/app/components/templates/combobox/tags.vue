@@ -42,7 +42,7 @@ const props = defineProps({
 // get all tags from the store, we do use the the "data" here, which is a plain clone of the tags objects. They are not reactive!
 const tagLookup = props.tagLookup
   ? props.tagLookup
-  : $store.$data.get(props.actionId, "ALL_TAGS");
+  : $store.$data.get(props.actionId, "meta/tags");
 // get the document we want to show and edit the tags for. This will be reactive
 const item = ref(false);
 const dataItemSubscriber$ = $store

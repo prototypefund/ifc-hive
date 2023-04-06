@@ -8,6 +8,7 @@
 
 <script setup>
 import { inject, ref, onMounted, computed, onUnmounted } from "vue";
+import { getSource } from "@lib/dataHelper.js";
 const $store = inject("$store");
 
 const props = defineProps({
@@ -52,14 +53,18 @@ const props = defineProps({
 // get all tags from the store, we do use the the "data" here, which is a plain clone of the tags objects. They are not reactive!
 const userLookup = props.userLookup
   ? props.userLookup
-  : $store.$data.get(props.actionId, "ALL_USER");
+  : $store.$data.get(props.actionId, "USERS");
 // get the document we want to show and edit the tags for. This will be reactive
 const item = ref(false);
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
-    if (item.value !== val) {
-      item.value = val || {};
+    const fullDocument = {
+      ...val,
+      _source: getSource(val._id)
+    }
+    if (item.value !== fullDocument) {
+      item.value = fullDocument || {};
     }
   });
 const selectedUser = computed({

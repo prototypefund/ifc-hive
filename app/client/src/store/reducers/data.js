@@ -1,13 +1,16 @@
 import { applicationState } from '../state'
 import { mergeDeepRight } from 'ramda'
+import { getSource } from "@lib/dataHelper.js";
 
 export default ($eventbus) => (state, action) => {
   let data, items, item
   if (state) {
     switch (action.type) {
       case 'init':
+        window.$pacificoData = {}
         return applicationState.data
       case 'projectInit':
+        window.$pacificoData = {}
         return applicationState.data
       case 'data/push':
         if (action.payload.data) {
@@ -21,9 +24,14 @@ export default ($eventbus) => (state, action) => {
           data = JSON.parse(JSON.stringify(state))
           action.payload.data.forEach(item => {
             if (item._type === 'delete') {
+              delete window.$pacificoData[item._id]
               delete data[item._id]
             } else {
               data[item._id] = JSON.parse(JSON.stringify(item))
+              // add full object to window for lookup
+              window.$pacificoData[item._id] = Object.freeze(JSON.parse(JSON.stringify(item)))
+              // delete source from dataStore item to prevent excessive memory usage
+              delete data[item._id]._source
             }
           })
           $eventbus.emit('store/dispatch', {
@@ -33,49 +41,15 @@ export default ($eventbus) => (state, action) => {
           return data
         }
         return state
-      case 'data/add':
-        if (action.docUUID && action.objectDefinition) {
-          $eventbus.emit('store/dispatch', {
-            type: 'notifications/add',
-            payload: {
-              event: 'newItem',
-              message: `a new Item with Id ${action.docUUID} of type ${action.type} was created`
-            }
-          })
-
-
-          //TODO change this to api usage once it's available
-          if (state[action.docUUID]) {
-            console.error("we have a data/add but we have the item already in the dataStore, this should not happen!")
-            // if we have the given doUUID in store already, we
-            // already created it so lets redirect this call to
-            // the update function
-          }
-          item = JSON.parse(JSON.stringify(action.objectDefinition))
-          item._source = mergeDeepRight(item._source, action.payload)
-
-          /*
-           * request new object from server
-           */
-          switch (item._type) {
-            // TODO send partial to type specific API endpoints: ticket, user, tag etc. 
-            case 'ticket':
-
-              break
-            default:
-              console.error(`Unknown object type ${item._type}`)
-          }
-
-          return state
-        }
-        return state
       case 'data/update':
-        //TODO change this to api usage once it's available
         if (action.docUUID) {
           // @TODO review the differentiation between new and existing docs
           if (state[action.docUUID]) {
-            // update existing doc
+            // get the meta data from our dataStore
             item = JSON.parse(JSON.stringify(state[action.docUUID]))
+            // retrieve the _source from our window store
+            item._source = getSource(action.docUUID)
+
           } else {
             // create a new doc
             item = JSON.parse(JSON.stringify(action.objectDefinition))

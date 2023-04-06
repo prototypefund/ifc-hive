@@ -18,6 +18,7 @@ import {
     onUnmounted,
 } from "vue";
 import { widgetLoader } from "@lib/widgetLoader";
+import { getSource } from "@lib/dataHelper.js";
 const $store = inject("$store");
 
 const props = defineProps({
@@ -53,7 +54,11 @@ const item = ref(false);
 const dataItemSubscriber$ = $store
     .select((state) => state.data[props.docUUID]._source.avatar)
     .subscribe((val) => {
-        item.value = val || {};
+        const fullDocument = {
+            ...val,
+            _source: getSource(val._id)
+        }
+        item.value = fullDocument._source.avatar || {};
     });
 
 const uploader = shallowRef(false);

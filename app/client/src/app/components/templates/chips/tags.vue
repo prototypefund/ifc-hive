@@ -2,10 +2,10 @@
   <v-row data-test-container="templates/chips/tags" no-gutters :data-test-container-uuid="props.uuid">
     <v-col cols="auto" v-for="tag in props.tags">
       <v-chip size="small" :color="
-        tagLookup.data[tag] ? tagLookup.data[tag]._source.color || 'grey' : 'grey'
-      ">{{
-  tagLookup.data[tag] ? tagLookup.data[tag]._source.title || tag : tag
-}}</v-chip>
+      tagLookup.data[tag] ? tagLookup.data[tag]._source.color || 'grey' : 'grey'
+        ">{{
+    tagLookup.data[tag] ? tagLookup.data[tag]._source.title || tag : tag
+  }}</v-chip>
     </v-col>
     <v-col cols="auto" />
   </v-row>
@@ -52,7 +52,7 @@ const props = defineProps({
 });
 const tagLookup = props.tagLookup
   ? props.tagLookup
-  : $store.$data.get(props.actionId, "ALL_TAGS");
+  : $store.$data.get(props.actionId, "meta/tags");
 onMounted(() => { });
 onUnmounted(() => {
   // if .value is set, it means that our lookup came from our store $date.get

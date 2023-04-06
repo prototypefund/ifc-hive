@@ -4,22 +4,21 @@
  * this should be replace by the actual API
  */
 import { ref, } from "vue"
-import { basicStoreFilters, splitIdentifier } from '@lib/dataHelper.js'
+import { searchHandler, splitIdentifier } from '@lib/dataHelper.js'
 import { mergeDeepRight, clone, forEachObjIndexed } from 'ramda'
 
-export default (store, dataLookup) => ({
+export default (store) => ({
 
   // TODO rethink this whole thing as soon as we have the es and api
   queryObjects: {},
-  dataLookup: dataLookup,
   update: (actionId, docUUID, doc) => {
 
   },
 
-  get: (actionId, query, params = {}, updateHook = false, hookCondition = 'all') => {
+  get: (actionId, query, params = { offset: 0, limit: 100 }, updateHook = false, hookCondition = 'all') => {
     // create a deep ref object which will contain the query data as well as the items
-    const queryObj = ref({ helper: { basicStoreFilters, splitIdentifier } })
-
+    const queryObj = ref({ helper: { searchHandler, splitIdentifier } })
+    // check if we have a query fullfilling the needs of the one requested here. If not we will update the one with this actionId
     if (!store.$data.queryObjects[actionId]
       || (store.$data.queryObjects[actionId].value.query !== query
         || store.$data.queryObjects[actionId].value.params !== params)) {
@@ -34,9 +33,10 @@ export default (store, dataLookup) => ({
     } else {
       return store.$data.queryObjects[actionId]
     }
-
     const subscriber$ = store.select((state) => state.queries[actionId])
       .subscribe((val) => {
+        if (!val) return
+        debugger
         // this will fire whenever we have changes to our query
         if (queryObj.value !== val && val) {
           if (updateHook) {
@@ -50,11 +50,13 @@ export default (store, dataLookup) => ({
                 && val.uuids.length !== store.$data.queryObjects[actionId].value.uuids.length) {
                 updateHook(val, queryObj.value)
               }
-
             }
           }
           // iterate the val object to not override 
           forEachObjIndexed((value, attribute) => {
+            if (attribute.uuids) {
+              debugger
+            }
             queryObj.value[attribute] = value
           }, val)
 

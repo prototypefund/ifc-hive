@@ -3,8 +3,6 @@
 </template>
 
 <script>
-import { setHttpToken } from '../lib/httpClient.js'
-
 export default {
   inject: ["$api", "$store", "$session"],
   data: () => ({

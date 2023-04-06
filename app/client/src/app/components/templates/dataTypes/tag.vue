@@ -79,6 +79,7 @@ import {
   onUnmounted,
 } from "vue";
 import objectTemplate from "../dbItems/tag";
+import { getSource } from "@lib/dataHelper.js";
 const $store = inject("$store");
 const tagTypes = ["status", "milestone", "default"];
 const showPicker = shallowRef(false);
@@ -181,17 +182,23 @@ const props = defineProps({
     required: true,
   },
 });
-const tagLookup = $store.$data.get(props.actionId + "_ALL_TAGS", "ALL_TAGS");
+const tagLookup = $store.$data.get(props.actionId + "_meta/tags", "meta/tags");
 const item = ref(false);
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
+    const fullDocument = {
+      ...val,
+      _source: getSource(val._id)
+    }
     if (typeof val === "undefined") {
       // if the val is undefined, we are creating a new item which means we have to take the itemDefinition as a base for our forms
       item.value = JSON.parse(JSON.stringify(props.itemDefinition));
       item.value._id = props.docUUID;
-    } else if (item.value != val) {
-      item.value = JSON.parse(JSON.stringify(val));
+    } else if (item.value != fullDocument) {
+      if (user.value !== fullDocument) {
+        item.value = fullDocument || {};
+      }
     }
   });
 onMounted(() => { editMode.value = props.mode });

@@ -42,8 +42,8 @@ const props = defineProps({
     },
   },
 });
-const data = $store.$data.get(props.actionId + "_ALL_MEMOS", "ALL_MEMOS");
-const tags = $store.$data.get(props.actionId + "_ALL_TAGS", "ALL_TAGS");
+const data = $store.$data.get(props.actionId + "_meta/tickets", "meta/tickets");
+const tags = $store.$data.get(props.actionId + "_meta/tags", "meta/tags");
 onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
