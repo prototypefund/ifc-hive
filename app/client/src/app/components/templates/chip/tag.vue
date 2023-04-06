@@ -1,6 +1,6 @@
 <template>
-  <v-chip v-if="tag._source" size="small" :color="tag ? tag._source.color || 'grey' : 'grey'"
-    data-test-container="templates/chip/tag" :data-test-container-uuid="props.uuid">
+  <v-chip v-if="tag" size="small" :color="tag._source?.color || 'grey'" data-test-container="templates/chip/tag"
+    :data-test-container-uuid="props.uuid">
     {{ tag._title }}
   </v-chip>
 </template>
@@ -31,10 +31,16 @@ const props = defineProps({
     default: {},
   },
 });
+
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
-    if (!val) return
+    if (!val) {
+      tag.value = {
+        _title: props.docUUID
+      }
+      return
+    }
     const fullDocument = {
       ...val,
       _source: getSource(val._id)

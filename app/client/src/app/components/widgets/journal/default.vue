@@ -42,7 +42,7 @@ const props = defineProps({
     },
   },
 });
-const data = $store.$data.get(props.actionId + "_meta/tickets", "meta/tickets");
+const data = $store.$data.get(props.actionId + "_meta/tickets", "meta/tickets", { limit: 5 });
 onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
