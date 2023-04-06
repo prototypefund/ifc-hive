@@ -1,6 +1,6 @@
 <template>
-  <v-card v-if="boardId"
-    :style="{ border: '2px solid ' + (boardItem.color || boardItem._source.color), width: width + 'px', height: '100%' }"
+  <v-card v-if="boardId && boardItem?._source"
+    :style="{ border: '2px solid ' + boardItem._source.color || 'grey', width: width + 'px', height: '100%' }"
     class="ticketWrapperCard" :prepend-icon="generic ? 'false' : 'false'"
     data-test-container="widgets/ticketboard/items/board" :data-test-container-uuid="uuid">
     <template v-slot:title v-if="generic">{{ $t("generics." + boardId) }} </template>
@@ -17,8 +17,13 @@
   </v-card>
 </template>
 <script setup>
+import { inject, ref, onMounted, onUnmounted } from "vue";
+import { getSource } from "@lib/dataHelper.js";
 import QuickListHandler from "@w/quickList/handler/batch.vue";
-defineProps({
+const $store = inject("$store");
+let boardItemSubscriber$ = false
+const boardItem = ref({})
+const props = defineProps({
   widgetUUID: {
     type: String,
     required: true,
@@ -33,11 +38,12 @@ defineProps({
   },
   boardId: {
     type: String,
-    required: true,
+    required: true
   },
   boardItem: {
     type: Object,
     required: true,
+    default: {}
   },
   uuid: {
     type: String,
@@ -45,6 +51,28 @@ defineProps({
       return rawProps.widgetUUID + "_ticketboard_board_" + rawProps.boardId;
     },
   },
+});
+
+onMounted(() => {
+  if (props.boardItem._source) {
+    boardItem.value = props.boardItem
+    return
+  }
+  boardItemSubscriber$ = $store
+    .select((state) => state.data[props.boardId])
+    .subscribe((val) => {
+      if (!val) return
+      const fullDocument = {
+        ...val,
+        _source: getSource(val._id)
+      }
+      if (boardItem.value !== fullDocument) {
+        boardItem.value = fullDocument || {};
+      }
+    });
+});
+onUnmounted(() => {
+  if (boardItemSubscriber$) boardItemSubscriber$.unsubscribe()
 });
 </script>
 <style lang="css" scoped></style>

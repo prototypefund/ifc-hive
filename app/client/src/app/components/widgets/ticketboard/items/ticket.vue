@@ -1,5 +1,5 @@
 <template>
-  <v-card variant="outlined" v-if="ticketItem && ticketItem._id" prepend-icon="mdi-drag" class="ticketItem"
+  <v-card variant="outlined" v-if="ticketItem && ticketItem._source" prepend-icon="mdi-drag" class="ticketItem"
     :elevation="isHovering === ticketItem._id ? 12 : 2" :class="{ 'on-hover': isHovering === ticketItem._id }"
     @mouseover="isHovering = ticketItem._id" @mouseout="isHovering = false">
     <template v-slot:title>
@@ -48,10 +48,15 @@
   </v-card>
 </template>
 <script setup>
-import { computed, shallowRef, defineAsyncComponent } from "vue";
+import { inject, ref, onMounted, onUnmounted, computed, shallowRef, defineAsyncComponent } from "vue";
+import { getSource } from "@lib/dataHelper.js";
 import QuickListHandler from "@w/quickList/handler/batch.vue";
+
+const $store = inject("$store");
+let ticketItemSubscriber$ = false
 const show = shallowRef(false);
 const isHovering = shallowRef(false);
+const ticketItem = ref({})
 const ticketUser = computed(() => {
   return defineAsyncComponent(() => import("@t/cards/user.vue"));
 });
@@ -81,9 +86,14 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  ticketItemId: {
+    type: String,
+    required: true,
+  },
   ticketItem: {
     type: Object,
     required: true,
+    default: {}
   },
   uuid: {
     type: String,
@@ -97,6 +107,28 @@ const props = defineProps({
   userLookup: {
     type: Object,
   },
+});
+
+onMounted(() => {
+  if (props.ticketItem._source) {
+    ticketItem.value = props.ticketItem
+    return
+  }
+  ticketItemSubscriber$ = $store
+    .select((state) => state.data[props.ticketItemId])
+    .subscribe((val) => {
+      if (!val) return
+      const fullDocument = {
+        ...val,
+        _source: getSource(val._id)
+      }
+      if (ticketItem.value !== fullDocument) {
+        ticketItem.value = fullDocument || {};
+      }
+    });
+});
+onUnmounted(() => {
+  if (ticketItemSubscriber$) ticketItemSubscriber$.unsubscribe()
 });
 </script>
 <style lang="css" scoped>

@@ -37,6 +37,8 @@ export const getSource = (docUUID) => {
 export const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, lookUp) => {
   if (!params.offset) params.offset = 0
   if (!params.limit) params.limit = 100
+  let identifier = false
+  let matchingData = {}
   let data = JSON.parse(JSON.stringify(lookUp))
   if (query.indexOf('/search') > -1) {
     //es
@@ -69,7 +71,10 @@ export const searchHandler = (actionId, query, params = { offset: 0, limit: 100 
       }, data)
     }
     if (params) {
+
+
       let limitedData = Object.keys(data)
+      console.log("schniedel " + actionId, limitedData)
       if (limitedData.length >= params?.offset + params?.limit) {
         // more results than requested available
         limitedData = limitedData.splice(params?.offset, params?.limit)
@@ -86,95 +91,8 @@ export const searchHandler = (actionId, query, params = { offset: 0, limit: 100 
       if (limitedData.length <= params?.offset + params?.limit) {
         return limitedData
       }
-
-    }
-
-  }
-  if (params == "ElasticSearchübernimmt hier") {
-    //TODO THIS NEEDS TO BE REPLACED BY AN ES CALL
-    if (params.identifier) {
-      identifier = splitIdentifier(params.identifier)
-      // iterate each dataItem to find  out if it fits our selectors
-      forEachObjIndexed((dataItem, uuid) => {
-        const item = dataItem._source
-        // iterate each selector property and check if value satisfies the selector
-        forEachObjIndexed((values, prop) => {
-          if (!matchingData[uuid]) {
-            if (item.hasOwnProperty(prop)) {
-              // get the property of our dataItem to check it's type to properly compare with the identifiers request
-              const itemProp = item[prop]
-              values.forEach(val => {
-                if (!matchingData[uuid]) {
-                  if (isTrueFalse(val)) {
-                    if (isTrue(val) && itemProp === true || itemProp === 'true') {
-                      matchingData[uuid] = dataItem
-                    }
-                    if (isFalse(val) && itemProp === false || itemProp === 'false') {
-                      matchingData[uuid] = dataItem
-                    }
-                  } else {
-                    if (typeof (itemProp) === 'object' && itemProp.indexOf(val) > -1) {
-                      matchingData[uuid] = dataItem
-                    }
-                    if (typeof (itemProp) === 'string' && itemProp == val) {
-                      matchingData[uuid] = dataItem
-                    }
-                  }
-                }
-              })
-            }
-          }
-        }, identifier)
-      }, data)
-      if (params.excluded && params.excluded.length > 0) {
-        identifier = splitIdentifier(params.excluded)
-        matchingData = filter((item) => {
-          // find and remove the excluded elements from our search result
-          let bail = false
-          forEachObjIndexed(((val, key) => {
-            // if we don't have the exclude field afterall, we can't fail can't we?
-            if (!item._source.hasOwnProperty(key)) {
-              return true
-            }
-            if (isTrueFalse(val)) {
-              if (isTrue(val)) {
-                bail = item._source[key] === true || item._source[key] === 'true'
-              }
-              if (isFalse(val)) {
-                bail = item._source[key] === false || item._source[key] === 'false'
-              }
-            } else {
-              if (key !== 'tags') {
-                console.error('so far there is just a filter based on arrays, strings and true false values allowed')
-              }
-              if (typeof (item._source[key]) === 'object') {
-                val.forEach(exclude => {
-                  // if we find one of the excluded array items in our current data item, we'll bail on it
-                  if (item._source[key].indexOf(exclude) > -1) {
-                    return bail = true
-                  }
-                })
-              }
-              if (typeof (item._source[key]) === 'string') {
-                // if the property contains or is the no no value we exclude it 
-                if (item._source[key].indexOf(val) > -1 || item._source[key] == val) {
-                  return bail = true
-                }
-              }
-            }
-          }), identifier);
-          return !bail;
-        }, matchingData)
-
-      }
-
-
-    } else {
-      matchingData = data
     }
   }
-
-  return Object.keys(data)
 }
 
 

@@ -11,7 +11,7 @@ import { mergeDeepRight } from 'ramda'
 import { applicationState, loadingHold } from './state'
 import { searchHandler } from '@lib/dataHelper.js'
 import createEvents from './events.js'  // we can specify event handler here
-import createTempDataApi from './tempDataApi.js'
+import createDataApi from './dataApi.js'
 /* import feature reducers */
 import createMetaReducer from './reducers/metaReducer.js'
 
@@ -265,7 +265,7 @@ export function createStore($eventbus) {
    * @TODO remove temporary data API once we have the real API
    * @TODO check after update on ticketboard.  
    * */
-  store.$data = createTempDataApi(store)
+  store.$data = createDataApi(store)
 
   return store
 }

@@ -14,7 +14,7 @@ export default (store) => ({
 
   },
 
-  get: (actionId, query, params = { offset: 0, limit: 100 }) => {
+  get: (actionId, query, params = { offset: 0, limit: 100 }, updateHook = false, hookCondition = 'all') => {
 
     // create a deep ref object which will contain the query data as well as the items
     const queryObj = ref({ data: {} })
@@ -36,6 +36,21 @@ export default (store) => ({
     const subscriber$ = store.select((state) => state.queries[actionId])
       .subscribe((val) => {
         if (!val) return
+        if (updateHook) {
+          if (hookCondition === 'all' || !store.$data.queryObjects[actionId]) {
+            // if we fire for the first time or we want to fire for all update events do it now
+            updateHook(val, queryObj.value)
+
+          } else if (hookCondition === 'count' && store.$data.queryObjects[actionId]) {
+            // check if the uuid counts in the old result match it count of the new result. If not, fire hook
+            if ((val.uuids && store.$data.queryObjects[actionId].value.uuids)
+              && val.uuids.length !== store.$data.queryObjects[actionId].value.uuids.length) {
+              updateHook(val, queryObj.value)
+            }
+
+          }
+        }
+
         // iterate the val object to not override 
         forEachObjIndexed((value, attribute) => {
           queryObj.value[attribute] = value
