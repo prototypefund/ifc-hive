@@ -52,15 +52,7 @@ const props = defineProps({
   props: {
     type: Object,
     default: {},
-  },
-  userLookup: {
-    type: Object,
-    required: false,
-  },
-  tagLookup: {
-    type: Object,
-    required: false,
-  },
+  }
 });
 const user = ref({});
 const dataItemSubscriber$ = $store

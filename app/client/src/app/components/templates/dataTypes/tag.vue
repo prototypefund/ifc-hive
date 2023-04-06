@@ -19,8 +19,7 @@
             <v-select v-model="type" :items="tagTypes" variant="underlined" :label="$t('generics.type')" />
           </v-col>
           <v-col cols="12">
-            <tag-combobox v-if="item._disId" :tag-lookup="tagLookup" :widgetUUID="props.widgetUUID" mode="edit"
-              :docUUID="item._id" />
+            <tag-combobox v-if="item._disId" :widgetUUID="props.widgetUUID" mode="edit" :docUUID="item._id" />
           </v-col>
           <v-col cols="12">
             <v-text-field v-model="color" :label="$t('generics.color')" :color="color" variant="underlined"
@@ -182,7 +181,6 @@ const props = defineProps({
     required: true,
   },
 });
-const tagLookup = $store.$data.get(props.actionId + "_meta/tags", "meta/tags");
 const item = ref(false);
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
@@ -206,6 +204,5 @@ const dataItemSubscriber$ = $store
 onMounted(() => { editMode.value = props.mode });
 onUnmounted(() => {
   dataItemSubscriber$.unsubscribe();
-  tagLookup.value.unsubscribe();
 });
 </script>

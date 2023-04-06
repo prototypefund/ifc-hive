@@ -5,7 +5,7 @@
       <v-virtual-scroll :items="data.uuids">
         <template v-slot:default="{ item }">
           <v-timeline-item :key="item" max-width="600px">
-            <ticket-card-item :widgetUUID="props.uuid" :tag-lookup="tags" :docUUID="item" />
+            <ticket-card-item :widgetUUID="props.uuid" :docUUID="item" />
           </v-timeline-item>
         </template>
       </v-virtual-scroll>
