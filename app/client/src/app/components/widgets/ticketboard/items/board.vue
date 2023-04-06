@@ -42,7 +42,7 @@ const props = defineProps({
   },
   boardItem: {
     type: Object,
-    required: true,
+    required: false,
     default: {}
   },
   uuid: {

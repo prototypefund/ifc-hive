@@ -92,7 +92,7 @@ const props = defineProps({
   },
   ticketItem: {
     type: Object,
-    required: true,
+    required: false,
     default: {}
   },
   uuid: {
