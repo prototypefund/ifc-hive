@@ -2,8 +2,8 @@
   <v-container v-if="state && props.uuid" data-test-container="widgets/journal/default"
     :data-test-container-uuid="props.uuid">
     <v-timeline align="start" :density="viewPortWidth < 1110 ? 'compact' : 'default'">
-      <v-timeline-item v-for="uuid in data.uuids" :key="uuid" max-width="600px">
-        <ticket-card-item :widgetUUID="props.uuid" :tag-lookup="tags" :docUUID="uuid" />
+      <v-timeline-item v-for="uuid in data.uuids" :key="'journalID_' + uuid" max-width="600px">
+        <ticket-card-item :widgetUUID="props.uuid" :docUUID="uuid" />
       </v-timeline-item>
     </v-timeline>
   </v-container>
@@ -43,12 +43,10 @@ const props = defineProps({
   },
 });
 const data = $store.$data.get(props.actionId + "_meta/tickets", "meta/tickets");
-const tags = $store.$data.get(props.actionId + "_meta/tags", "meta/tags");
 onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
   viewPortWidthSubscriber$.unsubscribe();
-  tags.value.unsubscribe();
   data.value.unsubscribe();
 });
 </script>

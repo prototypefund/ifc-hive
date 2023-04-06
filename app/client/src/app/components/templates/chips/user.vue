@@ -7,9 +7,8 @@
 </template>
 
 <script setup>
-import { inject, onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import userChip from "@t/chip/user.vue";
-const $store = inject("$store");
 
 const props = defineProps({
   uuid: {

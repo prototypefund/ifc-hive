@@ -1,6 +1,6 @@
 <template>
   <v-container data-test-container="pages/journal" fluid pa-0>
-    <h1>{{ $t("pages.app-journal") }}</h1>
+    <h1>{{ $t("pages.app-project-journal") }}</h1>
     <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="ticket">
       <v-btn>New Ticket</v-btn>
     </QuickListHandler>

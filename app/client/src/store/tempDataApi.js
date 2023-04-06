@@ -4,8 +4,7 @@
  * this should be replace by the actual API
  */
 import { ref, } from "vue"
-import { getFullItem } from '@lib/dataHelper.js'
-import { difference, forEachObjIndexed } from 'ramda'
+import { forEachObjIndexed } from 'ramda'
 
 export default (store) => ({
 
@@ -15,7 +14,7 @@ export default (store) => ({
 
   },
 
-  get: (actionId, query, params = { offset: 0, limit: 100 }, updateHook = false, hookCondition = 'all') => {
+  get: (actionId, query, params = { offset: 0, limit: 100 }) => {
 
     // create a deep ref object which will contain the query data as well as the items
     const queryObj = ref({ data: {} })
@@ -37,36 +36,16 @@ export default (store) => ({
     const subscriber$ = store.select((state) => state.queries[actionId])
       .subscribe((val) => {
         if (!val) return
-        const uuidsToAdd = difference(val.uuids, val.old_uuids);
-        const uuidsToRemove = difference(val.old_uuids, val.uuids);
-        /* uuidsToAdd.forEach(docUUID => {
-           if (typeof (docUUID) === 'object') {
-             queryObj.data[docUUID.actionId] = {
-               ...docUUID,
-               _id: docUUID.actionId
-             }
-           } else {
-             queryObj.data[docUUID] = getFullItem(docUUID)
-           }
- 
-         })
-         uuidsToRemove.forEach(docUUID => {
-           delete queryObj.data[docUUID]
-         })
- */
         // iterate the val object to not override 
         forEachObjIndexed((value, attribute) => {
-          if (attribute.uuids) {
-            debugger
-          }
-          queryObj[attribute] = value
+          queryObj.value[attribute] = value
         }, val)
 
 
 
       })
     // add a unsubscribe function to our object so that we can trigger it easily on dismount
-    queryObj.unsubscribe = () => {
+    queryObj.value.unsubscribe = () => {
       subscriber$.unsubscribe()
       store.dispatch({
         type: "queries/remove",

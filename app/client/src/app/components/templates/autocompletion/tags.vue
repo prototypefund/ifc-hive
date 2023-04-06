@@ -1,14 +1,13 @@
 <template>
   <div data-test-container="templates/autocompletion/tags" :data-test-container-uuid="props.uuid">
-    <v-autocomplete :disabled="disabled" v-model="selectedTags" :items="Object.values(tagLookup.data)" chips
-      item-title="_title" item-value="_id" hide-seleted closable-chips color="blue-grey-lighten-2"
-      :label="$t('generics.tags')" multiple />
+    <v-autocomplete :disabled="disabled" v-model="selectedTags" :items="getLookupDocuments()" chips item-title="_title"
+      item-value="_id" hide-seleted closable-chips color="blue-grey-lighten-2" :label="$t('generics.tags')" multiple />
   </div>
 </template>
 
 <script setup>
 import { inject, ref, onMounted, computed, onUnmounted } from "vue";
-import { getSource } from "@lib/dataHelper.js";
+import { getSource, getFullItem } from "@lib/dataHelper.js";
 const $store = inject("$store");
 
 const props = defineProps({
@@ -40,15 +39,9 @@ const props = defineProps({
     type: Object,
     default: {},
   },
-  tagLookup: {
-    type: Object,
-    required: false,
-  },
 });
 // get all tags from the store, or the props
-const tagLookup = props.tagLookup
-  ? props.tagLookup
-  : $store.$data.get(props.actionId, "meta/tags");
+const tagLookup = $store.$data.get(props.actionId, "meta/tags");
 // get the document we want to show and edit the tags for. This will be reactive
 const item = ref(false);
 const dataItemSubscriber$ = $store
@@ -75,12 +68,17 @@ const selectedTags = computed({
     });
   },
 });
+const getLookupDocuments = () => {
+  const lookup = []
+  tagLookup.value.uuids.forEach((uuid) => {
+    if (getFullItem(uuid)) lookup.push(getFullItem(uuid))
+  })
+  return lookup
+}
 onMounted(() => { });
 onUnmounted(() => {
   // if .value is set, it means that our lookup came from our store $date.get
-  if (tagLookup.value) {
-    tagLookup.value.unsubscribe();
-  }
+  tagLookup.value.unsubscribe();
   dataItemSubscriber$.unsubscribe();
 });
 </script>

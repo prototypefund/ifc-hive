@@ -1,7 +1,7 @@
 <template>
   <v-chip v-if="tag._source" size="small" :color="tag ? tag._source.color || 'grey' : 'grey'"
     data-test-container="templates/chip/tag" :data-test-container-uuid="props.uuid">
-
+    {{ tag._title }}
   </v-chip>
 </template>
 

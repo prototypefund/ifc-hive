@@ -52,8 +52,9 @@ const props = defineProps({
 // get the document we want to show and edit the tags for. This will be reactive
 const item = ref(false);
 const dataItemSubscriber$ = $store
-    .select((state) => state.data[props.docUUID]._source.avatar)
+    .select((state) => state.data[props.docUUID])
     .subscribe((val) => {
+        if (!val) return
         const fullDocument = {
             ...val,
             _source: getSource(val._id)

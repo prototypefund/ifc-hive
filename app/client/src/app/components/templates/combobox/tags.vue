@@ -1,12 +1,13 @@
 <template>
   <div data-test-container="templates/combobox/tags" :data-test-container-uuid="props.uuid">
-    <v-combobox v-model="selectedTags" :items="Object.values(tagLookup.data)" chips item-title="_title" item-value="_id"
+    <v-combobox v-model="selectedTags" :items="getLookupDocuments()" chips item-title="_title" item-value="_id"
       closable-chips color="blue-grey-lighten-2" :label="$t('generics.tags')" multiple />
   </div>
 </template>
 
 <script setup>
 import { inject, ref, onMounted, computed, onUnmounted } from "vue";
+import { getFullItem, getSource } from '@lib/dataHelper.js'
 const $store = inject("$store");
 
 const props = defineProps({
@@ -34,22 +35,21 @@ const props = defineProps({
     type: Object,
     default: {},
   },
-  tagLookup: {
-    type: Object,
-    required: false,
-  },
 });
 // get all tags from the store, we do use the the "data" here, which is a plain clone of the tags objects. They are not reactive!
-const tagLookup = props.tagLookup
-  ? props.tagLookup
-  : $store.$data.get(props.actionId, "meta/tags");
+const tagLookup = $store.$data.get(props.actionId, "meta/tags");
 // get the document we want to show and edit the tags for. This will be reactive
 const item = ref(false);
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
-    if (item.value !== val) {
-      item.value = val || {};
+    if (!val) return
+    const fullDocument = {
+      ...val,
+      _source: getSource(val._id)
+    }
+    if (item.value !== fullDocument) {
+      item.value = fullDocument || {};
     }
   });
 const selectedTags = computed({
@@ -57,25 +57,13 @@ const selectedTags = computed({
     const selectedTagsArr = [];
     if (item.value._source && item.value._source.tags) {
       item.value._source.tags.forEach((tag) => {
-        if (props.tagLookup) {
-          // sadly we have no .value if we get it via prop and we have .value if we retrieve the lookup ourselfs, so I have to make this nasty piece of if
-          if (tagLookup.data[tag]) {
-            selectedTagsArr.push(tagLookup.data[tag]);
-          } else {
-            selectedTagsArr.push({
-              _id: tag,
-              _title: tag,
-            });
-          }
+        if (getFullItem(tag)) {
+          selectedTagsArr.push(getFullItem(tag));
         } else {
-          if (tagLookup.value.data[tag]) {
-            selectedTagsArr.push(tagLookup.value.data[tag]);
-          } else {
-            selectedTagsArr.push({
-              _id: tag,
-              _title: tag,
-            });
-          }
+          selectedTagsArr.push({
+            _id: tag,
+            _title: tag,
+          });
         }
       });
     }
@@ -98,12 +86,16 @@ const selectedTags = computed({
     });
   },
 });
+const getLookupDocuments = () => {
+  const lookup = []
+  tagLookup.value.uuids.forEach((uuid) => {
+    if (getFullItem(uuid)) lookup.push(getFullItem(uuid))
+  })
+  return lookup
+}
 onMounted(() => { });
 onUnmounted(() => {
-  // if .value is set, it means that our lookup came from our store $date.get
-  if (tagLookup.value) {
-    tagLookup.value.unsubscribe();
-  }
+  tagLookup.value.unsubscribe();
   dataItemSubscriber$.unsubscribe();
 });
 </script>

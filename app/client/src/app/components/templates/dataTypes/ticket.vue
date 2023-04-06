@@ -18,8 +18,7 @@
             <v-text-field v-model="title" :label="$t('generics.title')" variant="underlined"></v-text-field>
           </v-col>
           <v-col cols="12">
-            <tag-combobox v-if="item._disId" :tag-lookup="tagLookup" :widgetUUID="props.widgetUUID" mode="edit"
-              :docUUID="item._id" />
+            <tag-combobox v-if="item._disId" :widgetUUID="props.widgetUUID" mode="edit" :docUUID="item._id" />
           </v-col>
           <v-col cols="12">
             <v-text-field v-model="due" :label="$t('generics.dueDate')" variant="underlined"
@@ -29,8 +28,8 @@
           </v-col>
 
           <v-col cols="12">
-            <user-autocompletion v-if="item._disId" :user-lookup="userLookup" :widgetUUID="props.widgetUUID" mode="edit"
-              :docUUID="item._id" selectedUserRole="assigned" />
+            <user-autocompletion v-if="item._disId" :widgetUUID="props.widgetUUID" mode="edit" :docUUID="item._id"
+              selectedUserRole="assigned" />
           </v-col>
           <v-col cols="12">
             <v-switch v-model="closed" hide-details
@@ -53,7 +52,7 @@
           </v-col>
           <v-col cols="12">
             <v-label>{{ $t("generics.assigned") }}</v-label>
-            <user-chips :widgetUUID="props.widgetUUID" :user-lookup="userLookup" :docUUID="item._id"
+            <user-chips :widgetUUID="props.widgetUUID" :docUUID="item._id"
               :selectedUser="item._source.assigned" /></v-col>
           <v-col cols="12">
             <v-switch v-model="closed" hide-details :label="closed ? $t('generics.closed') : $t('generics.open')"
@@ -204,8 +203,6 @@ const props = defineProps({
     required: true,
   },
 });
-const tagLookup = $store.$data.get(props.actionId + "_meta/tags", "meta/tags");
-const userLookup = $store.$data.get(props.actionId + "_meta/users", "meta/users");
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
   .subscribe((val) => {
@@ -232,7 +229,5 @@ onMounted(() => {
 });
 onUnmounted(() => {
   dataItemSubscriber$.unsubscribe();
-  tagLookup.value.unsubscribe();
-  userLookup.value.unsubscribe();
 });
 </script>

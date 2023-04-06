@@ -14,7 +14,7 @@
 
 <script setup>
 import { inject, ref, onMounted, onUnmounted } from "vue";
-import QuickListHandler from "@w/quickList/handler/click.vue";
+import QuickListHandler from "@w/quickList/handler/click_add.vue";
 import { getSource } from "@lib/dataHelper.js";
 const $store = inject("$store");
 const user = ref(false);

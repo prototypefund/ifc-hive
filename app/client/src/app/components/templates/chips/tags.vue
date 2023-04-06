@@ -7,9 +7,8 @@
 </template>
 
 <script setup>
-import { inject, onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import tagChip from "@t/chip/tag.vue";
-const $store = inject("$store");
 
 const props = defineProps({
   uuid: {
@@ -37,23 +36,12 @@ const props = defineProps({
     required: true,
     default: [],
   },
-  tagLookup: {
-    type: Object,
-    required: false,
-  },
   props: {
     type: Object,
     default: {},
   },
 });
-const tagLookup = props.tagLookup
-  ? props.tagLookup
-  : $store.$data.get(props.actionId, "meta/tags");
 onMounted(() => { });
 onUnmounted(() => {
-  // if .value is set, it means that our lookup came from our store $date.get
-  if (tagLookup.value) {
-    tagLookup.value.unsubscribe();
-  }
 });
 </script>

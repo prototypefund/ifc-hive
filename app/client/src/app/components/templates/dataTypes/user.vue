@@ -33,8 +33,7 @@
         </v-row>
         <v-row>
           <v-col cols="12">
-            <tag-autocompletion v-if="item._disId" mode="edit" :tag-lookup="tagLookup" :widgetUUID="props.widgetUUID"
-              :docUUID="item._id" />
+            <tag-autocompletion v-if="item._disId" mode="edit" :widgetUUID="props.widgetUUID" :docUUID="item._id" />
           </v-col>
           <v-col cols="12">
             <v-switch v-model="active" hide-details
@@ -217,7 +216,6 @@ const props = defineProps({
     required: true,
   },
 });
-const tagLookup = $store.$data.get(props.actionId + "_meta/tags", "meta/tags");
 const item = ref(false);
 const dataItemSubscriber$ = $store
   .select((state) => state.data[props.docUUID])
@@ -234,7 +232,7 @@ const dataItemSubscriber$ = $store
       _source: getSource(val._id)
     }
     if (item.value != fullDocument) {
-      if (user.value !== fullDocument) {
+      if (item.value !== fullDocument) {
         item.value = fullDocument || {};
       }
     }
@@ -242,6 +240,5 @@ const dataItemSubscriber$ = $store
 onMounted(() => { editMode.value = props.mode });
 onUnmounted(() => {
   dataItemSubscriber$.unsubscribe();
-  tagLookup.value.unsubscribe();
 });
 </script>

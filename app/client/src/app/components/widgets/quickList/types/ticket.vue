@@ -15,7 +15,6 @@
 <script setup>
 import ticket from "@t/dataTypes/ticket.vue";
 import QuickListHandler from "@w/quickList/handler/click_remove.vue";
-const onList = true
 const props = defineProps({
   uuid: {
     type: String,

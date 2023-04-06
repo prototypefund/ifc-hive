@@ -63,7 +63,7 @@
         <v-col cols="9">
           <QuickListHandler uuid="quickList" :docUUID="ticket._source.owner" :dataTitle="ticket._source.owner"
             type="user">
-            <user-list-item :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :docUUID="ticket._source.owner" />
+            <user-list-item :widgetUUID="props.widgetUUID" :docUUID="ticket._source.owner" />
           </QuickListHandler>
         </v-col>
       </v-row>
@@ -74,7 +74,7 @@
         </v-col>
         <v-col cols="9">
           <QuickListHandler uuid="quickList" :docUUID="assigned" :dataTitle="assigned" type="user">
-            <user-list-item :user-lookup="userLookup" :widgetUUID="props.widgetUUID" :docUUID="assigned" />
+            <user-list-item :widgetUUID="props.widgetUUID" :docUUID="assigned" />
           </QuickListHandler>
         </v-col>
       </v-row>
@@ -120,14 +120,6 @@ const props = defineProps({
   props: {
     type: Object,
     default: {},
-  },
-  userLookup: {
-    type: Object,
-    required: false,
-  },
-  tagLookup: {
-    type: Object,
-    required: false,
   },
 });
 const shortenId = (uuid) => {
