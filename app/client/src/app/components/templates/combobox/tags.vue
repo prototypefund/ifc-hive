@@ -55,7 +55,7 @@ const dataItemSubscriber$ = $store
 const selectedTags = computed({
   get() {
     const selectedTagsArr = [];
-    if (item.value._source && item.value._source.tags) {
+    if (item.value?._source?.tags) {
       item.value._source.tags.forEach((tag) => {
         if (getFullItem(tag)) {
           selectedTagsArr.push(getFullItem(tag));

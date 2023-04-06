@@ -28,10 +28,10 @@ export const isFalse = (value) => {
   return value === false || value === 'false'
 }
 export const getFullItem = (docUUID) => {
-  return window.$pacificoData[docUUID] || {}
+  return window.$pacificoData[docUUID] || undefined
 }
 export const getSource = (docUUID) => {
-  return getFullItem(docUUID)?._source || {}
+  return getFullItem(docUUID)?._source || undefined
 }
 
 export const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, lookUp) => {
