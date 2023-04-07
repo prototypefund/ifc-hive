@@ -2,197 +2,80 @@
  * Socket events
  */
 import Project from '#src/app/core/model/project/project.model.js'
-import Ticket from '#src/app/journal/model/ticket/ticket.model.js'
-import Tag from '#src/app/core/model/tag/tag.model.js '
-import User from '#src/app/core/model/user/user.model.js'
-import { createDataPayload } from '#src/lib/dataObjectHelpers.js'
-
+import { streamProjectData } from './streamProjectData.js'
+import { payloadFabric } from '../dataObjectHelpers.js'
 
 export async function registerSocketEvents (app) {
+  // get web socket server instance
   const { wss } = app
 
+/*
+ * handle socket connections and register socket events
+ */
   wss.on('connection', async (socket) => {
-
 
     /* log connection and say hello */
     app.log.warn(`[socket] connected ${socket.id}`)
     wss.emit('hello', { id: socket.id })
 
-
     /* always send a list with the projects accessible to this user */
     const projects = await Project.find()
-    wss.emit('projects/list', { projects } )
-
-
-    /* send dummy data when project data are request by the client */
-    socket.on('getProjectData', async (projectId) => {
-      Ticket
-        .find({})
-        // .limit(100)
-        .cursor()
-        .on('data', (doc) => {
-          app.log.info({ msg: 'Send socket Package', doc })
-        })
-    })
-
+    socket.emit('projects/list', { projects } )
 
     /* on discconnect */
     socket.on('disconnect', () => {
       app.log.warn(`[Socket] disconnected ${socket.id}`)
     })
 
-    /* on join */
+    /* on join room (currently only project) */
     socket.on('join', async (room) => {
-      socket.join(room.id)
-      
-      // get project data
       try {
-
-      // get project 
-      const project = await Project.findOne({ _id: room })
-
-        if (project) {
-          socket.emit('joinConfirmation', { room, project })
-          wss.sockets
-            .in(room.id)
-            .emit('room/new-member', { 
-              room: room.id,
-              msg: `member joined ${socket.id}`
-            })
-          app.log.info(`[Socket] socket ${socket.id} joined room ${room}`)
-        } else {
-          socket.emit('joinRejection', { 
-            error: {
-              status: 'roomDoesNotExistt',
-              msg: `There is no project with _id ${room}`
-            } 
-          })
+        // get project 
+        const project = await Project.findOne({ _id: room })
+        // early return if the project does not exist
+        if (!project) {
+          return socket.emit('error', { 
+            error: { msg: `There is no project with _id ${room}` } }
+          )
         }
 
+        socket.join(room)
+        socket.emit('joinConfirmation', { room, project })
+        app.log.info(`[Socket] socket ${socket.id} joined room ${room}`)
+        // stream all project data to socket client
+        return streamProjectData(socket, room)
       } catch (err) {
+        socket.emit('error', { error: { msg: 'Error joining and loding project room' } })
         app.log.error(err)
       }
-
-      /* inform the client */
-      const ticketCount = await Ticket.find({ isDeleted: false, project: room  }).count()
-      const userCount = await User.find({ isDeleted: false  }).count()
-      const tagCount = await Tag.find({ project: room }).count()
-      const expect = ticketCount + userCount + tagCount
-      let loadingCount = 0
-      socket.emit('batchDataStart', { expect, ticketCount, userCount, tagCount })
-
-      const checkLoadingCount = (doc) => {
-        loadingCount += 1
-        if (loadingCount == expect ) {
-          socket.emit('batchDataStop')
-        }
-      }
-
-      /* send ticket stream */
-      const projectData = [
-      Ticket
-        .find({ project: room })
-        .cursor()
-        .on('data', (doc) => {
-          const { _id, title, disId, project } = doc
-          const payload = {
-            _id,
-            _title: title,
-            _disId: disId,
-            _project: project,
-            _source: doc,
-            _type: 'ticket'
-          }
-          /* emit data packages to client */
-          socket.emit('data', payload )
-          checkLoadingCount(doc)
-        }),
-      User
-        .find({ isDeleted: false })
-        .select('title firstname lastname nickname email _id')
-        .populate('organization account')
-        .cursor()
-        .on('data', (doc) => {
-          const payload = {
-            _id: doc._id,
-            _title: `${doc.firstname} ${doc.lastname}`,
-            _disId: doc.nickname,
-            _project: null,
-            _source: doc,
-            _type: 'user'
-          }
-          /* emit data packages to client */
-          socket.emit('data', payload )
-          checkLoadingCount(doc)
-        }),
-
-        Tag
-        .find({ project: room })
-        .cursor()
-        .on('data', (doc) => {
-          const payload = {
-            _id: doc._id,
-            _title: doc.title,
-            _disId: doc.title,
-            _project: doc.project,
-            _source: doc,
-            _type: 'tag'
-          }
-          /* emit data packages to client */
-          socket.emit('data', payload )
-          checkLoadingCount(doc)
-        })
-      ]
-
-        // let the client now that we are done
-
     })
 
     /* on leave */
     socket.on('leave', (room) => {
-      socket.leave(room.id)
+      socket.leave(room)
       socket.emit('leaveConfirmation', room)
-      wss.sockets
-        .in(room.id)
-        .emit('memberLeft', {
-          room: room.id,
-          msg: `member left ${socket.id}`
-        })
-    })
-
-    socket.on('getProjectData', async (request) => {
-      socket.emit('projectDataConfirmation', {
-        msg: '... Kommt gleich',
-        count: {
-          total: 340,
-          tickets: 300,
-          user: 4,
-          tags: 36,
-        }
-      })
-    })
-
-    /* on details  */
-    socket.on('details', (args) => {
-      app.log.info('[Socket] details received') 
-      wss.emit('hello', { msg: 'we got your message' })
+      wss.in(room).emit('memberLeft', { room, msg: `member left ${socket.id}` })
     })
   })
 
+  /* on connection error */
   wss.on('connection_error', (err) => {
-    console.log(err.req)
-    console.log(err.code)
-    console.log(err.message)
-    console.log(err.context)
+    app.log.error({ msg: '[Socket]', error: err })
   })
 
-  app.eventbus.on('dataUpdate', (payload) => {
-    // validate schema
-    wss.emit('data', payload)
+  /* on dataUpdate */
+  app.eventbus.on('dataUpdate', (obj) => {
+    // account, ticket, tag, user, project
+    const payload = payloadFabric[obj.type](obj.obj)
+    // if user inform all rooms
+    if (payload._type === 'user') 
+      return  wss.emit('data', payload)
+    // else, ticket or tag, inform only project
+    wss.in(payload._project).emit('data', payload)
   })
 
   app.eventbus.on('dataNew', (payload) => {
     // validate schema
-    wss.emit('data', payload)
+    wss.to(payload._project).emit('data', payload)
   })
 } 

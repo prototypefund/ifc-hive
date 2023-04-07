@@ -11,17 +11,18 @@ export default function (app) {
   /* handler */
   async function handler (request, response) {
     try {
+      //  keep reference so we can calculate differences
+      const originalTicket = await Ticket.findOne({ _id: request.params.id })
+      if (!originalTicket) return response.notFound()
 
-      const checkTicket = await Ticket.findOne({ _id: request.params.id })
-      if (!checkTicket) return response.notFound()
-
-     
       // make sure nobody can overwrite the ID
       delete request.body._id
       let ticket = await Ticket.findOneAndUpdate({ _id: request.params.id },  request.body, { new: true })
       if (!ticket) {
         ticket = await Ticket.create(request.body)
       }
+      // emit update signal for ticket
+      app.eventbus.emit('dataUpdate', { type: 'ticket', obj: ticket, prev: originalTicket } )
       return ticket
     } catch (err) {
       app.log.error(err)

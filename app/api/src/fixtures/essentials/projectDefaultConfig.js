@@ -51,7 +51,7 @@ export default {
   inspectorTools: {
     'chart_ticketsByTag': {
       title: "ticketsByTag",
-      pages: false,
+      pages: 'mich-gibt-es-nicht',
       icon: "mdi-chart-donut",
       uuid: "chart_ticketsByTag",
       widget: {

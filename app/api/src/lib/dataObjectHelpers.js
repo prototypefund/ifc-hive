@@ -42,6 +42,43 @@ function createDataPayload (opts)  {
   return payload
 }
 
+function createTicketPayload (ticket) {
+  return {
+    _id: ticket._id,
+    _account: null,
+    _createdAt: ticket.createAt,
+    _updatedAt: ticket.updatedAt,
+    _deleted: ticket.isDeleted,
+    _project: ticket.project,
+    _path: ticket.path,
+    _source: ticket,
+    _title: ticket.title,
+    _type: 'ticket',
+    _disId: ticket.disId,
+  }
+}
+
+function createUserPayload (user) {
+  return {
+    _account: user.account, 
+    _createdAt: user.createdAt,
+    _updatedAt: user.updatedAt,
+    _deleted: user.isDeleted,
+    _project: null,
+    _path: null,
+    _source: user,
+    _title: `${firstname} ${lastname} ${nickname} ${email}`,
+    _type: 'user',
+    _disId: user.nickname,
+  }
+}
+
+const payloadFabric = {
+  ticket: createTicketPayload,
+  user: createUserPayload,
+}
+
+
 /*
  * validateDataPayload
  * validate payload object with dataObjectSchema
@@ -54,5 +91,8 @@ export {
   createDataPayload,
   validateDataPayload,
   dataPayloadSchema, 
+  payloadFabric, // use the payloadFabric map
+  createTicketPayload,
+  createUserPayload,
 }
 

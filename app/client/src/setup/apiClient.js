@@ -7,7 +7,7 @@ export function registerApiHandlerEvents($api, $store, $eventbus) {
   /* data_update */
   $eventbus.on('data_update', (item) => {
     // x-request-id: uuidv4()
-    $api.put(`/lab/ticket/${item._source._id}`, item)
+    $api.put(`/journal/ticket/${item._source._id}`, item._source)
   })
 
   /* saveLocalProjectConfig */

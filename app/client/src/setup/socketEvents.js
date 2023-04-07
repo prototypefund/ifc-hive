@@ -195,8 +195,8 @@ export function registerSocketEvents($socket, $store, $eventbus) {
       batchItems.push(data)
       $eventbus.emit('batchDataItemPush', batchItems.length)
     } else {
-      log.socket('dataTest', data)
-      $store.dispatch({ type: 'data/push', payload: { data } })
+      log.socket('data', data)
+      $store.dispatch({ type: 'data/push', payload: { data: [data] } })
     }
   })
 }
