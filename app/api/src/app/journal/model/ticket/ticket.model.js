@@ -21,6 +21,8 @@ const ticketSchema = new Schema({
   project: {
     type: Schema.Types.String,
     ref: 'pacifico_core_project',
+    required: true,
+    immutable: true,
   },
 
   /*
