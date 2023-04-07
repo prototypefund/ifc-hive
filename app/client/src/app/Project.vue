@@ -111,6 +111,13 @@
           <router-view v-slot="{ Component }">
             <component :is="Component" :class="{ isLoading: loading }" id="appComponent"
               :style="{ height: viewPortHeight + 'px' }" @scroll.passive="setScroll($event)" />
+            <v-fade-transition>
+              <v-row v-if="loading" class="fill-height" align-content="start" justify="center">
+                <v-col class="text-subtitle-1 text-center" cols="12">
+                  <v-progress-circular indeterminate :size="200" :width="10" color="primary" />
+                </v-col>
+              </v-row>
+            </v-fade-transition>
           </router-view>
         </template>
       </v-main>
