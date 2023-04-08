@@ -6,8 +6,9 @@
  * @param {object} $eventbus - instance of our custom eventbus
  */
 import log from '@lib/logger.js'
-import { globalPages, globalTags } from '@_/setup/application.js'
-export function registerSocketEvents($socket, $store, $eventbus) {
+import { setProjectBrowserConfig } from '@lib/setProjectConfiguration.js'
+
+function registerSocketEvents($socket, $store, $eventbus) {
 
   /* required for reconnection */
   let intervalId = false
@@ -21,14 +22,10 @@ export function registerSocketEvents($socket, $store, $eventbus) {
    * fired every time we have a new connection established
    */
   $socket.on('connect', (data) => {
-
     log.socket('connect', 'Socket connection established')
     $store.dispatch({ type: 'socket/status', payload: { status: 1, message: 'Connected' } })
-    // if we previously tried to connect stop that interval
-    if (intervalId) {
-      clearInterval(intervalId)
-      intervalId = false
-    }
+    // @TODO if we re-connect after a drop out we need to subscribe to our project without
+    // completely setting up the project up, e.g. only re-join project room.
   })
 
   /*
@@ -43,6 +40,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
    */
   $socket.on('reconnect', () => {
     $store.dispatch({ type: 'socket/status', payload: { status: 2, message: 'Reconnect' } })
+    const projectId = $store.select(state => state.project.id)
   })
 
   /*
@@ -84,65 +82,17 @@ export function registerSocketEvents($socket, $store, $eventbus) {
     $store.dispatch({ type: 'project/addlookup', payload: projectLookup })
   })
 
-  /* successfull join requests are confirmed by the server */
+  /*
+   * on joinConfirmation 
+   */
   $socket.on('joinConfirmation', (data) => {
     $store.dispatch({
       type: 'ui/update',
       payload: { loading: true }
     })
-    // Reset all store states which are project dependend. 
-    if (data.project && data.project.config) {
-      $store.dispatch({ type: 'projectInit' })
-      //readd the global pages (public.login etc.)
-      globalPages($store)
-      globalTags($store);
-      // TODO add mobile switch
-      if (data.project.config.browser) {
-        if (data.project.config.browser.ui) {
-          $store.dispatch({
-            type: 'ui/update',
-            payload: data.project.config.browser.ui
-          })
-        }
-        if (data.project.config.browser.pages && Object.keys(data.project.config.browser.pages).length > 0) {
-          for (const [key, value] of Object.entries(data.project.config.browser.pages)) {
-            $store.dispatch({
-              type: "pages/add",
-              payload: value,
-            });
-          }
-        }
-        if (data.project.config.browser.tools && Object.keys(data.project.config.browser.tools).length > 0) {
-          for (const [key, value] of Object.entries(data.project.config.browser.tools)) {
-            $store.dispatch({
-              type: "toolbar/add",
-              payload: value,
-            });
-          }
-
-        }
-        if (data.project.config.browser.navigationTools && Object.keys(data.project.config.browser.navigationTools).length > 0) {
-          for (const [key, value] of Object.entries(data.project.config.browser.navigationTools)) {
-            $store.dispatch({
-              type: "navigationTools/add",
-              payload: value,
-            });
-          }
-        }
-        if (data.project.config.browser.inspectorTools && Object.keys(data.project.config.browser.inspectorTools).length > 0) {
-          for (const [key, value] of Object.entries(data.project.config.browser.inspectorTools)) {
-            $store.dispatch({
-              type: "inspectorTools/add",
-              payload: value,
-            });
-          }
-        }
-      }
-    }
-
-
+    // @TODO introduce switch  or map to distinguish browser and mobile
+    setProjectBrowserConfig(data.project, $store)
     log.socket('joinConfirmation received', data)
-    // $eventbus.emit('routerPush', '/')
   })
 
   /* 
@@ -165,7 +115,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
   /*
    * batchDataStart
    * The server is just about to start sending a large batch of data
-   * const data = { expect: 13 }
+   * const data = { expect: Number, ticketCount: Number, userCount: Number, tagCount: Number }
    */
   $socket.on('batchDataStart', (data) => {
     batchLoading = true
@@ -199,4 +149,9 @@ export function registerSocketEvents($socket, $store, $eventbus) {
       $store.dispatch({ type: 'data/push', payload: { data: [data] } })
     }
   })
+}
+
+export default registerSocketEvents
+export {
+  registerSocketEvents,
 }

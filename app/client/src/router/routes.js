@@ -1,7 +1,7 @@
 // import routes from modules
 
-import App from '../app/App.vue'
-import Index from '../app/Index.vue'
+import Project from '../app/Project.vue'
+import App from '../app/Index.vue'
 import app_project_select from '../app/selectProject.vue'
 
 import app_dashboard from '../app/components/pages/dashboard/page.vue'
@@ -16,19 +16,19 @@ import public_login from '../public/login.vue'
 import public_terms from '../public/terms.vue'
 import public_logout from '../public/logout.vue'
 
-
-export default function (store) {
+function defineRoutes (store) {
   return [
     /* Root */
     { path: '/', props: true, redirect: { name: 'public.login' } },
     { path: '/login', name: 'public.login', component: public_login, props: true },
     { path: '/login', name: 'public.login', component: public_login, props: true },
     { path: '/logout', name: 'public.logout', component: public_logout, props: true },
+    { path: '/terms', name: 'public.terms', component: public_terms, props: true },
     {
       path: '/app',
       name: 'app.index',
       props: { redirectURL: null, redirectProps: null },
-      component: Index,
+      component: App,
       redirect: { name: 'app.project.select' },
       children: [
         {
@@ -40,7 +40,7 @@ export default function (store) {
         {
           path: 'project/:id',
           name: 'app.project.index',
-          component: App,
+          component: Project,
           props: { redirectURL: null, redirectProps: null },
           children: [
             {
@@ -85,3 +85,8 @@ export default function (store) {
     },
   ]
 } 
+
+export default defineRoutes
+export {
+  defineRoutes
+}

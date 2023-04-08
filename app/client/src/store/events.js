@@ -1,7 +1,11 @@
+/*
+ * Collection of event handlers to be use in the store
+ * see ./store/index.js for usage
+ */
 import { widgetConfLoader, widgetTypeConfLoader } from "@lib/widgetLoader"
 import log from '@lib/logger.js'
 
-export default function ($store, $eventbus) {
+function storeEventHandlers ($store, $eventbus) {
   return {
     /*
      * dispatch 
@@ -11,7 +15,7 @@ export default function ($store, $eventbus) {
      * @param {object} action - a minirx-store action object
      */
     dispatch (action) {
-      log.store(action, 'Event store/dispatch')
+      log.store('Event store/dispatch', action)
       $store.dispatch(action)
     },
 
@@ -19,7 +23,7 @@ export default function ($store, $eventbus) {
      * @param {object} widget - a widget object
      */
     widgetConfLoaderHandler (widget) {
-      log.store(widget, 'Event widgetsConfLoaderHandler')
+      log.store('Event widgetsConfLoaderHandler', widget)
       widgetConfLoader($store)(widget)
     },
 
@@ -27,8 +31,13 @@ export default function ($store, $eventbus) {
      * @param {object} widget - a widget object
      */
     widgetTypeConfLoaderHandler (widget) {
-      log.store(widget, 'Event widgetsTypeConfLoaderHandler')
+      log.store('Event widgetsTypeConfLoaderHandler', widget)
       widgetTypeConfLoader($store)(widget)
     },
   }
+}
+
+export default storeEventHandlers
+export {
+  storeEventHandlers
 }

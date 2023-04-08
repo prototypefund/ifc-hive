@@ -5,7 +5,7 @@
  *
  * make a hex color code from a string
  */
-export const stringToColour = function (string = 'abcdef') {
+const stringToColour = function (string = 'abcdef') {
   let hash = 0;
   for (let i = 0; i < string.length; i++) {
     hash = string.charCodeAt(i) + ((hash << 5) - hash);
@@ -16,4 +16,8 @@ export const stringToColour = function (string = 'abcdef') {
     colour += ("00" + value.toString(16)).substr(-2);
   }
   return colour;
+}
+
+export {
+  stringToColour,
 }

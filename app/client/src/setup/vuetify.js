@@ -8,16 +8,18 @@ import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import { locale } from './i18n.js'
 import lightTheme from '../styles/themes/light.js'
 import darkTheme from '../styles/themes/dark.js'
+
 const dark = {
   dark: true,
   colors: darkTheme
 }
+
 const light = {
   dark: false,
   colors: lightTheme
 }
 
-export const vuetify = createVuetify({
+const vuetify = createVuetify({
   locale,
   components: {
     ...components,
@@ -44,3 +46,6 @@ export const vuetify = createVuetify({
 })
 
 export default vuetify
+export {
+  vuetify
+}

@@ -6,19 +6,22 @@
 import { ref, } from "vue"
 import { forEachObjIndexed } from 'ramda'
 
-export default (store) => ({
-
+const storeDataApi =  (store) => ({
   // TODO rethink this whole thing as soon as we have the es and api
   queryObjects: {},
-  update: (actionId, docUUID, doc) => {
-
-  },
-
-  get: (actionId, query, params = { offset: 0, limit: 100 }, updateHook = false, hookCondition = 'all') => {
+  update: (actionId, docUUID, doc) => {},
+  get: (
+    actionId,
+    query,
+    params = { offset: 0, limit: 100 },
+    updateHook = false,
+    hookCondition = 'all'
+  ) => {
 
     // create a deep ref object which will contain the query data as well as the items
     const queryObj = ref({ data: {} })
-    // check if we have a query fullfilling the needs of the one requested here. If not we will update the one with this actionId
+    // check if we have a query fullfilling the needs of the one requested
+    // here. If not we will update the one with this actionId
     if (!store.$data.queryObjects[actionId]
       || (store.$data.queryObjects[actionId].value.query !== query
         || store.$data.queryObjects[actionId].value.params !== params)) {
@@ -47,7 +50,6 @@ export default (store) => ({
               && val.uuids.length !== store.$data.queryObjects[actionId].value.uuids.length) {
               updateHook(val, queryObj.value)
             }
-
           }
         }
 
@@ -55,9 +57,6 @@ export default (store) => ({
         forEachObjIndexed((value, attribute) => {
           queryObj.value[attribute] = value
         }, val)
-
-
-
       })
     // add a unsubscribe function to our object so that we can trigger it easily on dismount
     queryObj.value.unsubscribe = () => {
@@ -72,3 +71,8 @@ export default (store) => ({
     return queryObj
   }
 })
+
+export default storeDataApi
+export {
+  storeDataApi
+}

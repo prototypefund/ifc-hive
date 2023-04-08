@@ -5,7 +5,7 @@ import { filter, forEachObjIndexed } from 'ramda'
  *
  * @return { object } an object containing the properties as keys and arrays for their values
  */
-export const splitIdentifier = (identifier) => {
+const splitIdentifier = (identifier) => {
   let identifierKeyVal = false
   let attributes = {}
   identifier.forEach(identifier => {
@@ -18,23 +18,34 @@ export const splitIdentifier = (identifier) => {
 
   return attributes
 }
-export const isTrueFalse = (value) => {
+
+/* is true or false */
+const isTrueFalse = (value) => {
   return ((value === 'true' || value === true) || (value === 'false' || value === false));
 }
-export const isTrue = (value) => {
+
+/* is true? */
+const isTrue = (value) => {
   return value === true || value === 'true'
 }
-export const isFalse = (value) => {
+
+/* is false */
+const isFalse = (value) => {
   return value === false || value === 'false'
 }
-export const getFullItem = (docUUID) => {
+
+/* get full item */
+const getFullItem = (docUUID) => {
   return window.$pacificoData[docUUID] || undefined
 }
-export const getSource = (docUUID) => {
+
+/* get source attribute of data item */
+const getSource = (docUUID) => {
   return getFullItem(docUUID)?._source || undefined
 }
 
-export const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, lookUp) => {
+/* search handler */
+const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, lookUp) => {
   if (!params.offset) params.offset = 0
   if (!params.limit) params.limit = 100
   let identifier = false
@@ -95,5 +106,12 @@ export const searchHandler = (actionId, query, params = { offset: 0, limit: 100 
   }
 }
 
-
-
+export {
+  splitIdentifier,
+  isTrueFalse,
+  isTrue,
+  isFalse,
+  getFullItem,
+  getSource,
+  searchHandler,
+}

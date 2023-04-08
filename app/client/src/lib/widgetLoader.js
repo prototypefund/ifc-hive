@@ -7,7 +7,7 @@ import { mergeDeepRight } from 'ramda'
  *
  * Load a given widget vue file
  */
-export const widgetLoader = function (widgetName = 'debug', face = 'default') {
+const widgetLoader = function (widgetName = 'debug', face = 'default') {
   return import(`../app/components/widgets/${widgetName}/${face}.vue`).catch(e => {
     return import('../app/components/widgets/error/default.vue')
   })
@@ -18,7 +18,7 @@ export const widgetLoader = function (widgetName = 'debug', face = 'default') {
  *
  * get a config file for a given widget and configure its state
  */
-export const widgetConfLoader = function (store) {
+const widgetConfLoader = function (store) {
   return (widget) => {
     return import(`../app/components/widgets/${widget.name || 'debug'}/conf.js`).then(conf => {
       const widgetConf = conf[widget.face] || conf.default
@@ -40,7 +40,7 @@ export const widgetConfLoader = function (store) {
  *
  * get a config file for a given widget and configure its state
  */
-export const widgetTypeConfLoader = function (store) {
+const widgetTypeConfLoader = function (store) {
   return (widget) => {
     return import(`../app/components/widgets/${widget.name || 'debug'}/${widget.type || 'default'}/conf.js`)
       .then(conf => {
@@ -57,3 +57,9 @@ export const widgetTypeConfLoader = function (store) {
   }
 }
 
+
+export {
+  widgetLoader,
+  widgetConfLoader,
+  widgetTypeConfLoader,
+}

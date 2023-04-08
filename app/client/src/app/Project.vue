@@ -34,6 +34,8 @@
       <!-- notifications -->
       <Notifications />
 
+      <v-btn @click="logout">logout</v-btn>
+
       <!-- User menu -->
       <v-menu>
         <template v-slot:activator="{ props }">

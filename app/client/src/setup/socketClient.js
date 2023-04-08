@@ -3,7 +3,7 @@
  *
  * Listens to the event bus and emits accordingly messages to the socket server.
  */
-export function registerSocketClient($socket, $store, $eventbus) {
+function registerSocketClient($socket, $store, $eventbus) {
 
   $eventbus.on('socketJoinRoom', (roomId) => {
     $socket.emit('join', roomId)
@@ -16,4 +16,9 @@ export function registerSocketClient($socket, $store, $eventbus) {
   $eventbus.on('socketGetProjectData', (projectId) => {
     $socket.emit('getProjectData', projectId)
   })
+}
+
+export default registerSocketClient
+export {
+  registerSocketClient
 }

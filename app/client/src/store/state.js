@@ -11,13 +11,13 @@
 /*
  * Used as a timer value
  */
-export const loadingHold = 200
+const loadingHold = 200
 
 /*
  * applicationState
  * Our actual application data
  */
-export const applicationState = {
+const applicationState = {
   route: {},
   data: {},
   uploader: {},
@@ -134,7 +134,7 @@ export const applicationState = {
  * configPatterns
  * @TODO it seems currently this is not used anywhere?
  */
-export const configPatterns = {
+const configPatterns = {
   grid: {
     // defines the wrapping html template for the whole grid
     type: "default",
@@ -156,7 +156,7 @@ export const configPatterns = {
 /*
  * Some data object templates
  */
-export const storePatterns = {
+const storePatterns = {
   page: {
     // this will determine if we always scroll to the last page position or
     // to the top whenever we enter this page
@@ -183,4 +183,11 @@ export const storePatterns = {
     // or FACE.vue containing your add logic for a given widget
     type: false
   }
+}
+
+export {
+  loadingHold,
+  applicationState,
+  configPatterns,
+  storePatterns,
 }

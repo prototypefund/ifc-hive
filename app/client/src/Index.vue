@@ -1,3 +1,7 @@
+/**
+  Root component
+  This the neutral, global index file with the root router-view
+ */
 <template>
     <div>
         <router-view />
@@ -7,9 +11,9 @@
 import { globalPages } from "./setup/application";
 
 export default {
-    inject: ["$api", "$store", "$eventbus"],
-    mounted() {
-        globalPages(this.$store);
-    },
+  inject: ["$api", "$store", "$eventbus"],
+  mounted() {
+    globalPages(this.$store);
+  },
 }
 </script>

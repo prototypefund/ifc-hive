@@ -4,7 +4,7 @@
  */
 import { format, intlFormat } from 'date-fns'
 
-export default {
+const filters = {
   /*
    * Format date with date-fns
    */
@@ -21,3 +21,9 @@ export default {
     // return '123'
   }
 }
+
+export {
+  filters,
+}
+
+export default filters

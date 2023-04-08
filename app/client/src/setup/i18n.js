@@ -2,7 +2,8 @@ import { createI18n, useI18n } from 'vue-i18n'
 import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
 import messages from '../i18n/messages'
 import datetimeFormats from '../i18n/dateTimeFormats'
-export const i18n = createI18n({
+
+const i18n = createI18n({
   legacy: false, // you must set `false`, to use Composition API
   globalInjection: true,
   locale: (navigator.language || navigator.userLanguage).split('-')[0], // set locale
@@ -10,7 +11,8 @@ export const i18n = createI18n({
   messages, // set locale messages
   datetimeFormats
 })
-export const locale = {
+
+const locale = {
   adapter: createVueI18nAdapter({
     i18n,
     useI18n,
@@ -18,3 +20,8 @@ export const locale = {
 }
 
 export default i18n
+
+export {
+  i18n,
+  locale
+}

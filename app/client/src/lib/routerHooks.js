@@ -9,7 +9,7 @@
  *
  * Keep track of the current route in the store
  */
-export function forEachHook (store) {
+function forEachHook (store) {
   return (to, from)  => {
     if (to !== from) {
       // add default params to every route
@@ -29,7 +29,7 @@ export function forEachHook (store) {
  *
  * Pass route params and query data to the current page state
  */
-export function beforeResolveHook (store) {
+function beforeResolveHook (store) {
   return (to, from) => {
     // change the currentPage, might often be just a change in url params
     if (to !== from) {
@@ -40,4 +40,9 @@ export function beforeResolveHook (store) {
       })
     }
   }
+}
+
+export {
+  forEachHook,
+  beforeResolveHook,
 }

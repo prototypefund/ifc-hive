@@ -49,7 +49,7 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
  *
  * @param {object} $eventbus - a global eventbus which is also available in all vue components
  */
-export function createStore($eventbus) {
+function createStore($eventbus) {
 
   // TODO move this stup to seperate config and helper files
   // helper functions and lookup maps
@@ -224,11 +224,8 @@ export function createStore($eventbus) {
 
   /*
    * create and register events
-   * @TODO pseudo effect as events
-   *
    */
   const events = createEvents(store, $eventbus)
-
   $eventbus.on('store/dispatch', events.dispatch) // generic store.dispatch
   $eventbus.on('widgetConfLoader', events.widgetConfLoaderHandler)
   $eventbus.on('widgetTypeConfLoader', events.widgetTypeConfLoaderHandler)
@@ -271,3 +268,6 @@ export function createStore($eventbus) {
 }
 
 export default createStore
+export {
+  createStore,
+}

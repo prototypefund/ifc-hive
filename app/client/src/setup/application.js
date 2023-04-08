@@ -1,4 +1,4 @@
-export const globalPages = ($store) => {
+const globalPages = ($store) => {
   $store.dispatch({
     type: 'pages/add',
     routeName: 'public.login',
@@ -67,7 +67,7 @@ export const globalPages = ($store) => {
 }
 
 
-export const globalTags = ($store) => {
+const globalTags = ($store) => {
   $store.dispatch({
     type: "data/push",
     payload: {
@@ -151,7 +151,7 @@ export const globalTags = ($store) => {
   }
   )
 }
-export const globalTools = ($store) => {
+const globalTools = ($store) => {
   $store.dispatch({
     type: "navigationTools/add",
     payload: {
@@ -263,4 +263,10 @@ export const globalTools = ($store) => {
      },
    });
    */
+}
+
+export {
+  globalPages,
+  globalTools,
+  globalTags,
 }

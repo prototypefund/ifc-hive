@@ -1,3 +1,7 @@
+/**
+  Temporary page to allow for project selection. 
+  This might grow in the global user dashboard
+ */
 <template>
   <v-container>
     <v-sheet width="300" class="mx-auto" v-if="projects.length > 0">

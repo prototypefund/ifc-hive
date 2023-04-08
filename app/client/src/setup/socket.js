@@ -7,7 +7,7 @@ import log from '@lib/logger.js'
  * @param {string} host - our socket endpoint
  * @return {object} opts - socket.io options
  */
-export function createSocket(host, opts) {
+function createSocket(host, opts) {
   const defaults = {
     // path: '/socket/',
   }
@@ -21,7 +21,7 @@ export function createSocket(host, opts) {
  * @param {object} $store - a minirx-store instance, so we can dispatch actions
  * @param {object} $eventbus - instance of our custom eventbus
  */
-export function registerSocketEvents($socket, $store, $eventbus) {
+function registerSocketEvents($socket, $store, $eventbus) {
 
   /* required for reconnection */
   let intervalId = false
@@ -29,7 +29,6 @@ export function registerSocketEvents($socket, $store, $eventbus) {
   let batchItems = []
   // are we batch loading now?
   let batchLoading = false
-
 
   /*
    * open event
@@ -155,3 +154,7 @@ export function registerSocketEvents($socket, $store, $eventbus) {
 }
 
 export default createSocket
+export {
+  createSocket,
+  registerSocketEvents,
+}

@@ -7,7 +7,7 @@
  *
  * Load a given widget vue file for the usage within the toolbar
  */
-export default function (widgetName = 'debug', toolType = false, face = 'default') {
+export default function toolLoader (widgetName = 'debug', toolType = false, face = 'default') {
   if (!toolType) {
     return import(`../app/components/widgets/${widgetName}/${face}.vue`).catch(e => {
       return import('../app/components/widgets/error/default.vue')
@@ -18,4 +18,8 @@ export default function (widgetName = 'debug', toolType = false, face = 'default
     })
   }
 
+}
+
+export {
+  toolLoader,
 }
