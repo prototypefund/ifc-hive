@@ -1,3 +1,6 @@
+/*
+ * data reducers
+ */
 import { applicationState } from '../../state'
 import { mergeDeepRight } from 'ramda'
 import { getSource } from "@lib/dataHelper.js";
@@ -21,7 +24,8 @@ function projectInit (state, action) {
 /*
  * data push
  */
-function dataPush (state, action, $eventbus) {
+function dataPush (state, action) {
+  const { $eventbus } = action.meta
   // early return if no data
   if (!action.payload.data) return state
   let data
@@ -55,7 +59,8 @@ function dataPush (state, action, $eventbus) {
 /*
  * data update
  */
-function dataUpdate (state, action, $eventbus) {
+function dataUpdate (state, action) {
+  const { $eventbus }  = action.meta
   let item
   if (action.docUUID) {
     // @TODO review the differentiation between new and existing docs

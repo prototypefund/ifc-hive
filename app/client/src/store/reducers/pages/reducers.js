@@ -1,16 +1,9 @@
+/*
+ * pages reducers
+ */
 import { mergeDeepRight, clone } from 'ramda'
-import { applicationState, storePatterns } from '../../state'
-import { globalPages } from '@_/setup/application.js'
-
-/* init pages */
-function pagesInit (state, action) {
-  return  applicationState.pages
-}
-
-/* init project */
-function projectInit (state, action) {
-  return  applicationState.pages
-}
+import { storePatterns } from '../../state'
+// import { globalPages } from '@_/setup/application.js'
 
 /* add page */
 function pagesAdd (state, action) {
@@ -45,8 +38,6 @@ function pagesUpdate (state, action) {
 }
 
 export {
-  pagesInit,
-  projectInit,
   pagesAdd,
   pagesUpdate,
 }

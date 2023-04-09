@@ -1,3 +1,9 @@
+/*
+ * Configure and build application store
+ *
+ * The application store is the single source of truth for any data living
+ * outside the scope and lifecycle of a component.
+ */
 import {
   configureStore,
   LoggerExtension,
@@ -7,11 +13,10 @@ import {
 } from 'mini-rx-store'
 
 import getEnvVariable from '../lib/getEnvVariable'
-import { mergeDeepRight } from 'ramda'
 import { applicationState, loadingHold } from './state'
-import { searchHandler } from '@lib/dataHelper.js'
 import createEvents from './events.js'  // we can specify event handler here
 import createDataApi from './dataApi.js'
+
 /* import feature reducers */
 import createMetaReducer from './reducers/metaReducer.js'
 
@@ -29,8 +34,9 @@ import projectReducers from './reducers/project/index.js'
 import socketReducers from './reducers/socket/index.js'
 import navigationToolsReducers from './reducers/navigationTools/index.js'
 import inspectorToolsReducers from './reducers/inspectorTools/index.js'
-// TODO REMOVE
-import toolbarReducers from './reducers/toolbar/index.js'
+import queriesReducers from './reducers/queries/index.js'
+import currentPageReducers from './reducers/currentPage/index.js'
+import toolbarReducers from './reducers/toolbar/index.js' // @TODO remove
 
 /* Apply different extensions depending on the environment */
 const extensions = getEnvVariable('NODE_ENV') === 'production'
@@ -39,7 +45,11 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
   ]
   : [
     new LoggerExtension(),
-    new ReduxDevtoolsExtension({ name: 'pacifico applicationState', trace: true, traceLimit: 25 }),
+    new ReduxDevtoolsExtension({
+      name: 'pacifico applicationState',
+      trace: true,
+      traceLimit: 25
+    }),
     new ImmutableStateExtension(),
     new UndoExtension(),
   ]
@@ -51,13 +61,6 @@ const extensions = getEnvVariable('NODE_ENV') === 'production'
  */
 function createStore($eventbus) {
 
-  // TODO move this stup to seperate config and helper files
-  // helper functions and lookup maps
-
-  let pagesLookup = false
-  let widgetsLookup = false
-  let uiLookup = false
-  let dataLookup = false
   /*
    * register meta reducer
    * 
@@ -66,155 +69,27 @@ function createStore($eventbus) {
    */
   const metaReducer = createMetaReducer($eventbus)
 
-  /*
-   * register application reducers
-   */
+  /* register application reducers */
   const applicationReducers = {
-    pages: pagesReducers($eventbus),
-    widgets: widgetsReducers($eventbus),
-    ui: uiReducers($eventbus),
-    notifications: notificationsReducers($eventbus),
-    toolbar: toolbarReducers($eventbus, widgetsLookup), // TODO REMOVE
-    navigationTools: navigationToolsReducers($eventbus, widgetsLookup),
-    inspectorTools: inspectorToolsReducers($eventbus, widgetsLookup),
-    data: dataReducers($eventbus),
-    uploader: uploaderReducers($eventbus),
-    route: routeReducers($eventbus),
-    user: userReducers($eventbus),
-    organization: organizationReducers($eventbus),
-    project: projectReducers($eventbus),
-    socket: socketReducers($eventbus),
-
-    queries: (state, action) => {
-      let queries, items, query, params
-      if (state) {
-        switch (action.type) {
-          case 'init':
-            return applicationState.queries
-          case 'queries/execute':
-            if (Object.keys(state).length === 0) return state
-            queries = JSON.parse(JSON.stringify(state))
-            if (action.actionId) {
-              query = JSON.parse(JSON.stringify(queries[action.actionId]))
-              items = searchHandler(action.actionId, query.query, query.params || false, dataLookup)
-              // remember the former state of uuids for later evaluation in dataAPI
-              query.old_uuids = query.uuids || []
-              query.uuids = items
-              queries[action.actionId] = query
-              return queries
-            } else {
-              Object.values(queries).forEach(query => {
-                items = searchHandler(action.actionId, query.query, query.params || false, dataLookup)
-                // remember the former state of uuids for later evaluation in dataAPI
-                query.old_uuids = query.uuids || []
-                query.uuids = items
-              })
-            }
-            return queries
-          case 'queries/add':
-            if (action.payload.actionId) {
-              queries = {}
-              params = JSON.parse(JSON.stringify(action.payload.params))
-              if (!params.offset) params.offset = 0
-              if (!params.limit) params.limit = 100
-              queries[action.payload.actionId] = {
-                query: action.payload.query,
-                params: action.payload.params || false
-              }
-              store.dispatch({
-                type: 'queries/execute',
-                actionId: action.payload.actionId,
-              })
-            }
-            return { ...state, ...queries }
-          case 'queries/remove':
-            queries = JSON.parse(JSON.stringify(state))
-            if (action.actionId) {
-              delete queries[action.actionId]
-            }
-            return queries || {}
-          default:
-            return state
-        }
-      }
-    },
-    currentPage: (state, action) => {
-      if (state) {
-        switch (action.type) {
-          case 'init':
-            return applicationState.currentPage
-          // used in beforeResolve router hook, will trigger before each route change including param changes
-          case 'currentPage/set':
-            if (!action.routeName) return state
-            // create our json friendly uuid
-            let currPage = {}
-            let scrollY = false
-            // get current scroll position to apply it to the ticketry of page
-
-            const uuid = action.routeName.replaceAll('.', '-')
-            // check if that requested page has already been preconfigured (should always be the case)
-            if (pagesLookup && pagesLookup[uuid] && pagesLookup[uuid].uuid) {
-              // create a new currentPage object based on the url params merged ontop of the default page config
-              currPage = JSON.parse(JSON.stringify(mergeDeepRight(pagesLookup[uuid], action.payload)))
-              if (uiLookup.mobile) {
-                // TODO find a way to decouple this
-                if (currPage.slots) {
-                  currPage.grid.columns_bak = currPage.grid.columns
-                  currPage.grid.columns = 1
-                  currPage.slots.forEach(slot => {
-                    slot.column_bak = slot.column
-                    slot.column = 12
-                  })
-                }
-              }
-            } else {
-              console.error("race condition? a currentpage without a uuid? dafuq? bruder? alter?")
-              console.dir(pagesLookup)
-              console.dir(action)
-              currPage = action.payload
-            }
-
-            if (!currPage.scrollTop) {
-              // TODO find a way to decouple this
-              scrollY = document.getElementById("appComponent") ? document.getElementById("appComponent").scrollTop : 0
-            }
-            if (state.routeName) {
-              // update our ticketrized preconfigured page with the new version which includes url params and user data
-              store.dispatch({
-                type: 'pages/update',
-                stateName: state.uuid,
-                payload: {
-                  ...state,
-                  scrollY
-                }
-              })
-            }
-            // apply last scroll position to currentPage
-            // TODO find a way to decouple this
-            setTimeout(() => {
-              if (currPage.scrollY) {
-                for (let i = 0; i < currPage.scrollY; i++) {
-                  setTimeout(() => {
-                    document.getElementById("appComponent").scrollTo(0, i)
-                  }, 50)
-                }
-              }
-            }, loadingHold * 2)
-
-            return currPage
-          // simply let us update the state of the current page
-          case 'currentPage/update':
-            return mergeDeepRight(state, action.payload)
-          default:
-            return state
-        }
-      }
-    },
+    pages: pagesReducers,
+    widgets: widgetsReducers,
+    ui: uiReducers,
+    notifications: notificationsReducers,
+    toolbar: toolbarReducers, // TODO REMOVE
+    navigationTools: navigationToolsReducers,
+    inspectorTools: inspectorToolsReducers,
+    data: dataReducers,
+    uploader: uploaderReducers,
+    route: routeReducers,
+    user: userReducers,
+    organization: organizationReducers,
+    project: projectReducers,
+    socket: socketReducers,
+    queries: queriesReducers,
+    currentPage: currentPageReducers,
   }
 
-  /*
-   * create and configure the store
-   */
+  /* create and configure the store */
   const store = configureStore({
     extensions,
     reducers: applicationReducers,
@@ -222,40 +97,11 @@ function createStore($eventbus) {
     metaReducers: metaReducer
   })
 
-  /*
-   * create and register events
-   */
+  /* create and register events */
   const events = createEvents(store, $eventbus)
   $eventbus.on('store/dispatch', events.dispatch) // generic store.dispatch
   $eventbus.on('widgetConfLoader', events.widgetConfLoaderHandler)
   $eventbus.on('widgetTypeConfLoader', events.widgetTypeConfLoaderHandler)
-
-  /*
-   * Some default subscribers  
-   * @TODO move to its own file e.g. defaultSubscribers.js and import
-   */
-
-  // subscribe to page and widget changes so we can lookup those maps via pages/widgets variables
-  if (pagesLookup === false) {
-    store.select(state => state.pages).subscribe(val => {
-      pagesLookup = val
-    })
-  }
-  if (widgetsLookup === false) {
-    store.select(state => state.widgets).subscribe(val => {
-      widgetsLookup = val
-    })
-  }
-  if (uiLookup === false) {
-    store.select(state => state.ui).subscribe(val => {
-      uiLookup = val
-    })
-  }
-  if (dataLookup === false) {
-    store.select(state => state.data).subscribe(val => {
-      dataLookup = val
-    })
-  }
 
   /*
    * Temporary Data API
@@ -268,6 +114,4 @@ function createStore($eventbus) {
 }
 
 export default createStore
-export {
-  createStore,
-}
+export { createStore }

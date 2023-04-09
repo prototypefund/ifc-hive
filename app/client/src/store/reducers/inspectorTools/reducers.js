@@ -1,24 +1,13 @@
-import { applicationState } from '../../state'
+/*
+ * inspector reducers
+ */
 import { mergeDeepRight } from 'ramda'
-
-/*
- * init
- */
-function init (state, action, $eventbus) {
-  return applicationState.toolbar
-}
-
-/*
- * projectInit
- */
-function projectInit (state, action, $eventbus) {
-  return applicationState.inspectorTools
-}
 
 /*
  * inspector tool add
  */
-function inspectorToolsAdd (state, action, $eventbus, widgetsLookup) {
+function inspectorToolsAdd (state, action) {
+  const { widgetsLookup, $eventbus } = action.meta
   let tool = {}
   // early return if something vital is missing
   if (!action.payload || !action.payload.widget || !action.payload.uuid) return state
@@ -41,13 +30,11 @@ function inspectorToolsAdd (state, action, $eventbus, widgetsLookup) {
 /*
  * inspector tool update
  */
-function inspectorToolsUpdate (state, action, $eventbus) {
+function inspectorToolsUpdate (state, action) {
   return mergeDeepRight(state, action.payload)
 }
 
 export {
-  init,
-  projectInit, 
   inspectorToolsAdd,
   inspectorToolsUpdate
 }

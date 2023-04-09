@@ -2,7 +2,8 @@
 /*
  * toolbar add
  */
-function toolbarAdd (state, action, $eventbus, widgetsLookup) {
+function toolbarAdd (state, action) {
+  const { $eventbus, widgetsLookup } = action.meta
   // early return of given state if something vital is missing
   if (!action.payload || !action.payload.widget || !action.payload.uuid) return state
 

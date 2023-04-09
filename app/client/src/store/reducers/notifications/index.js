@@ -1,28 +1,21 @@
-import * as reducers from './reducers.js'
-
 /*
- * dataReducer
+ * notification reducer
  */
-export default ($eventbus) => (state, action) => {
-  // early return if no state at all
-  if (!state) return
+import * as reducers from './reducers.js'
+import reducerFromMap from '@lib/reducerFromMap.js' 
+import { applicationState } from '../../state'
 
-  // map instead of switch statement
-  const reducer = {
-    'init': reducers.init,
-    'projectInit': reducers.projectInit,
-    'notifications/add': reducers.inspectorToolsAdd,
-    'notifications/clear': reducers.notificationsClear,
-    'notifications/markAllAsSeen': reducers.notificationsMarkAllAsSeen,
-    'notifications/markAllAsRead': reducers.notificationsMarkAllAsRead,
-    'notifications/markAsRead': reducers.notificationsMarkAsRead,
-    'notifications/markUnread': reducers.notificationsMarkUnread,
-    'notifications/toggle': reducers.notificationsToggle,
-    'notifications/update': reducers.notificationsUpdate,
-  }
-
-  // return function from pagesReducerMap if it exists otherwiese return the given state 
-  return reducer[action.type] 
-    ? reducer[action.type](state, action, $eventbus)
-    : state
+const reducerMap = {
+  'init': () => applicationState.notifications,
+  'projectInit': () => applicationState.notifications,
+  'notifications/add': reducers.inspectorToolsAdd,
+  'notifications/clear': reducers.notificationsClear,
+  'notifications/markAllAsSeen': reducers.notificationsMarkAllAsSeen,
+  'notifications/markAllAsRead': reducers.notificationsMarkAllAsRead,
+  'notifications/markAsRead': reducers.notificationsMarkAsRead,
+  'notifications/markUnread': reducers.notificationsMarkUnread,
+  'notifications/toggle': reducers.notificationsToggle,
+  'notifications/update': reducers.notificationsUpdate,
 }
+
+export default reducerFromMap(reducerMap)

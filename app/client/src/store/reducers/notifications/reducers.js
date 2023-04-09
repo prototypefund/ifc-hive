@@ -1,19 +1,7 @@
-import { applicationState } from '../../state'
+/*
+ * notifcation reducers
+ */
 import { mergeDeepRight } from 'ramda'
-
-/*
- * init
- */
-function init (state, action) {
-  return applicationState.notifications
-}
-
-/*
- * project init
- */
-function projectInit (state, action) {
-  return applicationState.notifications
-}
 
 /*
  * add notifcation
@@ -40,7 +28,8 @@ function notifacationsClear (state, action) {
 /*
  * mark all notifcations as seen
  */
-function notificationsMarkAllAsSeen (state, action, $eventbus) {
+function notificationsMarkAllAsSeen (state, action) {
+  const { $eventbus } = action.meta
   let items
   items = JSON.parse(JSON.stringify(state.items))
   items.forEach(item => {
@@ -62,7 +51,8 @@ function notificationsMarkAllAsSeen (state, action, $eventbus) {
 /*
  * mark all notifactions as read
  */
-function notificationsMarkAllAsRead (state, action, $eventbus) {
+function notificationsMarkAllAsRead (state, action) {
+  const { $eventbus } = action.meta
   items = JSON.parse(JSON.stringify(state.items))
   items.forEach(item => {
     if (item.state === 'unread') {
@@ -83,7 +73,8 @@ function notificationsMarkAllAsRead (state, action, $eventbus) {
 /*
  * mark notification as read
  */
-function notificationsMarkAsRead (state, action, $eventbus) {
+function notificationsMarkAsRead (state, action) {
+  const { $eventbus } = action.meta
   items = JSON.parse(JSON.stringify(state.items))
   if (items[action.payload.index].state !== 'read') {
     items[action.payload.index].state = 'read'
@@ -106,7 +97,8 @@ function notificationsMarkAsRead (state, action, $eventbus) {
 /*
  * mark notifcation as unread
  */
-function notificationsMarkUnread (state, action, $eventbus) {
+function notificationsMarkUnread (state, action) {
+  const { $eventbus } = action.meta
   items = JSON.parse(JSON.stringify(state.items))
   if (items[action.payload.index].state !== 'unread') {
     items[action.payload.index].state = 'unread'
@@ -125,7 +117,8 @@ function notificationsMarkUnread (state, action, $eventbus) {
 /*
  * toggle notifications
  */
-function notificationsToggle (state, action, $eventbus) {
+function notificationsToggle (state, action) {
+  const { $eventbus } = action.meta
   if (action.payload.toggled === false && state.toggled === true) {
     $eventbus.emit('store/dispatch', {
       type: 'notifications/update',
@@ -150,8 +143,6 @@ function notificationsUpdate (state, action) {
 }
 
 export {
-  init,
-  projectInit,
   notificationsAdd,
   notifacationsClear,
   notificationsMarkAllAsSeen,

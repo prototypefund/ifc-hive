@@ -14,7 +14,8 @@ function widgetsUpdate (state, action) {
 /*
  * add widget
  */
-function widgetsAdd (state, action, $eventbus) {
+function widgetsAdd (state, action) {
+  const { $eventbus } = action.meta
   let newWidgets = {}
   if (action.payload.length > 0) {
     action.payload.forEach(widget => {

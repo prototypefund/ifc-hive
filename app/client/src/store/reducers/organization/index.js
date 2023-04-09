@@ -1,20 +1,13 @@
-import { applicationState } from '../../state'
-
 /*
  * organization reducer
  */
-export default ($eventbus) => (state, action) => {
-  // early return if no state at all
-  if (!state) return
+import { applicationState } from '../../state'
+import reducerFromMap from '@lib/reducerFromMap.js' 
 
-  // map instead of switch statement
-  const reducer = {
-    'init': () => applicationState.organization,
-    'organization/update': (action) => action.payload,
-  }
-
-  // return function from pagesReducerMap if it exists otherwiese return the given state 
-  return reducer[action.type] 
-    ? reducer[action.type](state, action, $eventbus)
-    : state
+// map instead of switch statement
+const reducerMap = {
+  'init': () => applicationState.organization,
+  'organization/update': (action) => action.payload,
 }
+
+export default reducerFromMap(reducerMap)

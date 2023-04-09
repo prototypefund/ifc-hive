@@ -1,24 +1,13 @@
-import { applicationState } from '../../state'
+/*
+ * navigation tools reducers
+ */
 import { mergeDeepRight } from 'ramda'
-
-/*
- * init
- */
-function init (state, action) {
-  return applicationState.navigationTools
-}
-
-/*
- * project init
- */
-function projectInit (state, action) {
-  return applicationState.navigationTools
-}
 
 /*
  * navigation tools add
  */
-function navigationToolsAdd (state, action, $eventbus, widgetsLookup) {
+function navigationToolsAdd (state, action) {
+  const { $eventbus, widgetsLookup } = action.meta
   let tool = {}
   let widget
   // early return of unchagned state if we are missing something vital
@@ -48,8 +37,6 @@ function navigationToolsUpdate (state, action) {
 }
 
 export {
-  init,
-  projectInit,
   navigationToolsAdd,
   navigationToolsUpdate,
 }

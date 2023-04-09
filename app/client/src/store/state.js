@@ -1,4 +1,6 @@
 /*
+ * Default state of the store
+ *
  * exports
  *
  * - loadingHold
