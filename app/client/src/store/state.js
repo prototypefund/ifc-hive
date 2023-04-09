@@ -2,7 +2,7 @@
  * exports
  *
  * - loadingHold
- * - applicationState
+ * - applicationState (initial state of the store)
  * - configPatterns
  * - storePatterns
  */

@@ -1,0 +1,52 @@
+import { mergeDeepRight, clone } from 'ramda'
+import { applicationState, storePatterns } from '../../state'
+import { globalPages } from '@_/setup/application.js'
+
+/* init pages */
+function pagesInit (state, action) {
+  return  applicationState.pages
+}
+
+/* init project */
+function projectInit (state, action) {
+  return  applicationState.pages
+}
+
+/* add page */
+function pagesAdd (state, action) {
+  let newPage, pageUUID
+  pageUUID = action.payload.uuid || action.routeName.replaceAll('.', '-')
+  // if the page already exists do nothing
+  if (state[pageUUID]) return state 
+
+  // create a new page object based on the default page config
+  const page = clone(mergeDeepRight(storePatterns.page, action.payload))
+  page.uuid = pageUUID
+  page.routeName = action.routeName
+  newPage = {}
+  newPage[page.uuid] = page
+
+  return mergeDeepRight(state, newPage)
+}
+
+/* update page */
+function pagesUpdate (state, action) {
+  let newPage, pageUUID
+  if (state[action.stateName]) {
+    newPage = {}
+    // if we had the last current page already, just merge their states
+    // based on the latest version coming from currentPage
+    newPage[action.stateName] = mergeDeepRight(state[action.stateName], action.payload)
+  } else {
+    console.error("pages/update no state for query")
+  }
+
+  return mergeDeepRight(state, newPage)
+}
+
+export {
+  pagesInit,
+  projectInit,
+  pagesAdd,
+  pagesUpdate,
+}

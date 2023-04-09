@@ -75,6 +75,7 @@ try {
   app.provide('$log', log)
   // provide a global eventbus
   app.provide('$eventbus', eventbus)
+  // provide session handler instance, e.g. for logout
   app.provide('$session', sessionHandlerInstance)
 
   //TODO move this into a setup file
