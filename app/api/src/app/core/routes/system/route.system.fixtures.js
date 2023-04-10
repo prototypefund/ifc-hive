@@ -98,50 +98,22 @@ export default function (app) {
       const newTickets = mapIds(refTickets, idMap, ['_id', 'parent', 'project', 'owner', 'tags'])
 
       try {
+        const savedTickets = []
         await Ticket.deleteMany()
 
-        // @TODO write function to iterate over promises and force sequential resolution as
-        // we need the parent to exist when we instert the child
-        const t0 = new Ticket(newTickets[0])
-        await t0.save()
-        const t1 = new Ticket(newTickets[1])
-        await t1.save()
-        const t2 = new Ticket(newTickets[2])
-        await t2.save()
-        const t3 = new Ticket(newTickets[3])
-        await t3.save()
-        const t4 = new Ticket(newTickets[4])
-        await t4.save()
-        const t5 = new Ticket(newTickets[5])
-        await t5.save()
-        const t6 = new Ticket(newTickets[6])
-        await t6.save()
+        // iterate over ticket fixtures and add
+        // @NOTE we can't use insertMany due to operations required to manage
+        // the tree structure, e.g. building the path attribute for each document
+        for (const t of newTickets) {
+          console.log(t)
+          const newTicket = new Ticket(t) 
+          await newTicket.save()
+          savedTickets.push(newTicket)
+        }
 
-        // second project
-        const f0 = new Ticket(newTickets[7])
-        await f0.save()
-        const f1 = new Ticket(newTickets[8])
-        await f1.save()
-        const f2 = new Ticket(newTickets[9])
-        await f2.save()
-        const f3 = new Ticket(newTickets[10])
-        await f3.save()
-        const f4 = new Ticket(newTickets[11])
-        await f4.save()
-        const f5 = new Ticket(newTickets[12])
-        await f5.save()
-        const f6 = new Ticket(newTickets[13])
-        await f6.save()
-        const f7 = new Ticket(newTickets[14])
-        await f7.save()
-
-
-        // third project with massiv amounts of tickets
-        // (1) root ticket
-        const d0 = new Ticket(newTickets[15])
-        await d0.save()
-
-        // child tickets
+        // dummy project with auto generated tickets for stress test
+        const dummyRoot = savedTickets.pop()
+        // generate dummy tickets objects
         const dummyTicketsRaw = [...Array(dummyTicketsCount)].map((_, i) => {
           const t = JSON.parse(JSON.stringify(tickets[0]))
           t._id= uuidv4()
@@ -150,11 +122,11 @@ export default function (app) {
           t.owner = 'userAnton',
           t.title = `${i} some random title with a prefix number`
           t.body = randomText
-          t.parent = d0._id
-          t.path = `${d0._id}#${t._id}`
+          t.parent = dummyRoot._id
+          t.path = `${dummyRoot._id}#${t._id}`
           return t 
         })
-
+        //  map id's in dummy tickets
         const dummyTickets = mapIds(dummyTicketsRaw, idMap, ['project', 'owner', 'tags'])
         await Ticket.insertMany(dummyTickets)
 
