@@ -1,3 +1,6 @@
+/*
+ * set project configuration
+ */
 import { globalPages, globalTags } from '@_/setup/application.js'
 
 /*

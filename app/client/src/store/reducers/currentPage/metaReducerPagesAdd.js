@@ -41,16 +41,16 @@ const metaReducerPagesAdd = ($eventbus) =>  (reducer) => {
         }
 
         // add page specific widget configs to state
-        $eventbus.emit('store/dispatch', { type: 'widgets/add', payload: widgets })
+        $eventbus.emit('storeDispatch', { type: 'widgets/add', payload: widgets })
         if (widgets.length > 0) {
-          $eventbus.emit('store/dispatch', {
+          $eventbus.emit('storeDispatch', {
             type: 'widgets/add',
             payload: widgets
           })
         }
         if (page.tools) {
           page.tools.forEach(tool => {
-            $eventbus.emit('store/dispatch', {
+            $eventbus.emit('storeDispatch', {
               type: 'toolbar/add',
               payload: tool
             })
@@ -58,7 +58,7 @@ const metaReducerPagesAdd = ($eventbus) =>  (reducer) => {
         }
         if (page.navigationTools) {
           page.navigationTools.forEach(tool => {
-            $eventbus.emit('store/dispatch', {
+            $eventbus.emit('storeDispatch', {
               type: 'navigationTools/add',
               payload: tool
             })
@@ -66,7 +66,7 @@ const metaReducerPagesAdd = ($eventbus) =>  (reducer) => {
         }
         if (page.inspectorTools) {
           page.inspectorTools.forEach(tool => {
-            $eventbus.emit('store/dispatch', {
+            $eventbus.emit('storeDispatch', {
               type: 'inspectorTools/add',
               payload: tool
             })

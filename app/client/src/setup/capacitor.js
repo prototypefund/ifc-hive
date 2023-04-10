@@ -1,3 +1,6 @@
+/*
+ * The capacitator helps creating the mobile app
+ */
 import { Capacitor } from '@capacitor/core';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { Camera, CameraResultType } from '@capacitor/camera';
@@ -12,7 +15,9 @@ import { Network } from '@capacitor/network';
 
 let module = Capacitor
 if (Capacitor.getPlatform() !== 'web') {
-  // TODO optimize this. Either make it in a way that we just include plugins if we know we are on mobile or remove this file entirely and add it to the build only during mobile build
+  // TODO optimize this. Either make it in a way that we just include plugins
+  // if we know we are on mobile or remove this file entirely and add it to the
+  // build only during mobile build
   Capacitor.SplashScreen = SplashScreen
   Capacitor.Camera = Camera
   Capacitor.CameraResultType = CameraResultType

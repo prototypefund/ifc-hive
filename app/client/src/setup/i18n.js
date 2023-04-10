@@ -1,3 +1,7 @@
+/*
+ * Set up i18n
+ * See th app/client/i18n directory for the different locale files
+ */
 import { createI18n, useI18n } from 'vue-i18n'
 import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
 import messages from '../i18n/messages'

@@ -1,6 +1,6 @@
 <template>
-  <v-container v-if="state" data-test-container="pages/boilerplate" fluid pa-0>
-    <p>This is a Page Boilerplate</p>
+  <v-container v-if="state" data-test-container="pages/test" fluid pa-0>
+    <p>This is a Test page created from the boilerplate</p>
     <!--
     Place any desired template structure around the widget grid,
     e.g. toolbar, sidebars, footers.

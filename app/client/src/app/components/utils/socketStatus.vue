@@ -18,8 +18,6 @@
 import { inject, ref, onMounted, onUnmounted } from "vue";
 
 const $store = inject('$store')
-
-
 const socket = ref({})
 
 const socketStatus$ = $store

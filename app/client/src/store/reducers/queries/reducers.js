@@ -47,7 +47,7 @@ function queriesAdd (state, action) {
       params: action.payload.params || false
     }
     // execute added query
-    $eventbus.emit('store/dispatch', {
+    $eventbus.emit('storeDispatch', {
       type: 'queries/execute',
       actionId: action.payload.actionId
     })

@@ -1,3 +1,4 @@
+<!-- Logout page -->
 <template>
   <h1>Logout</h1> 
 </template>

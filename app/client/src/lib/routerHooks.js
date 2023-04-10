@@ -11,15 +11,15 @@
  */
 function forEachHook (store) {
   return (to, from)  => {
-    if (to !== from) {
-      // add default params to every route
-      if (!to.params.locale) to.params.locale = 'de'
-      // set the new route to the store
-      store.dispatch({
-        type: 'route/update',
-        payload: to
-      });
-    }
+    if (to === from) return
+
+    // add default params to every route
+    if (!to.params.locale) to.params.locale = 'de'
+    // set the new route to the store
+    store.dispatch({
+      type: 'route/update',
+      payload: to
+    })
   }
 }
 
@@ -32,13 +32,13 @@ function forEachHook (store) {
 function beforeResolveHook (store) {
   return (to, from) => {
     // change the currentPage, might often be just a change in url params
-    if (to !== from) {
-      store.dispatch({
-        type: 'currentPage/set',
-        routeName: to.name,
-        payload: { ...to.params, query: to.query }
-      })
-    }
+    if (to === from) return
+
+    store.dispatch({
+      type: 'currentPage/set',
+      routeName: to.name,
+      payload: { ...to.params, query: to.query }
+    })
   }
 }
 

@@ -1,5 +1,8 @@
-// import routes from modules
+/*
+ * Define Routes
+ */
 
+// import routes from modules
 import Project from '../app/Project.vue'
 import App from '../app/Index.vue'
 import app_project_select from '../app/selectProject.vue'

@@ -1,4 +1,11 @@
-
+/*
+ * Session management such as
+ * - checkToken
+ * - logout
+ * - handleToken
+ *
+ *  @TODO shouldn't this also contain requestToken? 
+ */
 import { setHttpToken } from '@lib/httpClient.js'
 
 const sessionHandler = (store, api, eventbus, router) => {

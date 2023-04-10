@@ -67,17 +67,20 @@
           </QuickListHandler>
         </v-col>
       </v-row>
-      <v-row v-if="ticket._source.assigned && ticket._source.assigned.length > 0"
-        v-for="assigned in ticket._source.assigned">
-        <v-col cols="3">
-          {{ $t("generics.assignee") }}
-        </v-col>
-        <v-col cols="9">
-          <QuickListHandler uuid="quickList" :docUUID="assigned" :dataTitle="assigned" type="user">
-            <user-list-item :widgetUUID="props.widgetUUID" :docUUID="assigned" />
-          </QuickListHandler>
-        </v-col>
-      </v-row>
+
+      <template v-if="ticket._source.assigned && ticket._source.assigned.length > 0">
+        <v-row v-for="assigned in ticket._source.assigned" :key="assigned">
+          <v-col cols="3">
+            {{ $t("generics.assignee") }}
+          </v-col>
+          <v-col cols="9">
+            <QuickListHandler uuid="quickList" :docUUID="assigned" :dataTitle="assigned" type="user">
+              <user-list-item :widgetUUID="props.widgetUUID" :docUUID="assigned" />
+            </QuickListHandler>
+          </v-col>
+        </v-row>
+      </template>
+
     </v-card-subtitle>
   </v-card>
 </template>

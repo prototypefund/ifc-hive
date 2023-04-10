@@ -1,6 +1,5 @@
 /*
- * Socket Send message
- *
+ * Send messages to the socket server
  * Listens to the event bus and emits accordingly messages to the socket server.
  */
 function registerSocketClient($socket, $store, $eventbus) {

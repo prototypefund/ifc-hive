@@ -1,3 +1,9 @@
+/*
+ * Global default configuration for 
+ * - pages
+ * - tags
+ * - tools
+ */
 const globalPages = ($store) => {
   $store.dispatch({
     type: 'pages/add',

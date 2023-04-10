@@ -1,3 +1,6 @@
+/*
+ * Widget Config loader
+ */
 import { mergeDeepRight } from 'ramda'
 
 /*

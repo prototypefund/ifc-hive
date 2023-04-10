@@ -1,3 +1,8 @@
+/*
+ * Send http requests to the server
+ *
+ * Listen to the eventbus and execute http requests depending on the events
+ */
 import log from '@lib/logger.js'
 import { v4 as uuidv4 } from 'uuid'
 import localProjectConfig from './_config.temp.js'

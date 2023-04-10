@@ -1,4 +1,6 @@
 /*
+ * UI Helpers
+ *
  * stringToColour
  * @param { string } string, a string which you magically want to have transformed into a hex code
  * @return { string } a hexcode

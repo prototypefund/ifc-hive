@@ -49,7 +49,7 @@ function currentPageSet (state, action) {
   if (state.routeName) {
     // update our ticketrized preconfigured page with the new version which
     // includes url params and user data
-    $eventbus.emit('store/dispatch', {
+    $eventbus.emit('storeDispatch', {
       type: 'pages/update',
       stateName: state.uuid,
       payload: {

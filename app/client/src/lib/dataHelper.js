@@ -1,3 +1,11 @@
+/*
+ * Data helpers 
+ *
+ * Note that primary data items are only referenced in the store. The actual
+ * data items are currently kept in a map in window.$pacificoData. This is to
+ * navigate around performance issues of vue when dealing with large amounts of
+ * data.
+ */
 import { filter, forEachObjIndexed } from 'ramda'
 /*
  * splitIdentifier
@@ -82,8 +90,6 @@ const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, look
       }, data)
     }
     if (params) {
-
-
       let limitedData = Object.keys(data)
       console.log("schniedel " + actionId, limitedData)
       if (limitedData.length >= params?.offset + params?.limit) {

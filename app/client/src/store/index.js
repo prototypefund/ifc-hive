@@ -99,7 +99,7 @@ function createStore($eventbus) {
 
   /* create and register events */
   const events = createEvents(store, $eventbus)
-  $eventbus.on('store/dispatch', events.dispatch) // generic store.dispatch
+  $eventbus.on('storeDispatch', events.dispatch) // generic store.dispatch
   $eventbus.on('widgetConfLoader', events.widgetConfLoaderHandler)
   $eventbus.on('widgetTypeConfLoader', events.widgetTypeConfLoaderHandler)
 

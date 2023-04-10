@@ -24,6 +24,7 @@ export default defineConfig({
     resolve: {
         // @TODO too many aliases? It make the imports less intransparent when
         // reading and does it really save that much typing? 
+        // @TODO follow convention and use alias @ for src
         alias: {
             '@_': path.resolve(__dirname, './src'),
             '@': path.resolve(__dirname, './src/app/components'),

@@ -1,3 +1,4 @@
+<!-- login page -->
 <template>
   <v-container fluid :style="{ height: $vuetify.display.height + 'px' }">
     <!-- center login form vertically with a 20% negative offset -->

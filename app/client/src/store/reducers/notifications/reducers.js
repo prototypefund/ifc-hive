@@ -37,7 +37,7 @@ function notificationsMarkAllAsSeen (state, action) {
       item.state = 'seen'
     }
   })
-  $eventbus.emit('store/dispatch', {
+  $eventbus.emit('storeDispatch', {
     type: 'notifications/update',
     payload: {
       unreadCount: 0
@@ -59,7 +59,7 @@ function notificationsMarkAllAsRead (state, action) {
       item.state = 'read'
     }
   })
-  $eventbus.emit('store/dispatch', {
+  $eventbus.emit('storeDispatch', {
     type: 'notifications/update',
     payload: {
       unreadCount: 0
@@ -79,7 +79,7 @@ function notificationsMarkAsRead (state, action) {
   if (items[action.payload.index].state !== 'read') {
     items[action.payload.index].state = 'read'
     if (state.unreadCount > 0) {
-      $eventbus.emit('store/dispatch', {
+      $eventbus.emit('storeDispatch', {
         type: 'notifications/update',
         payload: {
           unreadCount: state.unreadCount - 1
@@ -102,7 +102,7 @@ function notificationsMarkUnread (state, action) {
   items = JSON.parse(JSON.stringify(state.items))
   if (items[action.payload.index].state !== 'unread') {
     items[action.payload.index].state = 'unread'
-    $eventbus.emit('store/dispatch', {
+    $eventbus.emit('storeDispatch', {
       type: 'notifications/update',
       payload: {
         unreadCount: state.unreadCount + 1
@@ -120,13 +120,13 @@ function notificationsMarkUnread (state, action) {
 function notificationsToggle (state, action) {
   const { $eventbus } = action.meta
   if (action.payload.toggled === false && state.toggled === true) {
-    $eventbus.emit('store/dispatch', {
+    $eventbus.emit('storeDispatch', {
       type: 'notifications/update',
       payload: {
         unreadCount: 0
       }
     })
-    $eventbus.emit('store/dispatch', {
+    $eventbus.emit('storeDispatch', {
       type: 'notifications/markAllAsSeen',
     })
   }

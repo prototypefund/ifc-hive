@@ -1,8 +1,11 @@
 /*
- * EventBus
+ * EventEmiter
  * @class
  *
- * This generic EventBus class mimicks the nodejs EVentEmitter Classs
+ * This class mimicks the nodejs EventEmitter. It is primarily used as the
+ * global eventbus so different parts of the application can communicate with
+ * each other without being tightly coupled.
+ * e.g. store -> http client, component -> http client, component -> socket etc.
  */
 
 class EventEmitter {

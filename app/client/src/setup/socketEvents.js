@@ -1,5 +1,5 @@
 /*
- * listen to socket events sent from the server
+ * listen to socket events received from the server
  *
  * @param {object} $socket - a socketClient instance 
  * @param {object} $store - a minirx-store instance, so we can dispatch actions

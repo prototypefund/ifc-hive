@@ -1,3 +1,7 @@
+/*
+ * Default minimum config. Whenever a new project is created this should be
+ * saved to the project configuration in the database.
+ */
 export default {
 
   /*

@@ -29,7 +29,7 @@ function dataPush (state, action) {
   // early return if no data
   if (!action.payload.data) return state
   let data
-  $eventbus.emit('store/dispatch', {
+  $eventbus.emit('storeDispatch', {
     type: 'notifications/add',
     payload: {
       event: 'push',
@@ -49,7 +49,7 @@ function dataPush (state, action) {
       delete data[item._id]._source
     }
   })
-  $eventbus.emit('store/dispatch', {
+  $eventbus.emit('storeDispatch', {
     type: 'queries/execute',
     actionId: false
   })

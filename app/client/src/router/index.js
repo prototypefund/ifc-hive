@@ -1,3 +1,6 @@
+/*
+ * Create router
+ */
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
 import { beforeEachHook, beforeResolveHook, afterEachHook } from './routerHooks.js'
@@ -20,6 +23,4 @@ function createCustomRouter(store, $api) {
 
 
 export default createCustomRouter
-export {
-  createCustomRouter
-}
+export { createCustomRouter }

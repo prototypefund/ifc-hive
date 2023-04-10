@@ -15,7 +15,7 @@ function storeEventHandlers ($store, $eventbus) {
      * @param {object} action - a minirx-store action object
      */
     dispatch (action) {
-      log.store('Event store/dispatch', action)
+      log.store('storeDispatch', action)
       $store.dispatch(action)
     },
 

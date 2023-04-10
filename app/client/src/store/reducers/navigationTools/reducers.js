@@ -17,7 +17,7 @@ function navigationToolsAdd (state, action) {
   if (!widget.uuid) { widget.uuid = action.payload.uuid }
   if (!widgetsLookup[widget.uuid]) {
     // make a generic widget state map
-    $eventbus.emit('store/dispatch', {
+    $eventbus.emit('storeDispatch', {
       type: 'widgets/add',
       payload: [{
         ...widget
