@@ -4,15 +4,16 @@
  * This route drops the complete database, reads fixture-data from ./src/fixtures
  * and imports these fixtures as fresh state.
  */
-import { S } from 'fluent-json-schema'
 import { v4 as uuidv4 } from 'uuid'
 import idMapEssentials from '#src/fixtures/idMapEssentials.js'
 import idMapDevelopment from '#src/fixtures/idMapDevelopment.js'
 import { defaultHeadersSchema } from '#src/lib/headersHelper.js'
-import { mapIds, getObjectSizeInBytes } from '#src/lib/helpers.js'
+import { mapIds } from '#src/lib/helpers.js'
 
+// random text sample for the large dummy project
 import randomText from '#src/fixtures/randomText.js'
 
+// get model definition and associated fixture data
 import User from '../../model/user/user.model.js'
 import users from '#src/fixtures/essentials/core_user.js'
 import Account from '../../model/account/account.model.js'
@@ -28,9 +29,8 @@ import permissions from '#src/fixtures/essentials/core_permission.js'
 import tickets from '#src/fixtures/essentials/journal_ticket.js'
 import Ticket from '../../../journal/model/ticket/ticket.model.js'
 
-
 /*
- * This is or Look-up-table to convert human readble ID's in the fixutres data
+ * This is our Look-up-table to convert human readble ID's in the fixutres data
  * to UUID's the database expects them.
  */
 const ids = idMapEssentials.concat(idMapDevelopment)
@@ -45,8 +45,8 @@ export default function (app) {
    */
   async function handler (request, response) {
     try { 
-
-      const dummyTicketsCount = request.query.dummyTicketsCount || 1000
+      // set dummyTicketsCount from query string parameter
+      const dummyTicketsCount = parseInt(request.query.dummyTicketsCount) || 1000
 
       // create a fresh idMap
       const idMap = ids.reduce((acc,curr)=> (acc[curr] = uuidv4(), acc), {})
@@ -94,21 +94,19 @@ export default function (app) {
       const newPermissions = mapIds(refPermissions, idMap, ['_id', 'subjectId', 'objectId'])
       Permission.insertMany(newPermissions)
       
-      const refTickets = JSON.parse(JSON.stringify(tickets))
-      const newTickets = mapIds(refTickets, idMap, ['_id', 'parent', 'project', 'owner', 'tags'])
 
+      /* import tickets */
       try {
-        const savedTickets = []
-        await Ticket.deleteMany()
+        // import tickets
+        const refTickets = JSON.parse(JSON.stringify(tickets)) // make a clean copy of fixtures
+        const newTickets = mapIds(refTickets, idMap, ['_id', 'parent', 'project', 'owner', 'tags'])
+        const savedTickets = [] // container to keep reference for newly saved tickets
+        await Ticket.deleteMany() // clear ticket collection
 
         // iterate over ticket fixtures and add
-        // @NOTE we can't use insertMany due to operations required to manage
-        // the tree structure, e.g. building the path attribute for each document
+        // @NOTE we can't use insertMany due to the recursive tree operations
         for (const t of newTickets) {
-          console.log(t)
-          const newTicket = new Ticket(t) 
-          await newTicket.save()
-          savedTickets.push(newTicket)
+          savedTickets.push(await Ticket.create(t))
         }
 
         // dummy project with auto generated tickets for stress test
@@ -128,11 +126,10 @@ export default function (app) {
         })
         //  map id's in dummy tickets
         const dummyTickets = mapIds(dummyTicketsRaw, idMap, ['project', 'owner', 'tags'])
+        // save all dummy tickets. Because of the simple dummy structure we can use insertMany()
         await Ticket.insertMany(dummyTickets)
 
-        /*
-         * send response with object counts
-         */
+        /* send response with object counts by type */
         return {
           accounts: await Account.countDocuments(),
           organizations: await Organization.countDocuments(),
@@ -142,11 +139,9 @@ export default function (app) {
           tickets: await Ticket.countDocuments(),
           user: await User.countDocuments(),
         }
-
       } catch (error) {
         console.log(err)
       }
-
     } catch (err) {
       app.httpErrors.internalServerError(err)
     }
