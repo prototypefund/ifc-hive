@@ -272,15 +272,16 @@ export default {
       this.$eventbus.on('batchDataStop', (data) => {
         this.batchLoading = false
         this.$eventbus.emit('setLastProjectId', this.$route.params.projectId)
-        if (this.$route.name === 'app.project.index') {
-          // @TODO add lastVisited ProjectPage redirect here
-          return this.$router.push({ name: 'app.project.dashboard', params: this.$route.params })
-        }
         if (this.$route?.query?.redirect) {
           return this.$router.push({
             path: this.$route.query.redirect,
           });
         }
+        if (this.$route.name === 'app.project.index') {
+          // @TODO add lastVisited ProjectPage redirect here
+          return this.$router.push({ name: 'app.project.dashboard', params: this.$route.params })
+        }
+
       })
     },
     toggleTheme: function () {

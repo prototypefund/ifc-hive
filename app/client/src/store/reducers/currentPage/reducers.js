@@ -7,7 +7,7 @@ import { loadingHold } from '../../state.js'
 /*
  * set current page
  */
-function currentPageSet (state, action) {
+function currentPageSet(state, action) {
   const { pagesLookup, uiLookup, $eventbus } = action.meta
 
   if (!action.routeName) return state
@@ -34,9 +34,7 @@ function currentPageSet (state, action) {
       }
     }
   } else {
-    console.error("race condition? a currentpage without a uuid? dafuq? bruder? alter?")
-    console.dir(pagesLookup)
-    console.dir(action)
+    // In this case, we arrive at a currentpage via a deeplink. We will be redirected anyways so just use the payload for now
     currPage = action.payload
   }
 
