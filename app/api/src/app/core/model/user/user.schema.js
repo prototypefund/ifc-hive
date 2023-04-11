@@ -25,6 +25,7 @@ const userSchema = S.object()
   .prop('ux', S.object()
     .prop('lastProjectId', S.anyOf([S.string(), S.null()]) )
     .prop('browser',S.array().items[S.object()])
+    .prop('project', S.anyOf([S.object(), S.null()]))
   )
   .required(['email', 'nickname'])
 
@@ -46,6 +47,11 @@ const userObjectTemplate = {
   organization: null, 
   account: null,
   tags: [],
+  ux: {
+    lastProjectId: null,
+    browser: null,
+    project: {},
+  }
 }
 
 /* template */

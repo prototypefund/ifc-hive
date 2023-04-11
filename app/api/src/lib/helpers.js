@@ -152,6 +152,7 @@ function getObjectSizeInBytes (obj) {
   return bytes
 }
 
+
 export { 
   randomIdGenerator,
   updateDeepObjectByPath,

@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 
 mongoose.set('strictQuery', false)
 
-  // do not use pluralized versions of the model names as collections names
+// do not use pluralized versions of the model names as collections names
 mongoose.pluralize(function (name) { return name })
 
 export default fp(async function (app, opts) {

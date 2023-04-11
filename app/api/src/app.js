@@ -17,6 +17,8 @@ import { nanoid } from 'nanoid'
 import eventbus from './plugins/eventbus/index.js'
 import jwt from './plugins/authentication/index.js'
 import mongodb from './plugins/mongodb/index.js'
+import elastic from './plugins/elastic/index.js'
+// import esManage from './lib/es/manage.js'
 import socket from './plugins/socket/index.js'
 import { registerSocketEvents } from './lib/socket/handleEvents.js'
 
@@ -48,12 +50,12 @@ global.__dirname = dirname(__filename)
  * SOCKET_TIMEOUT       45000   
  * SOCKET_PING_INTERVALL  25000
  * SOCKET_PING_TIMEOUT    20000
+ * ES_HOST              elasticsearch host
+ * ES_REQUEST_TIMEOUT   elasticsearch request timeout 
  *
- * @TODO add env variables for mongo, es etc. Basically all configuratioan
- * should be done by env-variables.
+ * @TODO add env variables for mongo, es etc. Basically all configuratioan should be done by env-variables.
  * @TODO add sensible defaults for all env variables.
- * @TODO use ajv to validate our env variables schema, e.g. PORT should be an
- * integer etc.
+ * @TODO use ajv to validate our env variables schema, e.g. PORT should be an integer etc.
  */
 
 /*
@@ -103,7 +105,12 @@ export default async function app (opts = {}) {
   /* register jwt authentication plugin */
   app.register(jwt, { secret: process.env.API_TOKEN_SECRET })
   /* connect to mongo */
-  app.register(mongodb, { uri: process.env.MONGO_URL })
+  app.register(mongodb, { uri: process.env.MONGO_HOST })
+  /* register elasticsearch client */
+  app.register(elastic, {
+    node: process.env.ELASTIC_HOST,
+    requestTimeout: process.env.ELASTIC_REQUEST_TIMEOUT
+  })
 
   app.register(socket)
 
@@ -223,7 +230,9 @@ export default async function app (opts = {}) {
   await app.ready()
   registerSocketEvents(app)
 
+  // await esManage(app.es).getIndices()
 
+  
   // return the configured app
   return app
 }

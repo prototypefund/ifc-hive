@@ -7,8 +7,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import idMapEssentials from '#src/fixtures/idMapEssentials.js'
 import idMapDevelopment from '#src/fixtures/idMapDevelopment.js'
-import { defaultHeadersSchema } from '#src/lib/headersHelper.js'
 import { mapIds } from '#src/lib/helpers.js'
+import { S } from 'fluent-json-schema'
 
 // random text sample for the large dummy project
 import randomText from '#src/fixtures/randomText.js'
@@ -147,8 +147,8 @@ export default function (app) {
     }
   }
 
-  /* headers */
-  const headers = defaultHeadersSchema (VERSIONS, VERSIONS.length -1) 
+  const querystring = S.object()
+    .prop('dummyTicketsCount', S.number().default(1000))
 
   /*
    * route definition
@@ -161,8 +161,8 @@ export default function (app) {
       summary: 'Load data fixtures (NOTE: deletes database)',
       description: `<strong>DELETES AND REINSTALLS THE COMPLETE DB</strong>. Dumps he database and loads data fixtures. `,
       tags: ['core/system'],
-      headers,
       security: [ { apiKey: [] } ],
+      querystring,
     }
   }
 }

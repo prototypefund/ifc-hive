@@ -19,15 +19,25 @@ services:
       - /app/node_modules
       - ./app/api/data:/opt/pacifico
     environment:
+      # all configuration is done with env variables
       - NODE_ENV=development
       - API_TOKEN_SECRET=mysecret
       - API_TOKEN_MAX_AGE=86400
       - API_ROOT_EMAIL=admin@example.com
       - API_ROOT_PASSWORD=administrator
-      - MONGO_URL=mongodb://mongo:27017/ifc-hive
+      - MONGO_HOST=mongodb://mongo:27017/ifc-hive
+      - ELASTIC_HOST=http://elasticsearch:9200
+      - ELASTIC_REQUEST_TIMEOUT=6000
+      - SOCKET_ORIGIN=/localhost/
+      - SOCKET_CONNECTION_TIMEOUT=45000
+      - SOCKET_PING_INTERVAL=25000
+      - SOCKET_PING_TIMEOUT=20000
     command: yarn run dev
     ports:
       - "8082:3000"
+    depends_on:
+      - mongo
+      - elasticsearch
 
   # Registry Service
   ifc-hive-reg0:
@@ -136,10 +146,10 @@ services:
       - xpack.security.enabled=false
       - discovery.type=single-node
       - ES_JAVA_OPTS=-Xms2G -Xmx2G
-    # ulimits:
-    #   memlock:
-    #     soft: -1
-    #     hard: -1
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
 
   # MongoDB service
   mongo:
