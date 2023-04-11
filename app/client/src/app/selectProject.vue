@@ -5,13 +5,12 @@
 <template>
   <v-container>
     <v-sheet width="300" class="mx-auto" v-if="projects.length > 0">
-      <v-form ref="form">
-        <v-list>
-          <v-list-item v-for="project in projects" :key="project._id">
-            <v-btn @click="setProjectId(project._id)">{{ project.title }}</v-btn>
-          </v-list-item>
+      <v-card>
+        <v-list lines="one">
+          <v-list-item v-for="project in projects" :key="uuid" @click="setProjectId(project._id)" :title="project.title"
+            :subtitle="project.description"></v-list-item>
         </v-list>
-      </v-form>
+      </v-card>
     </v-sheet>
   </v-container>
 </template>
