@@ -8,7 +8,7 @@ import { getSource } from "@lib/dataHelper.js";
 /*
  * init
  */
-function init (state, action) {
+function init(state, action) {
   window.$pacificoData = {}
   return applicationState.data
 }
@@ -16,7 +16,7 @@ function init (state, action) {
 /*
  * project init
  */
-function projectInit (state, action) {
+function projectInit(state, action) {
   window.$pacificoData = {}
   return applicationState.data
 }
@@ -24,7 +24,7 @@ function projectInit (state, action) {
 /*
  * data push
  */
-function dataPush (state, action) {
+function dataPush(state, action) {
   const { $eventbus } = action.meta
   // early return if no data
   if (!action.payload.data) return state
@@ -59,8 +59,8 @@ function dataPush (state, action) {
 /*
  * data update
  */
-function dataUpdate (state, action) {
-  const { $eventbus }  = action.meta
+function dataUpdate(state, action) {
+  const { $eventbus } = action.meta
   let item
   if (action.docUUID) {
     // @TODO review the differentiation between new and existing docs
@@ -82,12 +82,12 @@ function dataUpdate (state, action) {
   return state
 }
 
-function dataDelete (state, action) {
+function dataDelete(state, action) {
   console.error("data/delete not implemented")
   return state
 }
 
-function dataClear (state, action) {
+function dataClear(state, action) {
   console.error("data/clear not implemented")
   return state
 }

@@ -42,20 +42,22 @@ const sessionHandler = (store, api, eventbus, router) => {
    * This function takes the response from check token as input
    */
   const handleToken = async (user) => {
-    if (!user) {
+    const redirect = window.location.pathname.indexOf('/app') >= 0 ? window.location.pathname : false
+    if (!user && redirect) {
       if (window.location.pathname === '/login') return
-      router.push({ name: 'public.login', query: { redirect: window.location.pathname } });
-      return
+      if (redirect) return router.push({ name: 'public.login', query: { redirect } });
+      return router.push({ name: 'public.login' });
     }
-    if (user && (user.data.ux.lastProjectId
-      || router.currentRoute.value.params.projectId)) {
+    if (user && (user.data?.ux?.lastProjectId
+      || router.currentRoute?.value?.params?.projectId)) {
       if (router.currentRoute.value.name === 'app.project.index') return
-      router.push({ name: 'app.project.index', params: { projectId: router.currentRoute.value.params.projectId || user.data.ux.lastProjectId }, query: { redirect: window.location.pathname } });
-      return
+      if (redirect) return router.push({ name: 'app.project.index', params: { projectId: router.currentRoute.value.params.projectId || user.data.ux.lastProjectId }, query: { redirect } });
+      return router.push({ name: 'app.project.index', params: { projectId: router.currentRoute.value.params.projectId || user.data.ux.lastProjectId } });
+
     }
     if (user && !user.data.ux.lastProjectId
-      && !router.currentRoute.value.params.projectId) {
-      if (router.currentRoute.value.name === 'app.project.select') return
+      && !router.currentRoute?.value?.params?.projectId) {
+      if (router.currentRoute?.value?.name === 'app.project.select') return
       router.push({ name: 'app.project.select' });
       return
     }

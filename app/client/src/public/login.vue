@@ -90,7 +90,7 @@ export default {
 
     /* redirect after login depending on user config and login form checkbox */
     redirectAfterLogin(lastProjectId) {
-      if (this.$route?.query?.redirect) {
+      if (this.$route?.query?.redirect && this.$route.query.redirect.indexOf('/app') > -1) {
         return this.$router.push({
           path: this.$route.query.redirect,
           query: { redirect: this.$route.query.redirect }

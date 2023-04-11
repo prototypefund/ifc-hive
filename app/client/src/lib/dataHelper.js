@@ -51,7 +51,10 @@ const getFullItem = (docUUID) => {
 const getSource = (docUUID) => {
   return getFullItem(docUUID)?._source || undefined
 }
-
+/* get full item */
+const setActionItem = (docUUID) => {
+  return window.$pacificoData[docUUID] || undefined
+}
 /* search handler */
 const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, lookUp) => {
   if (!params.offset) params.offset = 0
@@ -91,13 +94,12 @@ const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, look
     }
     if (params) {
       let limitedData = Object.keys(data)
-      console.log("schniedel " + actionId, limitedData)
       if (limitedData.length >= params?.offset + params?.limit) {
         // more results than requested available
         limitedData = limitedData.splice(params?.offset, params?.limit)
         // add pseudo paging element
         limitedData.push({
-          _type: 'pseudo',
+          _type: `action_item_${actionId}_child`,
           _title: 'page for more',
           _actionId: `${actionId}_child`,
           _params: {},

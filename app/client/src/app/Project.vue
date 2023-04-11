@@ -4,7 +4,6 @@
     <v-app-bar density="compact" flat id="appAppbar" app>
       <v-app-bar-title>
         <!-- Breadcrumb -->
-        <br />
         <v-row no-gutters>
           <v-col cols="auto"> <router-link :to="{ path: '/' }" id="breadcrumb-home">
               <v-icon icon="mdi-home" color="primary" />
@@ -135,7 +134,7 @@ import inspectorToolsSidebar from "@u/inspectorToolsSidebar/default.vue";
 import StatusBar from "@u/uploader/statusBar.vue";
 import ProgressBar from "@u/uploader/progressBar.vue";
 import socketStatus from "@u/socketStatus.vue"
-import projectSwitch from "@u/projectSwitch/select.vue"
+import projectSwitch from "@u/projectSwitch/overlay.vue"
 import { useTheme } from 'vuetify'
 export default {
   components: {
@@ -259,6 +258,9 @@ export default {
   methods: {
     setupProject: function () {
       this.batchLoading = true
+      if (this.$route.params.projectId == 'undefined') {
+        return this.$router.push({ name: 'app.project.select' })
+      }
       this.$store.dispatch({
         type: "project/setId",
         payload: this.$route.params.projectId,
@@ -307,7 +309,7 @@ export default {
     },
 
     logout: async function () {
-      this.$router.push({ name: 'public.logout', params: this.$route.params })
+      return this.$router.push({ name: 'public.logout', params: this.$route.params })
     },
 
     setDimensions: async function () {
