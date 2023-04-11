@@ -19,32 +19,29 @@ import public_login from '../public/login.vue'
 import public_terms from '../public/terms.vue'
 import public_logout from '../public/logout.vue'
 
-function defineRoutes (store) {
+function defineRoutes(store) {
   return [
     /* Root */
     { path: '/', props: true, redirect: { name: 'public.login' } },
-    { path: '/login', name: 'public.login', component: public_login, props: true },
     { path: '/login', name: 'public.login', component: public_login, props: true },
     { path: '/logout', name: 'public.logout', component: public_logout, props: true },
     { path: '/terms', name: 'public.terms', component: public_terms, props: true },
     {
       path: '/app',
       name: 'app.index',
-      props: { redirectURL: null, redirectProps: null },
       component: App,
       redirect: { name: 'app.project.select' },
       children: [
         {
           path: 'projects',
           name: 'app.project.select',
-          props: { redirectURL: null, redirectProps: null },
           component: app_project_select,
         },
         {
-          path: 'project/:id',
+          path: 'project/:projectId',
           name: 'app.project.index',
           component: Project,
-          props: { redirectURL: null, redirectProps: null },
+          props: true,
           children: [
             {
               path: 'dashboard',
@@ -87,7 +84,7 @@ function defineRoutes (store) {
       ]
     },
   ]
-} 
+}
 
 export default defineRoutes
 export {

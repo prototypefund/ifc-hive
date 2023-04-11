@@ -16,7 +16,6 @@ const sessionHandler = (store, api, eventbus, router) => {
   const checkToken = async () => {
     const token = localStorage.getItem("USER_TOKEN")
     if (!token) {
-      router.push({ name: 'public.login' });
       return false
     }
     // set token in client
@@ -30,9 +29,9 @@ const sessionHandler = (store, api, eventbus, router) => {
     return res
   }
 
-/*
- * logout 
- */
+  /*
+   * logout 
+   */
   const logout = async () => {
     localStorage.removeItem('USER_TOKEN')
     router.push({ name: 'public.login' })
@@ -45,29 +44,24 @@ const sessionHandler = (store, api, eventbus, router) => {
   const handleToken = async (user) => {
     if (!user) {
       if (window.location.pathname === '/login') return
-      router.push({ path: '/login' });
+      router.push({ name: 'public.login', query: { redirect: window.location.pathname } });
       return
     }
     if (user && (user.data.ux.lastProjectId
-      || router.currentRoute.value.params.id))
-    {
+      || router.currentRoute.value.params.projectId)) {
       if (router.currentRoute.value.name === 'app.project.index') return
-      router.push({ name: 'app.project.index' });
+      router.push({ name: 'app.project.index', params: { projectId: router.currentRoute.value.params.projectId || user.data.ux.lastProjectId } });
       return
     }
     if (user && !user.data.ux.lastProjectId
-      && !router.currentRoute.value.params.id)
-    {
+      && !router.currentRoute.value.params.projectId) {
       if (router.currentRoute.value.name === 'app.project.select') return
       router.push({ name: 'app.project.select' });
       return
     }
   }
 
-  // @TODO do we need this? shouldn't this be called only from outside?
-  // or a a function composition or pipe, e.g. doing checkToken and handleToken
-  // in succession?
-  checkToken().then(user => handleToken)
+  checkToken().then(user => handleToken(user))
 
   return {
     checkToken,

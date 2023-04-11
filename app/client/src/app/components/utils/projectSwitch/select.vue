@@ -27,7 +27,7 @@ const currentProject = computed({
         router.push({
             name: 'app.project.index',
             params: {
-                id: newValue
+                projectId: newValue
             }
         })
         setTimeout(() => {

@@ -2,22 +2,20 @@
 <template>
   <v-container fluid :style="{ height: $vuetify.display.height + 'px' }">
     <!-- center login form vertically with a 20% negative offset -->
-    <v-row justify="center" align="center" :style="{
-      height: $vuetify.display.height + 'px',
-        marginTop: (-1) * $vuetify.display.height * 0.2 + 'px'
-    }">
+  <v-row justify="center" align="center" :style="{
+    height: $vuetify.display.height + 'px',
+      marginTop: (-1) * $vuetify.display.height * 0.2 + 'px'
+  }">
 
       <v-col col="12" md="6" lg="3">
         <!-- login form -->
         <v-form ref="form">
           <!-- Email -->
-          <v-text-field v-model="email" :counter="50"
-            :rules="emailRules" clearable label="E-Mail" required>
+          <v-text-field v-model="email" :counter="50" :rules="emailRules" clearable label="E-Mail" required>
           </v-text-field>
 
           <!-- Password -->
-          <v-text-field v-model="password" :counter="50"
-            :rules="passwordRules" clearable type="password" label="Password"
+          <v-text-field v-model="password" :counter="50" :rules="passwordRules" clearable type="password" label="Password"
             @keyup.enter="validate" required>
           </v-text-field>
 
@@ -69,15 +67,8 @@ export default {
     // TODO WHY DON'T WE GET THE REQUESTURI Param which se set in sessionHandler before redirect here?
     this.$session.checkToken().then(user => {
       if (!user) return
-      this.redirectAfterLogin(user.data?.ux?.lastProjectId)
+      this.redirectAfterLogin(user.data?.ux?.lastProjectId || false)
     })
-  },
-  props: {
-    redirectURL: {
-      type: String,
-      required: false,
-      default: null
-    }
   },
   methods: {
     /* validate and send login form */
@@ -94,20 +85,22 @@ export default {
       // save token to local storage
       localStorage.setItem("USER_TOKEN", user.data.token);
       // redirect after login
-      this.redirectAfterLogin(user.data?.user?.ux?.lastProjectId)
+      this.redirectAfterLogin(user.data?.user?.ux?.lastProjectId || false)
     },
 
     /* redirect after login depending on user config and login form checkbox */
     redirectAfterLogin(lastProjectId) {
-      console.dir(this.redirectURL)
-      // if applicable redirect to last project
-      console.dir(this.$route)
-      console.dir(this.$router)
+      if (this.$route?.query?.redirect) {
+        return this.$router.push({
+          path: this.$route.query.redirect,
+          query: { redirect: this.$route.query.redirect }
+        });
+      }
       if (this.singIntoLast && lastProjectId) {
         return this.$router.push({
           name: 'app.project.index',
           params: {
-            id: lastProjectId
+            projectId: lastProjectId
           },
         });
       }

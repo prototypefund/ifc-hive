@@ -35,7 +35,7 @@ export default {
       this.$router.push({
         name: 'app.project.index',
         params: {
-          id: projectId
+          projectId: projectId
         },
       })
     },

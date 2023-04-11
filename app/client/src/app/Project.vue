@@ -33,9 +33,6 @@
       <socket-status />
       <!-- notifications -->
       <Notifications />
-
-      <v-btn @click="logout">logout</v-btn>
-
       <!-- User menu -->
       <v-menu>
         <template v-slot:activator="{ props }">
@@ -159,6 +156,10 @@ export default {
       type: Number,
       default: 0,
     },
+    projectId: {
+      type: String,
+      required: true
+    }
   },
   data: () => ({
     page: false,
@@ -211,7 +212,7 @@ export default {
   },
   created() {
     // request project data by project id via the socket
-    this.$eventbus.emit('socketJoinRoom', this.$route.params.id)
+    this.$eventbus.emit('socketJoinRoom', this.$route.params.projectId)
     this.$store
       .select((state) => state.currentPage)
       .subscribe((val) => {
@@ -238,10 +239,10 @@ export default {
   },
 
   mounted() {
-    //this.$eventbus.emit('socketGetProjectData', this.$route.params.id)
+    //this.$eventbus.emit('socketGetProjectData', this.$route.params.projectId)
 
     this.$eventbus.on('switchProject', (data) => {
-      this.$eventbus.emit('socketJoinRoom', this.$route.params.id)
+      this.$eventbus.emit('socketJoinRoom', this.$route.params.projectId)
       this.setupProject()
     })
     this.setupProject()
@@ -260,7 +261,7 @@ export default {
       this.batchLoading = true
       this.$store.dispatch({
         type: "project/setId",
-        payload: this.$route.params.id,
+        payload: this.$route.params.projectId,
       });
       this.$eventbus.on('batchDataStart', (data) => {
         this.batchCount = data.expect
@@ -270,8 +271,16 @@ export default {
       })
       this.$eventbus.on('batchDataStop', (data) => {
         this.batchLoading = false
-        this.$eventbus.emit('setLastProjectId', this.$route.params.id)
-        this.$router.push({ name: 'app.project.dashboard', params: this.$route.params })
+        this.$eventbus.emit('setLastProjectId', this.$route.params.projectId)
+        if (this.$route.name === 'app.project.index') {
+          // @TODO add lastVisited ProjectPage redirect here
+          return this.$router.push({ name: 'app.project.dashboard', params: this.$route.params })
+        }
+        if (this.$route?.query?.redirect) {
+          return this.$router.push({
+            path: this.$route.query.redirect,
+          });
+        }
       })
     },
     toggleTheme: function () {

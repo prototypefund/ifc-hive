@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="state" data-test-container="pages/ticketboard/page" fluid pa-0 ma-0>
+  <v-container v-if="state?.widgets[0]?.uuid" data-test-container="pages/ticketboard/page" fluid pa-0 ma-0>
     <h1>{{ $t("pages.app-project-ticketboard") }}</h1>
     <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="ticket">
       <v-btn>New Ticket</v-btn>
