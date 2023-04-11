@@ -53,6 +53,10 @@ const sessionHandler = (store, api, eventbus, router) => {
       // apparently we want to see a public page while being signed in, which is not illegal
       return
     }
+    if (user && window.location.pathname == '/app/projects') {
+      // apparently we reloaded the project selection page, so let them
+      return
+    }
     if (user && (user.data?.ux?.lastProjectId
       || router.currentRoute?.value?.params?.projectId)) {
       // we are signed in and we know where to go, if we wanted to go to a specific page, we will remember this too

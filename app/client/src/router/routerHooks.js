@@ -22,8 +22,6 @@ function beforeEachHook(store) {
         type: 'ui/update',
         payload: { loading: true }
       })
-      // add default params to every route
-      if (!to.params.locale) to.params.locale = 'de'
       // set the new route to the store
       store.dispatch({
         type: 'route/update',
@@ -75,7 +73,7 @@ function beforeResolveHook(store) {
 }
 
 export {
- beforeEachHook,
- afterEachHook,
- beforeResolveHook,
+  beforeEachHook,
+  afterEachHook,
+  beforeResolveHook,
 }

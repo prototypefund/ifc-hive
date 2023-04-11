@@ -52,15 +52,13 @@ const getSource = (docUUID) => {
   return getFullItem(docUUID)?._source || undefined
 }
 /* get full item */
-const setActionItem = (docUUID) => {
-  return window.$pacificoData[docUUID] || undefined
+const setActionItem = (docUUID, content) => {
+  return window.$pacificoData[docUUID] = content || undefined
 }
 /* search handler */
 const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, lookUp) => {
   if (!params.offset) params.offset = 0
   if (!params.limit) params.limit = 100
-  let identifier = false
-  let matchingData = {}
   let data = JSON.parse(JSON.stringify(lookUp))
   if (query.indexOf('/search') > -1) {
     //es
@@ -98,8 +96,9 @@ const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, look
         // more results than requested available
         limitedData = limitedData.splice(params?.offset, params?.limit)
         // add pseudo paging element
-        limitedData.push({
-          _type: `action_item_${actionId}_child`,
+        limitedData.push(`action/${actionId}_child`)
+        setActionItem(`action/${actionId}_child`, {
+          _type: '_paging',
           _title: 'page for more',
           _actionId: `${actionId}_child`,
           _params: {},

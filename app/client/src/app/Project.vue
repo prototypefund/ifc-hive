@@ -5,7 +5,7 @@
       <v-app-bar-title>
         <!-- Breadcrumb -->
         <v-row no-gutters>
-          <v-col cols="auto"> <router-link :to="{ path: '/' }" id="breadcrumb-home">
+          <v-col cols="auto"> <router-link :to="{ path: 'dashboard' }" id="breadcrumb-home">
               <v-icon icon="mdi-home" color="primary" />
             </router-link></v-col>
 
@@ -105,7 +105,7 @@
         </template>
         <template v-else>
           <router-view v-slot="{ Component }">
-            <component :is="Component" :class="{ isLoading: loading }" id="appComponent"
+            <component :is="Component" key="appComponent" :class="{ isLoading: loading }" id="appComponent"
               :style="{ height: viewPortHeight + 'px' }" @scroll.passive="setScroll($event)" />
             <v-fade-transition>
               <v-row v-if="loading" class="fill-height" align-content="start" justify="center">

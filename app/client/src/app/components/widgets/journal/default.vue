@@ -3,7 +3,14 @@
     :data-test-container-uuid="props.uuid">
     <v-timeline align="start" :density="viewPortWidth < 1110 ? 'compact' : 'default'">
       <v-timeline-item v-for="uuid in data.uuids" :key="'journalID_' + uuid" max-width="600px">
-        <ticket-card-item :widgetUUID="props.uuid" :docUUID="uuid" />
+        <ticket-card-item v-if="uuid.indexOf('action/') === -1" :widgetUUID="props.uuid" :docUUID="uuid" />
+        <v-card v-else>
+          <pre>
+
+        {{ getFullItem(uuid) }}
+        </pre>
+
+        </v-card>
       </v-timeline-item>
     </v-timeline>
   </v-container>
@@ -12,6 +19,7 @@
 <script setup>
 import { inject, ref, onMounted, shallowRef, onUnmounted } from "vue";
 import ticketCardItem from "@t/cards/ticket.vue";
+import { getFullItem } from "@lib/dataHelper.js";
 
 const $store = inject("$store");
 const state = ref({});
@@ -20,11 +28,6 @@ const stateSubscriber$ = $store
   .select((state) => state.widgets[props.uuid])
   .subscribe((val) => {
     state.value = val;
-  });
-const viewPortWidthSubscriber$ = $store
-  .select((state) => state.ui.viewPortWidth)
-  .subscribe((val) => {
-    viewPortWidth.value = val;
   });
 const props = defineProps({
   props: {
@@ -46,7 +49,6 @@ const data = $store.$data.get(props.actionId + "_meta/tickets", "meta/tickets", 
 onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
-  viewPortWidthSubscriber$.unsubscribe();
   data.value.unsubscribe();
 });
 </script>

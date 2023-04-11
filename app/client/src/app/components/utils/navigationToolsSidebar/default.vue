@@ -5,7 +5,7 @@
       <v-row no-gutters class="border-bottom">
         <v-tabs v-model="currentTool" density="compact" center-active>
           <!-- iterate over page widget tools and display a button for each widget -->
-          <template v-for="(tool, key) in state">
+          <template v-for="(tool, key) in state" :key="key">
             <v-tab class="text-caption" :class="{ active: currentTool === key }" v-if="checkVisibility(tool)" :value="key"
               :key="tool">
               <a v-if="currentTool === key" class="closeOverlay" @click.stop="currentTool = false" />
@@ -18,8 +18,8 @@
       </v-row>
     </v-slide-x-transition>
     <v-container v-if="currentTool && currentComponent && currentTool !== true" fluid class="toolContent primary">
-      <component :is="currentComponent" :uuid="currentTool" :props="state[currentTool].widget.props || {}"
-        class="toolComponentWrapper">
+      <component :is="currentComponent" :key="currentTool" :uuid="currentTool"
+        :props="state[currentTool].widget.props || {}" class="toolComponentWrapper">
       </component>
     </v-container>
   </v-navigation-drawer>

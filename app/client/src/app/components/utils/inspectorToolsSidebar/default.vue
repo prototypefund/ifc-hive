@@ -6,7 +6,7 @@
         <v-list-item density="compact" @click.stop="handleToolSidebar()" class="sideBarToggle border-bottom">
           <v-icon icon="mdi-dock-right"></v-icon>
         </v-list-item>
-        <template v-for="(tool, key) in state">
+        <template v-for="(tool, key) in state" :key="key">
           <v-list-item density="compact" v-if="checkVisibility(tool)">
             <template v-slot:append>
               <v-btn density="compact" flat variant="plain" :icon="tool.icon" :value="key" :key="tool"
@@ -27,7 +27,7 @@
           </v-tabs>
           <v-tabs density="compact" v-model="currentTool" center-active>
             <!-- iterate over page widget tools and display a button for each widget -->
-            <template v-for="(tool, key) in state">
+            <template v-for="(tool, key) in state" :key="key">
               <v-tab class="text-caption" :class="{ active: currentTool === key }" v-if="checkVisibility(tool)"
                 :value="key" :key="tool">
                 <a v-if="currentTool === key" class="closeOverlay" @click.stop="currentTool = false" />
@@ -45,7 +45,7 @@
     <v-container v-if="currentTool && currentComponent && currentTool !== true" fluid :class="{ hidden: loading }"
       class="toolContent primary">
       <v-slide-x-reverse-transition>
-        <component v-if="currentTool" :is="currentComponent" :uuid="currentTool"
+        <component v-if="currentTool" :is="currentComponent" :key="currentTool" :uuid="currentTool"
           :props="state[currentTool].widget.props || {}" class="toolComponentWrapper">
         </component>
       </v-slide-x-reverse-transition>

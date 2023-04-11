@@ -7,8 +7,8 @@
     <v-sheet width="600" class="mx-auto" v-if="projects.length > 0">
       <v-card>
         <v-list lines="one">
-          <v-list-item v-for="project in projects" :key="uuid" @click="setProjectId(project._id)" :title="project.title"
-            :subtitle="project.description"></v-list-item>
+          <v-list-item v-for="project in projects" :key="project._id" @click="setProjectId(project._id)"
+            :title="project.title" :subtitle="project.description"></v-list-item>
         </v-list>
       </v-card>
     </v-sheet>
@@ -55,10 +55,6 @@ export default {
           delete projectLookup[project._id].config
         })
         this.projects = res.data.projects
-        // add project
-        this.$store.dispatch({ type: 'project/addlist', payload: projectList })
-        // TODO REMOVE LOOKUP
-        this.$store.dispatch({ type: 'project/addlookup', payload: projectLookup })
       })
 
 
