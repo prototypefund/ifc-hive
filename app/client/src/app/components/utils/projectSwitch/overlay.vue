@@ -1,5 +1,5 @@
 <template>
-    <v-overlay v-if="project.lookup" v-model="overlayOpen" class="align-center justify-center">
+    <v-overlay v-if="project.lookup && project.id" v-model="overlayOpen" class="align-center justify-center">
         <template #activator="{ isActive, props }">
             <v-btn v-bind="props"> {{ project.lookup[project.id].code }}</v-btn>
         </template>
@@ -14,7 +14,6 @@
 </template>
 <script setup>
 import { inject, ref, shallowRef, computed, onMounted, onUnmounted } from "vue";
-import { getFullItem } from "@lib/dataHelper.js";
 import { useRouter } from 'vue-router'
 const $store = inject('$store')
 const $eventbus = inject('$eventbus')
@@ -40,9 +39,6 @@ const switchProject = (uuid) => {
     }, 200);
 }
 
-const getLookupDocument = (uuid) => {
-    return getFullItem(uuid)
-}
 onMounted(() => {
 });
 onUnmounted(() => {

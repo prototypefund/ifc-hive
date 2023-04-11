@@ -35,11 +35,10 @@
         <v-col cols="2" v-if="ticketItem._source.assigned && ticketItem._source.assigned.length > 0"
           v-for="assigned in ticketItem._source.assigned">
           <v-avatar width="10" end color="indigo">
-            <v-img
-              v-if="props.userLookup.data[assigned]._source.avatar && props.userLookup.data[assigned]._source.avatar.file"
-              :src="props.userLookup.data[assigned]._source.avatar.file" />
-            <span justify="space-around" v-else>{{ props.userLookup.data[assigned]._source.firstname.substring(0, 1) }}
-              {{ props.userLookup.data[assigned]._source.lastname.substring(0, 1) }}</span>
+            <v-img v-if="getLookupDocument(assigned)?._source?.avatar?.file"
+              :src="getLookupDocument(assigned)._source.avatar.file" />
+            <span justify="space-around" v-else>{{ getLookupDocument(assigned)?._source?.firstname.substring(0, 1) || 0 }}
+              {{ getLookupDocument(assigned)?._source?.lastname.substring(0, 1) || 0 }}</span>
           </v-avatar>
         </v-col>
       </v-row>
@@ -51,6 +50,7 @@
 import { inject, ref, onMounted, onUnmounted, computed, shallowRef, defineAsyncComponent } from "vue";
 import { getSource } from "@lib/dataHelper.js";
 import QuickListHandler from "@w/quickList/handler/batch.vue";
+import { getFullItem } from "@lib/dataHelper.js";
 
 const $store = inject("$store");
 let ticketItemSubscriber$ = false
@@ -101,12 +101,6 @@ const props = defineProps({
       return rawProps.widgetUUID + "_ticketboard_board_" + rawProps.boardId;
     },
   },
-  tagLookup: {
-    type: Object,
-  },
-  userLookup: {
-    type: Object,
-  },
 });
 
 onMounted(() => {
@@ -127,6 +121,9 @@ onMounted(() => {
       }
     });
 });
+const getLookupDocument = (uuid) => {
+  return getFullItem(uuid)
+}
 onUnmounted(() => {
   if (ticketItemSubscriber$) ticketItemSubscriber$.unsubscribe()
 });

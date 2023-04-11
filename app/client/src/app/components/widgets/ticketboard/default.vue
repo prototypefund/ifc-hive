@@ -17,10 +17,9 @@
                       name: 'ticketSort',
                         pull: ['ticketSort'],
                           put: ['ticketSort'],
-                                                                                                                                                                                                                                                                                                                                                    }">
+                                                                                                                                                                                                                                                                                                                                                                                            }">
                     <template #item="{ element }">
-                      <ticket-item :tag-lookup="tagLookup" :user-lookup="userLookup" :widgetUUID="props.uuid"
-                        :boardId="boardId" :ticketItemId="element" />
+                      <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="element" />
                     </template>
                   </draggable>
                 </template>
@@ -32,7 +31,7 @@
                 name: 'ticketBoardSort',
                   pull: ['ticketBoardSort'],
                     put: ['ticketBoardSort'],
-                                                                                                                                                                                                                                              }"
+                                                                                                                                                                                                                                                                          }"
               @end="dragging = false">
               <template #item="{ element }">
                 <td>
@@ -45,10 +44,9 @@
                           name: 'ticketSort',
                             pull: ['ticketSort'],
                               put: ['ticketSort'],
-                                                                                                                                                                                                                                                                                                                                                                                                                        }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }">
                         <template #item="{ element }">
-                          <ticket-item :tag-lookup="tagLookup" :user-lookup="userLookup" :widgetUUID="props.uuid"
-                            :boardId="boardId" :ticketItemId="element" />
+                          <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="element" />
                         </template>
                       </draggable>
                     </template>
@@ -68,10 +66,9 @@
                       name: 'ticketSort',
                         pull: ['ticketSort'],
                           put: ['ticketSort'],
-                                                                                                                                                                                                                                                                                                                                                    }">
+                                                                                                                                                                                                                                                                                                                                                                                            }">
                     <template #item="{ element }">
-                      <ticket-item :tag-lookup="tagLookup" :user-lookup="userLookup" :widgetUUID="props.uuid"
-                        :boardId="boardId" :ticketItemId="element" />
+                      <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="element" />
                     </template>
                   </draggable>
                 </template>
@@ -92,8 +89,6 @@ import boardItem from "./items/board.vue";
 import ticketItem from "./items/ticket.vue";
 const $store = inject("$store");
 const state = ref({});
-const tagLookup = $store.$data.get(props.actionId + "_meta/tags", "meta/tags");
-const userLookup = $store.$data.get(props.actionId + "_meta/users", "meta/users");
 const boards = ref({
   generics: {
     open: false,
@@ -322,8 +317,6 @@ onUnmounted(() => {
       items.value[boardId].tickets.unsubscribe();
     }
   });
-  tagLookup.value.unsubscribe();
-  userLookup.value.unsubscribe();
 });
 </script>
 <style lang="css" scoped>
