@@ -11,12 +11,12 @@
         <!-- login form -->
         <v-form ref="form">
           <!-- Email -->
-          <v-text-field v-model="email" :counter="50" :rules="emailRules" clearable label="E-Mail" required>
+          <v-text-field v-model="email" :counter="50" :rules="emailRules" name="E-Mail" clearable label="E-Mail" required>
           </v-text-field>
 
           <!-- Password -->
-          <v-text-field v-model="password" :counter="50" :rules="passwordRules" clearable type="password" label="Password"
-            @keyup.enter="validate" required>
+          <v-text-field v-model="password" :counter="50" :rules="passwordRules" clearable type="password" name="Password"
+            label="Password" @keyup.enter="validate" required>
           </v-text-field>
 
           <!-- sign into last active project -->
