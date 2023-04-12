@@ -13,6 +13,7 @@ import { createSocket } from './setup/socket.js'
 import log from './lib/logger.js'
 import { httpClient, configClient, apiHealthcheck } from './lib/httpClient.js'
 import EventEmitter from './lib/eventEmitter.js'
+import eventMap from './lib/eventMap.js'
 import { registerApiHandlerEvents } from './setup/apiClient'
 import { registerSocketClient } from './setup/socketClient'
 import { registerSocketEvents } from './setup/socketEvents'
@@ -30,7 +31,7 @@ apiHealthcheck()
 /* set up socket client */
 const socket = createSocket(SOCKET_URL)
 /* create global event bus */
-const eventbus = new EventEmitter()
+const eventbus = new EventEmitter(eventMap)
 /* set up store and pass dependencies like socket and api client */
 // remove the socket and httpClient from the store, we communicate via the eventbus
 const store = createStore(eventbus)

@@ -25,6 +25,8 @@ const events = {
   widgetTypeConfLoader: 'widgetTypeConfLoader',
   setLastprojectId: 'setLastProjectId',
   switchProject: 'switchProject',
+  routerPush: 'routerPush',
+  setLastProjectId: 'setLastProjectId',
 }
 
 export default events

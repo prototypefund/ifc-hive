@@ -9,11 +9,12 @@
  */
 
 class EventEmitter {
-  constructor () {
+  constructor (eventMap) {
     /*
      * @type {object} events - container to hold key valye pairs of events/functions
      */
     this.events = {}
+    this.eventMap = eventMap
   }
 
   /*
@@ -23,6 +24,7 @@ class EventEmitter {
    * @param {function} listener - callback function
    */
   on (event, listener) {
+    if (!this.isValid(event)) return false
     if (typeof this.events[event] !== 'object') {
       this.events[event] = []
     }
@@ -52,6 +54,7 @@ class EventEmitter {
    * @param {string|object|boolean} - arbitrary arguements
    */
   emit (event, ...args) {
+    if (!this.isValid(event)) return false
     if (typeof this.events[event] === 'object') {
       this.events[event].forEach(listener => listener.apply(this, args));
     }
@@ -64,12 +67,23 @@ class EventEmitter {
    * @param {string|object|boolean} - arbitrary arguements
    */
   once (event, listener) {
+    if (!this.isValid(event)) return false
     const remove = this.on(event, (...args) => {
       remove()
       listener.apply(this, args)
     })
   }
 
+  isValid (event) {
+    // early return if we don't have an eventMap
+    if (!this.eventMap) return true
+    // throw error if the event is unknown
+    if (!this.eventMap[event]) {
+      throw new Error(`Unkown event ${event}`)
+    }
+    // return true if the event exists in the eventMap
+    return true
+  }
 }
 
 export default EventEmitter
