@@ -9,11 +9,18 @@
  */
 
 class EventEmitter {
+  /*
+   * @param {object} eventMap 
+   */
   constructor (eventMap) {
     /*
      * @type {object} events - container to hold key valye pairs of events/functions
      */
     this.events = {}
+    /*
+     * @type {object} eventMap - map of available events
+     * For the default eventbus see ./lib/eventMap.js
+     */
     this.eventMap = eventMap
   }
 
@@ -74,12 +81,19 @@ class EventEmitter {
     })
   }
 
+  /*
+   * isValid
+   *
+   * If an eventMap is present this method checks if the given event exists as
+   * key in the map.
+   * @param {string} event - event name
+   */
   isValid (event) {
     // early return if we don't have an eventMap
     if (!this.eventMap) return true
     // throw error if the event is unknown
     if (!this.eventMap[event]) {
-      throw new Error(`Unkown event ${event}`)
+      throw new Error(`Unkown event ${event}, please check or update ./lib/eventMap.js`)
     }
     // return true if the event exists in the eventMap
     return true
