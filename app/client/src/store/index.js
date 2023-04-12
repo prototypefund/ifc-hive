@@ -110,7 +110,12 @@ function createStore($eventbus) {
    * */
   store.$data = createDataApi(store)
 
-  return store
+  return {
+    dispatch: store.dispatch,
+    select: store.select,
+    unsubscribe: store.unsubscribe,
+    $data: store.$data
+  }
 }
 
 export default createStore
