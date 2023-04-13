@@ -63,5 +63,11 @@ export default {
   timeline: {
     title: 'Project Timeline Tile'
   },
-  "$vuetify.badge": "badge"
+  $vuetify: {
+    badge: "Badge",
+    close: "Close",
+    input: {
+      clear: "Clear"
+    }
+  }
 }

@@ -6,14 +6,14 @@ import { searchHandler } from '@lib/dataHelper.js'
 /*
  * execute queries
  */
-function queriesExecute (state, action) {
+function queriesExecute(state, action) {
   const { dataLookup } = action.meta
-  let queries, items, query
+  let items
   if (Object.keys(state).length === 0) return state
 
-  queries = JSON.parse(JSON.stringify(state))
+  const queries = JSON.parse(JSON.stringify(state))
   if (action.actionId) {
-    query = JSON.parse(JSON.stringify(queries[action.actionId]))
+    const query = JSON.parse(JSON.stringify(queries[action.actionId]))
     items = searchHandler(action.actionId, query.query, query.params || false, dataLookup)
     // remember the former state of uuids for later evaluation in dataAPI
     query.old_uuids = query.uuids || []
@@ -34,12 +34,11 @@ function queriesExecute (state, action) {
 /*
  * add queries
  */
-function queriesAdd (state, action) {
+function queriesAdd(state, action) {
   const { $eventbus } = action.meta
-  let queries, params
+  const queries = {}
   if (action.payload.actionId) {
-    queries = {}
-    params = JSON.parse(JSON.stringify(action.payload.params))
+    const params = JSON.parse(JSON.stringify(action.payload.params))
     if (!params.offset) params.offset = 0
     if (!params.limit) params.limit = 100
     queries[action.payload.actionId] = {
@@ -58,7 +57,7 @@ function queriesAdd (state, action) {
 /*
  * remove queries
  */
-function queriesRemove (state, action) {
+function queriesRemove(state, action) {
   const queries = JSON.parse(JSON.stringify(state))
   if (action.actionId) {
     delete queries[action.actionId]

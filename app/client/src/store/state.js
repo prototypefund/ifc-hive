@@ -20,7 +20,6 @@ const loadingHold = 200
  * Our actual application data
  */
 const applicationState = {
-  route: {},
   data: {},
   uploader: {},
   queries: {},
@@ -96,7 +95,7 @@ const applicationState = {
       title: 'funoFun',
       // an array from 0-n containing configurations for widgets
       slots: [
-        { 
+        {
           // a css class you want to have on the widget wrapper
           class: 'nice',
           // the width of your widget. represents the flexbox grid numbers from 1-12
@@ -107,7 +106,7 @@ const applicationState = {
             name: 'form',
             // and object which you can use to override the widgets default config in the
             // context of this page
-            props: { 
+            props: {
               title: 'anderer Titel',
               query: {
                 q: 'ich bin voll die andere query',

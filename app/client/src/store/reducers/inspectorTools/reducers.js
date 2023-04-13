@@ -6,13 +6,13 @@ import { mergeDeepRight } from 'ramda'
 /*
  * inspector tool add
  */
-function inspectorToolsAdd (state, action) {
+function inspectorToolsAdd(state, action) {
   const { widgetsLookup, $eventbus } = action.meta
-  let tool = {}
+  const tool = {}
   // early return if something vital is missing
   if (!action.payload || !action.payload.widget || !action.payload.uuid) return state
 
-  let widget = action.payload.widget
+  const widget = action.payload.widget
   if (!widget.uuid) { widget.uuid = action.payload.uuid }
   if (!widgetsLookup[widget.uuid]) {
     // make a generic widget state map
@@ -30,7 +30,7 @@ function inspectorToolsAdd (state, action) {
 /*
  * inspector tool update
  */
-function inspectorToolsUpdate (state, action) {
+function inspectorToolsUpdate(state, action) {
   return mergeDeepRight(state, action.payload)
 }
 

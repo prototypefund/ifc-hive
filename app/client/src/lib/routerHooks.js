@@ -9,17 +9,12 @@
  *
  * Keep track of the current route in the store
  */
-function forEachHook (store) {
-  return (to, from)  => {
+function forEachHook(store) {
+  return (to, from) => {
     if (to === from) return
 
     // add default params to every route
     if (!to.params.locale) to.params.locale = 'de'
-    // set the new route to the store
-    store.dispatch({
-      type: 'route/update',
-      payload: to
-    })
   }
 }
 
@@ -29,7 +24,7 @@ function forEachHook (store) {
  *
  * Pass route params and query data to the current page state
  */
-function beforeResolveHook (store) {
+function beforeResolveHook(store) {
   return (to, from) => {
     // change the currentPage, might often be just a change in url params
     if (to === from) return

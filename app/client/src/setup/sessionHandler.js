@@ -34,7 +34,7 @@ const sessionHandler = (store, api, eventbus, router) => {
    */
   const logout = async () => {
     localStorage.removeItem('USER_TOKEN')
-    router.push({ name: 'public.login' })
+    return router.push({ name: 'public.login' })
   }
 
   /*

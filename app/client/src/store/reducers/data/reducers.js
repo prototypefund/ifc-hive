@@ -26,17 +26,10 @@ function projectInit(state, action) {
  */
 function dataPush(state, action) {
   const { $eventbus } = action.meta
+  const initialData = action.payload.initialData || false
   // early return if no data
   if (!action.payload.data) return state
-  let data
-  $eventbus.emit('storeDispatch', {
-    type: 'notifications/add',
-    payload: {
-      event: 'push',
-      message: `we've received ${action.payload.data.length} new Items for you!`
-    }
-  })
-  data = JSON.parse(JSON.stringify(state))
+  const data = JSON.parse(JSON.stringify(state))
   action.payload.data.forEach(item => {
     if (item._type === 'delete') {
       delete window.$pacificoData[item._id]
@@ -49,10 +42,20 @@ function dataPush(state, action) {
       delete data[item._id]._source
     }
   })
-  $eventbus.emit('storeDispatch', {
-    type: 'queries/execute',
-    actionId: false
-  })
+  if (!initialData) {
+    $eventbus.emit('storeDispatch', {
+      type: 'notifications/add',
+      payload: {
+        event: 'push',
+        message: `we've received ${action.payload.data.length} new Items for you!`
+      }
+    })
+    $eventbus.emit('storeDispatch', {
+      type: 'queries/execute',
+      actionId: false
+    })
+  }
+
   return data
 }
 

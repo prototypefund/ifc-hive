@@ -27,7 +27,6 @@ import uiReducers from './reducers/ui/index.js'
 import notificationsReducers from './reducers/notifications/index.js'
 import dataReducers from './reducers/data/index.js'
 import uploaderReducers from './reducers/uploader/index.js'
-import routeReducers from './reducers/route/index.js'
 import userReducers from './reducers/user/index.js'
 import organizationReducers from './reducers/organization/index.js'
 import projectReducers from './reducers/project/index.js'
@@ -36,7 +35,6 @@ import navigationToolsReducers from './reducers/navigationTools/index.js'
 import inspectorToolsReducers from './reducers/inspectorTools/index.js'
 import queriesReducers from './reducers/queries/index.js'
 import currentPageReducers from './reducers/currentPage/index.js'
-import toolbarReducers from './reducers/toolbar/index.js' // @TODO remove
 
 /* Apply different extensions depending on the environment */
 const extensions = getEnvVariable('NODE_ENV') === 'production'
@@ -75,12 +73,10 @@ function createStore($eventbus) {
     widgets: widgetsReducers,
     ui: uiReducers,
     notifications: notificationsReducers,
-    toolbar: toolbarReducers, // TODO REMOVE
     navigationTools: navigationToolsReducers,
     inspectorTools: inspectorToolsReducers,
     data: dataReducers,
     uploader: uploaderReducers,
-    route: routeReducers,
     user: userReducers,
     organization: organizationReducers,
     project: projectReducers,

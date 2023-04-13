@@ -43,8 +43,8 @@
     <v-container v-if="currentTool && currentComponent" fluid :class="{ hidden: loading }" class="toolContent primary"
       :style="{
         height: viewPortHeight + 'px',
-        width: viewPortWidth < 800 ? viewPortWidth + 'px' : '60%',
-      }">
+          width: viewPortWidth < 800 ? viewPortWidth + 'px' : '60%',
+                        }">
       <hr class="contentLine" />
       <v-slide-x-reverse-transition>
         <v-card flat>
@@ -97,11 +97,6 @@ export default {
       .subscribe((val) => {
         this.state = val;
       });
-    this.routeSubscriber$ = this.$store
-      .select((state) => state.route)
-      .subscribe((val) => {
-        this.route = val;
-      });
     this.currentToolSubscriber$ = this.$store
       .select((state) => state.ui.currentTool)
       .subscribe((val) => {
@@ -128,7 +123,6 @@ export default {
   },
   destroyed() {
     this.stateSubscriber$.unsubscribe();
-    this.routeSubscriber$.unsubscribe();
     this.currentToolSubscriber$.unsubscribe();
     this.viewPortHeightSubscriber$.unsubscribe();
     this.viewPortWidthSubscriber$.unsubscribe();
@@ -148,7 +142,7 @@ export default {
     },
     checkVisibility(tool) {
       // if we have no page set to this tool or page set matches current route name we are good to go!
-      if (!tool.page || tool.page.indexOf(this.route.name) > -1) {
+      if (!tool.page || tool.page.indexOf(this.$router.currentRoute.value.name) > -1) {
         return true;
       }
       if (this.currentTool === tool.widget.uuid) {

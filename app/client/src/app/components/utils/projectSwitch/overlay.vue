@@ -4,8 +4,8 @@
             <v-btn v-bind="props"> {{ project.lookup[project.id].code }}</v-btn>
         </template>
         <v-card>
-            <v-list lines="one">
-                <v-list-item v-for="uuid in project.list" v-if="uuid !== project.id" :key="uuid"
+            <v-list lines="one" v-if="project.list.length > 0">
+                <v-list-item v-for="uuid in project.list" :disabled="uuid == project.id" :key="uuid"
                     @click="switchProject(uuid)" :title="project.lookup[uuid].title"
                     :subtitle="project.lookup[uuid].description"></v-list-item>
             </v-list>

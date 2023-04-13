@@ -6,9 +6,8 @@ import { mergeDeepRight } from 'ramda'
 /*
  * add notifcation
  */
-function notificationsAdd (state, action) {
-  let items
-  items = JSON.parse(JSON.stringify(state.items))
+function notificationsAdd(state, action) {
+  const items = JSON.parse(JSON.stringify(state.items))
   action.payload.time = Date.now()
   action.payload.state = 'unread'
 
@@ -21,17 +20,16 @@ function notificationsAdd (state, action) {
 /*
  * clear notifications
  */
-function notifacationsClear (state, action) {
+function notifacationsClear(state, action) {
   return applicationState.notifications
 }
 
 /*
  * mark all notifcations as seen
  */
-function notificationsMarkAllAsSeen (state, action) {
+function notificationsMarkAllAsSeen(state, action) {
   const { $eventbus } = action.meta
-  let items
-  items = JSON.parse(JSON.stringify(state.items))
+  const items = JSON.parse(JSON.stringify(state.items))
   items.forEach(item => {
     if (item.state !== 'read') {
       item.state = 'seen'
@@ -51,9 +49,9 @@ function notificationsMarkAllAsSeen (state, action) {
 /*
  * mark all notifactions as read
  */
-function notificationsMarkAllAsRead (state, action) {
+function notificationsMarkAllAsRead(state, action) {
   const { $eventbus } = action.meta
-  items = JSON.parse(JSON.stringify(state.items))
+  const items = JSON.parse(JSON.stringify(state.items))
   items.forEach(item => {
     if (item.state === 'unread') {
       item.state = 'read'
@@ -73,9 +71,9 @@ function notificationsMarkAllAsRead (state, action) {
 /*
  * mark notification as read
  */
-function notificationsMarkAsRead (state, action) {
+function notificationsMarkAsRead(state, action) {
   const { $eventbus } = action.meta
-  items = JSON.parse(JSON.stringify(state.items))
+  const items = JSON.parse(JSON.stringify(state.items))
   if (items[action.payload.index].state !== 'read') {
     items[action.payload.index].state = 'read'
     if (state.unreadCount > 0) {
@@ -97,9 +95,9 @@ function notificationsMarkAsRead (state, action) {
 /*
  * mark notifcation as unread
  */
-function notificationsMarkUnread (state, action) {
+function notificationsMarkUnread(state, action) {
   const { $eventbus } = action.meta
-  items = JSON.parse(JSON.stringify(state.items))
+  const items = JSON.parse(JSON.stringify(state.items))
   if (items[action.payload.index].state !== 'unread') {
     items[action.payload.index].state = 'unread'
     $eventbus.emit('storeDispatch', {
@@ -117,7 +115,7 @@ function notificationsMarkUnread (state, action) {
 /*
  * toggle notifications
  */
-function notificationsToggle (state, action) {
+function notificationsToggle(state, action) {
   const { $eventbus } = action.meta
   if (action.payload.toggled === false && state.toggled === true) {
     $eventbus.emit('storeDispatch', {
@@ -138,7 +136,7 @@ function notificationsToggle (state, action) {
 /*
  * update notifications
  */
-function notificationsUpdate (state, action) {
+function notificationsUpdate(state, action) {
   return mergeDeepRight(state, action.payload)
 }
 
@@ -150,5 +148,5 @@ export {
   notificationsMarkAsRead,
   notificationsMarkUnread,
   notificationsToggle,
-  notificationsUpdate 
+  notificationsUpdate
 }

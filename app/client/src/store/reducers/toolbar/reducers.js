@@ -2,13 +2,13 @@
 /*
  * toolbar add
  */
-function toolbarAdd (state, action) {
+function toolbarAdd(state, action) {
   const { $eventbus, widgetsLookup } = action.meta
   // early return of given state if something vital is missing
   if (!action.payload || !action.payload.widget || !action.payload.uuid) return state
 
   const tool = {}
-  widget = action.payload.widget
+  const widget = action.payload.widget
   if (!widget.uuid) {
     widget.uuid = action.payload.uuid
   }

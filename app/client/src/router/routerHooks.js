@@ -18,16 +18,12 @@ import { loadingHold } from '../store/state'
 function beforeEachHook(store) {
   return (to, from) => {
     if (to !== from) {
-      store.dispatch({
+      return store.dispatch({
         type: 'ui/update',
         payload: { loading: true }
       })
-      // set the new route to the store
-      store.dispatch({
-        type: 'route/update',
-        payload: to
-      });
     }
+    return
   }
 }
 
@@ -42,14 +38,14 @@ function afterEachHook(store) {
     // change the currentPage, might often be just a change in url params
     if (to !== from) {
       window.scrollTo(0, 0);
-      setTimeout(() => {
-        store.dispatch({
+      return setTimeout(() => {
+        return store.dispatch({
           type: 'ui/update',
           payload: { loading: false }
         })
       }, loadingHold);
-
     }
+    return
   }
 }
 
@@ -63,12 +59,13 @@ function beforeResolveHook(store) {
   return (to, from) => {
     // change the currentPage, might often be just a change in url params
     if (to !== from) {
-      store.dispatch({
+      return store.dispatch({
         type: 'currentPage/set',
         routeName: to.name,
         payload: { ...to.params, query: to.query }
       })
     }
+    return
   }
 }
 

@@ -110,6 +110,7 @@ const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, look
         return limitedData
       }
     }
+    return data
   }
 }
 

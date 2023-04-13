@@ -4,7 +4,7 @@ import { storePatterns } from '../../state.js'
 /*
  * update widget
  */
-function widgetsUpdate (state, action) {
+function widgetsUpdate(state, action) {
   const configuredWidget = {}
   // merge given payload onto widget state
   configuredWidget[action.uuid] = mergeDeepRight(state[action.uuid], action.payload)
@@ -14,9 +14,9 @@ function widgetsUpdate (state, action) {
 /*
  * add widget
  */
-function widgetsAdd (state, action) {
+function widgetsAdd(state, action) {
   const { $eventbus } = action.meta
-  let newWidgets = {}
+  const newWidgets = {}
   if (action.payload.length > 0) {
     action.payload.forEach(widget => {
       if (widget.uuid && state[widget.uuid]) {

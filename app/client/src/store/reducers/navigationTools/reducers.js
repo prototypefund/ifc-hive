@@ -6,14 +6,13 @@ import { mergeDeepRight } from 'ramda'
 /*
  * navigation tools add
  */
-function navigationToolsAdd (state, action) {
+function navigationToolsAdd(state, action) {
   const { $eventbus, widgetsLookup } = action.meta
-  let tool = {}
-  let widget
+  const tool = {}
   // early return of unchagned state if we are missing something vital
   if (!action.payload || !action.payload.widget || !action.payload.uuid) return state
 
-  widget = action.payload.widget
+  const widget = action.payload.widget
   if (!widget.uuid) { widget.uuid = action.payload.uuid }
   if (!widgetsLookup[widget.uuid]) {
     // make a generic widget state map
@@ -32,7 +31,7 @@ function navigationToolsAdd (state, action) {
 /*
  * navigation tools udpate
  */
-function navigationToolsUpdate (state, action) {
+function navigationToolsUpdate(state, action) {
   return mergeDeepRight(state, action.payload)
 }
 

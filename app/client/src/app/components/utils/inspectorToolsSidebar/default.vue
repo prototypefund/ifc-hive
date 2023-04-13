@@ -124,11 +124,6 @@ export default {
       .subscribe((val) => {
         this.openTool = val;
       });
-    this.routeSubscriber$ = this.$store
-      .select((state) => state.route)
-      .subscribe((val) => {
-        this.route = val;
-      });
     this.stateSubscriber$ = this.$store
       .select((state) => state.inspectorTools)
       .subscribe((val) => {
@@ -147,7 +142,7 @@ export default {
         return false
       }
       // if we have no page set to this tool or page set matches current route name we are good to go!
-      if (!tool.pages || tool.pages.indexOf(this.route.name) > -1) {
+      if (!tool.pages || tool.pages.indexOf(this.$router.currentRoute.value.name) > -1) {
         return true;
       }
       if (this.currentTool === tool.widget.uuid) {

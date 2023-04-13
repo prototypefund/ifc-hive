@@ -1,14 +1,13 @@
-const metaReducerPagesAdd = ($eventbus) =>  (reducer) => {
+const metaReducerPagesAdd = ($eventbus) => (reducer) => {
   return (state, action) => {
-    const nextState = reducer (state, action)
-    
+    const nextState = reducer(state, action)
+
     if (action.type == "pages/add") {
-      let page, widgets, pageUUID
-      page = action.payload
-      pageUUID = action.payload.uuid || action.routeName.replaceAll('.', '-')
+      const page = action.payload
+      const pageUUID = action.payload.uuid || action.routeName.replaceAll('.', '-')
       // if we have a widget config for this page we need to setup the widget states
       if ((page.slots || page.widgets) && !state.pages[pageUUID]) {
-        widgets = []
+        const widgets = []
         const makeWidget = (widget) => {
           if (!widget.uuid) {
             widget.uuid = uuidv4()

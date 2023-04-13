@@ -2,7 +2,7 @@
 /*
  * project init
  */
-function projectInit (state, action) {
+function projectInit(state, action) {
   const uiState = {
     currentTool: false
   }
@@ -12,7 +12,7 @@ function projectInit (state, action) {
 /*
  * set current page 
  */
-function currentPageSet (state) {
+function currentPageSet(state) {
   return {
     ...state, navigationOpen: false
   }
@@ -21,8 +21,8 @@ function currentPageSet (state) {
 /*
  *  toggle ui
  */
-function uiToggle (state, action) {
-  let uiState = {}
+function uiToggle(state, action) {
+  const uiState = {}
   if (!action.payload.list) return state
 
   action.payload.list.forEach(field => {
@@ -45,7 +45,7 @@ function uiToggle (state, action) {
 /*
  *  update ui
  */
-function uiUpdate (state, action) {
+function uiUpdate(state, action) {
   if (state.mobile && (action.payload.navigationOpen || action.payload.currentTool)) {
     if (action.payload.navigationOpen === true && state.currentTool !== false) {
       action.payload.currentTool = false

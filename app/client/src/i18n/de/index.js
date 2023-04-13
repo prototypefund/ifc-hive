@@ -63,5 +63,11 @@ export default {
   timeline: {
     title: 'Projektjournal Überschrift'
   },
-  "$vuetify.badge": "badge"
+  $vuetify: {
+    badge: "Badge",
+    close: "Schließen",
+    input: {
+      clear: "Zurücksetzen"
+    }
+  }
 }

@@ -2,14 +2,14 @@
  * notification reducer
  */
 import * as reducers from './reducers.js'
-import reducerFromMap from '@lib/reducerFromMap.js' 
+import reducerFromMap from '@lib/reducerFromMap.js'
 import { applicationState } from '../../state'
 
 const reducerMap = {
   'init': () => applicationState.notifications,
   'projectInit': () => applicationState.notifications,
-  'notifications/add': reducers.inspectorToolsAdd,
-  'notifications/clear': reducers.notificationsClear,
+  'notifications/add': reducers.notificationsAdd,
+  'notifications/clear': reducers.notifacationsClear,
   'notifications/markAllAsSeen': reducers.notificationsMarkAllAsSeen,
   'notifications/markAllAsRead': reducers.notificationsMarkAllAsRead,
   'notifications/markAsRead': reducers.notificationsMarkAsRead,

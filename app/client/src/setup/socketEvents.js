@@ -9,11 +9,12 @@ import log from '@lib/logger.js'
 import { setProjectBrowserConfig } from '@lib/setProjectConfiguration.js'
 
 function registerSocketEvents($socket, $store, $eventbus) {
-
+  const storeBatchSize = 600
   /* required for reconnection */
   let intervalId = false
   // local container to collect incoming batch items before we push them to the store
   let batchItems = []
+  let batchItemsCount = 0
   // are we batch loading right now?
   let batchLoading = false
 
@@ -131,9 +132,16 @@ function registerSocketEvents($socket, $store, $eventbus) {
    */
   $socket.on('batchDataStop', () => {
     batchLoading = false
-    log.socket('stop batch data', { received: batchItems.length })
-    $eventbus.emit('batchDataStop', batchItems.length)
-    $store.dispatch({ type: 'data/push', payload: { data: batchItems } })
+    log.socket('stop batch data', { received: batchItemsCount })
+    $eventbus.emit('batchDataStop', batchItemsCount)
+    $store.dispatch({ type: 'data/push', payload: { data: batchItems, initialData: true } })
+    $store.dispatch({
+      type: 'notifications/add',
+      payload: {
+        event: 'push',
+        message: `we've received ${batchItemsCount} new Items for you!`
+      }
+    })
   })
 
   /*
@@ -142,8 +150,13 @@ function registerSocketEvents($socket, $store, $eventbus) {
    */
   $socket.on('data', (data) => {
     if (batchLoading === true) {
+      batchItemsCount = batchItemsCount + 1
       batchItems.push(data)
-      $eventbus.emit('batchDataItemPush', batchItems.length)
+      if (batchItems.length >= storeBatchSize) {
+        $store.dispatch({ type: 'data/push', payload: { data: batchItems, initialData: true } })
+        batchItems = []
+      }
+      $eventbus.emit('batchDataItemPush', batchItemsCount)
     } else {
       log.socket('data', data)
       $store.dispatch({ type: 'data/push', payload: { data: [data] } })

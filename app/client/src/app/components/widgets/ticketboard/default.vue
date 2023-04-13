@@ -17,7 +17,7 @@
                       name: 'ticketSort',
                         pull: ['ticketSort'],
                           put: ['ticketSort'],
-                                                                                                                                                                                                                                                                                                                                                                                            }">
+                                                                                                                                                                                                                                                                                                                                                                                                                }">
                     <template #item="{ element }">
                       <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="element" />
                     </template>
@@ -31,7 +31,7 @@
                 name: 'ticketBoardSort',
                   pull: ['ticketBoardSort'],
                     put: ['ticketBoardSort'],
-                                                                                                                                                                                                                                                                          }"
+                                                                                                                                                                                                                                                                                        }"
               @end="dragging = false">
               <template #item="{ element }">
                 <td>
@@ -44,7 +44,7 @@
                           name: 'ticketSort',
                             pull: ['ticketSort'],
                               put: ['ticketSort'],
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }">
                         <template #item="{ element }">
                           <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="element" />
                         </template>
@@ -66,7 +66,7 @@
                       name: 'ticketSort',
                         pull: ['ticketSort'],
                           put: ['ticketSort'],
-                                                                                                                                                                                                                                                                                                                                                                                            }">
+                                                                                                                                                                                                                                                                                                                                                                                                                }">
                     <template #item="{ element }">
                       <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="element" />
                     </template>
@@ -203,6 +203,7 @@ const getRelevantData = (filter) => {
           identifier: board.identifier,
           excluded: board.excluded,
           receiver: boardId,
+          limit: 5
         },
         queryNewDataHook,
         "count"
@@ -230,6 +231,7 @@ const getRelevantData = (filter) => {
           identifier: board.identifier,
           excluded: board.excluded,
           receiver: boardId,
+          limit: 5
         },
         queryNewDataHook,
         "count"

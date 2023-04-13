@@ -285,9 +285,10 @@ export default {
         }
 
       })
+      return
     },
     toggleTheme: function () {
-      this.theme.global.name = this.theme.global.current.dark ? 'light' : 'dark';
+      return this.theme.global.name = this.theme.global.current.dark ? 'light' : 'dark';
     },
     setScroll: async function (e) {
       if (e.currentTarget.scrollTop > 0) {
@@ -295,6 +296,7 @@ export default {
       } else {
         this.hasScrolled = false;
       }
+      return
     },
 
     scrollTop: async function () {
@@ -302,10 +304,12 @@ export default {
         document.getElementById("appComponent").scrollTo(0, 0);
         this.hasScrolled = false;
       }
+      return
     },
 
     saveLocalProjectConfig: function () {
       this.$eventbus.emit('saveLocalProjectConfig')
+      return
     },
 
     logout: async function () {
@@ -323,7 +327,8 @@ export default {
         const windowWidth = window.innerWidth;
         this.viewPortHeight = window.innerHeight - appBarHeight;
         this.viewPortWidth = HackyShit;
-        this.$store.dispatch({
+
+        return this.$store.dispatch({
           type: "ui/update",
           payload: {
             viewPortHeight: this.viewPortHeight,
