@@ -90,31 +90,31 @@ async function createIndex (client, index, mappings) {
   return await client.indices.create({ index, mappings })
 }
 
-/*
- * delete given index
- */
-async function deleteIndex (client, index) {
-  return await client.indices.delete({ index })
-}
+// /*
+//  * delete given index
+//  */
+// async function deleteIndex (client, index) {
+//   return await client.indices.delete({ index })
+// }
 
 /*
  * delete all indices
  */
-async function deleteAllIndices (client, indices) {
-
-}
-
-/*
- * index a single document
- */
-async function indexDoc (client, obj, esmapper, index) {
-  return await client.index({
-    index,
-    id: obj._id,
-    refresh: true,
-    body: esmapper(obj) 
-  })
-}
+// async function deleteAllIndices (client, indices) {
+//
+// }
+//
+// /*
+//  * index a single document
+//  */
+// async function indexDoc (client, obj, esmapper, index) {
+//   return await client.index({
+//     index,
+//     id: obj._id,
+//     refresh: true,
+//     body: esmapper(obj) 
+//   })
+// }
 
 /*
  * index multiple documents
@@ -122,9 +122,9 @@ async function indexDoc (client, obj, esmapper, index) {
  * Use this method when indexing whole collections, e.g. in conjunction 
  * with paging through the mongo collection.
  */
-async function batch (client, objects, esmapper, index) {
-
-}
+// async function batch (client, objects, esmapper, index) {
+//
+// }
 
 export {
   getRequiredIndices,
@@ -133,5 +133,5 @@ export {
   createMissingIndices,
   getStats,
   createIndex,
-  indexDoc,
+  // indexDoc,
 }
