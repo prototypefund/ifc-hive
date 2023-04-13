@@ -1,6 +1,6 @@
 
 export default {
-  _id: { type: 'keyword' },
+  id: { type: 'keyword' },
   name: { type: 'text' },
   shortname: { type: 'text' },
   code: { type: 'code' },

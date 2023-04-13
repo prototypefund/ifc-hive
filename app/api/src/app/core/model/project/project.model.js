@@ -39,7 +39,7 @@ const projectSchema = new Schema({
   description: { type: String },
 
   /* soft delete */
-  isDeleted: { type: false },
+  isDeleted: { type: Boolean, default: false },
 
   /* Project configs, don't forget to use markedModified['configs'] when updating */
   config: {

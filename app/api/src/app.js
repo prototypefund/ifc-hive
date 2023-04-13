@@ -21,6 +21,7 @@ import elastic from './plugins/elastic/index.js'
 // import esManage from './lib/es/manage.js'
 import socket from './plugins/socket/index.js'
 import { registerSocketEvents } from './lib/socket/handleEvents.js'
+import * as esManage from './lib/es/manage.js'
 
 /*
  * import package.json so we know our app version
@@ -230,8 +231,11 @@ export default async function app (opts = {}) {
   await app.ready()
   registerSocketEvents(app)
 
-  // await esManage(app.es).getIndices()
-
+  // check search indices
+  const requiredIndices = await esManage.getRequiredIndices()
+  const indices = await esManage.getIndices(app.es)
+  const missing = await esManage.checkForMissingIndices(requiredIndices, indices)
+  await esManage.createMissingIndices(app.es, missing)
   
   // return the configured app
   return app

@@ -77,7 +77,9 @@ export default async function (app) {
   app.get('/tag/model', tag.model(app))
 
   /* system routes */
-  app.post('/system/fixtures', system.fixtures(app))
   app.get('/system/alive',  { schema: { tags: ['core/system'] } }, aliveHandler)
+  app.delete('/system/es/indices', system.deleteEsIndices(app))
+  app.get('/system/es/indices', system.getEsIndices(app))
+  app.post('/system/fixtures', system.fixtures(app))
 }
 
