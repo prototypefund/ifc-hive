@@ -232,10 +232,12 @@ export default async function app (opts = {}) {
   registerSocketEvents(app)
 
   // check search indices
-  // const requiredIndices = await esManage.getRequiredIndices()
-  // const indices = await esManage.getIndices(app.es)
-  // const missing = await esManage.checkForMissingIndices(requiredIndices, indices)
-  // await esManage.createMissingIndices(app.es, missing)
+  setTimeout(async () => {
+    const requiredIndices = await esManage.getRequiredIndices()
+    const indices = await esManage.getIndices(app.es)
+    const missing = await esManage.checkForMissingIndices(requiredIndices, indices)
+    await esManage.createMissingIndices(app.es, missing)
+  }, 20000)
   
   // return the configured app
   return app
