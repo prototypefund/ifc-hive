@@ -319,6 +319,11 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.21.1.tgz#a8f81ee2fe872af23faea4b17a08fcc869de7bcc"
   integrity sha512-JzhBFpkuhBNYUY7qs+wTzNmyCWUHEaAFpQQD2YfU1rPL38/L43Wvid0fFkiOCnHvsGncRZgEPyGnltABLcVDTg==
 
+"@babel/parser@^7.18.4":
+  version "7.21.4"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.21.4.tgz#94003fdfc520bbe2875d4ae557b43ddb6d880f17"
+  integrity sha512-alVJj7k7zIxqBZ7BTRhz0IqJFxW1VJbm6N8JbcYhQ186df9ZBPbZBmWSqAMXwHGsCJdYks7z/voa3ibiS5bCIw==
+
 "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@^7.18.6":
   version "7.18.6"
   resolved "https://registry.yarnpkg.com/@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression/-/plugin-bugfix-safari-id-destructuring-collision-in-function-expression-7.18.6.tgz#da5b8f9a580acdfbe53494dba45ea389fb09a4d2"
@@ -3012,6 +3017,11 @@
   resolved "https://registry.yarnpkg.com/@types/slice-ansi/-/slice-ansi-4.0.0.tgz#eb40dfbe3ac5c1de61f6bcb9ed471f54baa989d6"
   integrity sha512-+OpjSaq85gvlZAYINyzKpLeiFkSC4EsC6IIiT6v6TLSU5k5U83fHGj9Lel8oKEXM0HqgrMVCjXPDPVICtxF7EQ==
 
+"@types/sortablejs@^1.10.7":
+  version "1.15.1"
+  resolved "https://registry.yarnpkg.com/@types/sortablejs/-/sortablejs-1.15.1.tgz#123abafbe936f754fee5eb5b49009ce1f1075aa5"
+  integrity sha512-g/JwBNToh6oCTAwNS8UGVmjO7NLDKsejVhvE4x1eWiPTC3uCuNsa/TD4ssvX3du+MLiM+SHPNDuijp8y76JzLQ==
+
 "@types/source-list-map@*":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@types/source-list-map/-/source-list-map-0.1.2.tgz#0078836063ffaf17412349bba364087e0ac02ec9"
@@ -3563,6 +3573,15 @@
   dependencies:
     "@vue/compiler-core" "3.2.47"
     "@vue/shared" "3.2.47"
+
+"@vue/compiler-sfc@2.7.14":
+  version "2.7.14"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-sfc/-/compiler-sfc-2.7.14.tgz#3446fd2fbb670d709277fc3ffa88efc5e10284fd"
+  integrity sha512-aNmNHyLPsw+sVvlQFQ2/8sjNuLtK54TC6cuKnVzAY93ks4ZBrvwQSnkkIh7bsbNhum5hJBS00wSDipQ937f5DA==
+  dependencies:
+    "@babel/parser" "^7.18.4"
+    postcss "^8.4.14"
+    source-map "^0.6.1"
 
 "@vue/compiler-sfc@3.2.47", "@vue/compiler-sfc@^3.2.0":
   version "3.2.47"
@@ -5640,6 +5659,11 @@ csstype@^2.6.8:
   version "2.6.21"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.21.tgz#2efb85b7cc55c80017c66a5ad7cbd931fda3a90e"
   integrity sha512-Z1PhmomIfypOpoMjRQB70jfvy/wxT50qW08YXO5lMIJkrdq4yOTR+AW7FqutScmB9NkLwxo+jU+kZLbofZZq/w==
+
+csstype@^3.1.0:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.2.tgz#1d4bf9d572f11c14031f0436e1c10bc1f571f50b"
+  integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -10538,7 +10562,7 @@ postcss@^7.0.14, postcss@^7.0.26, postcss@^7.0.32, postcss@^7.0.36, postcss@^7.0
     picocolors "^0.2.1"
     source-map "^0.6.1"
 
-postcss@^8.1.10, postcss@^8.4.18, postcss@^8.4.21:
+postcss@^8.1.10, postcss@^8.4.14, postcss@^8.4.18, postcss@^8.4.21:
   version "8.4.21"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.21.tgz#c639b719a57efc3187b13a1d765675485f4134f4"
   integrity sha512-tP7u/Sn/dVxK2NnruI4H9BG+x+Wxz6oeZ1cJ8P6G/PZY0IKk4k/63TDsQf2kQq3+qoJeLm2kIBUNlZe3zgb4Zg==
@@ -11850,6 +11874,11 @@ socket.io-parser@~4.2.1:
   dependencies:
     "@socket.io/component-emitter" "~3.1.0"
     debug "~4.3.1"
+
+sortablejs@1.10.2:
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.10.2.tgz#6e40364d913f98b85a14f6678f92b5c1221f5290"
+  integrity sha512-YkPGufevysvfwn5rfdlGyrGjt7/CRHwvRPogD/lC+TnvcN29jDpCifKP+rBqf+LRldfXSTh+0CGLcSg0VIxq3A==
 
 sortablejs@1.14.0:
   version "1.14.0"
@@ -13270,6 +13299,11 @@ void-elements@^3.1.0:
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-3.1.0.tgz#614f7fbf8d801f0bb5f0661f5b2f5785750e4f09"
   integrity sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==
 
+vue-class-component@^7.2.6:
+  version "7.2.6"
+  resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.2.6.tgz#8471e037b8e4762f5a464686e19e5afc708502e4"
+  integrity sha512-+eaQXVrAm/LldalI272PpDe3+i4mPis0ORiMYxF6Ae4hyuCh15W8Idet7wPUEs4N4YptgFHGys4UrgNQOMyO6w==
+
 vue-demi@*:
   version "0.13.11"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.13.11.tgz#7d90369bdae8974d87b1973564ad390182410d99"
@@ -13302,6 +13336,18 @@ vue-docgen-loader@^1.5.0:
     loader-utils "^1.2.3"
     querystring "^0.2.0"
 
+vue-draggable-virtual-scroll-list@^0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/vue-draggable-virtual-scroll-list/-/vue-draggable-virtual-scroll-list-0.0.15.tgz#029a5d84f44f0671bcb20f499ddac168b206a77f"
+  integrity sha512-tKNFVuY2N1cH9pdLJThqgZZsEDBT3J4CoN/9GJ0FlOy7bullOHytqWFM+QSFzsoHx0iGMEORKwgfPZG+00abCg==
+  dependencies:
+    "@types/sortablejs" "^1.10.7"
+    vue "^2.6.14"
+    vue-class-component "^7.2.6"
+    vue-property-decorator "^9.1.2"
+    vue-virtual-scroll-list "^2.3.2"
+    vuedraggable "^2.24.3"
+
 vue-i18n@9.x:
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-9.2.2.tgz#aeb49d9424923c77e0d6441e3f21dafcecd0e666"
@@ -13326,6 +13372,11 @@ vue-loader@16.x, vue-loader@^16.4.1:
     hash-sum "^2.0.0"
     loader-utils "^2.0.0"
 
+vue-property-decorator@^9.1.2:
+  version "9.1.2"
+  resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-9.1.2.tgz#266a2eac61ba6527e2e68a6933cfb98fddab5457"
+  integrity sha512-xYA8MkZynPBGd/w5QFJ2d/NM0z/YeegMqYTphy7NJQXbZcuU6FC6AOdUAcy4SXP+YnkerC6AfH+ldg7PDk9ESQ==
+
 vue-resizable@2.x:
   version "2.1.7"
   resolved "https://registry.yarnpkg.com/vue-resizable/-/vue-resizable-2.1.7.tgz#c29421810a95a8effaaa3f44b04980ab7afa4849"
@@ -13337,6 +13388,11 @@ vue-router@4.x:
   integrity sha512-DYWYwsG6xNPmLq/FmZn8Ip+qrhFEzA14EI12MsMgVxvHFDYvlr4NXpVF5hrRH1wVcDP8fGi5F4rxuJSl8/r+EQ==
   dependencies:
     "@vue/devtools-api" "^6.4.5"
+
+vue-virtual-scroll-list@^2.3.2, vue-virtual-scroll-list@^2.3.4:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/vue-virtual-scroll-list/-/vue-virtual-scroll-list-2.3.4.tgz#0d08c2d26299d8609018b8c04f5e3ca608fbe2d6"
+  integrity sha512-a9bmmIhAdnKcp8NG0C9ZQ+pW9nAOrDv5SHqJfbbEpXxVVERCtbIgGeBnkwrGgmoILBoFz/WANIZgA22G44F0Yw==
 
 vue3-apexcharts@1.x:
   version "1.4.1"
@@ -13373,12 +13429,27 @@ vue@3.x:
     "@vue/server-renderer" "3.2.47"
     "@vue/shared" "3.2.47"
 
+vue@^2.6.14:
+  version "2.7.14"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.7.14.tgz#3743dcd248fd3a34d421ae456b864a0246bafb17"
+  integrity sha512-b2qkFyOM0kwqWFuQmgd4o+uHGU7T+2z3T+WQp8UBjADfEv2n4FEMffzBmCKNP0IGzOEEfYjvtcC62xaSKeQDrQ==
+  dependencies:
+    "@vue/compiler-sfc" "2.7.14"
+    csstype "^3.1.0"
+
 vuedraggable@4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-4.1.0.tgz#edece68adb8a4d9e06accff9dfc9040e66852270"
   integrity sha512-FU5HCWBmsf20GpP3eudURW3WdWTKIbEIQxh9/8GE806hydR9qZqRRxRE3RjqX7PkuLuMQG/A7n3cfj9rCEchww==
   dependencies:
     sortablejs "1.14.0"
+
+vuedraggable@^2.24.3:
+  version "2.24.3"
+  resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-2.24.3.tgz#43c93849b746a24ce503e123d5b259c701ba0d19"
+  integrity sha512-6/HDXi92GzB+Hcs9fC6PAAozK1RLt1ewPTLjK0anTYguXLAeySDmcnqE8IC0xa7shvSzRjQXq3/+dsZ7ETGF3g==
+  dependencies:
+    sortablejs "1.10.2"
 
 vuetify@3.x:
   version "3.1.6"
