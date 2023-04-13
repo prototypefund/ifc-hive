@@ -96,8 +96,10 @@ const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, look
         // more results than requested available
         limitedData = limitedData.splice(params?.offset, params?.limit)
         // add pseudo paging element
-        limitedData.push(`action/${actionId}_child`)
-        setActionItem(`action/${actionId}_child`, {
+        const pseudoId = `action/${actionId}_child`
+        limitedData.push(pseudoId)
+        setActionItem(pseudoId, {
+          _id: pseudoId,
           _type: '_paging',
           _title: 'page for more',
           _actionId: `${actionId}_child`,
