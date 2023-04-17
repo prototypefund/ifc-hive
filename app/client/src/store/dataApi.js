@@ -6,10 +6,10 @@
 import { ref, } from "vue"
 import { forEachObjIndexed } from 'ramda'
 
-const storeDataApi =  (store) => ({
+const storeDataApi = (store) => ({
   // TODO rethink this whole thing as soon as we have the es and api
   queryObjects: {},
-  update: (actionId, docUUID, doc) => {},
+  update: (actionId, docUUID, doc) => { },
   get: (
     actionId,
     query,

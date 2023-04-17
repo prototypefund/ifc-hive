@@ -59,6 +59,7 @@ const setActionItem = (docUUID, content) => {
 const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, lookUp) => {
   if (!params.offset) params.offset = 0
   if (!params.limit) params.limit = 100
+
   let data = JSON.parse(JSON.stringify(lookUp))
   if (query.indexOf('/search') > -1) {
     //es
@@ -90,29 +91,27 @@ const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, look
         return item._type === 'organization'
       }, data)
     }
+    let limitedData = Object.keys(data)
     if (params) {
-      let limitedData = Object.keys(data)
-      if (limitedData.length >= params?.offset + params?.limit) {
-        // more results than requested available
-        limitedData = limitedData.splice(params?.offset, params?.limit)
-        // add pseudo paging element
-        const pseudoId = `action/${actionId}_child`
-        limitedData.push(pseudoId)
-        setActionItem(pseudoId, {
-          _id: pseudoId,
-          _type: '_paging',
-          _title: 'page for more',
-          _actionId: `${actionId}_child`,
-          _params: {},
-          _query: query
-        })
-        return limitedData
-      }
-      if (limitedData.length <= params?.offset + params?.limit) {
-        return limitedData
+      if (!params.endless) {
+        if (limitedData.length >= params.offset + params.limit) {
+          // more results than requested available
+          limitedData = limitedData.splice(params?.offset, params?.limit)
+          // add pseudo paging element
+          const pseudoId = `action/${actionId}_child`
+          limitedData.push(pseudoId)
+          setActionItem(pseudoId, {
+            _id: pseudoId,
+            _type: '_paging',
+            _title: 'page for more',
+            _actionId: `${actionId}_child`,
+            _params: {},
+            _query: query
+          })
+        }
       }
     }
-    return data
+    return limitedData
   }
 }
 

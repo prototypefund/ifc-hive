@@ -4,7 +4,7 @@
 import { searchHandler } from '@lib/dataHelper.js'
 
 /*
- * execute queries
+ * execute queries
  */
 function queriesExecute(state, action) {
   const { dataLookup } = action.meta
@@ -15,16 +15,12 @@ function queriesExecute(state, action) {
   if (action.actionId) {
     const query = JSON.parse(JSON.stringify(queries[action.actionId]))
     items = searchHandler(action.actionId, query.query, query.params || false, dataLookup)
-    // remember the former state of uuids for later evaluation in dataAPI
-    query.old_uuids = query.uuids || []
     query.uuids = items
     queries[action.actionId] = query
     return queries
   } else {
     Object.values(queries).forEach(query => {
       items = searchHandler(action.actionId, query.query, query.params || false, dataLookup)
-      // remember the former state of uuids for later evaluation in dataAPI
-      query.old_uuids = query.uuids || []
       query.uuids = items
     })
   }

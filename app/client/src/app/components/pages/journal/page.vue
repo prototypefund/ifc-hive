@@ -10,7 +10,7 @@
     <QuickListHandler uuid="quickList" :docUUID="uuidv4()" dataTitle="New entry" :props="{ mode: 'edit' }" type="tag">
       <v-btn>New Tag</v-btn>
     </QuickListHandler>
-    <Grid></Grid>
+    <Grid />
   </v-container>
 </template>
 

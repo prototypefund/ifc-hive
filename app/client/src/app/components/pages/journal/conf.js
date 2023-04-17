@@ -9,7 +9,8 @@ export default {
       column: 12,
       widget: {
         uuid: "journalWidget",
-        name: "journal"
+        name: "journal",
+        face: "virtualScroll"
       }
     }
   ],

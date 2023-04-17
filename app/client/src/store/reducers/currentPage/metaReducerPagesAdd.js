@@ -19,9 +19,11 @@ const metaReducerPagesAdd = ($eventbus) => (reducer) => {
             widgets.push({
               uuid: widget.uuid,
               name: widget.name,
+              face: widget.face,
               props: widget.props,
               ...widget.props
             })
+
           }
         }
         if (page.slots) {

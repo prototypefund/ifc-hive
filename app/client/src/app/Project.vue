@@ -354,14 +354,6 @@ export default {
   text-decoration: none;
 }
 
-#app .appBarRel {
-  position: absolute !important;
-}
-
-#app .appBarRel.quickListWrapper {
-  position: absolute !important;
-}
-
 #app .v-toolbar__content>.v-btn:last-child {
   margin-inline-end: 0;
 }

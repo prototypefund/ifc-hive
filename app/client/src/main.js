@@ -1,23 +1,31 @@
 import { createApp, h } from 'vue'
-import App from './Index.vue'
+
 import Markdown from 'vue3-markdown-it'
-import getEnvVariable from './lib/getEnvVariable'
-import createStore from './store/index.js'
-import i18n from './setup/i18n.js'
-import vuetify from './setup/vuetify.js'
-import createCustomRouter from './router/index.js'
-import filters from './setup/filters.js'
-import capacitor from './setup/capacitor'
 import VueApexCharts from "vue3-apexcharts";
-import { createSocket } from './setup/socket.js'
+
+import VueVirtualScroller from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+
 import log from './lib/logger.js'
 import { httpClient, configClient, apiHealthcheck } from './lib/httpClient.js'
 import EventEmitter from './lib/eventEmitter.js'
 import eventMap from './lib/eventMap.js'
+import getEnvVariable from './lib/getEnvVariable'
+import createStore from './store/index.js'
+
+import i18n from './setup/i18n.js'
+import vuetify from './setup/vuetify.js'
+import filters from './setup/filters.js'
+import capacitor from './setup/capacitor'
+import { createSocket } from './setup/socket.js'
 import { registerApiHandlerEvents } from './setup/apiClient'
 import { registerSocketClient } from './setup/socketClient'
 import { registerSocketEvents } from './setup/socketEvents'
 import sessionHandler from './setup/sessionHandler'
+import createCustomRouter from './router/index.js'
+
+import App from './Index.vue'
+
 /*
  * get env variables to configure the app
  */
@@ -59,6 +67,7 @@ try {
   });
 
   /* register plugins */
+  app.use(VueVirtualScroller)
   app.use(i18n)
   app.use(vuetify)
   app.use(capacitor)

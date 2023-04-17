@@ -187,7 +187,8 @@ export default {
           widget: {
             uuid: 'journalWidget',
             version: '1',
-            name: 'journal'
+            name: 'journal',
+            face: 'virtualScroll',
           }
         }
       ],
