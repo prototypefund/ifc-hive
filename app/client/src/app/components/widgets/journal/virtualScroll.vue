@@ -1,7 +1,7 @@
 <template>
   <v-container v-if="state && props.uuid" data-test-container="widgets/journal/virtualScroll"
     :data-test-container-uuid="props.uuid">
-    <v-timeline v-if="data.vScrollItems.length > 0">
+    <v-timeline v-if="data?.vScrollItems?.length > 0">
       <DynamicScroller page-mode class="scroller" :items="data.vScrollItems" :min-item-size="150" key-field="docUUID">
         <template v-slot="{ item, index, active }">
           <DynamicScrollerItem :item="item" :active="active" :data-index="index">
@@ -43,7 +43,8 @@ const props = defineProps({
   },
 });
 const data = $store.$data.get(props.actionId + "_meta/tickets", "meta/tickets", { endless: true });
-onMounted(() => { });
+onMounted(() => {
+});
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
   data.value.unsubscribe();

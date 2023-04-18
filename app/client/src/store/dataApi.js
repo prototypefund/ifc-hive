@@ -22,9 +22,7 @@ const storeDataApi = (store) => ({
     const queryObj = ref({})
     // check if we have a query fullfilling the needs of the one requested
     // here. If not we will update the one with this actionId
-    if (!store.$data.queryObjects[actionId]
-      || (store.$data.queryObjects[actionId].value.target !== target
-        || store.$data.queryObjects[actionId].value.params !== params)) {
+    if (!store.$data.queryObjects[actionId]) {
       store.dispatch({
         type: "queries/add",
         payload: {

@@ -9,20 +9,28 @@
               <board-item :widgetUUID="props.uuid" boardId="open" :generic="true"
                 :boardItem="{ _source: { _title: 'open', color: 'white' } }" :width=300>
                 <template v-slot:tickets="{ boardId }">
-                  <pre>
-                {{ boards.generics.open }}
-
-                </pre>
+                  <DynamicScroller page-mode class="scroller" :items="boards.generics.open.query.vScrollItems"
+                    :min-item-size="50" key-field="docUUID">
+                    <template v-slot="{ item, index, active }">
+                      <DynamicScrollerItem :item="item" :active="active" :data-index="index">
+                        <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="item.docUUID" />
+                      </DynamicScrollerItem>
+                    </template>
+                  </DynamicScroller>
                 </template>
               </board-item>
             </td>
             <td v-for="board in boards.custom" :key="board.tagUUID">
               <board-item :widgetUUID="props.uuid" :boardId="board.tagUUID" :generic="false" :width=300>
                 <template v-slot:tickets="{ boardId }">
-                  <pre>
-                {{ board }}
-
-                </pre>
+                  <DynamicScroller page-mode class="scroller" :items="board.query.vScrollItems" :min-item-size="50"
+                    key-field="docUUID">
+                    <template v-slot="{ item, index, active }">
+                      <DynamicScrollerItem :item="item" :active="active" :data-index="index">
+                        <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="item.docUUID" />
+                      </DynamicScrollerItem>
+                    </template>
+                  </DynamicScroller>
                 </template>
               </board-item>
 
@@ -31,10 +39,14 @@
               <board-item :widgetUUID="props.uuid" boardId="closed" :generic="true"
                 :boardItem="{ _source: { _title: 'closed', color: 'black' } }" :width=300>
                 <template v-slot:tickets="{ boardId }">
-                  <pre>
-                {{ boards.generics.closed }}
-
-                </pre>
+                  <DynamicScroller page-mode class="scroller" :items="boards.generics.closed.query.vScrollItems"
+                    :min-item-size="50" key-field="docUUID">
+                    <template v-slot="{ item, index, active }">
+                      <DynamicScrollerItem :item="item" :active="active" :data-index="index">
+                        <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="item.docUUID" />
+                      </DynamicScrollerItem>
+                    </template>
+                  </DynamicScroller>
                 </template>
               </board-item>
             </td>
@@ -51,6 +63,8 @@ import { inject, ref, onMounted, computed, onUnmounted, shallowRef } from "vue";
 import { clone } from "ramda"
 import boardItem from "./items/board.vue";
 import ticketItem from "./items/ticket.vue";
+// just qol object to make the unsubscribing in unmount easier
+const querySubscriber = {}
 const $store = inject("$store");
 const state = ref({});
 const boards = ref({
@@ -82,7 +96,7 @@ const props = defineProps({
 // METHODS
 const createBoardByTagQuery = (_queryObj, searchTag, tagsExclude) => {
   const queryObj = clone(_queryObj)
-  queryObj.query = {
+  queryObj.params.query = {
     must: {
       term: {
         tag: searchTag
@@ -98,7 +112,7 @@ const createBoardByTagQuery = (_queryObj, searchTag, tagsExclude) => {
 }
 const createBoardByStateQuery = (_queryObj, stateAttribute, stateValue, tagsExclude) => {
   const queryObj = clone(_queryObj)
-  queryObj.query = {
+  queryObj.params.query = {
     must_not: {
       term: {
         tags: tagsExclude
@@ -106,7 +120,7 @@ const createBoardByStateQuery = (_queryObj, stateAttribute, stateValue, tagsExcl
     },
     must: {}
   }
-  queryObj.query.must[stateAttribute] = stateValue
+  queryObj.params.query.must[stateAttribute] = stateValue
   return queryObj
 }
 const setupCustomBoards = (customBoards, genericBoards) => {
@@ -116,9 +130,15 @@ const setupCustomBoards = (customBoards, genericBoards) => {
     const board = clone(_board)
     // create a list of all the other custom board tagUUIDS which we want to exclude from the result for this specific ticket board
     const excludeTags = customBoards.filter(otherBoard => otherBoard.tagUUID != board.tagUUID).map(item => item.tagUUID)
-    boards[board.tagUUID] = board
+
     // create a proper queryObject for our search term and our exclude list
-    boards[board.tagUUID].query = createBoardByTagQuery(boards[board.tagUUID].query, board.tagUUID, excludeTags)
+    board.query = createBoardByTagQuery(board.query, board.tagUUID, excludeTags)
+    board.query = querySubscriber[board.tagUUID] = $store.$data.get(
+      props.actionId + "_" + board.tagUUID,
+      board.query.target,
+      board.query.params
+    )
+    boards[board.tagUUID] = board
   })
   return boards
 }
@@ -126,7 +146,17 @@ const setupGenericBoards = (_genericBoards, customBoards) => {
   const genericBoards = clone(_genericBoards)
   const excludeTags = Object.keys(customBoards)
   genericBoards.open.query = createBoardByStateQuery(genericBoards.open.query, 'closed', false, excludeTags)
+  genericBoards.open.query = querySubscriber.open = $store.$data.get(
+    props.actionId + "_open",
+    genericBoards.open.query.target,
+    genericBoards.open.query.params
+  )
   genericBoards.closed.query = createBoardByStateQuery(genericBoards.closed.query, 'closed', true, excludeTags)
+  genericBoards.closed.query = querySubscriber.closed = $store.$data.get(
+    props.actionId + "_closed",
+    genericBoards.closed.query.target,
+    genericBoards.closed.query.params
+  )
   return genericBoards
 }
 
@@ -135,13 +165,6 @@ const setupBoards = () => {
   boards.value.custom = setupCustomBoards(state.value.filter.custom || [], state.value.filter.generics)
   boards.value.generics = setupGenericBoards(state.value.filter.generics, boards.value.custom || [])
 }
-
-
-
-
-
-
-
 
 const stateSubscriber$ = $store
   .select((state) => state.widgets[props.uuid])
@@ -153,7 +176,11 @@ const stateSubscriber$ = $store
 onMounted(() => { });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
-
+  // unsubscribe from all query listeners 
+  Object.keys(querySubscriber).forEach(subscriberKey => {
+    const subscriber$ = querySubscriber[subscriberKey].value
+    subscriber$.unsubscribe()
+  })
 });
 
 </script>
