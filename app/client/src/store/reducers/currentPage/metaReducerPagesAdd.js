@@ -20,7 +20,6 @@ const metaReducerPagesAdd = ($eventbus) => (reducer) => {
               uuid: widget.uuid,
               name: widget.name,
               face: widget.face,
-              props: widget.props,
               ...widget.props
             })
 

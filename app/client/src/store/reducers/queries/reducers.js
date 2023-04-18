@@ -14,13 +14,13 @@ function queriesExecute(state, action) {
   const queries = JSON.parse(JSON.stringify(state))
   if (action.actionId) {
     const query = JSON.parse(JSON.stringify(queries[action.actionId]))
-    items = searchHandler(action.actionId, query.query, query.params || false, dataLookup)
+    items = searchHandler(action.actionId, query.target, query.params || false, dataLookup)
     query.uuids = items
     queries[action.actionId] = query
     return queries
   } else {
     Object.values(queries).forEach(query => {
-      items = searchHandler(action.actionId, query.query, query.params || false, dataLookup)
+      items = searchHandler(action.actionId, query.target, query.params || false, dataLookup)
       query.uuids = items
     })
   }
@@ -38,7 +38,7 @@ function queriesAdd(state, action) {
     if (!params.offset) params.offset = 0
     if (!params.limit) params.limit = 100
     queries[action.payload.actionId] = {
-      query: action.payload.query,
+      target: action.payload.target,
       params: action.payload.params || false
     }
     // execute added query

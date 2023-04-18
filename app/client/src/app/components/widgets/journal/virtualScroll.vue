@@ -1,8 +1,8 @@
 <template>
-  <v-container v-if="state && props.uuid" data-test-container="widgets/journal/default"
+  <v-container v-if="state && props.uuid" data-test-container="widgets/journal/virtualScroll"
     :data-test-container-uuid="props.uuid">
-    <v-timeline v-if="data.uuids.length > 0">
-      <DynamicScroller page-mode class="scroller" :items="vScrollItems" :min-item-size="150" key-field="docUUID">
+    <v-timeline v-if="data.vScrollItems.length > 0">
+      <DynamicScroller page-mode class="scroller" :items="data.vScrollItems" :min-item-size="150" key-field="docUUID">
         <template v-slot="{ item, index, active }">
           <DynamicScrollerItem :item="item" :active="active" :data-index="index">
             <v-timeline-item max-width="600px">
@@ -16,21 +16,11 @@
 </template>
 
 <script setup>
-import { inject, ref, onMounted, computed, onUnmounted } from "vue";
+import { inject, ref, onMounted, onUnmounted } from "vue";
 import ticketCardItem from "@t/cards/ticket.vue";
 
 const $store = inject("$store");
 const state = ref({});
-const vScrollItems = computed(() => {
-  const dataItems = []
-  data.value.uuids.forEach(docUUID => {
-    dataItems.push({
-      docUUID
-    })
-  })
-
-  return dataItems
-});
 const stateSubscriber$ = $store
   .select((state) => state.widgets[props.uuid])
   .subscribe((val) => {

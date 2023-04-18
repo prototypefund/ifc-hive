@@ -1,0 +1,181 @@
+<template>
+  <v-container v-if="state && props.uuid" fluid pa-0 data-test-container="widgets/ticketboard/virtualScroll"
+    :data-test-container-uuid="props.uuid">
+    <div class="ticketContainer">
+      <table class="ticketTable" v-if="boards.generics.open">
+        <tbody>
+          <tr valign="top">
+            <td v-if="boards.generics.open">
+              <board-item :widgetUUID="props.uuid" boardId="open" :generic="true"
+                :boardItem="{ _source: { _title: 'open', color: 'white' } }" :width=300>
+                <template v-slot:tickets="{ boardId }">
+                  <pre>
+                {{ boards.generics.open }}
+
+                </pre>
+                </template>
+              </board-item>
+            </td>
+            <td v-for="board in boards.custom" :key="board.tagUUID">
+              <board-item :widgetUUID="props.uuid" :boardId="board.tagUUID" :generic="false" :width=300>
+                <template v-slot:tickets="{ boardId }">
+                  <pre>
+                {{ board }}
+
+                </pre>
+                </template>
+              </board-item>
+
+            </td>
+            <td v-if="boards.generics.closed">
+              <board-item :widgetUUID="props.uuid" boardId="closed" :generic="true"
+                :boardItem="{ _source: { _title: 'closed', color: 'black' } }" :width=300>
+                <template v-slot:tickets="{ boardId }">
+                  <pre>
+                {{ boards.generics.closed }}
+
+                </pre>
+                </template>
+              </board-item>
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+    </div>
+  </v-container>
+</template>
+<script setup>
+import { inject, ref, onMounted, computed, onUnmounted, shallowRef } from "vue";
+import { clone } from "ramda"
+import boardItem from "./items/board.vue";
+import ticketItem from "./items/ticket.vue";
+const $store = inject("$store");
+const state = ref({});
+const boards = ref({
+  generics: {
+    open: false,
+    closed: false,
+  },
+  custom: {},
+});
+const items = ref({});
+
+const props = defineProps({
+  props: {
+    type: Object,
+    default: () => ({}),
+  },
+  uuid: {
+    type: String,
+    required: true,
+  },
+  actionId: {
+    type: String,
+    default(rawProps) {
+      return rawProps.uuid + "_ticketboard";
+    },
+  },
+});
+
+// METHODS
+const createBoardByTagQuery = (_queryObj, searchTag, tagsExclude) => {
+  const queryObj = clone(_queryObj)
+  queryObj.query = {
+    must: {
+      term: {
+        tag: searchTag
+      }
+    },
+    must_not: {
+      term: {
+        tags: tagsExclude
+      }
+    }
+  }
+  return queryObj
+}
+const createBoardByStateQuery = (_queryObj, stateAttribute, stateValue, tagsExclude) => {
+  const queryObj = clone(_queryObj)
+  queryObj.query = {
+    must_not: {
+      term: {
+        tags: tagsExclude
+      }
+    },
+    must: {}
+  }
+  queryObj.query.must[stateAttribute] = stateValue
+  return queryObj
+}
+const setupCustomBoards = (customBoards, genericBoards) => {
+  if (customBoards.length === 0) return []
+  const boards = {}
+  customBoards.forEach(_board => {
+    const board = clone(_board)
+    // create a list of all the other custom board tagUUIDS which we want to exclude from the result for this specific ticket board
+    const excludeTags = customBoards.filter(otherBoard => otherBoard.tagUUID != board.tagUUID).map(item => item.tagUUID)
+    boards[board.tagUUID] = board
+    // create a proper queryObject for our search term and our exclude list
+    boards[board.tagUUID].query = createBoardByTagQuery(boards[board.tagUUID].query, board.tagUUID, excludeTags)
+  })
+  return boards
+}
+const setupGenericBoards = (_genericBoards, customBoards) => {
+  const genericBoards = clone(_genericBoards)
+  const excludeTags = Object.keys(customBoards)
+  genericBoards.open.query = createBoardByStateQuery(genericBoards.open.query, 'closed', false, excludeTags)
+  genericBoards.closed.query = createBoardByStateQuery(genericBoards.closed.query, 'closed', true, excludeTags)
+  return genericBoards
+}
+
+
+const setupBoards = () => {
+  boards.value.custom = setupCustomBoards(state.value.filter.custom || [], state.value.filter.generics)
+  boards.value.generics = setupGenericBoards(state.value.filter.generics, boards.value.custom || [])
+}
+
+
+
+
+
+
+
+
+const stateSubscriber$ = $store
+  .select((state) => state.widgets[props.uuid])
+  .subscribe((val) => {
+    state.value = val;
+    setupBoards()
+  });
+
+onMounted(() => { });
+onUnmounted(() => {
+  stateSubscriber$.unsubscribe();
+
+});
+
+</script>
+<style lang="css" scoped>
+.ticketContainer {
+  overflow: auto;
+}
+
+.list-group td {
+  padding: 0 10px;
+}
+
+.ticketTable {
+  max-width: 20000px !important;
+}
+
+.ticketTable td {
+  height: 1px;
+  min-height: 1px;
+}
+
+.ticketTable .v-table__wrapper {
+  overflow: hidden !important;
+}
+</style>

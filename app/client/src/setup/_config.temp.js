@@ -127,41 +127,56 @@ export default {
         uuid: 'ticketBoardWidget',
         version: '1',
         name: 'ticketboard',
-        face: 'default',
+        face: 'virtualScroll',
         props: {
           title: 'Ticketboard',
           filter: {
             excluded: [],
             custom: [
               {
-                identifier: [
-                  'tags:tag-todo'
-                ],
-                excluded: []
+                tagUUID: 'tag-todo',
+                query: {
+                  target: 'meta/tickets',
+                  params: {
+                    endless: true,
+                  }
+                }
               },
               {
-                identifier: [
-                  'tags:tag-doing'
-                ],
-                excluded: []
+                tagUUID: 'tag-doing',
+                query: {
+                  target: 'meta/tickets',
+                  params: {
+                    endless: true,
+                  }
+                }
               },
               {
-                identifier: [
-                  'tags:tag-test'
-                ],
-                excluded: []
+                tagUUID: 'tag-test',
+                query: {
+                  target: 'meta/tickets',
+                  params: {
+                    endless: true,
+                  }
+                }
               },
               {
-                identifier: [
-                  'tags:tag-qa'
-                ],
-                excluded: []
+                tagUUID: 'tag-qa',
+                query: {
+                  target: 'meta/tickets',
+                  params: {
+                    endless: true,
+                  }
+                }
               },
               {
-                identifier: [
-                  'tags:tag-done'
-                ],
-                excluded: []
+                tagUUID: 'tag-done',
+                query: {
+                  target: 'meta/tickets',
+                  params: {
+                    endless: true,
+                  }
+                }
               }
             ]
           }

@@ -6,27 +6,7 @@
  * navigate around performance issues of vue when dealing with large amounts of
  * data.
  */
-import { filter, forEachObjIndexed } from 'ramda'
-/*
- * splitIdentifier
- * @param { array } identifier, an array with identifiers i.e prop:value -> tags:my-tag-uuid
- *
- * @return { object } an object containing the properties as keys and arrays for their values
- */
-const splitIdentifier = (identifier) => {
-  let identifierKeyVal = false
-  let attributes = {}
-  identifier.forEach(identifier => {
-    identifierKeyVal = identifier.split(':')
-    if (!attributes[identifierKeyVal[0]]) {
-      attributes[identifierKeyVal[0]] = []
-    }
-    attributes[identifierKeyVal[0]].push(identifierKeyVal[1])
-  })
-
-  return attributes
-}
-
+import { filter } from 'ramda'
 /* is true or false */
 const isTrueFalse = (value) => {
   return ((value === 'true' || value === true) || (value === 'false' || value === false));
@@ -116,7 +96,6 @@ const searchHandler = (actionId, query, params = { offset: 0, limit: 100 }, look
 }
 
 export {
-  splitIdentifier,
   isTrueFalse,
   isTrue,
   isFalse,

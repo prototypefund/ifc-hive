@@ -17,7 +17,7 @@
                       name: 'ticketSort',
                         pull: ['ticketSort'],
                           put: ['ticketSort'],
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }">
                     <template #item="{ element }">
                       <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="element" />
                     </template>
@@ -31,7 +31,7 @@
                 name: 'ticketBoardSort',
                   pull: ['ticketBoardSort'],
                     put: ['ticketBoardSort'],
-                                                                                                                                                                                                                                                                                                                                  }"
+                                                                                                                                                                                                                                                                                                                                                }"
               @end="dragging = false">
               <template #item="{ element }">
                 <td>
@@ -44,7 +44,7 @@
                           name: 'ticketSort',
                             pull: ['ticketSort'],
                               put: ['ticketSort'],
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }">
                         <template #item="{ element }">
                           <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="element" />
                         </template>
@@ -66,7 +66,7 @@
                       name: 'ticketSort',
                         pull: ['ticketSort'],
                           put: ['ticketSort'],
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }">
                     <template #item="{ element }">
                       <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="element" />
                     </template>
@@ -297,6 +297,7 @@ const createBoardLists = (filter) => {
 const stateSubscriber$ = $store
   .select((state) => state.widgets[props.uuid])
   .subscribe((val) => {
+    debugger
     if (val.filter && val.filter !== state.value.value) {
       // Whenever our filters change we will simply rebuild the whole board context as it must be a grave data update from the serverside or the user widget config editor
       getRelevantData(val.filter);

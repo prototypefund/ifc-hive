@@ -3,13 +3,21 @@ export default {
   filter: {
     generics: {
       open: {
-        identifier: ['closed:false'],
-        excluded: [],
+        query: {
+          target: 'meta/tickets',
+          params: {
+            endless: true,
+          }
+        },
         title: 'open',
       },
       closed: {
-        identifier: ['closed:true'],
-        excluded: [],
+        query: {
+          target: 'meta/tickets',
+          params: {
+            endless: true,
+          }
+        },
         title: 'closed',
       },
     },

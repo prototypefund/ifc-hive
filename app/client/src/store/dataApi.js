@@ -12,24 +12,24 @@ const storeDataApi = (store) => ({
   update: (actionId, docUUID, doc) => { },
   get: (
     actionId,
-    query,
+    target,
     params = { offset: 0, limit: 100 },
     updateHook = false,
     hookCondition = 'all'
   ) => {
 
     // create a deep ref object which will contain the query data as well as the items
-    const queryObj = ref({ data: {} })
+    const queryObj = ref({})
     // check if we have a query fullfilling the needs of the one requested
     // here. If not we will update the one with this actionId
     if (!store.$data.queryObjects[actionId]
-      || (store.$data.queryObjects[actionId].value.query !== query
+      || (store.$data.queryObjects[actionId].value.target !== target
         || store.$data.queryObjects[actionId].value.params !== params)) {
       store.dispatch({
         type: "queries/add",
         payload: {
           actionId,
-          query,
+          target,
           params
         },
       })
@@ -39,15 +39,23 @@ const storeDataApi = (store) => ({
     const subscriber$ = store.select((state) => state.queries[actionId])
       .subscribe((val) => {
         if (!val) return
+        if (val?.uuids?.length > 0 && val.params?.endless) {
+          // lets always create a vScrollItems attribute to our query return to virtualScroll over them
+          const dataItems = []
+          val.uuids.forEach(docUUID => {
+            dataItems.push({
+              docUUID
+            })
+          })
+          queryObj.value.vScrollItems = dataItems
+        }
         if (updateHook) {
           if (hookCondition === 'all' || !store.$data.queryObjects[actionId]) {
             // if we fire for the first time or we want to fire for all update events do it now
             updateHook(val, queryObj.value)
-
           } else if (hookCondition === 'count' && store.$data.queryObjects[actionId]) {
             // check if the uuid counts in the old result match it count of the new result. If not, fire hook
-            if ((val.uuids && store.$data.queryObjects[actionId].value.uuids)
-              && val.uuids.length !== store.$data.queryObjects[actionId].value.uuids.length) {
+            if (val.uuids.length !== queryObj.value.uuids.length) {
               updateHook(val, queryObj.value)
             }
           }

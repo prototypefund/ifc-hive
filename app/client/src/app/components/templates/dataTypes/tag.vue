@@ -196,9 +196,7 @@ const dataItemSubscriber$ = $store
       _source: getSource(val._id)
     }
     if (item.value != fullDocument) {
-      if (user.value !== fullDocument) {
-        item.value = fullDocument || {};
-      }
+      item.value = fullDocument || {};
     }
   });
 onMounted(() => { editMode.value = props.mode });
