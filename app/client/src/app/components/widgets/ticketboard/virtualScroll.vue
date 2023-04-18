@@ -13,7 +13,8 @@
                     :min-item-size="50" key-field="docUUID">
                     <template v-slot="{ item, index, active }">
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index">
-                        <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="item.docUUID" />
+                        <ticket-item :key="boardId_ + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
+                          :ticketItemId="item.docUUID" />
                       </DynamicScrollerItem>
                     </template>
                   </DynamicScroller>
@@ -27,7 +28,8 @@
                     key-field="docUUID">
                     <template v-slot="{ item, index, active }">
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index">
-                        <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="item.docUUID" />
+                        <ticket-item :key="boardId_ + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
+                          :ticketItemId="item.docUUID" />
                       </DynamicScrollerItem>
                     </template>
                   </DynamicScroller>
@@ -43,7 +45,8 @@
                     :min-item-size="50" key-field="docUUID">
                     <template v-slot="{ item, index, active }">
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index">
-                        <ticket-item :widgetUUID="props.uuid" :boardId="boardId" :ticketItemId="item.docUUID" />
+                        <ticket-item :key="boardId_ + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
+                          :ticketItemId="item.docUUID" />
                       </DynamicScrollerItem>
                     </template>
                   </DynamicScroller>
@@ -204,5 +207,4 @@ onUnmounted(() => {
 
 .ticketTable .v-table__wrapper {
   overflow: hidden !important;
-}
-</style>
+}</style>
