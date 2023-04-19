@@ -7,10 +7,10 @@ import { searchHandler } from '@lib/dataHelper.js'
  * execute queries
  */
 function queriesExecute(state, action) {
+
   const { dataLookup } = action.meta
   let items
   if (Object.keys(state).length === 0) return state
-
   const queries = JSON.parse(JSON.stringify(state))
   if (action.actionId) {
     const query = JSON.parse(JSON.stringify(queries[action.actionId]))

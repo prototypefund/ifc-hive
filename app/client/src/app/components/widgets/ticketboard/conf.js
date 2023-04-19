@@ -1,22 +1,22 @@
 export default {
   title: 'Boilerplate default config',
   filter: {
+    query: {
+      target: 'meta/tickets',
+      params: {
+        endless: true
+      }
+    },
     generics: {
       open: {
         query: {
-          target: 'meta/tickets',
-          params: {
-            endless: true,
-          }
+          closed: false
         },
         title: 'open',
       },
       closed: {
         query: {
-          target: 'meta/tickets',
-          params: {
-            endless: true,
-          }
+          closed: true
         },
         title: 'closed',
       },

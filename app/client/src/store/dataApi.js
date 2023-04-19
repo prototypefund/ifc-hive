@@ -17,7 +17,6 @@ const storeDataApi = (store) => ({
     updateHook = false,
     hookCondition = 'all'
   ) => {
-
     // create a deep ref object which will contain the query data as well as the items
     const queryObj = ref({})
     // check if we have a query fullfilling the needs of the one requested

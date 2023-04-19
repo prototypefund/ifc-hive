@@ -4,15 +4,14 @@
     <div class="ticketContainer">
       <table class="ticketTable" v-if="boards.generics.open">
         <tbody>
-
           <tr valign="top">
             <td v-if="boards.generics.open">
               <board-item :widgetUUID="props.uuid" boardId="open" :generic="true"
                 :boardItem="{ _source: { _title: 'open', color: 'white' } }" :width=boardWidth>
                 <template v-slot:tickets="{ boardId }">
-                  <DynamicScroller page-mode class="scroller" :items="items.query.vScrollItems"
+                  <DynamicScroller page-mode class="scroller" :items="boards.generics.open.query.vScrollItems"
                     :min-item-size="ticketHeight" key-field="docUUID"
-                    v-draggable="[items.query.vScrollItems, draggableDirectiveConf]">
+                    v-draggable="[boards.generics.open.query.vScrollItems, draggableDirectiveConf]">
                     <template v-slot="{ item, index, active }">
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
                         <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
@@ -28,9 +27,9 @@
               <board-item :widgetUUID="props.uuid" :boardId="board.tagUUID" :generic="false" :width=boardWidth>
                 <template v-slot:tickets="{ boardId }">
 
-                  <DynamicScroller page-mode class="scroller" :items="items.query.vScrollItems"
+                  <DynamicScroller page-mode class="scroller" :items="board.query.vScrollItems"
                     :min-item-size="ticketHeight" key-field="docUUID"
-                    v-draggable="[items.query.vScrollItems, draggableDirectiveConf]">
+                    v-draggable="[board.query.vScrollItems, draggableDirectiveConf]">
                     <template v-slot="{ item, index, active }">
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
                         <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
@@ -46,9 +45,9 @@
               <board-item :widgetUUID="props.uuid" boardId="closed" :generic="true"
                 :boardItem="{ _source: { _title: 'closed', color: 'black' } }" :width=boardWidth>
                 <template v-slot:tickets="{ boardId }">
-                  <DynamicScroller page-mode class="scroller" :items="items.query.vScrollItems"
+                  <DynamicScroller page-mode class="scroller" :items="boards.generics.closed.query.vScrollItems"
                     :min-item-size="ticketHeight" key-field="docUUID"
-                    v-draggable="[items.query.vScrollItems, draggableDirectiveConf]">
+                    v-draggable="[boards.generics.closed.query.vScrollItems, draggableDirectiveConf]">
                     <template v-slot="{ item, index, active }">
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
                         <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
@@ -78,7 +77,6 @@ const boardWidth = 300;
 const ticketHeight = 350;
 const $store = inject("$store");
 const state = ref({});
-
 const boards = ref({
   generics: {
     open: false,
@@ -119,32 +117,34 @@ const props = defineProps({
 });
 
 // METHODS
-const getRelevantData = _query => {
-  const query = clone(_query)
-  return $store.$data.get(
-    props.actionId + '_allRelevantTickets',
-    query.target,
-    query.params
-  )
-}
-const setupTicketItemQuery = (_query, customBoards, genericBoards, excluded) => {
-  const includeTags = Object.keys(customBoards)
-  const query = clone(_query)
-  query.params.query = {
+const createBoardByTagQuery = (_queryObj, searchTag, tagsExclude) => {
+  const queryObj = clone(_queryObj)
+  queryObj.params.query = {
     must: {
       term: {
-        tags: includeTags
+        tag: searchTag
       }
-    }
-  }
-  if (excluded.length > 0) {
-    query.params.query.must_not = {
+    },
+    must_not: {
       term: {
-        tags: clone(excluded)
+        tags: tagsExclude
       }
     }
   }
-  return query
+  return queryObj
+}
+const createBoardByStateQuery = (_queryObj, stateAttribute, stateValue, tagsExclude) => {
+  const queryObj = clone(_queryObj)
+  queryObj.params.query = {
+    must_not: {
+      term: {
+        tags: tagsExclude
+      }
+    },
+    must: {}
+  }
+  queryObj.params.query.must[stateAttribute] = stateValue
+  return queryObj
 }
 const setupCustomBoards = (customBoards, genericBoards) => {
   if (customBoards.length === 0) return []
@@ -153,7 +153,14 @@ const setupCustomBoards = (customBoards, genericBoards) => {
     const board = clone(_board)
     // create a list of all the other custom board tagUUIDS which we want to exclude from the result for this specific ticket board
     const excludeTags = customBoards.filter(otherBoard => otherBoard.tagUUID != board.tagUUID).map(item => item.tagUUID)
-    board.query.exclude = excludeTags
+
+    // create a proper queryObject for our search term and our exclude list
+    board.query = createBoardByTagQuery(board.query, board.tagUUID, excludeTags)
+    board.query = querySubscriber[board.tagUUID] = $store.$data.get(
+      props.actionId + "_" + board.tagUUID,
+      board.query.target,
+      board.query.params
+    )
     boards[board.tagUUID] = board
   })
   return boards
@@ -161,6 +168,18 @@ const setupCustomBoards = (customBoards, genericBoards) => {
 const setupGenericBoards = (_genericBoards, customBoards) => {
   const genericBoards = clone(_genericBoards)
   const excludeTags = Object.keys(customBoards)
+  genericBoards.open.query = createBoardByStateQuery(genericBoards.open.query, 'closed', false, excludeTags)
+  genericBoards.open.query = querySubscriber.open = $store.$data.get(
+    props.actionId + "_open",
+    genericBoards.open.query.target,
+    genericBoards.open.query.params
+  )
+  genericBoards.closed.query = createBoardByStateQuery(genericBoards.closed.query, 'closed', true, excludeTags)
+  genericBoards.closed.query = querySubscriber.closed = $store.$data.get(
+    props.actionId + "_closed",
+    genericBoards.closed.query.target,
+    genericBoards.closed.query.params
+  )
   return genericBoards
 }
 
@@ -168,8 +187,6 @@ const setupGenericBoards = (_genericBoards, customBoards) => {
 const setupBoards = () => {
   boards.value.custom = setupCustomBoards(state.value.filter.custom || [], state.value.filter.generics)
   boards.value.generics = setupGenericBoards(state.value.filter.generics, boards.value.custom || [])
-  items.value.query = setupTicketItemQuery(state.value.filter.query, boards.value.custom, boards.value.generics, state.value.filter.excluded)
-  items.value.query = querySubscriber.current = getRelevantData(items.value.query)
 }
 
 const stateSubscriber$ = $store

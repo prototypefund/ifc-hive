@@ -12,7 +12,6 @@
     </template>
     <template v-slot: card-text>
       <slot name="tickets" :boardId="boardId"></slot>
-      <slot />
     </template>
   </v-card>
 </template>

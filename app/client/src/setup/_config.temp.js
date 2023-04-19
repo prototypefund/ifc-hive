@@ -136,46 +136,31 @@ export default {
               {
                 tagUUID: 'tag-todo',
                 query: {
-                  target: 'meta/tickets',
-                  params: {
-                    endless: true,
-                  }
+                  tags: 'tag-todo'
                 }
               },
               {
                 tagUUID: 'tag-doing',
                 query: {
-                  target: 'meta/tickets',
-                  params: {
-                    endless: true,
-                  }
+                  tags: 'tag-doing'
                 }
               },
               {
                 tagUUID: 'tag-test',
                 query: {
-                  target: 'meta/tickets',
-                  params: {
-                    endless: true,
-                  }
+                  tags: 'tag-test'
                 }
               },
               {
                 tagUUID: 'tag-qa',
                 query: {
-                  target: 'meta/tickets',
-                  params: {
-                    endless: true,
-                  }
+                  tags: 'tag-qa'
                 }
               },
               {
                 tagUUID: 'tag-done',
                 query: {
-                  target: 'meta/tickets',
-                  params: {
-                    endless: true,
-                  }
+                  tags: 'tag-done'
                 }
               }
             ]
