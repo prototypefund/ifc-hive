@@ -9,8 +9,9 @@
               <board-item :widgetUUID="props.uuid" boardId="open" :generic="true"
                 :boardItem="{ _source: { _title: 'open', color: 'white' } }" :width=boardWidth>
                 <template v-slot:tickets="{ boardId }">
-                  <DynamicScroller page-mode class="scroller" :items="boards.generics.open.vScrollItems"
-                    :min-item-size="ticketHeight" key-field="docUUID">
+
+                  <DynamicScroller page-mode :id="boardId + '_scroller'" class="scroller"
+                    :items="boards.generics.open.vScrollItems" :min-item-size="ticketHeight" key-field="docUUID">
                     <template v-slot="{ item, index, active }">
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
                         <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
@@ -25,8 +26,8 @@
             <td v-for="board in boards.custom" :key="board.tagUUID">
               <board-item :widgetUUID="props.uuid" :boardId="board.tagUUID" :generic="false" :width=boardWidth>
                 <template v-slot:tickets="{ boardId }">
-                  <DynamicScroller page-mode class="scroller" :items="board.vScrollItems" :min-item-size="ticketHeight"
-                    key-field="docUUID">
+                  <DynamicScroller page-mode :id="boardId + '_scroller'" class="scroller" :items="board.vScrollItems"
+                    :min-item-size="ticketHeight" key-field="docUUID">
                     <template v-slot="{ item, index, active }">
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
                         <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
@@ -42,8 +43,8 @@
               <board-item :widgetUUID="props.uuid" boardId="closed" :generic="true"
                 :boardItem="{ _source: { _title: 'closed', color: 'black' } }" :width=boardWidth>
                 <template v-slot:tickets="{ boardId }">
-                  <DynamicScroller page-mode class="scroller" :items="boards.generics.closed.vScrollItems"
-                    :min-item-size="ticketHeight" key-field="docUUID">
+                  <DynamicScroller page-mode :id="boardId + '_scroller'" class="scroller"
+                    :items="boards.generics.closed.vScrollItems" :min-item-size="ticketHeight" key-field="docUUID">
                     <template v-slot="{ item, index, active }">
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
                         <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
@@ -63,6 +64,7 @@
 </template>
 <script setup>
 import { inject, ref, onMounted, computed, onUnmounted } from "vue";
+import { useDraggable } from 'vue-draggable-plus';
 import { getFullItem } from "@lib/dataHelper.js";
 import { VueDraggable } from 'vue-draggable-plus'
 import { clone } from "ramda"
@@ -75,6 +77,20 @@ const ticketHeight = 250;
 const $store = inject("$store");
 const state = ref({});
 
+
+const ticketDrag = {
+  name: 'ticketSort',
+  pull: ['ticketSort'],
+  put: ['ticketSort'],
+  clone: false
+}
+const draggableDirectiveConf = {
+  animation: 150,
+  group: ticketDrag
+}
+const initDraggable = (el, list) => {
+  useDraggable(el, list, draggableDirectiveConf);
+}
 const boards = ref({
   generics: {
     open: false,
@@ -83,20 +99,7 @@ const boards = ref({
   custom: {},
 });
 const drag = ref(false)
-const ticketDrag = {
-  name: 'ticketSort',
-  pull: 'ticketSort',
-  put: 'ticketSort'
-}
-const draggableDirectiveConf = {
-  animation: 150,
-  el: '.ticketDrag',
-  target: '.ticketDrag',
-  group: ticketDrag,
-  ghostClass: "ghost",
-  handle: ".mdi-drag",
-  sort: false,
-}
+
 
 const items = ref({});
 
@@ -225,7 +228,24 @@ const stateSubscriber$ = $store
     setupBoards()
   });
 
-onMounted(() => { });
+onMounted(() => {
+  /*
+  window.setTimeout(() => {
+    debugger
+    Object.keys(boards.value.custom).forEach(boardKey => {
+      const board = boards.value.custom[boardKey]
+      initDraggable(`#${boardKey}_scroller`, board.vScrollItems)
+
+    })
+    Object.keys(boards.value.generics).forEach(boardKey => {
+      const board = boards.value.generics[boardKey]
+      initDraggable(`#${boardKey}_scroller`, board.vScrollItems)
+
+    })
+  }, 1500)
+  */
+
+});
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
   // unsubscribe from all query listeners 
