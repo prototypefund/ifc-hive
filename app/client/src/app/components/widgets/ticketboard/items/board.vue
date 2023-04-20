@@ -1,6 +1,6 @@
 <template>
   <v-card v-if="boardId && boardItem?._source"
-    :style="{ border: '2px solid ' + boardItem._source.color || 'grey', width: width + 'px', height: '100%' }"
+    :style="{ border: '2px solid ' + boardItem._source.color || 'red', width: width + 'px', height: '100%' }"
     class="ticketWrapperCard" :prepend-icon="generic ? 'false' : 'false'"
     data-test-container="widgets/ticketboard/items/board" :data-test-container-uuid="uuid">
     <template v-slot:title v-if="generic">{{ $t("generics." + boardId) }} </template>
@@ -66,6 +66,7 @@ onMounted(() => {
         _source: getSource(val._id)
       }
       if (boardItem.value !== fullDocument) {
+        fullDocument._source.color = fullDocument._source.color || 'green'
         boardItem.value = fullDocument || {};
       }
     });

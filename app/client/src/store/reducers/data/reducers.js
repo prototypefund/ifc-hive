@@ -5,6 +5,16 @@ import { applicationState } from '../../state'
 import { mergeDeepRight } from 'ramda'
 import { getSource } from "@lib/dataHelper.js";
 
+const deepFreeze = (obj1) => {
+  Object.keys(obj1).forEach((property) => {
+    if (
+      typeof obj1[property] === "object" &&
+      !Object.isFrozen(obj1[property])
+    )
+      deepFreeze(obj1[property]);
+  });
+  return Object.freeze(obj1);
+};
 /*
  * init
  */
@@ -35,11 +45,14 @@ function dataPush(state, action) {
       delete window.$pacificoData[item._id]
       delete data[item._id]
     } else {
-      data[item._id] = JSON.parse(JSON.stringify(item))
+      data[item._id] = {
+        _id: item._id,
+        _type: item._type,
+        _disId: item._disId,
+        _title: item._title
+      }
       // add full object to window for lookup
-      window.$pacificoData[item._id] = Object.freeze(JSON.parse(JSON.stringify(item)))
-      // delete source from dataStore item to prevent excessive memory usage
-      delete data[item._id]._source
+      window.$pacificoData[item._id] = deepFreeze(item)
     }
   })
   if (!initialData) {

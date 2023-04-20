@@ -1,8 +1,8 @@
 <template>
-  <v-container v-if="state && props.uuid" fluid pa-0 data-test-container="widgets/ticketboard/virtualScroll"
-    :data-test-container-uuid="props.uuid">
+  <v-container v-if="state && props.uuid" fluid class="primary fill-height" pa-0
+    data-test-container="widgets/ticketboard/virtualScroll" :data-test-container-uuid="props.uuid">
     <div class="ticketContainer">
-      <table class="ticketTable">
+      <v-table class="ticketTable">
         <tbody>
           <tr valign="top" v-if="boards.generics">
             <td v-if="boards.generics.open">
@@ -54,7 +54,7 @@
             </td>
           </tr>
         </tbody>
-      </table>
+      </v-table>
     </div>
   </v-container>
 </template>
@@ -119,11 +119,9 @@ const customVScrollItems = board => {
     get() {
       return items.value.query.vScrollItems.filter(item => {
         const fullItem = getFullItem(item.docUUID)
-        // if the item has the tag which identifies this ticketboard column and is not closed, put it in that list
-        if (fullItem._source.tags.indexOf(board.tags) > -1 && fullItem._source.closed === false) {
-          return true
-        }
-        return false
+        // if the item does not have the tag we are looking for or is already closed, exit
+        if (fullItem._source.tags.indexOf(board.tags) === -1 || fullItem._source.closed === true) return false
+        return true
       })
     },
     set(newValue) {
@@ -137,12 +135,20 @@ const genericVScrollItems = board => {
     get() {
       return items.value.query.vScrollItems.filter(item => {
         const fullItem = getFullItem(item.docUUID)
-        // if the item's closed attribute has the same value as the one configured for this board, pass
-        if (fullItem._source.closed === board.closed) {
-          // now make sure we just display tickets in that generic board which are not already tagged with a state from the whole ticketboard we are in atm
-          return fullItem._source.tags.filter(itemTag => board.exclude.indexOf(itemTag) === -1).length === 0 ? false : true
-        }
-        return false
+        // if the item's closed attribute has a different value as the one we are looking for, exit
+        if (fullItem._source.closed != board.closed) return false
+        // now make sure we just display tickets in that generic board which are not already tagged with a state from the whole ticketboard we are in atm
+        let result = true
+        // if we have no excludes, return our item
+        if (!board.exclude) return result
+        // find out if we have to exclude it from display
+        fullItem._source.tags.forEach(itemTag => {
+          if (board.exclude.indexOf(itemTag) > -1) {
+            result = false
+          }
+        })
+        return result
+
       })
     },
     set(newValue) {
@@ -198,7 +204,6 @@ const setupGenericBoards = (_genericBoards, customBoards) => {
     board.vScrollItems = computed(genericVScrollItems(board.query))
   })
   genericBoards.open.query.exclude = Object.keys(customBoards)
-  genericBoards.closed.query.exclude = Object.keys(customBoards)
   return genericBoards
 }
 

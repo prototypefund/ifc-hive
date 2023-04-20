@@ -134,27 +134,21 @@ export default {
             excluded: [],
             custom: [
               {
-                tagUUID: 'cc13d261-b617-4a58-bb13-2ede1d7adda4',
+                tagUUID: 'db22cd8a-11d5-4558-83fb-c5869075bc3a',
                 query: {
-                  tags: 'cc13d261-b617-4a58-bb13-2ede1d7adda4'
+                  tags: 'db22cd8a-11d5-4558-83fb-c5869075bc3a'
                 }
               },
               {
-                tagUUID: '8979ea0c-99c7-444b-82a0-8af95bf1a8c2',
+                tagUUID: 'f7c8be57-90bc-48a9-b8fe-8ddf39370600',
                 query: {
-                  tags: '8979ea0c-99c7-444b-82a0-8af95bf1a8c2'
+                  tags: 'f7c8be57-90bc-48a9-b8fe-8ddf39370600'
                 }
               },
               {
-                tagUUID: '37aea62a-4496-42e2-824e-27d5ee7a6f02',
+                tagUUID: 'b5502367-35fa-4e4c-8ea5-ed6fe7236b6a',
                 query: {
-                  tags: '37aea62a-4496-42e2-824e-27d5ee7a6f02'
-                }
-              },
-              {
-                tagUUID: '17a0c14c-fdf7-4c68-a078-534280151195',
-                query: {
-                  tags: '17a0c14c-fdf7-4c68-a078-534280151195'
+                  tags: 'b5502367-35fa-4e4c-8ea5-ed6fe7236b6a'
                 }
               },
             ]

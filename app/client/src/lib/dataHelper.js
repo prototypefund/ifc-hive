@@ -24,7 +24,7 @@ const isFalse = (value) => {
 
 /* get full item */
 const getFullItem = (docUUID) => {
-  return window.$pacificoData[docUUID] || undefined
+  return window.$pacificoData[docUUID] ? JSON.parse(JSON.stringify(window.$pacificoData[docUUID])) : undefined
 }
 
 /* get source attribute of data item */

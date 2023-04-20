@@ -98,7 +98,7 @@
       <PageNavigation :nav-items="navItems" :footer-items="footerItems" />
       <navigation-tools-sidebar v-if="currentNavigationTool" />
       <!-- Main content -->
-      <v-main id="appMain">
+      <v-main id="appMain" fluid class="primary fill-height">
         <v-btn class="backToTop" v-if="hasScrolled" @click="scrollTop" icon="mdi-chevron-up" color="primary" />
         <template v-if="isInTest">
           <slot />
