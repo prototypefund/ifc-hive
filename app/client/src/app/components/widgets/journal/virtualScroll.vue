@@ -2,15 +2,13 @@
   <v-container v-if="state && props.uuid" data-test-container="widgets/journal/virtualScroll"
     :data-test-container-uuid="props.uuid">
     <v-timeline v-if="data?.vScrollItems?.length > 0">
-      <DynamicScroller page-mode class="scroller" :items="data.vScrollItems" :min-item-size="150" key-field="docUUID">
-        <template v-slot="{ item, index, active }">
-          <DynamicScrollerItem :item="item" :active="active" :data-index="index">
-            <v-timeline-item max-width="600px">
-              <ticket-card-item :key="item.docUUID + '_' + index" :widgetUUID="props.uuid" :docUUID="item.docUUID" />
-            </v-timeline-item>
-          </DynamicScrollerItem>
-        </template>
-      </DynamicScroller>
+      <RecycleScroller page-mode class="scroller" :items="data.vScrollItems" :item-size="300" key-field="docUUID"
+        v-slot="{ item }">
+        <v-timeline-item max-width="600px">
+          <ticket-card-item :key="item.docUUID" :widgetUUID="props.uuid" :docUUID="item.docUUID" />
+        </v-timeline-item>
+      </RecycleScroller>
+
     </v-timeline>
   </v-container>
 </template>

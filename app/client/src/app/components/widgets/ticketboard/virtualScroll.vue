@@ -9,33 +9,25 @@
               <board-item :widgetUUID="props.uuid" boardId="open" :generic="true"
                 :boardItem="{ _source: { _title: 'open', color: 'white' } }" :width=boardWidth>
                 <template v-slot:tickets="{ boardId }">
-
-                  <DynamicScroller page-mode :id="boardId + '_scroller'" class="scroller"
-                    :items="boards.generics.open.vScrollItems" :min-item-size="ticketHeight" key-field="docUUID">
-                    <template v-slot="{ item, index, active }">
-                      <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
-                        <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
-                          :ticketItemId="item.docUUID" />
-                        <div class="ticketSeperator" />
-                      </DynamicScrollerItem>
-                    </template>
-                  </DynamicScroller>
+                  <RecycleScroller page-mode :id="boardId + '_scroller'" class="scroller"
+                    :items="boards.generics.open.vScrollItems" :item-size="ticketHeight" key-field="docUUID"
+                    v-slot="{ item }">
+                    <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
+                      :ticketItemId="item.docUUID" />
+                  </RecycleScroller>
                 </template>
               </board-item>
             </td>
             <td v-for="board in boards.custom" :key="board.tagUUID">
               <board-item :widgetUUID="props.uuid" :boardId="board.tagUUID" :generic="false" :width=boardWidth>
                 <template v-slot:tickets="{ boardId }">
-                  <DynamicScroller page-mode :id="boardId + '_scroller'" class="scroller" :items="board.vScrollItems"
-                    :min-item-size="ticketHeight" key-field="docUUID">
-                    <template v-slot="{ item, index, active }">
-                      <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
-                        <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
-                          :ticketItemId="item.docUUID" />
-                        <div class="ticketSeperator" />
-                      </DynamicScrollerItem>
-                    </template>
-                  </DynamicScroller>
+                  {{ board.vScrollItems.length }}
+                  <RecycleScroller page-mode :id="boardId + '_scroller'" class="scroller" :items="board.vScrollItems"
+                    :item-size="ticketHeight" key-field="docUUID" v-slot="{ item }">
+                    <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
+                      :ticketItemId="item.docUUID" />
+                  </RecycleScroller>
+
                 </template>
               </board-item>
             </td>
@@ -43,16 +35,13 @@
               <board-item :widgetUUID="props.uuid" boardId="closed" :generic="true"
                 :boardItem="{ _source: { _title: 'closed', color: 'black' } }" :width=boardWidth>
                 <template v-slot:tickets="{ boardId }">
-                  <DynamicScroller page-mode :id="boardId + '_scroller'" class="scroller"
-                    :items="boards.generics.closed.vScrollItems" :min-item-size="ticketHeight" key-field="docUUID">
-                    <template v-slot="{ item, index, active }">
-                      <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
-                        <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
-                          :ticketItemId="item.docUUID" />
-                        <div class="ticketSeperator" />
-                      </DynamicScrollerItem>
-                    </template>
-                  </DynamicScroller>
+                  <RecycleScroller page-mode :id="boardId + '_scroller'" class="scroller"
+                    :items="boards.generics.closed.vScrollItems" :item-size="ticketHeight" key-field="docUUID"
+                    v-slot="{ item }">
+                    <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
+                      :ticketItemId="item.docUUID" />
+                  </RecycleScroller>
+
                 </template>
               </board-item>
             </td>
@@ -73,10 +62,9 @@ import ticketItem from "./items/ticket.vue";
 // just qol object to make the unsubscribing in unmount easier
 const querySubscriber = {}
 const boardWidth = 300;
-const ticketHeight = 250;
+const ticketHeight = 200;
 const $store = inject("$store");
 const state = ref({});
-
 
 const ticketDrag = {
   name: 'ticketSort',
@@ -86,7 +74,8 @@ const ticketDrag = {
 }
 const draggableDirectiveConf = {
   animation: 150,
-  group: ticketDrag
+  group: ticketDrag,
+  el: '.ticketDrag'
 }
 const initDraggable = (el, list) => {
   useDraggable(el, list, draggableDirectiveConf);
@@ -229,22 +218,19 @@ const stateSubscriber$ = $store
   });
 
 onMounted(() => {
-  /*
-  window.setTimeout(() => {
-    debugger
+  /*window.setTimeout(() => {
     Object.keys(boards.value.custom).forEach(boardKey => {
       const board = boards.value.custom[boardKey]
-      initDraggable(`#${boardKey}_scroller`, board.vScrollItems)
+      initDraggable(`#${boardKey}_scroller .vue-recycle-scroller__item-wrapper`, board.vScrollItems)
 
     })
     Object.keys(boards.value.generics).forEach(boardKey => {
       const board = boards.value.generics[boardKey]
-      initDraggable(`#${boardKey}_scroller`, board.vScrollItems)
+      initDraggable(`#${boardKey}_scroller .vue-recycle-scroller__item-wrapper`, board.vScrollItems)
 
     })
   }, 1500)
-  */
-
+*/
 });
 onUnmounted(() => {
   stateSubscriber$.unsubscribe();
