@@ -10,11 +10,9 @@ function pagesAdd(state, action) {
   const pageUUID = action.payload.uuid || action.routeName.replaceAll('.', '-')
   // if the page already exists do nothing
   if (state[pageUUID]) return state
-
   // create a new page object based on the default page config
   const page = clone(mergeDeepRight(storePatterns.page, action.payload))
   page.uuid = pageUUID
-  page.routeName = action.routeName
   const newPage = {}
   newPage[page.uuid] = page
 

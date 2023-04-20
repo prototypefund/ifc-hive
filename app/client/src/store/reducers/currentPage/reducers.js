@@ -37,7 +37,6 @@ function currentPageSet(state, action) {
     // In this case, we arrive at a currentpage via a deeplink. We will be redirected anyways so just use the payload for now
     currPage = action.payload
   }
-
   if (!currPage.scrollTop) {
     // TODO find a way to decouple this
     scrollY = document.getElementById("appComponent")

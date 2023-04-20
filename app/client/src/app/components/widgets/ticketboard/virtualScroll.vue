@@ -49,7 +49,7 @@
                       </DynamicScrollerItem>
                     </template>
                   </DynamicScroller>
-                </template>doing
+                </template>
               </board-item>
             </td>
           </tr>

@@ -11,7 +11,8 @@
       </QuickListHandler>
     </template>
     <template v-slot: card-text>
-      <slot name="tickets" :boardId="boardId"></slot>
+      <slot name="tickets" :boardId="boardId" />
+      <slot />
     </template>
   </v-card>
 </template>

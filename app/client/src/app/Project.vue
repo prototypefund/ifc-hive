@@ -75,7 +75,8 @@
 
     <v-divider />
     <template v-if="batchLoading">
-      <v-main id="appMain">
+      <v-main id="appMain" fluid class="primary fill-height">
+        <span ref="topBarIndicator" />
         <v-container>
           <v-row class="fill-height" align-content="center" justify="center">
             <v-col class="text-subtitle-1 text-center" cols="12">
@@ -99,14 +100,15 @@
       <navigation-tools-sidebar v-if="currentNavigationTool" />
       <!-- Main content -->
       <v-main id="appMain" fluid class="primary fill-height">
+        <span ref="topBarIndicator" />
         <v-btn class="backToTop" v-if="hasScrolled" @click="scrollTop" icon="mdi-chevron-up" color="primary" />
         <template v-if="isInTest">
           <slot />
         </template>
         <template v-else>
           <router-view v-slot="{ Component }">
-            <component :is="Component" key="appComponent" :class="{ isLoading: loading }" id="appComponent"
-              :style="{ height: viewPortHeight + 'px' }" @scroll.passive="setScroll($event)" />
+            <component :is="Component" key="appComponent" :class="{ isLoading: loading }"
+              :style="{ height: viewPortHeight + 'px' }" id="appComponent" @scroll.passive="setScroll($event)" />
             <v-fade-transition>
               <v-row v-if="loading" class="fill-height" align-content="start" justify="center">
                 <v-col class="text-subtitle-1 text-center" cols="12">
@@ -167,7 +169,6 @@ export default {
     batchCurrent: 0,
     editMode: false,
     viewPortHeight: false,
-    viewPortWidth: false,
     loading: false,
     currentNavigationTool: false,
     currentInspectorTool: false,
@@ -223,6 +224,7 @@ export default {
       .select((state) => state.ui.loading)
       .subscribe((val) => {
         this.loading = val;
+        this.setDimensions()
       });
     this.$store
       .select((state) => state.ui.currentNavigationTool)
@@ -234,7 +236,6 @@ export default {
       .subscribe((val) => {
         this.currentInspectorTool = val;
       });
-
   },
 
   mounted() {
@@ -253,6 +254,7 @@ export default {
         },
       });
     }
+    window.onresize = this.setDimensions;
   },
 
   methods: {
@@ -273,6 +275,8 @@ export default {
       })
       this.$eventbus.on('batchDataStop', (data) => {
         this.batchLoading = false
+        this.batchCount = 0
+        this.batchCurrent = 0
         this.$eventbus.emit('setLastProjectId', this.$route.params.projectId)
         if (this.$route?.query?.redirect) {
           return this.$router.push({
@@ -283,7 +287,6 @@ export default {
           // @TODO add lastVisited ProjectPage redirect here
           return this.$router.push({ name: 'app.project.dashboard', params: this.$route.params })
         }
-
       })
       return
     },
@@ -317,25 +320,9 @@ export default {
     },
 
     setDimensions: async function () {
-      // TODO REPLACE THIS WITH PROPER VUETIFY LOGIC OR REMOVE FROM HERE
       await this.$nextTick(function () {
-        //TODO find out why we can't properly use the $refs for size read here.
-        const appBarHeight = document.getElementById("appAppbar").offsetHeight;
-        const HackyShit =
-          document.getElementById("appMain").offsetWidth -
-          document.getElementById("navSideBar").offsetWidth;
-        const windowWidth = window.innerWidth;
-        this.viewPortHeight = window.innerHeight - appBarHeight;
-        this.viewPortWidth = HackyShit;
-
-        return this.$store.dispatch({
-          type: "ui/update",
-          payload: {
-            viewPortHeight: this.viewPortHeight,
-            viewPortWidth: this.viewPortWidth,
-            windowWidth,
-          },
-        });
+        if (!this.$refs.topBarIndicator) return
+        this.viewPortHeight = window.innerHeight - this.$refs.topBarIndicator.offsetTop
       });
     },
   },
@@ -343,6 +330,15 @@ export default {
 </script>
 
 <style>
+html,
+body {
+  overflow: hidden;
+}
+
+#appComponent {
+  overflow: auto;
+}
+
 #app .backToTop {
   position: fixed !important;
   z-index: 100;
