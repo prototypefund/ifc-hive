@@ -1,20 +1,19 @@
 /*
  * set project configuration
  */
-import { globalPages, globalTags } from '@_/setup/application.js'
+import { globalPages } from '@_/setup/application.js'
 
 /*
  * Browser Config
  */
-function setProjectBrowserConfig (project, $store) {
-    // early return if we didn't receive project and its configuration
-  if (!project || !project.config || !project.config.browser)  return
+function setProjectBrowserConfig(project, $store) {
+  // early return if we didn't receive project and its configuration
+  if (!project || !project.config || !project.config.browser) return
   // Reset all store states which are project dependend. 
   $store.dispatch({ type: 'projectInit' })
 
   // add global pages and tools from local configuration
   globalPages($store)
-  globalTags($store);
 
   // add browser ui configuration to store
   if (project.config.browser.ui) {

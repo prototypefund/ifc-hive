@@ -68,7 +68,7 @@ import ticketItem from "./items/ticket.vue";
 // just qol object to make the unsubscribing in unmount easier
 const querySubscriber = {}
 const boardWidth = 300;
-const ticketHeight = 400;
+const ticketHeight = 250;
 const $store = inject("$store");
 const state = ref({});
 

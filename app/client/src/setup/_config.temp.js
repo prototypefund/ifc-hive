@@ -54,26 +54,6 @@ export default {
 * inspectorTools
 */
   inspectorTools: {
-    'chart_ticketsByTag': {
-      title: "ticketsByTag",
-      pages: false,
-      icon: "mdi-chart-donut",
-      uuid: "chart_ticketsByTag",
-      widget: {
-        name: "ticketboard",
-        type: "chart",
-        face: "ticketsByTag",
-        props: {
-          categories: [
-            "tags:tag-todo",
-            "tags:tag-doing",
-            "tags:tag-test",
-            "tags:tag-qa",
-            "tags:tag-done",
-          ],
-        },
-      },
-    },
     'journal_chart': {
       title: "chartJournal",
       pages: false,
