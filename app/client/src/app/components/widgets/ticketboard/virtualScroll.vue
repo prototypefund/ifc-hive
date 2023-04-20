@@ -15,6 +15,7 @@
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
                         <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
                           :ticketItemId="item.docUUID" />
+                        <div class="ticketSeperator" />
                       </DynamicScrollerItem>
                     </template>
                   </DynamicScroller>
@@ -30,6 +31,7 @@
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
                         <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
                           :ticketItemId="item.docUUID" />
+                        <div class="ticketSeperator" />
                       </DynamicScrollerItem>
                     </template>
                   </DynamicScroller>
@@ -46,6 +48,7 @@
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
                         <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
                           :ticketItemId="item.docUUID" />
+                        <div class="ticketSeperator" />
                       </DynamicScrollerItem>
                     </template>
                   </DynamicScroller>
@@ -236,6 +239,10 @@ onUnmounted(() => {
 <style lang="css" scoped>
 .ticketContainer {
   overflow: auto;
+}
+
+.ticketSeperator {
+  height: 1px
 }
 
 .scroller {
