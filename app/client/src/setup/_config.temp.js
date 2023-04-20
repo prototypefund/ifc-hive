@@ -134,35 +134,29 @@ export default {
             excluded: [],
             custom: [
               {
-                tagUUID: 'tag-todo',
+                tagUUID: 'cc13d261-b617-4a58-bb13-2ede1d7adda4',
                 query: {
-                  tags: 'tag-todo'
+                  tags: 'cc13d261-b617-4a58-bb13-2ede1d7adda4'
                 }
               },
               {
-                tagUUID: 'tag-doing',
+                tagUUID: '8979ea0c-99c7-444b-82a0-8af95bf1a8c2',
                 query: {
-                  tags: 'tag-doing'
+                  tags: '8979ea0c-99c7-444b-82a0-8af95bf1a8c2'
                 }
               },
               {
-                tagUUID: 'tag-test',
+                tagUUID: '37aea62a-4496-42e2-824e-27d5ee7a6f02',
                 query: {
-                  tags: 'tag-test'
+                  tags: '37aea62a-4496-42e2-824e-27d5ee7a6f02'
                 }
               },
               {
-                tagUUID: 'tag-qa',
+                tagUUID: '17a0c14c-fdf7-4c68-a078-534280151195',
                 query: {
-                  tags: 'tag-qa'
+                  tags: '17a0c14c-fdf7-4c68-a078-534280151195'
                 }
               },
-              {
-                tagUUID: 'tag-done',
-                query: {
-                  tags: 'tag-done'
-                }
-              }
             ]
           }
         }

@@ -2,17 +2,15 @@
   <v-container v-if="state && props.uuid" fluid pa-0 data-test-container="widgets/ticketboard/virtualScroll"
     :data-test-container-uuid="props.uuid">
     <div class="ticketContainer">
-      <table class="ticketTable" v-if="boards.generics.open">
+      <table class="ticketTable">
         <tbody>
-
-          <tr valign="top">
+          <tr valign="top" v-if="boards.generics">
             <td v-if="boards.generics.open">
               <board-item :widgetUUID="props.uuid" boardId="open" :generic="true"
                 :boardItem="{ _source: { _title: 'open', color: 'white' } }" :width=boardWidth>
                 <template v-slot:tickets="{ boardId }">
-                  <DynamicScroller page-mode class="scroller" :items="items.query.vScrollItems"
-                    :min-item-size="ticketHeight" key-field="docUUID"
-                    v-draggable="[items.query.vScrollItems, draggableDirectiveConf]">
+                  <DynamicScroller page-mode class="scroller" :items="boards.generics.open.vScrollItems"
+                    :min-item-size="ticketHeight" key-field="docUUID">
                     <template v-slot="{ item, index, active }">
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
                         <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
@@ -20,17 +18,14 @@
                       </DynamicScrollerItem>
                     </template>
                   </DynamicScroller>
-
                 </template>
               </board-item>
             </td>
             <td v-for="board in boards.custom" :key="board.tagUUID">
               <board-item :widgetUUID="props.uuid" :boardId="board.tagUUID" :generic="false" :width=boardWidth>
                 <template v-slot:tickets="{ boardId }">
-
-                  <DynamicScroller page-mode class="scroller" :items="items.query.vScrollItems"
-                    :min-item-size="ticketHeight" key-field="docUUID"
-                    v-draggable="[items.query.vScrollItems, draggableDirectiveConf]">
+                  <DynamicScroller page-mode class="scroller" :items="board.vScrollItems" :min-item-size="ticketHeight"
+                    key-field="docUUID">
                     <template v-slot="{ item, index, active }">
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
                         <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
@@ -38,7 +33,6 @@
                       </DynamicScrollerItem>
                     </template>
                   </DynamicScroller>
-
                 </template>
               </board-item>
             </td>
@@ -46,9 +40,8 @@
               <board-item :widgetUUID="props.uuid" boardId="closed" :generic="true"
                 :boardItem="{ _source: { _title: 'closed', color: 'black' } }" :width=boardWidth>
                 <template v-slot:tickets="{ boardId }">
-                  <DynamicScroller page-mode class="scroller" :items="items.query.vScrollItems"
-                    :min-item-size="ticketHeight" key-field="docUUID"
-                    v-draggable="[items.query.vScrollItems, draggableDirectiveConf]">
+                  <DynamicScroller page-mode class="scroller" :items="boards.generics.closed.vScrollItems"
+                    :min-item-size="ticketHeight" key-field="docUUID">
                     <template v-slot="{ item, index, active }">
                       <DynamicScrollerItem :item="item" :active="active" :data-index="index" class="ticketDrag">
                         <ticket-item :key="boardId + '_' + item.docUUID" :widgetUUID="props.uuid" :boardId="boardId"
@@ -56,8 +49,7 @@
                       </DynamicScrollerItem>
                     </template>
                   </DynamicScroller>
-
-                </template>
+                </template>doing
               </board-item>
             </td>
           </tr>
@@ -67,15 +59,16 @@
   </v-container>
 </template>
 <script setup>
-import { inject, ref, onMounted, computed, onUnmounted, shallowRef } from "vue";
-import { vDraggable } from 'vue-draggable-plus'
+import { inject, ref, onMounted, computed, onUnmounted } from "vue";
+import { getFullItem } from "@lib/dataHelper.js";
+import { VueDraggable } from 'vue-draggable-plus'
 import { clone } from "ramda"
 import boardItem from "./items/board.vue";
 import ticketItem from "./items/ticket.vue";
 // just qol object to make the unsubscribing in unmount easier
 const querySubscriber = {}
 const boardWidth = 300;
-const ticketHeight = 350;
+const ticketHeight = 400;
 const $store = inject("$store");
 const state = ref({});
 
@@ -86,19 +79,22 @@ const boards = ref({
   },
   custom: {},
 });
+const drag = ref(false)
 const ticketDrag = {
   name: 'ticketSort',
-  pull: ['ticketSort'],
-  put: ['ticketSort']
+  pull: 'ticketSort',
+  put: 'ticketSort'
 }
 const draggableDirectiveConf = {
   animation: 150,
-  target: '.ticketDrag',
   el: '.ticketDrag',
+  target: '.ticketDrag',
   group: ticketDrag,
   ghostClass: "ghost",
-  handle: ".mdi-drag"
+  handle: ".mdi-drag",
+  sort: false,
 }
+
 const items = ref({});
 
 const props = defineProps({
@@ -118,6 +114,42 @@ const props = defineProps({
   },
 });
 
+const customVScrollItems = board => {
+  return {
+    get() {
+      return items.value.query.vScrollItems.filter(item => {
+        const fullItem = getFullItem(item.docUUID)
+        // if the item has the tag which identifies this ticketboard column and is not closed, put it in that list
+        if (fullItem._source.tags.indexOf(board.tags) > -1 && fullItem._source.closed === false) {
+          return true
+        }
+        return false
+      })
+    },
+    set(newValue) {
+      debugger
+    },
+  }
+
+}
+const genericVScrollItems = board => {
+  return {
+    get() {
+      return items.value.query.vScrollItems.filter(item => {
+        const fullItem = getFullItem(item.docUUID)
+        // if the item's closed attribute has the same value as the one configured for this board, pass
+        if (fullItem._source.closed === board.closed) {
+          // now make sure we just display tickets in that generic board which are not already tagged with a state from the whole ticketboard we are in atm
+          return fullItem._source.tags.filter(itemTag => board.exclude.indexOf(itemTag) === -1).length === 0 ? false : true
+        }
+        return false
+      })
+    },
+    set(newValue) {
+      debugger
+    },
+  }
+}
 // METHODS
 const getRelevantData = _query => {
   const query = clone(_query)
@@ -154,13 +186,19 @@ const setupCustomBoards = (customBoards, genericBoards) => {
     // create a list of all the other custom board tagUUIDS which we want to exclude from the result for this specific ticket board
     const excludeTags = customBoards.filter(otherBoard => otherBoard.tagUUID != board.tagUUID).map(item => item.tagUUID)
     board.query.exclude = excludeTags
+    board.vScrollItems = computed(customVScrollItems(board.query))
     boards[board.tagUUID] = board
   })
   return boards
 }
 const setupGenericBoards = (_genericBoards, customBoards) => {
   const genericBoards = clone(_genericBoards)
-  const excludeTags = Object.keys(customBoards)
+  Object.keys(genericBoards).forEach(boardKey => {
+    const board = genericBoards[boardKey]
+    board.vScrollItems = computed(genericVScrollItems(board.query))
+  })
+  genericBoards.open.query.exclude = Object.keys(customBoards)
+  genericBoards.closed.query.exclude = Object.keys(customBoards)
   return genericBoards
 }
 
